@@ -1,4 +1,4 @@
-package net.juligames.core;
+package net.juligames.core.api;
 
 /**
  * @author Ture Bentzin
@@ -6,6 +6,6 @@ package net.juligames.core;
  */
 public class Main {
     public static void main(String[] args) {
-
+        System.out.println("Hello world!");
     }
 }

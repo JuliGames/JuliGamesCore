@@ -28,7 +28,6 @@ Project.java
 ProjectDAO.java
 JGTestObj.java
 JDBITEST.java
-.idea\
-target\
-target\
-target\
+.idea/
+target/
+
