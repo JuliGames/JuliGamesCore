@@ -1,6 +1,6 @@
 package net.juligames.core.api.jdbi;
 
-import net.juligames.core.api.jdbi.Locale;
+import net.juligames.core.api.jdbi.bean.LocaleBean;
 import org.jdbi.v3.sqlobject.config.RegisterBeanMapper;
 import org.jdbi.v3.sqlobject.customizer.Bind;
 import org.jdbi.v3.sqlobject.customizer.BindBean;
@@ -25,7 +25,7 @@ public interface LocaleDAO {
     void createTable();
 
     @SqlQuery("SELECT * FROM locale")
-    List<Locale> listAll();
+    List<LocaleBean> listAllBeans();
 
     @SqlUpdate("INSERT INTO locale(locale, description) values (:locale, :description)")
     void insert(@BindBean Locale locale);
@@ -34,7 +34,15 @@ public interface LocaleDAO {
     void delete(@Bind("locale") String locale);
 
     @SqlQuery("SELECT * FROM locale where locale = :locale")
-    java.util.Locale select(@Bind("locale") String locale);
+    LocaleBean selectBean(@Bind("locale") String locale);
+
+    default Locale select(String locale) {
+        return selectBean(locale);
+    }
+
+    default List<Locale> listAll() {
+        return listAllBeans().stream().map(localeBean -> (Locale) localeBean).toList();
+    }
 
 
 }

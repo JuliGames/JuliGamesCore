@@ -3,6 +3,7 @@ package net.juligames.core.master;
 import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
+import net.juligames.core.api.jdbi.LocaleDAO;
 import net.juligames.core.hcast.HCastConfigProvider;
 import net.juligames.core.master.data.MasterHazelInformationProvider;
 import net.juligames.core.master.sql.MasterSQLManager;
@@ -38,11 +39,17 @@ public class CoreMaster {
         logger.info("hazelcast boot was initiated");
 
         logger.debug("sql: start");
-        SQLManager = new MasterSQLManager("jdbc:mysql://admin@localhost:3306/jdbi_test");
+        SQLManager = new MasterSQLManager("jdbc:mysql://admin@localhost:3306/minecraft");
         SQLManager.createTables();
+
+        SQLManager.getJdbi().withExtension(LocaleDAO.class,extension -> {
+            extension.listAll();
+            return null;
+        });
 
         //Data
         masterHazelInformationProvider = new MasterHazelInformationProvider(hazelcast);
+
     }
 
     public static SQLManager getMasterSQLManager() {

@@ -1,4 +1,4 @@
-package net.juligames.core.jdbi;
+package net.juligames.core.api.jdbi.bean;
 
 import net.juligames.core.api.jdbi.Locale;
 import org.jetbrains.annotations.NotNull;

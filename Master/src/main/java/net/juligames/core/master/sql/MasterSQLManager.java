@@ -4,7 +4,7 @@ import net.juligames.core.api.jdbi.Locale;
 import net.juligames.core.api.jdbi.SQLManager;
 import net.juligames.core.api.jdbi.LocaleDAO;
 import net.juligames.core.api.jdbi.MessageDAO;
-import net.juligames.core.jdbi.LocaleBean;
+import net.juligames.core.api.jdbi.bean.LocaleBean;
 import net.juligames.core.master.CoreMaster;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.sqlobject.SqlObjectPlugin;

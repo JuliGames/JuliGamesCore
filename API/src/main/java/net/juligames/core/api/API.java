@@ -9,9 +9,14 @@ import net.juligames.core.api.data.HazelDataApi;
  */
 public interface API {
 
+    static API get() {
+        return ApiCore.getAPI();
+    }
+
     /**
      *
      * @return the DataAPI
      */
     HazelDataApi getHazelDataApi();
+
 }

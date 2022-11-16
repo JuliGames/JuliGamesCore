@@ -1,8 +1,7 @@
 package net.juligames.core.api.jdbi;
 
-import net.juligames.core.api.jdbi.Locale;
-import net.juligames.core.api.jdbi.Message;
-import net.juligames.core.api.jdbi.SQLManager;
+import net.juligames.core.api.API;
+import net.juligames.core.api.jdbi.bean.MessageBean;
 import org.jdbi.v3.sqlobject.config.RegisterBeanMapper;
 import org.jdbi.v3.sqlobject.customizer.Bind;
 import org.jdbi.v3.sqlobject.customizer.BindBean;
@@ -15,6 +14,7 @@ import java.util.List;
  * @author Ture Bentzin
  * 16.11.2022
  */
+@SuppressWarnings("SqlResolve")
 @RegisterBeanMapper(MessageBean.class)
 public interface MessageDAO {
 
@@ -32,7 +32,7 @@ public interface MessageDAO {
     void createTable();
 
     @SqlQuery("SELECT * FROM message")
-    List<Locale> listAll();
+    List<Locale> listAllBeans();
 
     @SqlUpdate("INSERT INTO message(messageKey, locale, miniMessage) values (:messageKey, :locale, :miniMessage)")
     void insert(@BindBean Message message);
@@ -43,17 +43,18 @@ public interface MessageDAO {
     @SqlQuery("SELECT * FROM message where messageKey = :key AND locale = :locale")
     Message select(@Bind("key") String key, @Bind("locale") String locale);
 
-    default Message select(String key, Locale locale){
-        return select(key,locale.getLocale());
+    default Message selectBean(String key, Locale locale) {
+        return select(key, locale.getLocale());
     }
 
     /**
      * This will return the default message
+     *
      * @param key the key
      * @return the Message
      */
     default Message select(String key) {
-        return select(key, SQLManager.defaultEnglish().getLocale());
+        return select(key, API.get().getHazelDataApi().<String, String>getMap("master_information").get("default_locale"));
     }
 
 

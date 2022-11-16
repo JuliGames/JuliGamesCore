@@ -1,4 +1,4 @@
-package net.juligames.core.jdbi;
+package net.juligames.core.api.jdbi.bean;
 
 import net.juligames.core.api.jdbi.Message;
 
@@ -7,8 +7,6 @@ import net.juligames.core.api.jdbi.Message;
  * 16.11.2022
  */
 public class MessageBean implements Message {
-
-
 
     public MessageBean(String messageKey, String locale, String miniMessage) {
         this.messageKey = messageKey;

@@ -13,6 +13,7 @@
         <module>Core</module>
         <module>API</module>
         <module>Master</module>
+        <module>HazelAPI</module>
     </modules>
 
     <properties>
