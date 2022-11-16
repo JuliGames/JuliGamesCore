@@ -19,7 +19,7 @@ public class HazelConnector {
         return new HazelConnector(name);
     }
 
-    public static HazelConnector getInstanceAndCo(String name){
+    public static HazelConnector getInstanceAndConnect(String name){
         return new HazelConnector(name).connect();
     }
 

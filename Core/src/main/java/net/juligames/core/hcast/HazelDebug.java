@@ -11,7 +11,7 @@ import java.util.concurrent.ExecutionException;
 public class HazelDebug {
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
-        HazelConnector hazelConnector = HazelConnector.getInstanceAndCo("test");
+        HazelConnector hazelConnector = HazelConnector.getInstanceAndConnect("test");
         IMap<String,String> bommelsMap = hazelConnector.getInstance().get().getMap("BommelsMap");
         bommelsMap.put("micheal","MICHEAL");
 

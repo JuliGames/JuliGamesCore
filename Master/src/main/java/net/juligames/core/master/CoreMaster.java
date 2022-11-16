@@ -1,16 +1,14 @@
 package net.juligames.core.master;
 
-import com.hazelcast.client.Client;
-import com.hazelcast.client.ClientListener;
 import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.internal.server.tcp.ChannelInitializerFunction;
 import net.juligames.core.hcast.HCastConfigProvider;
+import net.juligames.core.master.data.MasterHazelInformationProvider;
+import net.juligames.core.master.sql.MasterSQLManager;
+import net.juligames.core.api.jdbi.SQLManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Properties;
 
 /**
  * @author Ture Bentzin
@@ -18,8 +16,13 @@ import java.util.Properties;
  */
 public class CoreMaster {
 
+    private static MasterHazelInformationProvider masterHazelInformationProvider;
+
+    private CoreMaster() {}
+
     public static final Config CONFIG = new Config();
     public static final Logger logger = LoggerFactory.getLogger(CoreMaster.class);
+    private static SQLManager SQLManager;
 
     public static void main(String[] args) {
         //entry point for Master
@@ -31,6 +34,18 @@ public class CoreMaster {
         logger.warn("This is an early development build!");
         logger.info("booting hazelcast:");
         HazelcastInstance hazelcast = Hazelcast.newHazelcastInstance(CONFIG);
+
         logger.info("hazelcast boot was initiated");
+
+        logger.debug("sql: start");
+        SQLManager = new MasterSQLManager("jdbc:mysql://admin@localhost:3306/jdbi_test");
+        SQLManager.createTables();
+
+        //Data
+        masterHazelInformationProvider = new MasterHazelInformationProvider(hazelcast);
+    }
+
+    public static SQLManager getMasterSQLManager() {
+        return SQLManager;
     }
 }
