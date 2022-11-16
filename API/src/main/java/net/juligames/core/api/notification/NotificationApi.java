@@ -8,6 +8,8 @@ public interface NotificationApi {
 
     boolean registerListener(NotificationListener listener);
 
+    boolean unregisterListener(NotificationListener listener);
+
     NotificationSender getNotificationSender();
 
 }

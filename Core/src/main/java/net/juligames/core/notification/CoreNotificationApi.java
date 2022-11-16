@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
+import java.util.NoSuchElementException;
 
 /**
  * @author Ture Bentzin
@@ -22,7 +23,17 @@ public final class CoreNotificationApi implements NotificationApi {
         try {
             listenerRegisterator.register(listener);
             return true;
-        } catch (Registerator.DuplicateEntryException e) {
+        } catch (Registerator.DuplicateEntryException ignore) {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean unregisterListener(NotificationListener listener) {
+        try {
+            listenerRegisterator.unregister(listener);
+            return true;
+        }catch (Registerator.NoSuchEntryException ignored){
             return false;
         }
     }
