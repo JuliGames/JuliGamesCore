@@ -44,7 +44,7 @@ public final class Core implements API {
      */
     @Contract(value = " -> new", pure = true)
     @Override
-    public @NotNull HazelDataApi getHazelDataApi() {
+    public @NotNull HazelDataCore getHazelDataApi() {
         return new HazelDataCore();
     }
 
@@ -53,7 +53,7 @@ public final class Core implements API {
      */
     @Contract(value = " -> new", pure = true)
     @Override
-    public @NotNull NotificationApi getNotificationApi() {
+    public @NotNull CoreNotificationApi getNotificationApi() {
         return new CoreNotificationApi();
     }
 
@@ -62,9 +62,10 @@ public final class Core implements API {
      */
     @Contract(value = " -> new", pure = true)
     @Override
-    public @NotNull ClusterApi getClusterApi() {
+    public @NotNull CoreClusterApi getClusterApi() {
         return new CoreClusterApi();
     }
+
 
     public HazelConnector getHazelConnector() {
         return hazelConnector;
