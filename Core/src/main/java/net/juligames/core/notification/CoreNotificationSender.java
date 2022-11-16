@@ -13,6 +13,7 @@ public class CoreNotificationSender implements NotificationSender {
     @Override
     public void sendNotification(SimpleNotification notification, UUID... addresses) {
         //TODO
+
     }
 
     @Override

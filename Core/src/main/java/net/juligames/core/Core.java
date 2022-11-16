@@ -25,7 +25,6 @@ import java.util.concurrent.CompletableFuture;
 public final class Core implements API {
 
     private static Core core;
-    private HazelcastClient hazelcastClient;
     private HazelConnector hazelConnector;
 
     public static Core getInstance() {
@@ -71,9 +70,6 @@ public final class Core implements API {
         return hazelConnector;
     }
 
-    public HazelcastClient getHazelcastClient() {
-        return hazelcastClient;
-    }
 
     public HazelcastInstance getOrThrow(){
         CompletableFuture<HazelcastInstance> instance = getHazelConnector().getInstance();
