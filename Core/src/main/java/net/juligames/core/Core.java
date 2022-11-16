@@ -4,9 +4,13 @@ import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.core.HazelcastInstance;
 import net.juligames.core.api.API;
 import net.juligames.core.api.ApiCore;
+import net.juligames.core.api.cluster.ClusterApi;
 import net.juligames.core.api.data.HazelDataApi;
+import net.juligames.core.api.notification.NotificationApi;
+import net.juligames.core.cluster.CoreClusterApi;
 import net.juligames.core.data.HazelDataCore;
 import net.juligames.core.hcast.HazelConnector;
+import net.juligames.core.notification.CoreNotificationApi;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -43,6 +47,24 @@ public final class Core implements API {
     @Override
     public @NotNull HazelDataApi getHazelDataApi() {
         return new HazelDataCore();
+    }
+
+    /**
+     * @return The NotificationApi for this core
+     */
+    @Contract(value = " -> new", pure = true)
+    @Override
+    public @NotNull NotificationApi getNotificationApi() {
+        return new CoreNotificationApi();
+    }
+
+    /**
+     * @return The ClusterApi for this core
+     */
+    @Contract(value = " -> new", pure = true)
+    @Override
+    public @NotNull ClusterApi getClusterApi() {
+        return new CoreClusterApi();
     }
 
     public HazelConnector getHazelConnector() {
