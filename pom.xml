@@ -12,6 +12,7 @@
         <module>PaperCore</module>
         <module>Core</module>
         <module>API</module>
+        <module>Master</module>
     </modules>
 
     <properties>
