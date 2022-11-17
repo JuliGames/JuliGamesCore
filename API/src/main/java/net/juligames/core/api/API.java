@@ -1,5 +1,7 @@
 package net.juligames.core.api;
 
+import com.mysql.cj.log.Log;
+import de.bentzin.tools.logging.Logger;
 import net.juligames.core.api.cluster.ClusterApi;
 import net.juligames.core.api.data.HazelDataApi;
 import net.juligames.core.api.notification.NotificationApi;
@@ -32,4 +34,10 @@ public interface API {
      * @return The ClusterApi for this core
      */
     ClusterApi getClusterApi();
+
+    /**
+     * @return Logger for use when accessing via API
+     */
+    Logger getAPILogger();
+
 }

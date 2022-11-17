@@ -3,13 +3,14 @@ package net.juligames.core.master;
 import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
+import de.bentzin.tools.logging.Logger;
+import net.juligames.core.Core;
 import net.juligames.core.api.jdbi.LocaleDAO;
 import net.juligames.core.hcast.HCastConfigProvider;
 import net.juligames.core.master.data.MasterHazelInformationProvider;
+import net.juligames.core.master.logging.MasterLogger;
 import net.juligames.core.master.sql.MasterSQLManager;
 import net.juligames.core.api.jdbi.SQLManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author Ture Bentzin
@@ -22,17 +23,20 @@ public class CoreMaster {
     private CoreMaster() {}
 
     public static final Config CONFIG = new Config();
-    public static final Logger logger = LoggerFactory.getLogger(CoreMaster.class);
+    public static Logger logger;
     private static SQLManager SQLManager;
 
     public static void main(String[] args) {
+
+        logger  = new MasterLogger("Master", java.util.logging.Logger.getLogger(Core.getShortRelease()));
+
         //entry point for Master
         CONFIG.setClusterName(HCastConfigProvider.CLUSTER_NAME);
         CONFIG.setInstanceName("Master");
         CONFIG.getJetConfig().setEnabled(true);
 
         logger.info("welcome to JuliGames-Core Master");
-        logger.warn("This is an early development build!");
+        logger.warning("This is an early development build!");
         logger.info("booting hazelcast:");
         HazelcastInstance hazelcast = Hazelcast.newHazelcastInstance(CONFIG);
 

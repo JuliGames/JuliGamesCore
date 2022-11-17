@@ -2,6 +2,8 @@ package net.juligames.core;
 
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.core.HazelcastInstance;
+import de.bentzin.tools.logging.JavaLogger;
+import de.bentzin.tools.logging.Logger;
 import net.juligames.core.api.API;
 import net.juligames.core.api.ApiCore;
 import net.juligames.core.api.cluster.ClusterApi;
@@ -17,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.NoSuchElementException;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 /**
  * @author Ture Bentzin
@@ -24,19 +27,64 @@ import java.util.concurrent.CompletableFuture;
  */
 public final class Core implements API {
 
+
+    public static final String CORE_BRAND = "Core";
+    public static final String CORE_VERSION_NUMBER = "0.0.1";
+    public static final String CORE_SPECIFICATION = "Micheal";
+
+    @Contract(pure = true)
+    public static @NotNull String getFullCoreName() {
+        return CORE_BRAND + "-" + CORE_VERSION_NUMBER + " " + CORE_SPECIFICATION;
+    }
+
+    @Contract(pure = true)
+    public static @NotNull String getShortCoreName() {
+        return CORE_BRAND + "-" + CORE_VERSION_NUMBER;
+    }
+
+    @Contract(pure = true)
+    public static @NotNull String getShortRelease() {
+        return CORE_BRAND + "-" + CORE_SPECIFICATION;
+    }
+
+
     private static Core core;
     private HazelConnector hazelConnector;
+
+    private Logger coreLogger;
+    private Logger apiLogger;
+
+    private String core_name;
 
     public static Core getInstance() {
         return core;
     }
 
     @ApiStatus.Internal
-    public void start(String core_name) {
+    public void start(String core_name, Logger logger) {
+        this.core_name = core_name;
         if (core != null) throw new IllegalStateException("seems like a core is already running!");
         core = this;
         ApiCore.CURRENT_API = this;
         hazelConnector = HazelConnector.getInstanceAndConnect(core_name);
+
+        coreLogger = logger;
+        apiLogger = coreLogger.adopt("api");
+
+        coreLogger.info(core_name + " was started! - waiting for HazelCast to connect!");
+
+        try {
+            hazelConnector.getInstance().get();
+            coreLogger.info("connected to hazelcast!");
+        } catch (InterruptedException | ExecutionException e) {
+            coreLogger.error("connection to hazelcast failed! connection cant be reestablished!");
+            coreLogger.error(e.getClass().getName() + " : " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void start(String core_name) {
+        start(core_name,new JavaLogger(core_name, java.util.logging.Logger.getLogger(getShortCoreName())));
     }
 
     /**
@@ -66,6 +114,19 @@ public final class Core implements API {
         return new CoreClusterApi();
     }
 
+    /**
+     * @return Logger for use when accessing via API
+     */
+    @Override
+    public Logger getAPILogger() {
+        return apiLogger;
+    }
+
+
+    public Logger getCoreLogger(){
+        return coreLogger;
+    }
+
 
     public HazelConnector getHazelConnector() {
         return hazelConnector;
@@ -79,4 +140,6 @@ public final class Core implements API {
        }
         throw new NoSuchElementException("HazelcastInstance is not present!");
     }
+
+
 }
