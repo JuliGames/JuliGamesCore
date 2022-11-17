@@ -5,6 +5,7 @@ import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.core.HazelcastInstance;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 /**
  * @author Ture Bentzin
@@ -33,6 +34,14 @@ public class HazelConnector {
         HazelcastInstance hazelcastInstance = HazelcastClient.newHazelcastClient(clientConfig);
         instance.complete(hazelcastInstance);
         return this;
+    }
+
+    public void disconnect(){
+        try {
+            instance.get().shutdown();
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public CompletableFuture<HazelcastInstance> getInstance() {

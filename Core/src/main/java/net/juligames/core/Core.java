@@ -13,6 +13,7 @@ import net.juligames.core.cluster.CoreClusterApi;
 import net.juligames.core.data.HazelDataCore;
 import net.juligames.core.hcast.HazelConnector;
 import net.juligames.core.notification.CoreNotificationApi;
+import net.juligames.core.notification.TopicNotificationCore;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -50,6 +51,7 @@ public final class Core implements API {
 
     private static Core core;
     private HazelConnector hazelConnector;
+    private TopicNotificationCore topicNotificationCore;
 
     private Logger coreLogger;
     private Logger apiLogger;
@@ -61,7 +63,7 @@ public final class Core implements API {
     }
 
     @ApiStatus.Internal
-    public void start(String core_name, Logger logger) {
+    public void start(String core_name, Logger logger, boolean member) {
         this.core_name = core_name;
         if (core != null) throw new IllegalStateException("seems like a core is already running!");
         core = this;
@@ -81,10 +83,18 @@ public final class Core implements API {
             coreLogger.error(e.getClass().getName() + " : " + e.getMessage());
             e.printStackTrace();
         }
+
+        topicNotificationCore = new TopicNotificationCore(getOrThrow());
     }
 
     public void start(String core_name) {
-        start(core_name,new JavaLogger(core_name, java.util.logging.Logger.getLogger(getShortCoreName())));
+        start(core_name,new JavaLogger(core_name, java.util.logging.Logger.getLogger(getShortCoreName())),false);
+    }
+
+    public void stop(){
+        coreLogger.info("stopping hazelcast client connection");
+        hazelConnector.disconnect();
+        coreLogger.info("goodbye!");
     }
 
     /**
@@ -141,5 +151,8 @@ public final class Core implements API {
         throw new NoSuchElementException("HazelcastInstance is not present!");
     }
 
+    public TopicNotificationCore getNotificationCore() {
+        return topicNotificationCore;
+    }
 
 }

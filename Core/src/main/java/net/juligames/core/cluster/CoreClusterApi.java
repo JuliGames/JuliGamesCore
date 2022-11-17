@@ -6,16 +6,14 @@ import com.hazelcast.cluster.Cluster;
 import com.hazelcast.cluster.ClusterState;
 import com.hazelcast.cluster.Member;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.transaction.TransactionOptions;
 import net.juligames.core.Core;
 import net.juligames.core.api.cluster.ClusterApi;
-import net.juligames.core.api.err.dev.TODOException;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.Set;
 import java.util.UUID;
-import java.util.function.IntFunction;
 
 /**
  * @author Ture Bentzin
@@ -35,8 +33,32 @@ public final class CoreClusterApi implements ClusterApi {
 
     @Override
     public String[] getClientNames() {
-        //TODO
-        throw new TODOException();
+       //manual converter
+        Collection<Client> clients = getClients();
+        String[] names = new String[clients.size()];
+        int i = 0;
+        for (Client client : clients) {
+            names[i] = client.getName();
+            i++;
+        }
+        return names;
+    }
+
+    @Override
+    public UUID @NotNull [] getClientUUIDS() {
+        //manual converter
+        Collection<Client> clients = getClients();
+        UUID[] names = new UUID[clients.size()];
+        int i = 0;
+        for (Client client : clients) {
+            names[i] = client.getUuid();
+            i++;
+        }
+        return names;
+    }
+
+    public @NotNull Collection<Client> getClients() {
+        return getClientService().getConnectedClients();
     }
 
     public @NotNull ClientService getClientService() {
@@ -55,20 +77,19 @@ public final class CoreClusterApi implements ClusterApi {
         return getCluster().getLocalMember();
     }
 
-    public Client getLocalClient() {
-        for (Client connectedClient : getClientService().getConnectedClients()) {
-
-        }
-
-        throw new TODOException();
-    }
-
     public void shutdown(){
         getCluster().shutdown();
     }
 
     public @NotNull ClusterState getState() {
         return getCluster().getClusterState();
+    }
+
+    /**
+     * @return Gives always the UUID of this instance (works for members and clients)
+     */
+    public UUID getLocalUUID(){
+        return instance().getLocalEndpoint().getUuid();
     }
 
 

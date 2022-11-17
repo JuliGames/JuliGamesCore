@@ -11,4 +11,11 @@ public interface ClusterApi {
     UUID[] getMembers();
 
     String[] getClientNames();
+
+    UUID[] getClientUUIDS();
+
+    /**
+     * @return Gives always the UUID of this instance (works for members and clients)
+     */
+    UUID getLocalUUID();
 }

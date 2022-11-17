@@ -1,6 +1,8 @@
 package net.juligames.core.notification;
 
+import com.hazelcast.client.Client;
 import com.hazelcast.client.ClientService;
+import com.hazelcast.cluster.Address;
 import com.hazelcast.cluster.Member;
 import com.hazelcast.core.HazelcastInstance;
 import de.bentzin.tools.pair.DividedPair;
@@ -11,6 +13,8 @@ import net.juligames.core.api.notification.NotificationSender;
 import net.juligames.core.api.notification.SimpleNotification;
 import org.checkerframework.checker.units.qual.C;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Set;
 import java.util.UUID;
 
@@ -37,19 +41,44 @@ public class CoreNotificationSender implements NotificationSender {
         final Member localMember = Core.getInstance().getClusterApi().getLocalMember();
 
         final DividedPair<UUID,String> us = new DividedPair<>(localMember.getUuid(),"TODO");
-        final DividedPair<UUID,String>[] addressPairs = new DividedPair[addresses.length];
+        final ArrayList<DividedPair<UUID,String>> addressPairs = new ArrayList<>();
 
-        CoreNotification coreNotification = CoreNotification.craft(notification, us, addressPairs);
-        for (Member hazelMember : hazelMembers) {
-            if(notificationApi.getBlacklist().contains(hazelMember.getAddress())) continue;
-            //TODO: CRAFT NOTIFICATION
-            if(notification instanceof Notification implication) {
-                return;
+        //check Members
+        for (UUID address : addresses) {
+            for (Member hazelMember : hazelMembers) {
+                if(hazelMember.getUuid().equals(address)){
+                    Address ad = hazelMember.getAddress();
+                    String valueName = hazelMember.getAttribute("name");
+                    addressPairs.add(new DividedPair<>(address, valueName != null? valueName : ad.toString()));
+                }
             }
-
-           // hazelMembers.stream().filter(member -> member.getUuid().equals())
-
         }
+
+        //check Clients
+
+        for (UUID address : addresses) {
+            Collection<Client> clients = Core.getInstance().getClusterApi().getClients();
+            for (Client client : clients) {
+                if(client.getUuid().equals(address)){
+                    addressPairs.add(new DividedPair<>(address,client.getName()));
+                }
+            }
+        }
+
+        @SuppressWarnings("unchecked")
+        DividedPair<UUID,String>[] dividedPairs = new DividedPair[addressPairs.size()];
+        for (int i = 0; i < addressPairs.size(); i++) {
+            dividedPairs[i] = addressPairs.get(i);
+        }
+
+        CoreNotification coreNotification = CoreNotification.craft(notification, us, dividedPairs);
+        //now finally time to send the dude
+        Core.getInstance().getNotificationCore().sendNotification(coreNotification);
+
+    }
+
+    public void send(CoreNotification coreNotification) {
+
     }
 
 

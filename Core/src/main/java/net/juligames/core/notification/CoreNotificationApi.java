@@ -1,6 +1,8 @@
 package net.juligames.core.notification;
 
 import com.hazelcast.cluster.Address;
+import com.hazelcast.topic.Message;
+import com.hazelcast.topic.MessageListener;
 import de.bentzin.tools.register.Registerator;
 import net.juligames.core.api.notification.NotificationApi;
 import net.juligames.core.api.notification.NotificationListener;
@@ -16,7 +18,7 @@ import java.util.Set;
  * @author Ture Bentzin
  * 16.11.2022
  */
-public final class CoreNotificationApi implements NotificationApi {
+public final class CoreNotificationApi implements NotificationApi, MessageListener<CoreNotification> {
 
     private Registerator<NotificationListener> listenerRegisterator;
     private Set<Address> blacklist = new HashSet<>();
@@ -57,5 +59,17 @@ public final class CoreNotificationApi implements NotificationApi {
      */
     public Set<Address> getBlacklist() {
         return blacklist;
+    }
+
+
+    /**
+     * handler for notificationsApi
+     * @param message the message that is received for the topic
+     */
+    @Override
+    public void onMessage(Message<CoreNotification> message) {
+        for (NotificationListener notificationListener : listenerRegisterator) {
+            notificationListener.onNotification(message.getMessageObject());
+        }
     }
 }
