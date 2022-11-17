@@ -16,31 +16,48 @@ public class MasterCommandRunner extends Registerator<MasterCommand> {
 
     public MasterCommandRunner(Logger parentLogger) {
          cmd = parentLogger.adopt("cmd");
+        try {
+            register(new HelpCommand(this));
+        } catch (DuplicateEntryException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public Logger cmd;
 
     public void run() {
         cmd.warning("Master is now in cmd mode! Master will accept command input through this commandLine!");
+
+
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
+        String input;
         while (true) {
             try {
-                if (!bufferedReader.ready()) break;
-                //loop
-                String input = bufferedReader.readLine();
-                String[] s = input.split(" ");
-                if(s.length < 1) {
-                    throw new Exception("input is malformed");
-                }
-                String a = s[0];
-                for (MasterCommand index : getIndex()) {
-                    if(index.getCommandName().equalsIgnoreCase(a)){
-                        index.executeCommand(input.replaceFirst(a,""));
+                if ((input = bufferedReader.readLine()) == null) break;
+                try {
+                    //loop
+                    String[] s = input.split(" ");
+                    if(s.length < 1) {
+                        throw new Exception("input is malformed");
                     }
+                    String a = s[0];
+                    boolean found = false;
+                    for (MasterCommand index : getIndex()) {
+                        if(index.getCommandName().equalsIgnoreCase(a)){
+                            index.executeCommand(input.replaceFirst(a,""));
+                            found = true;
+                        }
+                    }
+                    if(!found) {
+                        cmd.info("command \"" + a + "\" not found - try help");
+                    }
+                } catch (Exception e) {
+                    cmd.error("error while master command execution: " + e.getMessage());
+                    e.printStackTrace();
                 }
-            } catch (Exception e) {
-                cmd.error("error while master command execution: " + e.getMessage());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
 
         }

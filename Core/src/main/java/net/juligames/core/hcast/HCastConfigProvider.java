@@ -1,6 +1,9 @@
 package net.juligames.core.hcast;
 
 import com.hazelcast.client.config.ClientConfig;
+import com.hazelcast.config.Config;
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Ture Bentzin
@@ -13,8 +16,17 @@ public class HCastConfigProvider {
     private HCastConfigProvider() {
     }
 
-    public static ClientConfig provide(String memberName) {
+    public static @NotNull ClientConfig provide(String clientName) {
         ClientConfig config = new ClientConfig();
+        config.setInstanceName(clientName);
+        config.setClusterName(CLUSTER_NAME);
+        return config;
+    }
+
+
+    @ApiStatus.Internal
+    public static @NotNull Config provideMember(String memberName) {
+        Config config = new Config();
         config.setInstanceName(memberName);
         config.setClusterName(CLUSTER_NAME);
         return config;

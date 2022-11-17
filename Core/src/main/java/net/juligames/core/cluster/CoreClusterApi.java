@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * @author Ture Bentzin
@@ -24,7 +25,7 @@ public final class CoreClusterApi implements ClusterApi {
     @Override
     @ApiStatus.Experimental
     public UUID @NotNull [] getMembers() {
-       return (UUID[]) getHazelMembers().stream().map(Member::getUuid).toArray();
+       return getHazelMembers().stream().map(Member::getUuid).toList().toArray(new UUID[0]);
     }
 
     public @NotNull Set<Member> getHazelMembers() {

@@ -13,10 +13,7 @@ import net.juligames.core.api.notification.NotificationSender;
 import net.juligames.core.api.notification.SimpleNotification;
 import org.checkerframework.checker.units.qual.C;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author Ture Bentzin
@@ -77,14 +74,29 @@ public class CoreNotificationSender implements NotificationSender {
 
     }
 
-    public void send(CoreNotification coreNotification) {
-
-    }
-
 
     @Override
     public void broadcastNotification(SimpleNotification notification) {
-        //TODO
+        //members first
+        ArrayList<UUID> uuids = new ArrayList<>();
+        Collections.addAll(uuids, Core.getInstance().getClusterApi().getMembers());
+        Collections.addAll(uuids,Core.getInstance().getClusterApi().getClientUUIDS());
+        //legacy
+        UUID[] uuids1 = new UUID[uuids.size()];
+        for (int i = 0; i < uuids.size(); i++) {
+            uuids1[i] = uuids.get(i);
+        }
+        sendNotification(notification,uuids1);
+    }
+
+    @Override
+    public void sendNotification(String header, String message, UUID... addressees) {
+        sendNotification(new CoreSimpleNotification(header,message),addressees);
+    }
+
+    @Override
+    public void broadcastNotification(String header, String message) {
+        broadcastNotification(new CoreSimpleNotification(header,message));
     }
 
 

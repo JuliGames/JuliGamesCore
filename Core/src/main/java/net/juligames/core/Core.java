@@ -12,12 +12,15 @@ import net.juligames.core.api.notification.NotificationApi;
 import net.juligames.core.cluster.CoreClusterApi;
 import net.juligames.core.data.HazelDataCore;
 import net.juligames.core.hcast.HazelConnector;
+import net.juligames.core.notification.CoreNotification;
 import net.juligames.core.notification.CoreNotificationApi;
 import net.juligames.core.notification.TopicNotificationCore;
+import org.checkerframework.checker.units.qual.C;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -32,6 +35,7 @@ public final class Core implements API {
     public static final String CORE_BRAND = "Core";
     public static final String CORE_VERSION_NUMBER = "0.0.1";
     public static final String CORE_SPECIFICATION = "Micheal";
+
 
     @Contract(pure = true)
     public static @NotNull String getFullCoreName() {
@@ -52,6 +56,8 @@ public final class Core implements API {
     private static Core core;
     private HazelConnector hazelConnector;
     private TopicNotificationCore topicNotificationCore;
+    private CoreNotificationApi coreNotificationApi;
+    private CoreClusterApi clusterApi;
 
     private Logger coreLogger;
     private Logger apiLogger;
@@ -68,7 +74,10 @@ public final class Core implements API {
         if (core != null) throw new IllegalStateException("seems like a core is already running!");
         core = this;
         ApiCore.CURRENT_API = this;
-        hazelConnector = HazelConnector.getInstanceAndConnect(core_name);
+        if(!member)
+            hazelConnector = HazelConnector.getInstanceAndConnect(core_name);
+        else
+            hazelConnector = HazelConnector.getInstanceAndConnectAsMember(core_name);
 
         coreLogger = logger;
         apiLogger = coreLogger.adopt("api");
@@ -85,6 +94,11 @@ public final class Core implements API {
         }
 
         topicNotificationCore = new TopicNotificationCore(getOrThrow());
+        coreNotificationApi = new CoreNotificationApi();
+        clusterApi = new CoreClusterApi();
+
+        Core.getInstance().getOrThrow().<CoreNotification>getTopic("notify: " + Core.getInstance().getClusterApi().getLocalUUID().toString())
+                .addMessageListener(coreNotificationApi);
     }
 
     public void start(String core_name) {
@@ -112,7 +126,7 @@ public final class Core implements API {
     @Contract(value = " -> new", pure = true)
     @Override
     public @NotNull CoreNotificationApi getNotificationApi() {
-        return new CoreNotificationApi();
+        return coreNotificationApi;
     }
 
     /**
@@ -121,7 +135,7 @@ public final class Core implements API {
     @Contract(value = " -> new", pure = true)
     @Override
     public @NotNull CoreClusterApi getClusterApi() {
-        return new CoreClusterApi();
+        return clusterApi;
     }
 
     /**
@@ -149,6 +163,11 @@ public final class Core implements API {
            return instance.getNow(null);
        }
         throw new NoSuchElementException("HazelcastInstance is not present!");
+    }
+
+    public HazelcastInstance getOrWait() throws ExecutionException, InterruptedException {
+        CompletableFuture<HazelcastInstance> instance = getHazelConnector().getInstance();
+        return instance.get();
     }
 
     public TopicNotificationCore getNotificationCore() {

@@ -4,9 +4,11 @@ import com.hazelcast.cluster.Address;
 import com.hazelcast.topic.Message;
 import com.hazelcast.topic.MessageListener;
 import de.bentzin.tools.register.Registerator;
+import net.juligames.core.Core;
 import net.juligames.core.api.notification.NotificationApi;
 import net.juligames.core.api.notification.NotificationListener;
 import net.juligames.core.api.notification.NotificationSender;
+import net.juligames.core.notification.debug.DebugNotificationPrinter;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,7 +23,12 @@ import java.util.Set;
 public final class CoreNotificationApi implements NotificationApi, MessageListener<CoreNotification> {
 
     private Registerator<NotificationListener> listenerRegisterator;
+
     private Set<Address> blacklist = new HashSet<>();
+
+    public CoreNotificationApi() {
+
+    }
 
     @Override
     public boolean registerListener(NotificationListener listener) {
@@ -68,6 +75,8 @@ public final class CoreNotificationApi implements NotificationApi, MessageListen
      */
     @Override
     public void onMessage(Message<CoreNotification> message) {
+        //call Debug...
+        new DebugNotificationPrinter().onMessage(message); //TODO REMOVE OR MOVE
         for (NotificationListener notificationListener : listenerRegisterator) {
             notificationListener.onNotification(message.getMessageObject());
         }
