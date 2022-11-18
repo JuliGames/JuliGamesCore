@@ -1,6 +1,5 @@
 package net.juligames.core.api;
 
-import com.mysql.cj.log.Log;
 import de.bentzin.tools.logging.Logger;
 import net.juligames.core.api.cluster.ClusterApi;
 import net.juligames.core.api.data.HazelDataApi;

@@ -4,7 +4,6 @@ import com.hazelcast.cluster.Address;
 import com.hazelcast.topic.Message;
 import com.hazelcast.topic.MessageListener;
 import de.bentzin.tools.register.Registerator;
-import net.juligames.core.Core;
 import net.juligames.core.api.notification.NotificationApi;
 import net.juligames.core.api.notification.NotificationListener;
 import net.juligames.core.api.notification.NotificationSender;

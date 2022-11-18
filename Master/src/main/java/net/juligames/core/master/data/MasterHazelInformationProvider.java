@@ -2,7 +2,6 @@ package net.juligames.core.master.data;
 
 import com.hazelcast.core.HazelcastInstance;
 import net.juligames.core.api.jdbi.Locale;
-import net.juligames.core.master.CoreMaster;
 import net.juligames.core.master.sql.MasterSQLManager;
 import org.jetbrains.annotations.NotNull;
 

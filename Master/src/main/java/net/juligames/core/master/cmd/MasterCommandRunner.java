@@ -6,7 +6,6 @@ import de.bentzin.tools.register.Registerator;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.charset.MalformedInputException;
 
 /**
  * @author Ture Bentzin

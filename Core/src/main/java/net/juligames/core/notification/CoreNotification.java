@@ -3,7 +3,6 @@ package net.juligames.core.notification;
 import de.bentzin.tools.pair.DividedPair;
 import net.juligames.core.api.notification.SimpleNotification;
 import net.juligames.core.serialization.SerializedNotification;
-import org.checkerframework.checker.units.qual.C;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 

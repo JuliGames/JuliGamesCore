@@ -1,22 +1,16 @@
 package net.juligames.core.master;
 
-import com.hazelcast.config.Config;
-import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import de.bentzin.tools.logging.Logger;
 import de.bentzin.tools.register.Registerator;
 import net.juligames.core.Core;
 import net.juligames.core.api.jdbi.LocaleDAO;
-import net.juligames.core.api.notification.SimpleNotification;
-import net.juligames.core.hcast.HCastConfigProvider;
+import net.juligames.core.api.jdbi.SQLManager;
 import net.juligames.core.master.cmd.MasterCommand;
 import net.juligames.core.master.cmd.MasterCommandRunner;
 import net.juligames.core.master.data.MasterHazelInformationProvider;
 import net.juligames.core.master.logging.MasterLogger;
 import net.juligames.core.master.sql.MasterSQLManager;
-import net.juligames.core.api.jdbi.SQLManager;
-import net.juligames.core.notification.TopicNotificationCore;
-import org.checkerframework.checker.units.qual.C;
 
 import java.util.concurrent.ExecutionException;
 

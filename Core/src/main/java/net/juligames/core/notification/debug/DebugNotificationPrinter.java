@@ -5,11 +5,9 @@ import com.hazelcast.topic.MessageListener;
 import de.bentzin.tools.logging.Logger;
 import net.juligames.core.Core;
 import net.juligames.core.api.notification.Notification;
-import net.juligames.core.notification.CoreNotification;
 import net.juligames.core.serialization.SerializedNotification;
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.*;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;

@@ -6,8 +6,6 @@ import com.hazelcast.collection.ISet;
 import com.hazelcast.map.IMap;
 import com.hazelcast.topic.ITopic;
 
-import java.util.Queue;
-
 /**
  * @apiNote This can be used to get the hazel versions of the datastructures - This will be extended in the future
  * @author Ture Bentzin
