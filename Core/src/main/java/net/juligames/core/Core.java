@@ -15,6 +15,7 @@ import net.juligames.core.hcast.HazelConnector;
 import net.juligames.core.notification.CoreNotification;
 import net.juligames.core.notification.CoreNotificationApi;
 import net.juligames.core.notification.TopicNotificationCore;
+import net.juligames.core.serialization.SerializedNotification;
 import org.checkerframework.checker.units.qual.C;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
@@ -97,7 +98,7 @@ public final class Core implements API {
         coreNotificationApi = new CoreNotificationApi();
         clusterApi = new CoreClusterApi();
 
-        Core.getInstance().getOrThrow().<CoreNotification>getTopic("notify: " + Core.getInstance().getClusterApi().getLocalUUID().toString())
+        Core.getInstance().getOrThrow().<SerializedNotification>getTopic("notify: " + Core.getInstance().getClusterApi().getLocalUUID().toString())
                 .addMessageListener(coreNotificationApi);
     }
 

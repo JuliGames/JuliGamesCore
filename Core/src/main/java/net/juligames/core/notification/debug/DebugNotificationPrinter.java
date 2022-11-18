@@ -6,6 +6,7 @@ import de.bentzin.tools.logging.Logger;
 import net.juligames.core.Core;
 import net.juligames.core.api.notification.Notification;
 import net.juligames.core.notification.CoreNotification;
+import net.juligames.core.serialization.SerializedNotification;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
@@ -18,9 +19,9 @@ import java.time.format.DateTimeFormatter;
  * @author Ture Bentzin
  * 17.11.2022
  */
-public class DebugNotificationPrinter implements MessageListener<CoreNotification> {
+public class DebugNotificationPrinter implements MessageListener<SerializedNotification> {
 
-    public static DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("z - yyyy/MM/dd HH:mm:ss");
+    public static DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 
     /**
      * Invoked when a message is received for the topic. Note that the topic guarantees message ordering.
@@ -30,13 +31,13 @@ public class DebugNotificationPrinter implements MessageListener<CoreNotificatio
      * @param message the message that is received for the topic
      */
     @Override
-    public void onMessage(@NotNull Message<CoreNotification> message) {
+    public void onMessage(@NotNull Message<SerializedNotification> message) {
         Logger notify = Core.getInstance().getCoreLogger().adopt("notify");
         notify.info("----------------NEW MESSAGE----------------");
         LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(message.getPublishTime()), ZoneId.systemDefault());
         notify.info("Message sent: " + FORMATTER.format(localDateTime));
         notify.info("Sender (Member): " + message.getPublishingMember().getUuid());
-        Notification notification = message.getMessageObject();
+        Notification notification = message.getMessageObject().deserialize();
         notify.info("Notification Header: " + notification.header());
         notify.info("Notification Content: " + notification.message());
         notify.info("--------------->NEW MESSAGE<---------------");

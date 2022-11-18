@@ -2,6 +2,7 @@ package net.juligames.core.notification;
 
 import de.bentzin.tools.pair.DividedPair;
 import net.juligames.core.api.notification.SimpleNotification;
+import net.juligames.core.serialization.SerializedNotification;
 import org.checkerframework.checker.units.qual.C;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -17,6 +18,27 @@ public class CoreNotification implements net.juligames.core.api.notification.Not
     @Contract("_, _, _ -> new")
     public static @NotNull CoreNotification craft(@NotNull SimpleNotification notification, DividedPair<UUID,String> sender, DividedPair<UUID,String>[] addresses) {
         return new CoreNotification(notification.message(),notification.header(),sender,addresses);
+    }
+
+    @Contract("_ -> new")
+    public static @NotNull CoreNotification deserialize(@NotNull SerializedNotification serializedNotification) {
+        int length = serializedNotification.addresses_names().length;
+        assert length == serializedNotification.addresses_uuids().length;
+
+        DividedPair<UUID,String> sender = new DividedPair<>(
+                serializedNotification.sender_uuid(),serializedNotification.sender_name());
+
+        DividedPair<UUID,String>[] addresses = new DividedPair[length];
+        for (int i = 0; i < addresses.length; i++) {
+            addresses[i] = new DividedPair<>(
+                    UUID.fromString(serializedNotification.addresses_uuids()[i]),
+                    serializedNotification.addresses_names()[i]
+            );
+        }
+
+        return new CoreNotification(serializedNotification.message(),
+                serializedNotification.header(),
+                sender, addresses);
     }
 
     private final String message;
@@ -71,5 +93,9 @@ public class CoreNotification implements net.juligames.core.api.notification.Not
         sb.append("message='").append(message).append('\'');
         sb.append('}');
         return sb.toString();
+    }
+
+    public SerializedNotification serialize() {
+        return SerializedNotification.serialize(this);
     }
 }
