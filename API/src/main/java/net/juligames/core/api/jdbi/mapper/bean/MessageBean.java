@@ -1,4 +1,4 @@
-package net.juligames.core.api.jdbi.bean;
+package net.juligames.core.api.jdbi.mapper.bean;
 
 import net.juligames.core.api.jdbi.Message;
 

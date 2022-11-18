@@ -1,6 +1,6 @@
 package net.juligames.core.api.jdbi;
 
-import net.juligames.core.api.jdbi.bean.LocaleBean;
+import net.juligames.core.api.jdbi.mapper.bean.LocaleBean;
 import org.jdbi.v3.sqlobject.config.RegisterBeanMapper;
 import org.jdbi.v3.sqlobject.customizer.Bind;
 import org.jdbi.v3.sqlobject.customizer.BindBean;
