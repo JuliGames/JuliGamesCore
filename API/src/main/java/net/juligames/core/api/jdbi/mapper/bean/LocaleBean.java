@@ -1,13 +1,13 @@
 package net.juligames.core.api.jdbi.mapper.bean;
 
-import net.juligames.core.api.jdbi.Locale;
+import net.juligames.core.api.jdbi.DBLocale;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Ture Bentzin
  * 16.11.2022
  */
-public class LocaleBean implements Locale {
+public class LocaleBean implements DBLocale {
 
 
     private String locale;

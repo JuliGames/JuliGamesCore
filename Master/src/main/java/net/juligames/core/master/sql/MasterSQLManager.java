@@ -1,6 +1,6 @@
 package net.juligames.core.master.sql;
 
-import net.juligames.core.api.jdbi.Locale;
+import net.juligames.core.api.jdbi.DBLocale;
 import net.juligames.core.api.jdbi.LocaleDAO;
 import net.juligames.core.api.jdbi.MessageDAO;
 import net.juligames.core.api.jdbi.SQLManager;
@@ -24,10 +24,10 @@ public class MasterSQLManager implements SQLManager {
      *
      * @return
      */
-    public static Locale defaultEnglish() {
+    public static DBLocale defaultEnglish() {
         return CoreMaster.getMasterSQLManager().getJdbi().withExtension(LocaleDAO.class, extension -> {
-            List<Locale> locales = extension.listAll();
-            for (Locale locale : locales) {
+            List<DBLocale> locales = extension.listAll();
+            for (DBLocale locale : locales) {
                 if (locale.getLocale().equals("EN_US")) {
                     return locale;
                 }

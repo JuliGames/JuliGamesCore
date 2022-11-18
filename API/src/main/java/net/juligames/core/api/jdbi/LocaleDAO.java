@@ -28,7 +28,7 @@ public interface LocaleDAO {
     List<LocaleBean> listAllBeans();
 
     @SqlUpdate("INSERT INTO locale(locale, description) values (:locale, :description)")
-    void insert(@BindBean Locale locale);
+    void insert(@BindBean DBLocale locale);
 
     @SqlUpdate("DELETE FROM locale WHERE locale = :locale")
     void delete(@Bind("locale") String locale);
@@ -36,12 +36,12 @@ public interface LocaleDAO {
     @SqlQuery("SELECT * FROM locale where locale = :locale")
     LocaleBean selectBean(@Bind("locale") String locale);
 
-    default Locale select(String locale) {
+    default DBLocale select(String locale) {
         return selectBean(locale);
     }
 
-    default List<Locale> listAll() {
-        return listAllBeans().stream().map(localeBean -> (Locale) localeBean).toList();
+    default List<DBLocale> listAll() {
+        return listAllBeans().stream().map(localeBean -> (DBLocale) localeBean).toList();
     }
 
 

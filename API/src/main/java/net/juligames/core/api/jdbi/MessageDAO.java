@@ -32,18 +32,18 @@ public interface MessageDAO {
     void createTable();
 
     @SqlQuery("SELECT * FROM message")
-    List<Locale> listAllBeans();
+    List<DBLocale> listAllBeans();
 
     @SqlUpdate("INSERT INTO message(messageKey, locale, miniMessage) values (:messageKey, :locale, :miniMessage)")
-    void insert(@BindBean Message message);
+    void insert(@BindBean DBMessage message);
 
     @SqlUpdate("DELETE FROM message WHERE messageKey = :key")
     void delete(@Bind("key") String messageKey);
 
     @SqlQuery("SELECT * FROM message where messageKey = :key AND locale = :locale")
-    Message select(@Bind("key") String key, @Bind("locale") String locale);
+    DBMessage select(@Bind("key") String key, @Bind("locale") String locale);
 
-    default Message selectBean(String key, Locale locale) {
+    default DBMessage selectBean(String key, DBLocale locale) {
         return select(key, locale.getLocale());
     }
 
@@ -53,7 +53,7 @@ public interface MessageDAO {
      * @param key the key
      * @return the Message
      */
-    default Message select(String key) {
+    default DBMessage select(String key) {
         return select(key, API.get().getHazelDataApi().<String, String>getMap("master_information").get("default_locale"));
     }
 
