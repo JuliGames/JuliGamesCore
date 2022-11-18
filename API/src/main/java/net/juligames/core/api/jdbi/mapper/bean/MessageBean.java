@@ -1,12 +1,12 @@
 package net.juligames.core.api.jdbi.mapper.bean;
 
-import net.juligames.core.api.jdbi.Message;
+import net.juligames.core.api.jdbi.DBMessage;
 
 /**
  * @author Ture Bentzin
  * 16.11.2022
  */
-public class MessageBean implements Message {
+public class MessageBean implements DBMessage {
 
     public MessageBean(String messageKey, String locale, String miniMessage) {
         this.messageKey = messageKey;

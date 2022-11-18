@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Ture Bentzin
  * 16.11.2022
  */
-public interface Locale {
+public interface DBLocale {
     String getDescription();
 
     void setDescription(String description);
