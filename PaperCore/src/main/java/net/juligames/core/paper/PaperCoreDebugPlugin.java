@@ -14,4 +14,9 @@ public class PaperCoreDebugPlugin extends JavaPlugin {
         Core core = new Core();
         core.start("paper-core");
     }
+
+    @Override
+    public void onDisable() {
+        Core.getInstance().stop();
+    }
 }
