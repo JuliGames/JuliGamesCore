@@ -1,4 +1,4 @@
-package net.juligames.core.api.jdbi.mapper;
+package net.juligames.core.api.jdbi;
 
 import net.juligames.core.api.jdbi.DBReplacement;
 import net.juligames.core.api.jdbi.mapper.bean.ReplacementBean;
