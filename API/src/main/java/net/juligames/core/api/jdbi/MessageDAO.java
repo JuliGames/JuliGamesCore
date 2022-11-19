@@ -40,6 +40,13 @@ public interface MessageDAO {
     @SqlUpdate("DELETE FROM message WHERE messageKey = :key")
     void delete(@Bind("key") String messageKey);
 
+    @SqlUpdate("UPDATE minecraft.message " +
+            "SET miniMessage = :newMiniMessage " +
+            "WHERE locale = :locale AND messageKey = :key;")
+    void update(@Bind("key") String key,
+                @Bind("locale")  String locale,
+                @Bind("miniMesage") String newMiniMesssage);
+
     @SqlQuery("SELECT * FROM message where messageKey = :key AND locale = :locale")
     DBMessage select(@Bind("key") String key, @Bind("locale") String locale);
 

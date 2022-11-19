@@ -10,7 +10,6 @@ import net.juligames.core.master.cmd.MasterCommand;
 import net.juligames.core.master.cmd.MasterCommandRunner;
 import net.juligames.core.master.data.MasterHazelInformationProvider;
 import net.juligames.core.master.logging.MasterLogger;
-import net.juligames.core.master.sql.MasterSQLManager;
 
 import java.util.concurrent.ExecutionException;
 
@@ -51,8 +50,9 @@ public class CoreMaster {
         logger.info("hazelcast boot was initiated");
 
         logger.debug("sql: start");
-        SQLManager = new MasterSQLManager("jdbc:mysql://admin@localhost:3306/minecraft");
-        SQLManager.createTables();
+        SQLManager = Core.getInstance().getSQLManager();
+
+        SQLManager.createTables(); //MASTER CREATES TABLES (NOT THE CORE!!!)
 
         SQLManager.getJdbi().withExtension(LocaleDAO.class, extension -> {
             extension.listAll();

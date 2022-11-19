@@ -5,9 +5,11 @@ import de.bentzin.tools.logging.JavaLogger;
 import de.bentzin.tools.logging.Logger;
 import net.juligames.core.api.API;
 import net.juligames.core.api.ApiCore;
+import net.juligames.core.api.jdbi.SQLManager;
 import net.juligames.core.cluster.CoreClusterApi;
 import net.juligames.core.data.HazelDataCore;
 import net.juligames.core.hcast.HazelConnector;
+import net.juligames.core.jdbi.CoreSQLManager;
 import net.juligames.core.notification.CoreNotificationApi;
 import net.juligames.core.notification.TopicNotificationCore;
 import net.juligames.core.serialization.SerializedNotification;
@@ -55,6 +57,7 @@ public final class Core implements API {
 
     private Logger coreLogger;
     private Logger apiLogger;
+    private CoreSQLManager sqlManager;
 
     private String core_name;
 
@@ -86,6 +89,10 @@ public final class Core implements API {
             coreLogger.error(e.getClass().getName() + " : " + e.getMessage());
             e.printStackTrace();
         }
+
+        logger.info("connecting to jdbi... <hardcode>");
+        sqlManager = new CoreSQLManager("jdbc:mysql://admin@localhost:3306/minecraft", logger);
+        logger.info("connected to jdbi -> " + sqlManager);
 
         topicNotificationCore = new TopicNotificationCore(getOrThrow());
         coreNotificationApi = new CoreNotificationApi();
@@ -168,4 +175,7 @@ public final class Core implements API {
         return topicNotificationCore;
     }
 
+    public SQLManager getSQLManager() {
+        return sqlManager;
+    }
 }

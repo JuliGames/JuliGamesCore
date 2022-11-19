@@ -5,6 +5,7 @@ import net.juligames.core.api.jdbi.MessageDAO;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * @author Ture Bentzin
@@ -18,7 +19,5 @@ public interface Message extends Cloneable {
     String getMiniMessage();
     String getPlainMessage();
 
-    void doWithMiniMessage(Consumer<String> actionToPerform);
-
-    Message clone();
+    void doWithMiniMessage(Function<String, String> actionToPerform);
 }

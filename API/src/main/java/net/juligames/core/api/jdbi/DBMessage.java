@@ -4,7 +4,7 @@ package net.juligames.core.api.jdbi;
  * @author Ture Bentzin
  * 16.11.2022
  */
-public interface DBMessage {
+public interface DBMessage extends Cloneable{
     String getMiniMessage();
 
     void setMiniMessage(String miniMessage);
@@ -14,4 +14,6 @@ public interface DBMessage {
     void setLocale(String locale);
 
     String getMessageKey();
+
+    public DBMessage clone();
 }

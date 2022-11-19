@@ -1,31 +1,28 @@
-package net.juligames.core.master.sql;
+package net.juligames.core.jdbi;
 
-import net.juligames.core.api.jdbi.DBLocale;
-import net.juligames.core.api.jdbi.LocaleDAO;
-import net.juligames.core.api.jdbi.MessageDAO;
-import net.juligames.core.api.jdbi.SQLManager;
+import de.bentzin.tools.Hardcode;
+import de.bentzin.tools.logging.Logger;
+import net.juligames.core.Core;
+import net.juligames.core.api.jdbi.*;
 import net.juligames.core.api.jdbi.mapper.bean.LocaleBean;
-import net.juligames.core.master.CoreMaster;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.sqlobject.SqlObjectPlugin;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 /**
  * @author Ture Bentzin
- * 16.11.2022
+ * 19.11.2022
  */
-public class MasterSQLManager implements SQLManager {
+public class CoreSQLManager implements SQLManager {
 
     /**
      * This does not save anything to the DB it just gets if there is a locale for EN_US and returns it when found and if not it will generate one!
-     *
-     * @return
      */
+    @Hardcode
     public static DBLocale defaultEnglish() {
-        return CoreMaster.getMasterSQLManager().getJdbi().withExtension(LocaleDAO.class, extension -> {
+        return Core.getInstance().getSqlManager().getJdbi().withExtension(LocaleDAO.class, extension -> {
             List<DBLocale> locales = extension.listAll();
             for (DBLocale locale : locales) {
                 if (locale.getLocale().equals("EN_US")) {
@@ -36,16 +33,19 @@ public class MasterSQLManager implements SQLManager {
         });
     }
 
-    public static final Logger logger = LoggerFactory.getLogger(MasterSQLManager.class);
 
     private final Jdbi jdbi;
+    private final Logger logger;
 
-    public MasterSQLManager(String connection) {
+
+    public CoreSQLManager(String connection, @NotNull Logger parentLogger) {
+        logger = parentLogger.adopt("jdbi");
         jdbi = Jdbi.create(connection);
         jdbi.installPlugin(new SqlObjectPlugin());
     }
 
     @Override
+    @Hardcode //TODO: Make Dynamic
     public void createTables() {
         //Locale
         logger.info("creating: locale");
@@ -62,11 +62,29 @@ public class MasterSQLManager implements SQLManager {
             return null;
         });
         logger.info("created: message");
+
+
+        //player_locale_preference
+        logger.info("creating: player_locale_preference");
+        jdbi.withExtension(PlayerLocalPreferenceDAO.class, extension -> {
+            extension.createTable();
+            return null;
+        });
+        logger.info("created: player_locale_preference");
     }
 
+    protected Logger getLogger(){
+        return logger;
+    }
 
     @Override
     public Jdbi getJdbi() {
         return jdbi;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        return builder.append("JDBI is currently: ").append(jdbi).toString();
     }
 }

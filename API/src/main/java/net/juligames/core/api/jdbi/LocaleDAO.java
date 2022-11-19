@@ -33,6 +33,11 @@ public interface LocaleDAO {
     @SqlUpdate("DELETE FROM locale WHERE locale = :locale")
     void delete(@Bind("locale") String locale);
 
+    @SqlUpdate("UPDATE minecraft.locale " +
+            "SET description = :desc " +
+            "WHERE locale LIKE :locale;")
+    void update(@Bind("locale") String locale,@Bind("desc")  String newDescription);
+
     @SqlQuery("SELECT * FROM locale where locale = :locale")
     LocaleBean selectBean(@Bind("locale") String locale);
 

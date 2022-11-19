@@ -2,7 +2,7 @@ package net.juligames.core.master.data;
 
 import com.hazelcast.core.HazelcastInstance;
 import net.juligames.core.api.jdbi.DBLocale;
-import net.juligames.core.master.sql.MasterSQLManager;
+import net.juligames.core.jdbi.CoreSQLManager;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -33,7 +33,7 @@ public class MasterHazelInformationProvider {
 
     public void update() {
         //Locale
-        DBLocale defaultEnglish = MasterSQLManager.defaultEnglish();
+        DBLocale defaultEnglish = CoreSQLManager.defaultEnglish();
         informationMap().put("default_locale", defaultEnglish.getLocale());
         informationMap().put("default_locale_description", defaultEnglish.getDescription());
     }

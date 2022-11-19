@@ -11,4 +11,6 @@ public interface MessagePostScript {
     Message message();
     Date timeSent();
     MessageRecipient recipient();
+
+    MultiMessagePostScript toMulti();
 }
