@@ -1,5 +1,6 @@
 package net.juligames.core.jdbi;
 
+import com.google.errorprone.annotations.DoNotCall;
 import de.bentzin.tools.Hardcode;
 import de.bentzin.tools.logging.Logger;
 import net.juligames.core.Core;
@@ -46,6 +47,11 @@ public class CoreSQLManager implements SQLManager {
 
     @Override
     @Hardcode //TODO: Make Dynamic
+    @DoNotCall
+    /**
+     * This should only be called by a master instance. If you don't know when this method should be called or what a master
+     * is then you are the one I have written this message for.
+     */
     public void createTables() {
         //Locale
         logger.info("creating: locale");
@@ -71,6 +77,25 @@ public class CoreSQLManager implements SQLManager {
             return null;
         });
         logger.info("created: player_locale_preference");
+
+        //replacement
+        logger.info("creating: replacement");
+        jdbi.withExtension(ReplacementDAO.class, extension -> {
+            extension.createTable();
+            return null;
+        });
+        logger.info("created: replacement");
+
+        //replacementType
+        logger.info("creating: replacementType");
+        jdbi.withExtension(ReplacementTypeDAO.class, extension -> {
+            extension.createTable();
+            return null;
+        });
+        logger.info("created: replacementType");
+
+        //default the replacementTypes:
+
     }
 
     protected Logger getLogger(){

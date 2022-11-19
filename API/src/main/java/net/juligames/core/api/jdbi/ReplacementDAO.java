@@ -44,8 +44,8 @@ public interface ReplacementDAO {
     @SqlQuery("SELECT * FROM replacement where tag = :tag")
     ReplacementBean selectBean(@Bind("tag") String tag);
 
-    default DBReplacement select(String locale) {
-        return selectBean(locale);
+    default DBReplacement select(String tag) {
+        return selectBean(tag);
     }
 
     default List<DBReplacement> listAll() {

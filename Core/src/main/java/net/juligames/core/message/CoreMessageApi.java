@@ -6,6 +6,7 @@ import net.juligames.core.Core;
 import net.juligames.core.api.jdbi.*;
 import net.juligames.core.api.jdbi.mapper.bean.MessageBean;
 import net.juligames.core.api.message.*;
+import net.juligames.core.message.adventure.AdventureTagManager;
 import org.jdbi.v3.core.extension.ExtensionCallback;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -18,6 +19,12 @@ import java.util.stream.Stream;
  * 19.11.2022
  */
 public class CoreMessageApi implements MessageApi {
+
+    private final AdventureTagManager adventureTagManager;
+
+    public CoreMessageApi(){
+        this.adventureTagManager = new AdventureTagManager();
+    }
 
 
     @Override
@@ -45,13 +52,13 @@ public class CoreMessageApi implements MessageApi {
     @Override
     public Message getMessage(String messageKey, Locale locale) {
         DBMessage dbMessage = callMessageExtension(extension -> extension.select(messageKey, locale.toString()));
-
-        return null;
+        return new CoreMessage(dbMessage);
     }
 
     @Override
     public Message getMessage(String messageKey, String locale) {
-        return null;
+        DBMessage dbMessage = callMessageExtension(extension -> extension.select(messageKey,locale));
+        return new CoreMessage(dbMessage);
     }
 
     @Override
@@ -172,5 +179,10 @@ public class CoreMessageApi implements MessageApi {
     @Override
     public MultiMessagePostScript broadcastMessage(Collection<String> messageKeys) {
         return null;
+    }
+
+    @Override
+    public AdventureTagManager getTagManager() {
+        return adventureTagManager;
     }
 }

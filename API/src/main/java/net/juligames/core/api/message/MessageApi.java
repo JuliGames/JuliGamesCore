@@ -94,4 +94,5 @@ public interface MessageApi {
     MultiMessagePostScript broadcastMessage(Collection<String> messageKeys);
     //TODO messageRecipient and prefer locals
 
+    TagManager getTagManager();
 }
