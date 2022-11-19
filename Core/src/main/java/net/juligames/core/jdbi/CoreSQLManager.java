@@ -22,7 +22,7 @@ public class CoreSQLManager implements SQLManager {
      */
     @Hardcode
     public static DBLocale defaultEnglish() {
-        return Core.getInstance().getSqlManager().getJdbi().withExtension(LocaleDAO.class, extension -> {
+        return Core.getInstance().getSQLManager().getJdbi().withExtension(LocaleDAO.class, extension -> {
             List<DBLocale> locales = extension.listAll();
             for (DBLocale locale : locales) {
                 if (locale.getLocale().equals("EN_US")) {
