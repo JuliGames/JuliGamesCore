@@ -2,3 +2,7 @@ main: net.juligames.core.paper.PaperCoreDebugPlugin
 version: 0.0.1 - Micheal
 name: PaperCore
 author: Ture Bentzin
+commands:
+  message:
+    description: test message core
+    usage: /command messageKey

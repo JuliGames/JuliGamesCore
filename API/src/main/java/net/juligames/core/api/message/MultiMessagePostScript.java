@@ -12,7 +12,7 @@ import java.util.Date;
 public interface MultiMessagePostScript {
     Collection<Message> messages();
     Date timeSent();
-    Collection<MessageRecipient> recipients();
+    Collection<? extends MessageRecipient> recipients();
 
     Collection<MessagePostScript> toSingles();
 }

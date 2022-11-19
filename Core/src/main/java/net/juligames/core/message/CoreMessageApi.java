@@ -28,6 +28,7 @@ import java.util.stream.Stream;
 public class CoreMessageApi implements MessageApi {
 
     //TODO switch all Collections / Streams to ? extends X for performance reasons
+    //TODO AUTOMATIC FALLBACK!!!
 
     private final AdventureTagManager adventureTagManager;
 
@@ -200,7 +201,7 @@ public class CoreMessageApi implements MessageApi {
     public CoreMultiMessagePostScript broadcastMessage(String messageKey, String defaultLocale) {
        //because of performance reasons I will reimplement sendMessage here - it is not "good" code, but I think its worth it!
         Message message = getMessage(messageKey,defaultLocale);
-        Collection<MessageRecipient> messageRecipients = Core.getInstance().getOnlineRecipientProvider().get();
+        Collection<? extends MessageRecipient> messageRecipients = Core.getInstance().getOnlineRecipientProvider().get();
         for (MessageRecipient messageRecipient : messageRecipients) {
             messageRecipient.deliver(message);
         }
@@ -229,7 +230,7 @@ public class CoreMessageApi implements MessageApi {
      * @return not accurate {@link CoreMultiMessagePostScript}
      */
     @Override
-    public CoreMultiMessagePostScript sendMessage(@NotNull Collection<String> messageKeys, Collection<MessageRecipient> messageRecipients) {
+    public CoreMultiMessagePostScript sendMessage(@NotNull Collection<String> messageKeys, Collection<? extends MessageRecipient> messageRecipients) {
         //because of performance reasons I will reimplement sendMessage here - it is not "good" code, but I think its worth it!
         Collection<Message> messages = new ArrayList<>();
         for (String messageKey : messageKeys) {
@@ -260,7 +261,7 @@ public class CoreMessageApi implements MessageApi {
     }
 
     @Override
-    public CoreMultiMessagePostScript sendMessage(@NotNull Collection<String> messageKeys, Collection<MessageRecipient> messageRecipients, String overrideLocale) {
+    public CoreMultiMessagePostScript sendMessage(@NotNull Collection<String> messageKeys, Collection<? extends MessageRecipient> messageRecipients, String overrideLocale) {
         //because of performance reasons I will reimplement sendMessage here - it is not "good" code, but I think its worth it!
         Collection<Message> messages = new ArrayList<>();
         for (String messageKey : messageKeys) {
@@ -274,12 +275,12 @@ public class CoreMessageApi implements MessageApi {
     }
 
     @Override
-    public CoreMultiMessagePostScript sendMessage(Collection<String> messageKeys, Collection<MessageRecipient> messageRecipients, @NotNull Locale overrideLocale) {
+    public CoreMultiMessagePostScript sendMessage(Collection<String> messageKeys, Collection<? extends MessageRecipient> messageRecipients, @NotNull Locale overrideLocale) {
         return sendMessage(messageKeys,messageRecipients,overrideLocale.toString());
     }
 
     @Override
-    public CoreMultiMessagePostScript sendMessage(Collection<String> messageKeys, Collection<MessageRecipient> messageRecipients, @NotNull DBLocale overrideLocale) {
+    public CoreMultiMessagePostScript sendMessage(Collection<String> messageKeys, Collection<? extends MessageRecipient> messageRecipients, @NotNull DBLocale overrideLocale) {
         return sendMessage(messageKeys,messageRecipients,overrideLocale.toUtil());
     }
 

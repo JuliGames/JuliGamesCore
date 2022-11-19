@@ -18,16 +18,16 @@ import java.util.Date;
 public class CoreMultiMessagePostScript implements MultiMessagePostScript {
 
     private final Collection<Message> messages;
-    private final Collection<MessageRecipient> recipients;
+    private final Collection<? extends MessageRecipient> recipients;
     private final Date timeSent;
 
-    public CoreMultiMessagePostScript(Collection<Message> messages, Collection<MessageRecipient> recipients, Date timeSent) {
+    public CoreMultiMessagePostScript(Collection<Message> messages, Collection<? extends MessageRecipient> recipients, Date timeSent) {
         this.messages = messages;
         this.recipients = recipients;
         this.timeSent = timeSent;
     }
 
-    public CoreMultiMessagePostScript(Collection<Message> messages, Collection<MessageRecipient> recipients) {
+    public CoreMultiMessagePostScript(Collection<Message> messages, Collection<? extends MessageRecipient> recipients) {
         this.messages = messages;
         this.recipients = recipients;
         this.timeSent = Date.from(Instant.now());
@@ -44,7 +44,7 @@ public class CoreMultiMessagePostScript implements MultiMessagePostScript {
     }
 
     @Override
-    public Collection<MessageRecipient> recipients() {
+    public Collection<? extends MessageRecipient> recipients() {
         return recipients;
     }
 

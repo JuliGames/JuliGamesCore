@@ -71,7 +71,7 @@ public final class Core implements API {
 
 
     @NotNull
-    private Supplier<Collection<MessageRecipient>> onlineRecipientProvider = () -> List.of(new DummyMessageRecipient());
+    private Supplier<Collection<? extends MessageRecipient>> onlineRecipientProvider = () -> List.of(new DummyMessageRecipient());
 
     public static Core getInstance() {
         return core;
@@ -208,11 +208,11 @@ public final class Core implements API {
         return messageApi;
     }
 
-    public Supplier<Collection<MessageRecipient>> getOnlineRecipientProvider() {
+    public Supplier<Collection<? extends MessageRecipient>> getOnlineRecipientProvider() {
         return onlineRecipientProvider;
     }
 
-    public void setOnlineRecipientProvider(Supplier<Collection<MessageRecipient>> onlineRecipientProvider) {
+    public void setOnlineRecipientProvider(@NotNull Supplier<Collection<? extends MessageRecipient>> onlineRecipientProvider) {
         this.onlineRecipientProvider = onlineRecipientProvider;
     }
 }

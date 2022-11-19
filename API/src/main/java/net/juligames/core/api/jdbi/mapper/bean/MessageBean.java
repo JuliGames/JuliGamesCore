@@ -49,6 +49,11 @@ public class MessageBean implements DBMessage {
     }
 
     @Override
+    public void setMessageKey(String messageKey) {
+        this.messageKey = messageKey;
+    }
+
+    @Override
     public DBMessage clone(){
         return new MessageBean(messageKey,locale,miniMessage);
     }

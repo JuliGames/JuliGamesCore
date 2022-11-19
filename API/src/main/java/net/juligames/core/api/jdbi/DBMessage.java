@@ -15,5 +15,7 @@ public interface DBMessage extends Cloneable{
 
     String getMessageKey();
 
+    void setMessageKey(String messageKey);
+
     public DBMessage clone();
 }
