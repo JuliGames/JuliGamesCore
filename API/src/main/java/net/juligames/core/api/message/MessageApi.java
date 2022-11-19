@@ -36,6 +36,16 @@ public interface MessageApi {
     <R>
     R callPreferenceExtension(ExtensionCallback<R,PlayerLocalPreferenceDAO,RuntimeException> extensionCallback);
 
+    @ApiStatus.Internal
+    @ApiStatus.Experimental
+    <R>
+    R callReplacementExtension(ExtensionCallback<R,ReplacementDAO,RuntimeException> extensionCallback);
+
+    @ApiStatus.Internal
+    @ApiStatus.Experimental
+    <R>
+    R callReplacementTypeExtension(ExtensionCallback<R,ReplacementTypeDAO,RuntimeException> extensionCallback);
+
     //get
     Message getMessage(String messageKey, Locale locale);
 
@@ -56,14 +66,20 @@ public interface MessageApi {
     @ApiStatus.Internal
     Stream<DBMessage> streamData();
 
-    Collection<Pair<String>> getReplacers();
+    Collection<DBReplacement> getReplacers();
 
     //register
 
     @Deprecated
-    boolean registerMessage(String messageKey);
+    void registerMessage(String messageKey);
 
-    boolean registerMessage(String messageKey, String defaultMiniMessage);
+    void registerMessage(String messageKey, String defaultMiniMessage);
+
+    boolean hasMessage(String messageKey);
+
+    boolean hasMessage(String messageKey, String locale);
+    boolean hasMessage(String messageKey, Locale locale);
+    boolean hasMessage(String messageKey, DBLocale locale);
 
     MessagePostScript sendMessage(String messageKey, MessageRecipient messageRecipient);
 
@@ -84,6 +100,14 @@ public interface MessageApi {
     MultiMessagePostScript sendMessage(Collection<String> messageKeys, MessageRecipient messageRecipient);
 
     MultiMessagePostScript sendMessage(Collection<String> messageKeys, Collection<MessageRecipient> messageRecipients);
+
+    MultiMessagePostScript sendMessage(Collection<String> messageKeys, MessageRecipient messageRecipient, String overrideLocale);
+    MultiMessagePostScript sendMessage(Collection<String> messageKeys, MessageRecipient messageRecipient, Locale overrideLocale);
+    MultiMessagePostScript sendMessage(Collection<String> messageKeys, MessageRecipient messageRecipient, DBLocale overrideLocale);
+
+    MultiMessagePostScript sendMessage(Collection<String> messageKeys, Collection<MessageRecipient> messageRecipients, String overrideLocale);
+    MultiMessagePostScript sendMessage(Collection<String> messageKeys, Collection<MessageRecipient> messageRecipients, Locale overrideLocale);
+    MultiMessagePostScript sendMessage(Collection<String> messageKeys, Collection<MessageRecipient> messageRecipients, DBLocale overrideLocale);
 
     MultiMessagePostScript broadcastMessage(Collection<String> messageKeys, Locale defaultLocale);
 

@@ -5,7 +5,6 @@ import de.bentzin.tools.logging.JavaLogger;
 import de.bentzin.tools.logging.Logger;
 import net.juligames.core.api.API;
 import net.juligames.core.api.ApiCore;
-import net.juligames.core.api.jdbi.SQLManager;
 import net.juligames.core.cluster.CoreClusterApi;
 import net.juligames.core.data.HazelDataCore;
 import net.juligames.core.hcast.HazelConnector;
@@ -17,10 +16,14 @@ import net.juligames.core.serialization.SerializedNotification;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import net.juligames.core.api.message.MessageRecipient;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Supplier;
 
 /**
  * @author Ture Bentzin
@@ -32,6 +35,9 @@ public final class Core implements API {
     public static final String CORE_BRAND = "Core";
     public static final String CORE_VERSION_NUMBER = "0.0.1";
     public static final String CORE_SPECIFICATION = "Micheal";
+
+    public Core() {
+    }
 
 
     @Contract(pure = true)
@@ -62,6 +68,10 @@ public final class Core implements API {
     private CoreMessageApi messageApi;
 
     private String core_name;
+
+
+    @NotNull
+    private Supplier<Collection<MessageRecipient>> onlineRecipientProvider = () -> List.of(new DummyMessageRecipient());
 
     public static Core getInstance() {
         return core;
@@ -196,5 +206,13 @@ public final class Core implements API {
     @Override
     public CoreMessageApi getMessageApi() {
         return messageApi;
+    }
+
+    public Supplier<Collection<MessageRecipient>> getOnlineRecipientProvider() {
+        return onlineRecipientProvider;
+    }
+
+    public void setOnlineRecipientProvider(Supplier<Collection<MessageRecipient>> onlineRecipientProvider) {
+        this.onlineRecipientProvider = onlineRecipientProvider;
     }
 }

@@ -1,6 +1,8 @@
 package net.juligames.core.api.message;
 
+import net.juligames.core.api.API;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Ture Bentzin
@@ -14,11 +16,20 @@ public interface MessageRecipient {
     String getName();
     void deliver(Message message);
 
-    @ApiStatus.Internal
-    @Deprecated
+
     /**
      * delivers a miniMessage string to the recipient
      *
      */
+    @ApiStatus.Internal
+    @Deprecated
     void deliver(String miniMessage);
+
+    @Nullable
+    String supplyLocale();
+
+    default String supplyLocaleOrDefault(){
+        if(supplyLocale() != null) return supplyLocale();
+        return API.get().getHazelDataApi().getMasterInformation().get("default_locale");
+    }
 }

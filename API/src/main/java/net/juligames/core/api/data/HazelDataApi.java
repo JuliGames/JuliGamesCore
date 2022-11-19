@@ -12,16 +12,23 @@ import java.util.Set;
 public interface HazelDataApi {
 
     /**
-     *
      * @param hazel the name of the map in the cluster
+     * @param <A>   key
+     * @param <B>   value
      * @return the map from hazelCast
-     * @param <A> key
-     * @param <B> value
      */
-    <A,B> Map<A,B> getMap(String hazel);
+    <A, B> Map<A, B> getMap(String hazel);
+
     <T> Queue<T> getQueue(String hazel);
+
     <T> Set<T> getSet(String hazel);
+
     <E> List<E> getList(String hazel);
+
+    default Map<String, String> getMasterInformation() {
+        //API.get().getHazelDataApi().<String, String>getMap("master_information").get("default_locale")
+        return getMap("master_information");
+    }
 
 
 }
