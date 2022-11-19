@@ -4,6 +4,7 @@ import de.bentzin.tools.logging.Logger;
 import net.juligames.core.api.cluster.ClusterApi;
 import net.juligames.core.api.data.HazelDataApi;
 import net.juligames.core.api.jdbi.SQLManager;
+import net.juligames.core.api.message.MessageApi;
 import net.juligames.core.api.notification.NotificationApi;
 
 /**
@@ -45,5 +46,11 @@ public interface API {
      * @return SQL Manager to get JDBI
      */
     SQLManager getSQLManager();
+
+    /**
+     *
+     * @return The MessageAPI used to send Messages via core to players
+     */
+    MessageApi getMessageApi();
 
 }

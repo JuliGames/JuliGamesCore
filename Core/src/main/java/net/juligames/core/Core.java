@@ -10,6 +10,7 @@ import net.juligames.core.cluster.CoreClusterApi;
 import net.juligames.core.data.HazelDataCore;
 import net.juligames.core.hcast.HazelConnector;
 import net.juligames.core.jdbi.CoreSQLManager;
+import net.juligames.core.message.CoreMessageApi;
 import net.juligames.core.notification.CoreNotificationApi;
 import net.juligames.core.notification.TopicNotificationCore;
 import net.juligames.core.serialization.SerializedNotification;
@@ -58,6 +59,7 @@ public final class Core implements API {
     private Logger coreLogger;
     private Logger apiLogger;
     private CoreSQLManager sqlManager;
+    private CoreMessageApi messageApi;
 
     private String core_name;
 
@@ -97,6 +99,7 @@ public final class Core implements API {
         topicNotificationCore = new TopicNotificationCore(getOrThrow());
         coreNotificationApi = new CoreNotificationApi();
         clusterApi = new CoreClusterApi();
+        messageApi = new CoreMessageApi();
 
         Core.getInstance().getOrThrow().<SerializedNotification>getTopic("notify: " + Core.getInstance().getClusterApi().getLocalUUID().toString())
                 .addMessageListener(coreNotificationApi);
@@ -104,6 +107,14 @@ public final class Core implements API {
 
     public void start(String core_name) {
         start(core_name,new JavaLogger(core_name, java.util.logging.Logger.getLogger(getShortCoreName())),false);
+    }
+
+    public void await() throws InterruptedException {
+        try {
+            getHazelConnector().getInstance().get();
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void stop(){
@@ -175,7 +186,15 @@ public final class Core implements API {
         return topicNotificationCore;
     }
 
-    public SQLManager getSQLManager() {
+    public CoreSQLManager getSQLManager() {
         return sqlManager;
+    }
+
+    /**
+     * @return The MessageAPI used to send Messages via core to players
+     */
+    @Override
+    public CoreMessageApi getMessageApi() {
+        return messageApi;
     }
 }

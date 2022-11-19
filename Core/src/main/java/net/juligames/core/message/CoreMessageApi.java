@@ -4,6 +4,7 @@ import de.bentzin.tools.Hardcode;
 import de.bentzin.tools.pair.Pair;
 import net.juligames.core.Core;
 import net.juligames.core.api.jdbi.*;
+import net.juligames.core.api.jdbi.mapper.bean.MessageBean;
 import net.juligames.core.api.message.*;
 import org.jdbi.v3.core.extension.ExtensionCallback;
 import org.jetbrains.annotations.ApiStatus;
@@ -43,8 +44,9 @@ public class CoreMessageApi implements MessageApi {
 
     @Override
     public Message getMessage(String messageKey, Locale locale) {
-        return callMessageExtension(extension -> extension.select(messageKey,locale.toString()));
+        DBMessage dbMessage = callMessageExtension(extension -> extension.select(messageKey, locale.toString()));
 
+        return null;
     }
 
     @Override

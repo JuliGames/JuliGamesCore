@@ -31,7 +31,7 @@ public interface ReplacementDAO {
 
     @SqlUpdate("INSERT INTO replacement(replacementType,tag, value) values (:replacementType," +
             " :tag, :value)")
-    void insert(@BindBean DBReplacement locale);
+    void insert(@BindBean ReplacementBean locale);
 
     @SqlUpdate("DELETE FROM replacement WHERE tag = :tag")
     void delete(@Bind("tag") String tag);

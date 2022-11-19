@@ -7,6 +7,7 @@ import org.jdbi.v3.sqlobject.customizer.Bind;
 import org.jdbi.v3.sqlobject.customizer.BindBean;
 import org.jdbi.v3.sqlobject.statement.SqlQuery;
 import org.jdbi.v3.sqlobject.statement.SqlUpdate;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -32,7 +33,7 @@ public interface MessageDAO {
     void createTable();
 
     @SqlQuery("SELECT * FROM message")
-    List<DBLocale> listAllBeans();
+    List<MessageBean> listAllBeans();
 
     @SqlUpdate("INSERT INTO message(messageKey, locale, miniMessage) values (:messageKey, :locale, :miniMessage)")
     void insert(@BindBean DBMessage message);
@@ -42,16 +43,20 @@ public interface MessageDAO {
 
     @SqlUpdate("UPDATE minecraft.message " +
             "SET miniMessage = :newMiniMessage " +
-            "WHERE locale = :locale AND messageKey = :key;")
+            "WHERE locale = :locale AND messageKey;")
     void update(@Bind("key") String key,
                 @Bind("locale")  String locale,
-                @Bind("miniMesage") String newMiniMesssage);
+                @Bind("miniMessage") String newMiniMesssage);
 
     @SqlQuery("SELECT * FROM message where messageKey = :key AND locale = :locale")
-    DBMessage select(@Bind("key") String key, @Bind("locale") String locale);
+    MessageBean selectBean(@Bind("key") String key, @Bind("locale") String locale);
 
-    default DBMessage selectBean(String key, DBLocale locale) {
-        return select(key, locale.getLocale());
+    default DBMessage select(String key, String locale) {
+        return selectBean(key,locale);
+    }
+
+    default MessageBean selectBean(String key, @NotNull DBLocale locale) {
+        return selectBean(key, locale.getLocale());
     }
 
     /**
@@ -60,8 +65,8 @@ public interface MessageDAO {
      * @param key the key
      * @return the Message
      */
-    default DBMessage select(String key) {
-        return select(key, API.get().getHazelDataApi().<String, String>getMap("master_information").get("default_locale"));
+    default MessageBean select(String key) {
+        return selectBean(key, API.get().getHazelDataApi().<String, String>getMap("master_information").get("default_locale"));
     }
 
 

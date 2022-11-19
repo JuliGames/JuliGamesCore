@@ -6,15 +6,15 @@ import net.juligames.core.api.jdbi.DBReplacementType;
  * @author Ture Bentzin
  * 19.11.2022
  */
-public class DBReplacementTypeBean implements DBReplacementType {
+public class ReplacementTypeBean implements DBReplacementType {
 
     private String name;
 
-    public DBReplacementTypeBean(String name) {
+    public ReplacementTypeBean(String name) {
         this.name = name;
     }
 
-    public DBReplacementTypeBean() {
+    public ReplacementTypeBean() {
 
     }
 
