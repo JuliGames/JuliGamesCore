@@ -167,7 +167,7 @@ public class CoreMessageApi implements MessageApi {
     }
 
     @Override
-    public MessagePostScript sendMessage(String messageKey, @NotNull MessageRecipient messageRecipient) {
+    public CoreMessagePostScript sendMessage(String messageKey, @NotNull MessageRecipient messageRecipient) {
         //send it baby
         Message message = getMessage(messageKey,messageRecipient.supplyLocaleOrDefault());
         messageRecipient.deliver(message);
@@ -175,29 +175,29 @@ public class CoreMessageApi implements MessageApi {
     }
 
     @Override
-    public MessagePostScript sendMessage(String messageKey, @NotNull MessageRecipient messageRecipient, @NotNull Locale overrideLocale) {
+    public CoreMessagePostScript sendMessage(String messageKey, @NotNull MessageRecipient messageRecipient, @NotNull Locale overrideLocale) {
         return sendMessage(messageKey, messageRecipient, overrideLocale.toString());
     }
 
     @Override
-    public MessagePostScript sendMessage(String messageKey, @NotNull MessageRecipient messageRecipient, String overrideLocale) {
+    public CoreMessagePostScript sendMessage(String messageKey, @NotNull MessageRecipient messageRecipient, String overrideLocale) {
         Message message = getMessage(messageKey,overrideLocale);
         messageRecipient.deliver(message);
         return new CoreMessagePostScript(message,messageRecipient,now());
     }
 
     @Override
-    public MessagePostScript sendMessage(String messageKey, MessageRecipient messageRecipient, @NotNull DBLocale overrideLocale) {
+    public CoreMessagePostScript sendMessage(String messageKey, MessageRecipient messageRecipient, @NotNull DBLocale overrideLocale) {
         return sendMessage(messageKey,messageRecipient,overrideLocale.toUtil());
     }
 
     @Override
-    public MultiMessagePostScript broadcastMessage(String messageKey, @NotNull Locale defaultLocale) {
+    public CoreMultiMessagePostScript broadcastMessage(String messageKey, @NotNull Locale defaultLocale) {
         return broadcastMessage(messageKey,defaultLocale.toString());
     }
 
     @Override
-    public MultiMessagePostScript broadcastMessage(String messageKey, String defaultLocale) {
+    public CoreMultiMessagePostScript broadcastMessage(String messageKey, String defaultLocale) {
        //because of performance reasons I will reimplement sendMessage here - it is not "good" code, but I think its worth it!
         Message message = getMessage(messageKey,defaultLocale);
         Collection<MessageRecipient> messageRecipients = Core.getInstance().getOnlineRecipientProvider().get();
@@ -208,17 +208,17 @@ public class CoreMessageApi implements MessageApi {
     }
 
     @Override
-    public MultiMessagePostScript broadcastMessage(String messageKey, @NotNull DBLocale defaultLocale) {
+    public CoreMultiMessagePostScript broadcastMessage(String messageKey, @NotNull DBLocale defaultLocale) {
         return broadcastMessage(messageKey,defaultLocale.toUtil());
     }
 
     @Override
-    public MultiMessagePostScript broadcastMessage(String messageKey) {
+    public CoreMultiMessagePostScript broadcastMessage(String messageKey) {
         return broadcastMessage(messageKey,defaultLocale());
     }
 
     @Override
-    public MultiMessagePostScript sendMessage(Collection<String> messageKeys, MessageRecipient messageRecipient) {
+    public CoreMultiMessagePostScript sendMessage(Collection<String> messageKeys, MessageRecipient messageRecipient) {
         return sendMessage(messageKeys,List.of(messageRecipient));
     }
 
@@ -226,16 +226,16 @@ public class CoreMessageApi implements MessageApi {
      * @apiNote This will not return the accurate messages in the PostScript but only the "first" one that was sent of a type
      * @param messageKeys the keys
      * @param messageRecipients the recipients
-     * @return not accurate {@link MultiMessagePostScript}
+     * @return not accurate {@link CoreMultiMessagePostScript}
      */
     @Override
-    public MultiMessagePostScript sendMessage(@NotNull Collection<String> messageKeys, Collection<MessageRecipient> messageRecipients) {
+    public CoreMultiMessagePostScript sendMessage(@NotNull Collection<String> messageKeys, Collection<MessageRecipient> messageRecipients) {
         //because of performance reasons I will reimplement sendMessage here - it is not "good" code, but I think its worth it!
         Collection<Message> messages = new ArrayList<>();
         for (String messageKey : messageKeys) {
             for (MessageRecipient messageRecipient : messageRecipients) {
                 Message message = getMessage(messageKey, messageRecipient.supplyLocaleOrDefault());
-                if(!messages.stream().anyMatch(message1 -> message1.getMessageData().getMessageKey().equals(message.getMessageData().getMessageKey()))){
+                if(messages.stream().noneMatch(message1 -> message1.getMessageData().getMessageKey().equals(message.getMessageData().getMessageKey()))){
                     messages.add(message);
                 }
                 messageRecipient.deliver(message);
@@ -245,22 +245,22 @@ public class CoreMessageApi implements MessageApi {
     }
 
     @Override
-    public MultiMessagePostScript sendMessage(Collection<String> messageKeys, MessageRecipient messageRecipient, String overrideLocale) {
+    public CoreMultiMessagePostScript sendMessage(Collection<String> messageKeys, MessageRecipient messageRecipient, String overrideLocale) {
         return sendMessage(messageKeys,List.of(messageRecipient), overrideLocale);
     }
 
     @Override
-    public MultiMessagePostScript sendMessage(Collection<String> messageKeys, MessageRecipient messageRecipient, @NotNull Locale overrideLocale) {
+    public CoreMultiMessagePostScript sendMessage(Collection<String> messageKeys, MessageRecipient messageRecipient, @NotNull Locale overrideLocale) {
         return sendMessage(messageKeys,List.of(messageRecipient), overrideLocale.toString());
     }
 
     @Override
-    public MultiMessagePostScript sendMessage(Collection<String> messageKeys, MessageRecipient messageRecipient, @NotNull DBLocale overrideLocale) {
+    public CoreMultiMessagePostScript sendMessage(Collection<String> messageKeys, MessageRecipient messageRecipient, @NotNull DBLocale overrideLocale) {
         return sendMessage(messageKeys,List.of(messageRecipient), overrideLocale.toUtil());
     }
 
     @Override
-    public MultiMessagePostScript sendMessage(@NotNull Collection<String> messageKeys, Collection<MessageRecipient> messageRecipients, String overrideLocale) {
+    public CoreMultiMessagePostScript sendMessage(@NotNull Collection<String> messageKeys, Collection<MessageRecipient> messageRecipients, String overrideLocale) {
         //because of performance reasons I will reimplement sendMessage here - it is not "good" code, but I think its worth it!
         Collection<Message> messages = new ArrayList<>();
         for (String messageKey : messageKeys) {
@@ -274,33 +274,33 @@ public class CoreMessageApi implements MessageApi {
     }
 
     @Override
-    public MultiMessagePostScript sendMessage(Collection<String> messageKeys, Collection<MessageRecipient> messageRecipients, @NotNull Locale overrideLocale) {
+    public CoreMultiMessagePostScript sendMessage(Collection<String> messageKeys, Collection<MessageRecipient> messageRecipients, @NotNull Locale overrideLocale) {
         return sendMessage(messageKeys,messageRecipients,overrideLocale.toString());
     }
 
     @Override
-    public MultiMessagePostScript sendMessage(Collection<String> messageKeys, Collection<MessageRecipient> messageRecipients, @NotNull DBLocale overrideLocale) {
+    public CoreMultiMessagePostScript sendMessage(Collection<String> messageKeys, Collection<MessageRecipient> messageRecipients, @NotNull DBLocale overrideLocale) {
         return sendMessage(messageKeys,messageRecipients,overrideLocale.toUtil());
     }
 
     @Override
-    public MultiMessagePostScript broadcastMessage(Collection<String> messageKeys, @NotNull Locale defaultLocale) {
+    public CoreMultiMessagePostScript broadcastMessage(Collection<String> messageKeys, @NotNull Locale defaultLocale) {
         return broadcastMessage(messageKeys,defaultLocale.toString());
     }
 
     @Override
-    public MultiMessagePostScript broadcastMessage(Collection<String> messageKeys, String defaultLocale) {
+    public CoreMultiMessagePostScript broadcastMessage(Collection<String> messageKeys, String defaultLocale) {
         return sendMessage(messageKeys,Core.getInstance().getOnlineRecipientProvider().get(),defaultLocale);
     }
 
     @Override
-    public MultiMessagePostScript broadcastMessage(Collection<String> messageKeys, @NotNull DBLocale defaultLocale) {
+    public CoreMultiMessagePostScript broadcastMessage(Collection<String> messageKeys, @NotNull DBLocale defaultLocale) {
         return broadcastMessage(messageKeys,defaultLocale.toUtil());
     }
 
     @ApiStatus.Experimental
     @Override
-    public MultiMessagePostScript broadcastMessage(Collection<String> messageKeys) {
+    public CoreMultiMessagePostScript broadcastMessage(Collection<String> messageKeys) {
         return sendMessage(messageKeys,Core.getInstance().getOnlineRecipientProvider().get());
     }
 
