@@ -6,6 +6,7 @@ import de.bentzin.tools.logging.Logger;
 import net.juligames.core.Core;
 import net.juligames.core.api.jdbi.*;
 import net.juligames.core.api.jdbi.mapper.bean.LocaleBean;
+import net.juligames.core.message.adventure.JDBITagAdapter;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.sqlobject.SqlObjectPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -78,14 +79,6 @@ public class CoreSQLManager implements SQLManager {
         });
         logger.info("created: player_locale_preference");
 
-        //replacement
-        logger.info("creating: replacement");
-        jdbi.withExtension(ReplacementDAO.class, extension -> {
-            extension.createTable();
-            return null;
-        });
-        logger.info("created: replacement");
-
         //replacementType
         logger.info("creating: replacementType");
         jdbi.withExtension(ReplacementTypeDAO.class, extension -> {
@@ -94,7 +87,18 @@ public class CoreSQLManager implements SQLManager {
         });
         logger.info("created: replacementType");
 
+        //replacement
+        logger.info("creating: replacement");
+        jdbi.withExtension(ReplacementDAO.class, extension -> {
+            extension.createTable();
+            return null;
+        });
+        logger.info("created: replacement");
+
+
+
         //default the replacementTypes:
+        JDBITagAdapter.ReplacementType.defaultToJDBI(Core.getInstance().getSQLManager().getJdbi());
 
     }
 

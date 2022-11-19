@@ -8,4 +8,6 @@ public interface DBReplacementType {
     String name();
 
     void setName(String name);
+
+    String getName();
 }

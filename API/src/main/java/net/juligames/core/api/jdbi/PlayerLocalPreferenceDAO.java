@@ -30,7 +30,7 @@ public interface PlayerLocalPreferenceDAO {
     @SqlQuery("SELECT * FROM player_locale_preference")
     List<DBPlayerLocalPreference> listAllBeans();
 
-    @SqlUpdate("INSERT INTO player_locale_preference(uuid, locale, fallback) values (:uuid, :locale, :fallback)")
+    @SqlUpdate("INSERT IGNORE INTO player_locale_preference(uuid, locale, fallback) values (:uuid, :locale, :fallback)")
     void insert(@BindBean DBPlayerLocalPreference preferenceBean);
 
     @SqlUpdate("DELETE FROM player_locale_preference WHERE uuid = :uuid")

@@ -27,4 +27,9 @@ public class ReplacementTypeBean implements DBReplacementType {
     public void setName(String name) {
         this.name = name;
     }
+
+    @Override
+    public String getName() {
+        return name;
+    }
 }

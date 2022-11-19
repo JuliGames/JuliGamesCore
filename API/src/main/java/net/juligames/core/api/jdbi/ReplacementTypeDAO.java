@@ -30,7 +30,7 @@ public interface ReplacementTypeDAO {
     @SqlQuery("SELECT * FROM replacement_type")
     List<DBLocale> listAllBeans();
 
-    @SqlUpdate("INSERT INTO replacement_type(name) values (:name)")
+    @SqlUpdate("INSERT IGNORE INTO replacement_type(name) values (:name)")
     void insert(@BindBean DBReplacementType replacementType);
 
     @SqlUpdate("DELETE FROM replacement_type WHERE name = :name")

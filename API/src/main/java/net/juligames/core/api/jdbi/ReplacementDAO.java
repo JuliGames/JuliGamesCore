@@ -21,15 +21,19 @@ public interface ReplacementDAO {
             create table if not exists minecraft.replacement
             (
             tag varchar(100) not null,
-            replacementType varchar(100) not null primary key,
-            value varchar(255) not null
+            replacementType varchar(100) not null,
+            value varchar(255) not null,
+            constraint replacement_pk
+                primary key (tag,replacementType),
+            constraint replacement_fk
+            foreign key (replacementType) REFERENCES replacement_type(name)
             );""")
     void createTable();
 
     @SqlQuery("SELECT * FROM replacement")
     List<ReplacementBean> listAllBeans();
 
-    @SqlUpdate("INSERT INTO replacement(replacementType,tag, value) values (:replacementType," +
+    @SqlUpdate("INSERT IGNORE INTO replacement(replacementType,tag, value) values (:replacementType," +
             " :tag, :value)")
     void insert(@BindBean ReplacementBean locale);
 

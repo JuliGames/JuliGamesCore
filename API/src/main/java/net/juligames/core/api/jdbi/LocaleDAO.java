@@ -20,14 +20,14 @@ public interface LocaleDAO {
             create table if not exists minecraft.locale
             (
             locale      varchar(10)            not null primary key ,
-            miniMessage varchar(20) default '' not null
+            description varchar(20) default '' not null
             );""")
     void createTable();
 
     @SqlQuery("SELECT * FROM locale")
     List<LocaleBean> listAllBeans();
 
-    @SqlUpdate("INSERT INTO locale(locale, description) values (:locale, :description)")
+    @SqlUpdate("INSERT IGNORE INTO locale(locale, description) values (:locale, :description)")
     void insert(@BindBean DBLocale locale);
 
     @SqlUpdate("DELETE FROM locale WHERE locale = :locale")

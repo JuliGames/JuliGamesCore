@@ -35,7 +35,7 @@ public interface MessageDAO {
     @SqlQuery("SELECT * FROM message")
     List<MessageBean> listAllBeans();
 
-    @SqlUpdate("INSERT INTO message(messageKey, locale, miniMessage) values (:messageKey, :locale, :miniMessage)")
+    @SqlUpdate("INSERT IGNORE INTO message(messageKey, locale, miniMessage) values (:messageKey, :locale, :miniMessage)")
     void insert(@BindBean DBMessage message);
 
     @SqlUpdate("DELETE FROM message WHERE messageKey = :key")

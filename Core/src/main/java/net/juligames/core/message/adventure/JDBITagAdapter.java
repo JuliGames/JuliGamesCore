@@ -84,7 +84,7 @@ public class JDBITagAdapter {
          */
         @DoNotCall
         @ApiStatus.Internal
-        static void defaultToJDBI(@NotNull Jdbi jdbi){
+        public static void defaultToJDBI(@NotNull Jdbi jdbi){
             jdbi.withExtension(ReplacementTypeDAO.class,extension -> {
                 for (ReplacementType value : values()) {
                     extension.insert(new ReplacementTypeBean(value.name()));
