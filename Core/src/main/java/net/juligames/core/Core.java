@@ -5,6 +5,7 @@ import de.bentzin.tools.logging.JavaLogger;
 import de.bentzin.tools.logging.Logger;
 import net.juligames.core.api.API;
 import net.juligames.core.api.ApiCore;
+import net.juligames.core.api.message.MessageRecipient;
 import net.juligames.core.cluster.CoreClusterApi;
 import net.juligames.core.data.HazelDataCore;
 import net.juligames.core.hcast.HazelConnector;
@@ -16,7 +17,6 @@ import net.juligames.core.serialization.SerializedNotification;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import net.juligames.core.api.message.MessageRecipient;
 
 import java.util.Collection;
 import java.util.List;
@@ -35,10 +35,20 @@ public final class Core implements API {
     public static final String CORE_BRAND = "Core";
     public static final String CORE_VERSION_NUMBER = "0.0.1";
     public static final String CORE_SPECIFICATION = "Micheal";
-
+    private static Core core;
+    private HazelConnector hazelConnector;
+    private TopicNotificationCore topicNotificationCore;
+    private CoreNotificationApi coreNotificationApi;
+    private CoreClusterApi clusterApi;
+    private Logger coreLogger;
+    private Logger apiLogger;
+    private CoreSQLManager sqlManager;
+    private CoreMessageApi messageApi;
+    private String core_name;
+    @NotNull
+    private Supplier<Collection<? extends MessageRecipient>> onlineRecipientProvider = () -> List.of(new DummyMessageRecipient());
     public Core() {
     }
-
 
     @Contract(pure = true)
     public static @NotNull String getFullCoreName() {
@@ -55,24 +65,6 @@ public final class Core implements API {
         return CORE_BRAND + "-" + CORE_SPECIFICATION;
     }
 
-
-    private static Core core;
-    private HazelConnector hazelConnector;
-    private TopicNotificationCore topicNotificationCore;
-    private CoreNotificationApi coreNotificationApi;
-    private CoreClusterApi clusterApi;
-
-    private Logger coreLogger;
-    private Logger apiLogger;
-    private CoreSQLManager sqlManager;
-    private CoreMessageApi messageApi;
-
-    private String core_name;
-
-
-    @NotNull
-    private Supplier<Collection<? extends MessageRecipient>> onlineRecipientProvider = () -> List.of(new DummyMessageRecipient());
-
     public static Core getInstance() {
         return core;
     }
@@ -83,7 +75,7 @@ public final class Core implements API {
         if (core != null) throw new IllegalStateException("seems like a core is already running!");
         core = this;
         ApiCore.CURRENT_API = this;
-        if(!member)
+        if (!member)
             hazelConnector = HazelConnector.getInstanceAndConnect(core_name);
         else
             hazelConnector = HazelConnector.getInstanceAndConnectAsMember(core_name);
@@ -111,12 +103,15 @@ public final class Core implements API {
         clusterApi = new CoreClusterApi();
         messageApi = new CoreMessageApi();
 
+        logger.info("loading replacements from jdbi...");
+        messageApi.getTagManager().load();
+        logger.info("loaded replacements from jdbi...");
         Core.getInstance().getOrThrow().<SerializedNotification>getTopic("notify: " + Core.getInstance().getClusterApi().getLocalUUID().toString())
                 .addMessageListener(coreNotificationApi);
     }
 
     public void start(String core_name) {
-        start(core_name,new JavaLogger(core_name, java.util.logging.Logger.getLogger(getShortCoreName())),false);
+        start(core_name, new JavaLogger(core_name, java.util.logging.Logger.getLogger(getShortCoreName())), false);
     }
 
     public void await() throws InterruptedException {
@@ -127,7 +122,7 @@ public final class Core implements API {
         }
     }
 
-    public void stop(){
+    public void stop() {
         coreLogger.info("stopping hazelcast client connection");
         hazelConnector.disconnect();
         coreLogger.info("goodbye!");
@@ -169,7 +164,7 @@ public final class Core implements API {
     }
 
 
-    public Logger getCoreLogger(){
+    public Logger getCoreLogger() {
         return coreLogger;
     }
 
@@ -179,11 +174,11 @@ public final class Core implements API {
     }
 
 
-    public HazelcastInstance getOrThrow(){
+    public HazelcastInstance getOrThrow() {
         CompletableFuture<HazelcastInstance> instance = getHazelConnector().getInstance();
-        if(instance.isDone()){
-           return instance.getNow(null);
-       }
+        if (instance.isDone()) {
+            return instance.getNow(null);
+        }
         throw new NoSuchElementException("HazelcastInstance is not present!");
     }
 

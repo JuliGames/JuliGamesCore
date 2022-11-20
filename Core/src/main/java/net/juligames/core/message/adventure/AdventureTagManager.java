@@ -3,6 +3,8 @@ package net.juligames.core.message.adventure;
 import de.bentzin.tools.register.Registerator;
 import net.juligames.core.Core;
 import net.juligames.core.api.jdbi.DBReplacement;
+import net.juligames.core.api.jdbi.ReplacementDAO;
+import net.juligames.core.api.jdbi.mapper.bean.ReplacementBean;
 import net.juligames.core.api.message.Message;
 import net.juligames.core.api.message.TagManager;
 import net.kyori.adventure.text.Component;
@@ -16,6 +18,8 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 /**
  * @author Ture Bentzin
  * 19.11.2022
@@ -27,6 +31,12 @@ public final class AdventureTagManager implements TagManager {
     @Override
     public void register(@NotNull DBReplacement dbReplacement) {
         register(dbReplacement.getTag(), JDBITagAdapter.fromJDBI(dbReplacement));
+    }
+
+    @Override
+    public void reload() {
+        clearResolver();
+        load();
     }
 
     public void register(String name, Tag tag) {
@@ -74,5 +84,14 @@ public final class AdventureTagManager implements TagManager {
     @Contract(pure = true)
     public @NotNull Component fallbackResolve(String miniMessage) {
         return getMiniMessage().deserialize(miniMessage,getFallbackResolver());
+    }
+
+
+    public void load() {
+        List<DBReplacement> dbReplacements =
+                Core.getInstance().getMessageApi().callReplacementExtension(ReplacementDAO::listAll);
+        for (DBReplacement replacement : dbReplacements) {
+            register(replacement);
+        }
     }
 }

@@ -8,4 +8,5 @@ import net.juligames.core.api.jdbi.DBReplacement;
  */
 public interface TagManager {
     void register(DBReplacement dbReplacement);
+    void reload();
 }
