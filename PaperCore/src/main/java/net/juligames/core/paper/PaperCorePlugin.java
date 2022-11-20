@@ -11,7 +11,7 @@ import java.util.Objects;
  * @author Ture Bentzin
  * 18.11.2022
  */
-public class PaperCoreDebugPlugin extends JavaPlugin {
+public class PaperCorePlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
