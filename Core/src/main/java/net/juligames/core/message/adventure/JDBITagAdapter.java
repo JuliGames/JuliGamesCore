@@ -23,7 +23,7 @@ public class JDBITagAdapter {
 
     public static Logger logger = Core.getInstance().getCoreLogger().adopt("adapter");
     public static Tag fromJDBI(@NotNull DBReplacement replacement) {
-        String s = replacement.getReplacementType().name();
+        String s = replacement.getReplacementType();
         ReplacementType replacementType = ReplacementType.valueOf(s);
         switch (replacementType) {
 

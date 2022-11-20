@@ -10,9 +10,9 @@ import java.util.StringJoiner;
 
 /**
  * @author Ture Bentzin
- * 19.11.2022
+ * 20.11.2022
  */
-public class MessageCommand implements CommandExecutor {
+public class BCTestCommand implements CommandExecutor {
     /**
      * Executes the given command, returning its success.
      * <br>
@@ -26,14 +26,14 @@ public class MessageCommand implements CommandExecutor {
      * @return true if a valid command, otherwise false
      */
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         StringJoiner joiner = new StringJoiner(" ");
         for (String arg : args) {
             joiner.add(arg);
         }
         String arg = joiner.toString();
 
-        Core.getInstance().getMessageApi().sendMessage(arg,new PaperMessageRecipient(sender));
+        Core.getInstance().getMessageApi().broadcastMessage(arg);
 
         return true;
     }

@@ -1,6 +1,7 @@
 package net.juligames.core;
 
 import com.hazelcast.core.HazelcastInstance;
+import com.mysql.cj.log.Log;
 import de.bentzin.tools.logging.JavaLogger;
 import de.bentzin.tools.logging.Logger;
 import net.juligames.core.api.API;
@@ -81,6 +82,7 @@ public final class Core implements API {
             hazelConnector = HazelConnector.getInstanceAndConnectAsMember(core_name);
 
         coreLogger = logger;
+        coreLogger.setDebug(true);
         apiLogger = coreLogger.adopt("api");
 
         coreLogger.info(core_name + " was started! - waiting for HazelCast to connect!");

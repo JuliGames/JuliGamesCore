@@ -24,6 +24,9 @@ public class PaperCoreDebugPlugin extends JavaPlugin {
         });
 
         Objects.requireNonNull(getCommand("message")).setExecutor(new MessageCommand());
+        Objects.requireNonNull(getCommand("locale")).setExecutor(new LocaleCommand());
+        Objects.requireNonNull(getCommand("replacetest")).setExecutor(new ReplaceTestCommand());
+        Objects.requireNonNull(getCommand("bctest")).setExecutor(new BCTestCommand());
     }
 
     @Override

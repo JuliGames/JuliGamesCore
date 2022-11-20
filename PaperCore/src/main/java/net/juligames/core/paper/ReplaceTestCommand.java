@@ -1,18 +1,26 @@
 package net.juligames.core.paper;
 
 import net.juligames.core.Core;
+import net.juligames.core.api.API;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.StringJoiner;
-
 /**
  * @author Ture Bentzin
- * 19.11.2022
+ * 20.11.2022
  */
-public class MessageCommand implements CommandExecutor {
+public class ReplaceTestCommand implements CommandExecutor {
+
+
+    private final String messageKey;
+
+    public ReplaceTestCommand(){
+        messageKey = "papercore.test.replace";
+        API.get().getMessageApi().registerMessage(messageKey,"<prefix><info_color>input: {0}, {1}, {3}");
+    }
+
     /**
      * Executes the given command, returning its success.
      * <br>
@@ -26,14 +34,10 @@ public class MessageCommand implements CommandExecutor {
      * @return true if a valid command, otherwise false
      */
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
-        StringJoiner joiner = new StringJoiner(" ");
-        for (String arg : args) {
-            joiner.add(arg);
-        }
-        String arg = joiner.toString();
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
-        Core.getInstance().getMessageApi().sendMessage(arg,new PaperMessageRecipient(sender));
+        API.get().getMessageApi().sendMessage(messageKey,
+                new PaperMessageRecipient(sender),args);
 
         return true;
     }

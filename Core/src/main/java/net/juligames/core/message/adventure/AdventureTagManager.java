@@ -40,6 +40,7 @@ public final class AdventureTagManager implements TagManager {
     }
 
     public void register(String name, Tag tag) {
+        Core.getInstance().getCoreLogger().info("added: " + name + " as " + tag);
         internalResolver = TagResolver.builder().resolver(internalResolver).tag(name,tag).build();
     }
 
@@ -54,7 +55,7 @@ public final class AdventureTagManager implements TagManager {
     }
 
     public @NotNull TagResolver getResolver(){
-        return TagResolver.builder().build(); //TODO
+        return internalResolver;
     }
 
     public @NotNull Component resolve(String miniMessage) {

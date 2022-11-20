@@ -31,7 +31,7 @@ public class CoreMessageApi implements MessageApi {
 
     private final AdventureTagManager adventureTagManager;
 
-    public CoreMessageApi(){
+    public CoreMessageApi() {
         this.adventureTagManager = new AdventureTagManager();
     }
 
@@ -40,65 +40,64 @@ public class CoreMessageApi implements MessageApi {
     @Hardcode
     @ApiStatus.Internal
     public <R> R callMessageExtension(ExtensionCallback<R, MessageDAO, RuntimeException> extensionCallback) {
-        return Core.getInstance().getSQLManager().getJdbi().withExtension(MessageDAO.class,extensionCallback);
+        return Core.getInstance().getSQLManager().getJdbi().withExtension(MessageDAO.class, extensionCallback);
     }
 
     @Override
     @Hardcode
     @ApiStatus.Internal
     public <R> R callLocaleExtension(ExtensionCallback<R, LocaleDAO, RuntimeException> extensionCallback) {
-        return Core.getInstance().getSQLManager().getJdbi().withExtension(LocaleDAO.class,extensionCallback);
+        return Core.getInstance().getSQLManager().getJdbi().withExtension(LocaleDAO.class, extensionCallback);
     }
 
     @Override
     @Hardcode
     @ApiStatus.Internal
     public <R> R callPreferenceExtension(ExtensionCallback<R, PlayerLocalPreferenceDAO, RuntimeException> extensionCallback) {
-        return Core.getInstance().getSQLManager().getJdbi().withExtension(PlayerLocalPreferenceDAO.class,extensionCallback);
+        return Core.getInstance().getSQLManager().getJdbi().withExtension(PlayerLocalPreferenceDAO.class, extensionCallback);
     }
 
     @Override
     @Hardcode
     @ApiStatus.Internal
     public <R> R callReplacementExtension(ExtensionCallback<R, ReplacementDAO, RuntimeException> extensionCallback) {
-        return Core.getInstance().getSQLManager().getJdbi().withExtension(ReplacementDAO.class,extensionCallback);
+        return Core.getInstance().getSQLManager().getJdbi().withExtension(ReplacementDAO.class, extensionCallback);
     }
 
     @Override
     @Hardcode
     @ApiStatus.Internal
     public <R> R callReplacementTypeExtension(ExtensionCallback<R, ReplacementTypeDAO, RuntimeException> extensionCallback) {
-        return Core.getInstance().getSQLManager().getJdbi().withExtension(ReplacementTypeDAO.class,extensionCallback);
+        return Core.getInstance().getSQLManager().getJdbi().withExtension(ReplacementTypeDAO.class, extensionCallback);
     }
 
 
     @Override
     public CoreMessage getMessage(String messageKey, Locale locale) {
-        return getMessage(messageKey,locale, (String[]) null); //the cast is super important here to avoid exception
+        return getMessage(messageKey, locale, (String[]) null); //the cast is super important here to avoid exception
     }
 
     /**
-     *
-     * @param messageKey the messageKey
-     * @param locale the locale for that specific message
+     * @param messageKey   the messageKey
+     * @param locale       the locale for that specific message
      * @param replacements all the replacements in order stating by 0 or null if nothing should be replaced
      * @return the Message
      */
     @Override
     public CoreMessage getMessage(String messageKey, Locale locale, String... replacements) {
-        return getMessage(messageKey,locale.toString(),replacements);
+        return getMessage(messageKey, locale.toString(), replacements);
     }
 
     @Override
     public CoreMessage getMessage(String messageKey, String locale) {
-        DBMessage dbMessage = callMessageExtension(extension -> extension.select(messageKey,locale));
-        return CoreMessage.fromData(dbMessage,locale);
+        DBMessage dbMessage = callMessageExtension(extension -> extension.select(messageKey, locale));
+        return CoreMessage.fromData(dbMessage, locale);
     }
 
     @Override
     public CoreMessage getMessage(String messageKey, String locale, String... replacements) {
         DBMessage dbMessage = callMessageExtension(extension -> extension.select(messageKey, locale));
-        CoreMessage message =  CoreMessage.fromData(dbMessage,messageKey);
+        CoreMessage message = CoreMessage.fromData(dbMessage, messageKey);
         message.doWithMiniMessage(insertReplacements(replacements));
         return message;
     }
@@ -110,13 +109,13 @@ public class CoreMessageApi implements MessageApi {
 
     @Override
     public CoreMessage getMessage(String messageKey, @NotNull DBLocale dbLocale, String... replacements) {
-        return getMessage(messageKey,dbLocale.toUtil(),replacements);
+        return getMessage(messageKey, dbLocale.toUtil(), replacements);
     }
 
     @Override
     public Collection<CoreMessage> getMessage(String messageKey) {
         List<MessageBean> messageBeans = callMessageExtension(extension -> extension.selectFromKey(messageKey));
-        return messageBeans.stream().map(messageBean -> CoreMessage.fromData(messageBean,messageKey)).toList();
+        return messageBeans.stream().map(messageBean -> CoreMessage.fromData(messageBean, messageKey)).toList();
     }
 
     @Override
@@ -187,14 +186,14 @@ public class CoreMessageApi implements MessageApi {
     @Override
     public Collection<DBReplacement> getReplacers() {
         List<ReplacementBean> replacementBeans = callReplacementExtension(ReplacementDAO::listAllBeans);
-        return  replacementBeans.stream().map(replacementBean -> (DBReplacement) replacementBean).toList();
+        return replacementBeans.stream().map(replacementBean -> (DBReplacement) replacementBean).toList();
     }
 
     @Override
     @Deprecated
     public void registerMessage(String messageKey) {
         callMessageExtension(extension -> {
-            extension.insert(new MessageBean(messageKey,defaultLocale(),"null"));
+            extension.insert(new MessageBean(messageKey, defaultLocale(), "null"));
             return null;
         });
     }
@@ -202,7 +201,7 @@ public class CoreMessageApi implements MessageApi {
     @Override
     public void registerMessage(String messageKey, String defaultMiniMessage) {
         callMessageExtension(extension -> {
-            extension.insert(new MessageBean(messageKey,defaultLocale(),defaultMiniMessage));
+            extension.insert(new MessageBean(messageKey, defaultLocale(), defaultMiniMessage));
             return null;
         });
     }
@@ -214,7 +213,7 @@ public class CoreMessageApi implements MessageApi {
 
     @Override
     public boolean hasMessage(String messageKey, String locale) {
-        return callMessageExtension(extension -> extension.select(messageKey,locale) != null);
+        return callMessageExtension(extension -> extension.select(messageKey, locale) != null);
     }
 
     @Override
@@ -229,7 +228,7 @@ public class CoreMessageApi implements MessageApi {
 
     @Override
     public CoreMessagePostScript sendMessage(String messageKey, @NotNull MessageRecipient messageRecipient) {
-        return sendMessage(messageKey,messageRecipient, (String[]) null);
+        return sendMessage(messageKey, messageRecipient, (String[]) null);
     }
 
     @Override
@@ -239,146 +238,146 @@ public class CoreMessageApi implements MessageApi {
 
     @Override
     public CoreMessagePostScript sendMessage(String messageKey, @NotNull MessageRecipient messageRecipient, String overrideLocale) {
-        return sendMessage(messageKey,messageRecipient,overrideLocale,(String[]) null);
+        return sendMessage(messageKey, messageRecipient, overrideLocale, (String[]) null);
     }
 
     @Override
     public CoreMessagePostScript sendMessage(String messageKey, MessageRecipient messageRecipient, @NotNull DBLocale overrideLocale) {
-        return sendMessage(messageKey,messageRecipient,overrideLocale.toUtil());
+        return sendMessage(messageKey, messageRecipient, overrideLocale.toUtil());
     }
 
     @Override
     public CoreMultiMessagePostScript broadcastMessage(String messageKey, @NotNull Locale defaultLocale) {
-        return broadcastMessage(messageKey,defaultLocale.toString());
+        return broadcastMessage(messageKey, defaultLocale.toString());
     }
 
     @Override
     public CoreMultiMessagePostScript broadcastMessage(String messageKey, String defaultLocale) {
-        return broadcastMessage(messageKey,defaultLocale,(String[]) null);
+        return broadcastMessage(messageKey, defaultLocale, (String[]) null);
     }
 
     @Override
     public CoreMultiMessagePostScript broadcastMessage(String messageKey, @NotNull DBLocale defaultLocale) {
-        return broadcastMessage(messageKey,defaultLocale.toUtil());
+        return broadcastMessage(messageKey, defaultLocale.toUtil());
     }
 
     @Override
     public Collection<CoreMessagePostScript> broadcastMessage(String messageKey) {
-        return broadcastMessage(messageKey,(String[]) null);
+        return broadcastMessage(messageKey, (String[]) null);
     }
 
     @Override
     public CoreMultiMessagePostScript sendMessage(Collection<String> messageKeys, MessageRecipient messageRecipient) {
-        return sendMessage(messageKeys,List.of(messageRecipient));
+        return sendMessage(messageKeys, List.of(messageRecipient));
     }
 
     /**
-     * @apiNote This will not return the accurate messages in the PostScript but only the "first" one that was sent of a type
-     * @param messageKeys the keys
+     * @param messageKeys       the keys
      * @param messageRecipients the recipients
      * @return not accurate {@link CoreMultiMessagePostScript}
+     * @apiNote This will not return the accurate messages in the PostScript but only the "first" one that was sent of a type
      */
     @Override
     public CoreMultiMessagePostScript sendMessage(@NotNull Collection<String> messageKeys, Collection<? extends MessageRecipient> messageRecipients) {
-        return sendMessage(messageKeys,messageRecipients,(String[]) null);
+        return sendMessage(messageKeys, messageRecipients, (String[]) null);
     }
 
     @Override
     public CoreMultiMessagePostScript sendMessage(Collection<String> messageKeys, MessageRecipient messageRecipient, String overrideLocale) {
-        return sendMessage(messageKeys,List.of(messageRecipient), overrideLocale);
+        return sendMessage(messageKeys, List.of(messageRecipient), overrideLocale);
     }
 
     @Override
     public CoreMultiMessagePostScript sendMessage(Collection<String> messageKeys, MessageRecipient messageRecipient, @NotNull Locale overrideLocale) {
-        return sendMessage(messageKeys,List.of(messageRecipient), overrideLocale.toString());
+        return sendMessage(messageKeys, List.of(messageRecipient), overrideLocale.toString());
     }
 
     @Override
     public CoreMultiMessagePostScript sendMessage(Collection<String> messageKeys, MessageRecipient messageRecipient, @NotNull DBLocale overrideLocale) {
-        return sendMessage(messageKeys,List.of(messageRecipient), overrideLocale.toUtil());
+        return sendMessage(messageKeys, List.of(messageRecipient), overrideLocale.toUtil());
     }
 
     @Override
     public CoreMultiMessagePostScript sendMessage(@NotNull Collection<String> messageKeys, Collection<? extends MessageRecipient> messageRecipients, String overrideLocale) {
-        return sendMessage(messageKeys,messageRecipients,overrideLocale, (String[]) null);
+        return sendMessage(messageKeys, messageRecipients, overrideLocale, (String[]) null);
     }
 
     @Override
     public CoreMultiMessagePostScript sendMessage(Collection<String> messageKeys, Collection<? extends MessageRecipient> messageRecipients, @NotNull Locale overrideLocale) {
-        return sendMessage(messageKeys,messageRecipients,overrideLocale.toString());
+        return sendMessage(messageKeys, messageRecipients, overrideLocale.toString());
     }
 
     @Override
     public CoreMultiMessagePostScript sendMessage(Collection<String> messageKeys, Collection<? extends MessageRecipient> messageRecipients, @NotNull DBLocale overrideLocale) {
-        return sendMessage(messageKeys,messageRecipients,overrideLocale.toUtil());
+        return sendMessage(messageKeys, messageRecipients, overrideLocale.toUtil());
     }
 
     @Override
     public CoreMultiMessagePostScript broadcastMessage(Collection<String> messageKeys, @NotNull Locale defaultLocale) {
-        return broadcastMessage(messageKeys,defaultLocale.toString());
+        return broadcastMessage(messageKeys, defaultLocale.toString());
     }
 
     @Override
     public CoreMultiMessagePostScript broadcastMessage(Collection<String> messageKeys, String defaultLocale) {
-        return sendMessage(messageKeys,Core.getInstance().getOnlineRecipientProvider().get(),defaultLocale);
+        return sendMessage(messageKeys, Core.getInstance().getOnlineRecipientProvider().get(), defaultLocale);
     }
 
     @Override
     public CoreMultiMessagePostScript broadcastMessage(Collection<String> messageKeys, @NotNull DBLocale defaultLocale) {
-        return broadcastMessage(messageKeys,defaultLocale.toUtil());
+        return broadcastMessage(messageKeys, defaultLocale.toUtil());
     }
 
     @ApiStatus.Experimental
     @Override
     public CoreMultiMessagePostScript broadcastMessage(Collection<String> messageKeys) {
-        return sendMessage(messageKeys,Core.getInstance().getOnlineRecipientProvider().get());
+        return sendMessage(messageKeys, Core.getInstance().getOnlineRecipientProvider().get());
     }
 
     @Override
     public CoreMessagePostScript sendMessage(String messageKey, @NotNull MessageRecipient messageRecipient, String... replacement) {
         //send it baby
-        Message message = getMessage(messageKey,findBestForRecipient(messageKey, messageRecipient), replacement);
+        Message message = getMessage(messageKey, findBestForRecipient(messageKey, messageRecipient), replacement);
         messageRecipient.deliver(message);
-        return new CoreMessagePostScript(message,messageRecipient,now());
+        return new CoreMessagePostScript(message, messageRecipient, now());
     }
 
     @Override
     public CoreMessagePostScript sendMessage(String messageKey, MessageRecipient messageRecipient, @NotNull Locale overrideLocale, String... replacement) {
-        return sendMessage(messageKey,messageRecipient,overrideLocale.toString(),replacement);
+        return sendMessage(messageKey, messageRecipient, overrideLocale.toString(), replacement);
     }
 
     @Override
     public CoreMessagePostScript sendMessage(String messageKey, @NotNull MessageRecipient messageRecipient, String overrideLocale, String... replacement) {
-        Message message = getMessage(messageKey,overrideLocale, replacement);
+        Message message = getMessage(messageKey, overrideLocale, replacement);
         message.doWithMiniMessage(insertReplacements(replacement));
         messageRecipient.deliver(message);
-        return new CoreMessagePostScript(message,messageRecipient,now());
+        return new CoreMessagePostScript(message, messageRecipient, now());
     }
 
     @Override
     public CoreMessagePostScript sendMessage(String messageKey, MessageRecipient messageRecipient, @NotNull DBLocale overrideLocale, String... replacement) {
-        return sendMessage(messageKey, messageRecipient, overrideLocale.toUtil(),replacement);
+        return sendMessage(messageKey, messageRecipient, overrideLocale.toUtil(), replacement);
     }
 
     @Override
     public CoreMultiMessagePostScript broadcastMessage(String messageKey, @NotNull Locale defaultLocale, String... replacement) {
-        return broadcastMessage(messageKey,defaultLocale.toString(),replacement);
+        return broadcastMessage(messageKey, defaultLocale.toString(), replacement);
     }
 
     @Override
     public CoreMultiMessagePostScript broadcastMessage(String messageKey, String defaultLocale, String... replacement) {
         //because of performance reasons I will reimplement sendMessage here - it is not "good" code, but I think its worth it!
-        Message message = getMessage(messageKey,defaultLocale);
+        Message message = getMessage(messageKey, defaultLocale);
         Collection<? extends MessageRecipient> messageRecipients = Core.getInstance().getOnlineRecipientProvider().get();
         for (MessageRecipient messageRecipient : messageRecipients) {
             messageRecipient.deliver(message);
         }
-        return new CoreMultiMessagePostScript(List.of(message),messageRecipients,now());
+        return new CoreMultiMessagePostScript(List.of(message), messageRecipients, now());
     }
 
     @Override
     public CoreMultiMessagePostScript broadcastMessage(String messageKey, @NotNull DBLocale defaultLocale, String... replacement) {
-        return broadcastMessage(messageKey,defaultLocale.toUtil(),replacement);
+        return broadcastMessage(messageKey, defaultLocale.toUtil(), replacement);
     }
 
     @Override
@@ -390,14 +389,14 @@ public class CoreMessageApi implements MessageApi {
             CoreMessage message = getMessage(messageKey, findBestForRecipient(messageKey, messageRecipient));
             message.doWithMiniMessage(insertReplacements(replacement));
             messageRecipient.deliver(message);
-            postScripts.add(new CoreMessagePostScript(message,messageRecipient,now()));
+            postScripts.add(new CoreMessagePostScript(message, messageRecipient, now()));
         }
         return postScripts;
     }
 
     @Override
     public CoreMultiMessagePostScript sendMessage(Collection<String> messageKeys, MessageRecipient messageRecipient, String... replacement) {
-        return sendMessage(messageKeys,List.of(messageRecipient),replacement);
+        return sendMessage(messageKeys, List.of(messageRecipient), replacement);
     }
 
     @Override
@@ -408,28 +407,28 @@ public class CoreMessageApi implements MessageApi {
             for (MessageRecipient messageRecipient : messageRecipients) {
                 Message message = getMessage(messageKey, messageRecipient.supplyLocaleOrDefault());
                 message.doWithMiniMessage(insertReplacements(replacement));
-                if(messages.stream().noneMatch(message1 -> message1.getMessageData().getMessageKey().equals(message.getMessageData().getMessageKey()))){
+                if (messages.stream().noneMatch(message1 -> message1.getMessageData().getMessageKey().equals(message.getMessageData().getMessageKey()))) {
                     messages.add(message);
                 }
                 messageRecipient.deliver(message);
             }
         }
-        return new CoreMultiMessagePostScript(messages,messageRecipients,now());
+        return new CoreMultiMessagePostScript(messages, messageRecipients, now());
     }
 
     @Override
     public CoreMultiMessagePostScript sendMessage(Collection<String> messageKeys, MessageRecipient messageRecipient, String overrideLocale, String... replacement) {
-        return sendMessage(messageKeys,List.of(messageRecipient),overrideLocale,replacement);
+        return sendMessage(messageKeys, List.of(messageRecipient), overrideLocale, replacement);
     }
 
     @Override
     public CoreMultiMessagePostScript sendMessage(Collection<String> messageKeys, MessageRecipient messageRecipient, @NotNull Locale overrideLocale, String... replacement) {
-        return sendMessage(messageKeys,messageRecipient,overrideLocale.toString(),replacement);
+        return sendMessage(messageKeys, messageRecipient, overrideLocale.toString(), replacement);
     }
 
     @Override
     public CoreMultiMessagePostScript sendMessage(Collection<String> messageKeys, MessageRecipient messageRecipient, @NotNull DBLocale overrideLocale, String... replacement) {
-        return sendMessage(messageKeys,messageRecipient,overrideLocale.toUtil(),replacement);
+        return sendMessage(messageKeys, messageRecipient, overrideLocale.toUtil(), replacement);
     }
 
     @Override
@@ -444,37 +443,37 @@ public class CoreMessageApi implements MessageApi {
             }
             messages.add(message);
         }
-        return new CoreMultiMessagePostScript(messages,messageRecipients,now());
+        return new CoreMultiMessagePostScript(messages, messageRecipients, now());
     }
 
     @Override
     public CoreMultiMessagePostScript sendMessage(Collection<String> messageKeys, Collection<? extends MessageRecipient> messageRecipients, @NotNull Locale overrideLocale, String... replacement) {
-        return sendMessage(messageKeys,messageRecipients,overrideLocale.toString(),replacement);
+        return sendMessage(messageKeys, messageRecipients, overrideLocale.toString(), replacement);
     }
 
     @Override
     public CoreMultiMessagePostScript sendMessage(Collection<String> messageKeys, Collection<? extends MessageRecipient> messageRecipients, @NotNull DBLocale overrideLocale, String... replacement) {
-        return sendMessage(messageKeys,messageRecipients,overrideLocale.toUtil(),replacement);
+        return sendMessage(messageKeys, messageRecipients, overrideLocale.toUtil(), replacement);
     }
 
     @Override
     public CoreMultiMessagePostScript broadcastMessage(Collection<String> messageKeys, @NotNull Locale defaultLocale, String... replacement) {
-        return broadcastMessage(messageKeys,defaultLocale.toString(),replacement);
+        return broadcastMessage(messageKeys, defaultLocale.toString(), replacement);
     }
 
     @Override
     public CoreMultiMessagePostScript broadcastMessage(Collection<String> messageKeys, String defaultLocale, String... replacement) {
-        return sendMessage(messageKeys,Core.getInstance().getOnlineRecipientProvider().get(), defaultLocale,replacement);
+        return sendMessage(messageKeys, Core.getInstance().getOnlineRecipientProvider().get(), defaultLocale, replacement);
     }
 
     @Override
     public CoreMultiMessagePostScript broadcastMessage(Collection<String> messageKeys, @NotNull DBLocale defaultLocale, String... replacement) {
-        return broadcastMessage(messageKeys,defaultLocale.toUtil(),replacement);
+        return broadcastMessage(messageKeys, defaultLocale.toUtil(), replacement);
     }
 
     @Override
     public CoreMultiMessagePostScript broadcastMessage(Collection<String> messageKeys, String... replacement) {
-        return sendMessage(messageKeys,Core.getInstance().getOnlineRecipientProvider().get(),replacement);
+        return sendMessage(messageKeys, Core.getInstance().getOnlineRecipientProvider().get(), replacement);
     }
 
     @Override
@@ -482,7 +481,7 @@ public class CoreMessageApi implements MessageApi {
         return adventureTagManager;
     }
 
-    public String defaultLocale(){
+    public String defaultLocale() {
         //"master_information"
         return Core.getInstance().getHazelDataApi().getMasterInformation().get("default_locale");
     }
@@ -493,16 +492,19 @@ public class CoreMessageApi implements MessageApi {
     }
 
     @Contract(pure = true)
-    private @NotNull Function<String,String> insertReplacements(@Nullable String @NotNull ... replacements){
+    private @NotNull Function<String, String> insertReplacements(@Nullable String @NotNull ... replacements) {
         //noinspection ConstantConditions for 100% security
-        if(replacements == null) {
+        if (replacements == null) {
             return miniMessage -> miniMessage;
         }
         return miniMessage -> {
+            Core.getInstance().getCoreLogger().debug("insert start: " + miniMessage);
             for (int i = 0; i < replacements.length; i++) {
                 assert replacements[i] != null;
-                miniMessage = miniMessage.replaceAll(buildPattern(i),replacements[i]);
+                miniMessage = miniMessage.replace(buildPattern(i), replacements[i]);
+                Core.getInstance().getCoreLogger().debug("insert step: " + i + " :" + miniMessage);
             }
+            Core.getInstance().getCoreLogger().debug("insert end: " + miniMessage);
             return miniMessage;
         };
     }
@@ -512,63 +514,61 @@ public class CoreMessageApi implements MessageApi {
     }
 
     public String reduce(@NotNull String locale, char delimiter) {
-        String s1 = locale.substring(0,locale.lastIndexOf(delimiter));
+        String s1 = locale.substring(0, locale.lastIndexOf(delimiter));
         return s1.trim();
     }
 
     public String reduce(String locale) {
-       return reduce(locale,'_');
+        return reduce(locale, '_');
     }
 
 
     public String findBestForRecipient(String messageKey, @NotNull MessageRecipient messageRecipient) {
-       return findBest(messageKey,messageRecipient.supplyLocaleOrDefault());
+        return findBest(messageKey, messageRecipient.supplyLocaleOrDefault());
     }
 
     public String findBest(String messageKey, String locale) {
         Message message = API.get().getMessageApi().getMessage(messageKey, locale);
-        if(message instanceof FallBackMessage) {
+        if (message instanceof FallBackMessage) {
             //fallback = not present
-            if(!Objects.equals(locale, defaultLocale())) {
-                if (locale.contains("_")){
+            if (!Objects.equals(locale, defaultLocale())) {
+                if (locale.contains("_")) {
                     //can go "deeper"
                     return findBest(messageKey, reduce(locale));
-                }else{
-                    //use defaultLocale or fallback...
-                    return defaultLocale();
                 }
             }
-        }else {
+            //use defaultLocale or fallback...
+            return defaultLocale();
+
+        } else {
             //Message is present...
             return locale;
         }
-        //if something goes wrong
-        throw new IllegalStateException("message...");
     }
 
     public Locale parseFromString(@NotNull String input) {
         String[] s = input.split("_");
         Locale parse = null;
 
-        if(s.length == 0) {
+        if (s.length == 0) {
             parse = Locale.getDefault();
         }
-        if(s.length == 1) {
+        if (s.length == 1) {
             parse = new Locale(s[0]);
         }
-        if(s.length == 2) {
-            parse = new Locale(s[0],s[1]);
+        if (s.length == 2) {
+            parse = new Locale(s[0], s[1]);
         }
-        if(s.length == 3) {
-            parse = new Locale(s[0],s[1],s[2]);
+        if (s.length == 3) {
+            parse = new Locale(s[0], s[1], s[2]);
         }
 
-        if(s.length > 3) {
+        if (s.length > 3) {
             StringJoiner variant = new StringJoiner("_");
             for (int i = 3; i < s.length; i++) {
                 variant.add(s[i]);
             }
-            parse = new Locale(s[0],s[1],variant.toString());
+            parse = new Locale(s[0], s[1], variant.toString());
         }
         return parse;
     }

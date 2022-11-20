@@ -5,4 +5,13 @@ author: Ture Bentzin
 commands:
   message:
     description: test message core
-    usage: /command messageKey
+    usage: /message messageKey
+  locale:
+    description: get your own locale
+    usage: /locale (Only for Players)
+  replacetest:
+    description: test replacers
+    usage: /replacetest args
+  bctest:
+    description: test broadcast
+    usage: /bctest key

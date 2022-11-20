@@ -5,6 +5,7 @@ import net.juligames.core.api.message.Message;
 import net.juligames.core.api.message.MessageRecipient;
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -45,7 +46,10 @@ public class PaperMessageRecipient implements MessageRecipient {
 
     @Override
     public @Nullable String supplyLocale() {
-        //TODO
-        return null;
+        if(commandSender instanceof Player player) {
+            return player.locale().toString();
+        }
+        else
+            return null;
     }
 }

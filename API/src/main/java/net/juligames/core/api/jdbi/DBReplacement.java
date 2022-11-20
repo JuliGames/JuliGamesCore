@@ -6,9 +6,9 @@ package net.juligames.core.api.jdbi;
  */
 public interface DBReplacement {
 
-    DBReplacementType getReplacementType();
+    String getReplacementType();
 
-    void setReplacementType(DBReplacementType replacementType);
+    void setReplacementType(String replacementType);
 
     String getValue();
 
