@@ -43,7 +43,7 @@ public interface ReplacementDAO {
     @SqlUpdate("UPDATE minecraft.replacement " +
             "SET value = :value " +
             "WHERE tag LIKE :tag;")
-    void update(@Bind("tag") String tag, @Bind("value") String newValue);
+    void update(@Bind("tag") String tag, @Bind("getValue") String newValue);
 
     @SqlQuery("SELECT * FROM replacement where tag = :tag")
     ReplacementBean selectBean(@Bind("tag") String tag);

@@ -5,13 +5,12 @@ package net.juligames.core.api.jdbi;
  * 19.11.2022
  */
 public interface DBReplacement {
-    String replacementType();
 
     DBReplacementType getReplacementType();
 
-    void setReplacementType(String replacementType);
+    void setReplacementType(DBReplacementType replacementType);
 
-    String value();
+    String getValue();
 
     void setValue(String value);
 

@@ -14,7 +14,7 @@ public interface HazelDataApi {
     /**
      * @param hazel the name of the map in the cluster
      * @param <A>   key
-     * @param <B>   value
+     * @param <B>   getValue
      * @return the map from hazelCast
      */
     <A, B> Map<A, B> getMap(String hazel);

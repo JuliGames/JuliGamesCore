@@ -12,11 +12,11 @@ import net.juligames.core.api.jdbi.ReplacementTypeDAO;
  */
 public class ReplacementBean implements DBReplacement {
 
-    private String replacementType;
+    private DBReplacementType replacementType;
     private String value;
     private String tag;
 
-    public ReplacementBean(String replacementType, String value, String tag) {
+    public ReplacementBean(DBReplacementType replacementType, String value, String tag) {
         this.replacementType = replacementType;
         this.value = value;
         this.tag = tag;
@@ -25,24 +25,19 @@ public class ReplacementBean implements DBReplacement {
     public ReplacementBean() {
     }
 
+
     @Override
-    public String replacementType() {
+    public DBReplacementType getReplacementType() {
         return replacementType;
     }
 
     @Override
-    public DBReplacementType getReplacementType() {
-        return API.get().getSQLManager().getJdbi().
-                withExtension(ReplacementTypeDAO.class, extension -> extension.select(replacementType));
-    }
-
-    @Override
-    public void setReplacementType(String replacementType) {
+    public void setReplacementType(DBReplacementType replacementType) {
         this.replacementType = replacementType;
     }
 
     @Override
-    public String value() {
+    public String getValue() {
         return value;
     }
 
