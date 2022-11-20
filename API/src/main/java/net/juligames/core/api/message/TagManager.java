@@ -7,5 +7,5 @@ import net.juligames.core.api.jdbi.DBReplacement;
  * 19.11.2022
  */
 public interface TagManager {
-    boolean register(DBReplacement dbReplacement);
+    void register(DBReplacement dbReplacement);
 }

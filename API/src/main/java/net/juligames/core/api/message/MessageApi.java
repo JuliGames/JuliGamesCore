@@ -48,25 +48,35 @@ public interface MessageApi {
 
     //get
     Message getMessage(String messageKey, Locale locale);
+    Message getMessage(String messageKey, Locale locale, String... replacements);
 
     Message getMessage(String messageKey, String locale);
+    Message getMessage(String messageKey, String locale, String... replacements);
 
     Message getMessage(String messageKey, DBLocale dbLocale);
+    Message getMessage(String messageKey, DBLocale dbLocale, String... replacements);
 
-    Collection<Message> getMessage(String messageKey);
+    Collection<? extends Message> getMessage(String messageKey);
+    Collection<? extends Message> getMessage(String messageKey, String... replacements);
 
-    Collection<Message> getAllFromLocale(Locale locale);
+    Collection<? extends Message> getAllFromLocale(Locale locale);
+    Collection<? extends Message> getAllFromLocale(Locale locale, String... replacements);
 
-    Collection<Message> getAllFromLocale(String locale);
+    Collection<? extends Message> getAllFromLocale(String locale);
+    Collection<? extends Message> getAllFromLocale(String locale, String... replacements);
 
-    Collection<Message> getAllFromLocale(DBLocale dbLocale);
+    Collection<? extends Message> getAllFromLocale(DBLocale dbLocale);
+    Collection<? extends Message> getAllFromLocale(DBLocale dbLocale, String... replacements);
 
-    Collection<Message> getAll();
+    @ApiStatus.Experimental
+    Collection<? extends Message> getAll();
+    @ApiStatus.Experimental
+    Collection<? extends Message> getAll(String... replacements);
 
     @ApiStatus.Internal
-    Stream<DBMessage> streamData();
+    Stream<? extends DBMessage> streamData();
 
-    Collection<DBReplacement> getReplacers();
+    Collection<? extends DBReplacement> getReplacers();
 
     //register
 
@@ -95,7 +105,7 @@ public interface MessageApi {
 
     MultiMessagePostScript broadcastMessage(String messageKey, DBLocale defaultLocale);
 
-    MultiMessagePostScript broadcastMessage(String messageKey);
+    Collection<? extends MessagePostScript> broadcastMessage(String messageKey);
 
     MultiMessagePostScript sendMessage(Collection<String> messageKeys, MessageRecipient messageRecipient);
 
@@ -116,6 +126,45 @@ public interface MessageApi {
     MultiMessagePostScript broadcastMessage(Collection<String> messageKeys, DBLocale defaultLocale);
 
     MultiMessagePostScript broadcastMessage(Collection<String> messageKeys);
+
+    //sending with replacements
+    MessagePostScript sendMessage(String messageKey, MessageRecipient messageRecipient, String... replacement);
+
+    MessagePostScript sendMessage(String messageKey, MessageRecipient messageRecipient, Locale overrideLocale, String... replacement);
+
+    MessagePostScript sendMessage(String messageKey, MessageRecipient messageRecipient, String overrideLocale, String... replacement);
+
+    MessagePostScript sendMessage(String messageKey, MessageRecipient messageRecipient, DBLocale overrideLocale, String... replacement);
+
+    MultiMessagePostScript broadcastMessage(String messageKey, Locale defaultLocale, String... replacement);
+
+    MultiMessagePostScript broadcastMessage(String messageKey, String defaultLocale, String... replacement);
+
+    MultiMessagePostScript broadcastMessage(String messageKey, DBLocale defaultLocale, String... replacement);
+
+    Collection<? extends MessagePostScript> broadcastMessage(String messageKey, String... replacement);
+
+    MultiMessagePostScript sendMessage(Collection<String> messageKeys, MessageRecipient messageRecipient, String... replacement);
+
+    MultiMessagePostScript sendMessage(Collection<String> messageKeys, Collection<? extends MessageRecipient> messageRecipients, String... replacement);
+
+    MultiMessagePostScript sendMessage(Collection<String> messageKeys, MessageRecipient messageRecipient, String overrideLocale, String... replacement);
+    MultiMessagePostScript sendMessage(Collection<String> messageKeys, MessageRecipient messageRecipient, Locale overrideLocale, String... replacement);
+    MultiMessagePostScript sendMessage(Collection<String> messageKeys, MessageRecipient messageRecipient, DBLocale overrideLocale, String... replacement);
+
+    MultiMessagePostScript sendMessage(Collection<String> messageKeys, Collection<? extends MessageRecipient> messageRecipients, String overrideLocale, String... replacement);
+    MultiMessagePostScript sendMessage(Collection<String> messageKeys, Collection<? extends MessageRecipient> messageRecipients, Locale overrideLocale, String... replacement);
+    MultiMessagePostScript sendMessage(Collection<String> messageKeys, Collection<? extends MessageRecipient> messageRecipients, DBLocale overrideLocale, String... replacement);
+
+    MultiMessagePostScript broadcastMessage(Collection<String> messageKeys, Locale defaultLocale, String... replacement);
+
+    MultiMessagePostScript broadcastMessage(Collection<String> messageKeys, String defaultLocale, String... replacement);
+
+    MultiMessagePostScript broadcastMessage(Collection<String> messageKeys, DBLocale defaultLocale, String... replacement);
+
+    MultiMessagePostScript broadcastMessage(Collection<String> messageKeys, String... replacement);
+
+
     //TODO messageRecipient and prefer locals
 
     TagManager getTagManager();

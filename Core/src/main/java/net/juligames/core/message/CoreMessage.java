@@ -2,7 +2,9 @@ package net.juligames.core.message;
 
 import net.juligames.core.api.jdbi.DBMessage;
 import net.juligames.core.api.message.Message;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
 
@@ -12,9 +14,28 @@ import java.util.function.Function;
  */
 public class CoreMessage implements Message {
 
+    @Contract("_, _ -> new")
+    public static @NotNull CoreMessage fromData(@Nullable DBMessage messageData, String messageKey) {
+        if(messageData == null) {
+            return new FallBackMessage(messageKey);
+        }else {
+            return new CoreMessage(messageData);
+        }
+    }
+
+    @Deprecated
+    @Contract("_ -> new")
+    public static @NotNull CoreMessage fromData(@Nullable DBMessage messageData) {
+        if(messageData == null) {
+            return new FallBackMessage();
+        }else {
+            return new CoreMessage(messageData);
+        }
+    }
+
     private final DBMessage messageData;
 
-    public CoreMessage(DBMessage messageData) {
+    public CoreMessage(@Nullable DBMessage messageData) {
         this.messageData = messageData;
     }
 

@@ -12,6 +12,7 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.serializer.ComponentSerializer;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,19 +20,22 @@ import org.jetbrains.annotations.NotNull;
  * @author Ture Bentzin
  * 19.11.2022
  */
-public final class AdventureTagManager extends Registerator<Tag> implements TagManager {
+public final class AdventureTagManager implements TagManager {
 
+    private TagResolver internalResolver = TagResolver.standard();
 
     @Override
-    public boolean register(DBReplacement dbReplacement) {
-        try {
-            register(JDBITagAdapter.fromJDBI(dbReplacement));
-            return true;
-        } catch (DuplicateEntryException e) {
-            Core.getInstance().getCoreLogger().warning("someone tried to register a tag that was already registered...");
-            e.printStackTrace();
-            return false;
-        }
+    public void register(@NotNull DBReplacement dbReplacement) {
+        register(dbReplacement.getTag(), JDBITagAdapter.fromJDBI(dbReplacement));
+    }
+
+    public void register(String name, Tag tag) {
+        internalResolver = TagResolver.builder().resolver(internalResolver).tag(name,tag).build();
+    }
+
+    @ApiStatus.Internal
+    public void clearResolver() {
+        internalResolver = TagResolver.standard();
     }
 
     @Contract(pure = true)
