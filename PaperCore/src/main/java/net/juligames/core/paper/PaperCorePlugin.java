@@ -16,7 +16,9 @@ public class PaperCorePlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         Core core = new Core();
-        core.start("paper-core");
+        String serverName = Bukkit.getName() + "@" + ((Bukkit.getServer().getIp().isEmpty())? Bukkit.getServer().getIp() + ":": Bukkit.getServer().getPort());
+        getLogger().info("stating core with the following identification: " + serverName);
+        core.start("paper-core|" + serverName);
         core.setOnlineRecipientProvider(() -> {
             List<PaperMessageRecipient> paperMessageRecipients = new java.util.ArrayList<>(Bukkit.getOnlinePlayers().stream().map(PaperMessageRecipient::new).toList());
             paperMessageRecipients.add(new PaperMessageRecipient(Bukkit.getConsoleSender()));
@@ -27,10 +29,13 @@ public class PaperCorePlugin extends JavaPlugin {
         Objects.requireNonNull(getCommand("locale")).setExecutor(new LocaleCommand());
         Objects.requireNonNull(getCommand("replacetest")).setExecutor(new ReplaceTestCommand());
         Objects.requireNonNull(getCommand("bctest")).setExecutor(new BCTestCommand());
+
+        //PaperAPI
     }
 
     @Override
     public void onDisable() {
+        Core.getInstance().getCoreLogger().info("onDisable() -> Client shutdown!");
         Core.getInstance().stop();
     }
 }

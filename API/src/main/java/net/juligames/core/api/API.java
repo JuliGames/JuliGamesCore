@@ -6,6 +6,9 @@ import net.juligames.core.api.data.HazelDataApi;
 import net.juligames.core.api.jdbi.SQLManager;
 import net.juligames.core.api.message.MessageApi;
 import net.juligames.core.api.notification.NotificationApi;
+import org.jetbrains.annotations.ApiStatus;
+
+import java.util.Map;
 
 /**
  * @implNote Main class to be used to get the different parts of the api
@@ -52,5 +55,28 @@ public interface API {
      * @return The MessageAPI used to send Messages via core to players
      */
     MessageApi getMessageApi();
+
+    /**
+     *
+     * @return The Name this core is assigned to
+     */
+    String getName();
+
+    String getVersion();
+
+    Map<String,String> getJavaEnvironment();
+
+    Runtime getJavaRuntime();
+
+    @ApiStatus.Internal
+    void collectGarbage();
+
+    /*
+     *
+     * @return if the core is connected and ready for operation
+     */
+   // boolean isAlive();
+
+
 
 }

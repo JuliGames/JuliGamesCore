@@ -64,6 +64,11 @@ public class HazelConnector {
         }
     }
 
+    @ApiStatus.Internal
+    public HazelcastInstance getForce() {
+        return getInstance().getNow(null);
+    }
+
     public CompletableFuture<HazelcastInstance> getInstance() {
         return instance;
     }

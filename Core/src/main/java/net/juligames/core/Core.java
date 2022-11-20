@@ -1,11 +1,14 @@
 package net.juligames.core;
 
 import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.topic.LocalTopicStats;
 import com.mysql.cj.log.Log;
 import de.bentzin.tools.logging.JavaLogger;
 import de.bentzin.tools.logging.Logger;
 import net.juligames.core.api.API;
 import net.juligames.core.api.ApiCore;
+import net.juligames.core.api.TODO;
+import net.juligames.core.api.err.dev.TODOException;
 import net.juligames.core.api.message.MessageRecipient;
 import net.juligames.core.cluster.CoreClusterApi;
 import net.juligames.core.data.HazelDataCore;
@@ -21,6 +24,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -32,9 +36,11 @@ import java.util.function.Supplier;
  */
 public final class Core implements API {
 
-
+    /**
+     * This can be set depending on the build of the Core
+     */
     public static final String CORE_BRAND = "Core";
-    public static final String CORE_VERSION_NUMBER = "0.0.1";
+    public static final String CORE_VERSION_NUMBER = "0.1";
     public static final String CORE_SPECIFICATION = "Micheal";
     private static Core core;
     private HazelConnector hazelConnector;
@@ -110,6 +116,11 @@ public final class Core implements API {
         logger.info("loaded replacements from jdbi...");
         Core.getInstance().getOrThrow().<SerializedNotification>getTopic("notify: " + Core.getInstance().getClusterApi().getLocalUUID().toString())
                 .addMessageListener(coreNotificationApi);
+
+        logger.info("hooking to shutdown...");
+        getJavaRuntime().addShutdownHook(new Thread(() -> {
+
+        }));
     }
 
     public void start(String core_name) {
@@ -184,6 +195,10 @@ public final class Core implements API {
         throw new NoSuchElementException("HazelcastInstance is not present!");
     }
 
+    private HazelcastInstance getForce(){
+        return getHazelConnector().getForce();
+    }
+
     public HazelcastInstance getOrWait() throws ExecutionException, InterruptedException {
         CompletableFuture<HazelcastInstance> instance = getHazelConnector().getInstance();
         return instance.get();
@@ -203,6 +218,43 @@ public final class Core implements API {
     @Override
     public CoreMessageApi getMessageApi() {
         return messageApi;
+    }
+
+    /**
+     * @return The Name this core is assigned to
+     */
+    @Override
+    public String getName() {
+        return core_name;
+    }
+
+    @Contract(pure = true)
+    @Override
+    public @NotNull String getVersion() {
+        return getFullCoreName();
+    }
+
+    @Override
+    public Map<String, String> getJavaEnvironment() {
+        return System.getenv();
+    }
+
+    @Override
+    public Runtime getJavaRuntime() {
+        return Runtime.getRuntime();
+    }
+
+    @Override
+    public void collectGarbage() {
+        getJavaRuntime().gc();
+    }
+
+    /**
+     * @return if the core is connected and ready for operation
+     */
+    @TODO(doNotcall = true)
+    public boolean isAlive() {
+        throw new TODOException();
     }
 
     public Supplier<Collection<? extends MessageRecipient>> getOnlineRecipientProvider() {
