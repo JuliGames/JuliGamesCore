@@ -57,6 +57,15 @@ public final class Core implements API {
     public Core() {
     }
 
+    /**
+     * This will create AND START the Core!
+     * @param core_name the core name
+     */
+    @ApiStatus.Experimental
+    public Core(String core_name) {
+        start(core_name);
+    }
+
     @Contract(pure = true)
     public static @NotNull String getFullCoreName() {
         return CORE_BRAND + "-" + CORE_VERSION_NUMBER + " " + CORE_SPECIFICATION;

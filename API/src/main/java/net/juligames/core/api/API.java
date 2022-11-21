@@ -3,9 +3,11 @@ package net.juligames.core.api;
 import de.bentzin.tools.logging.Logger;
 import net.juligames.core.api.cluster.ClusterApi;
 import net.juligames.core.api.data.HazelDataApi;
+import net.juligames.core.api.err.APIException;
 import net.juligames.core.api.jdbi.SQLManager;
 import net.juligames.core.api.message.MessageApi;
 import net.juligames.core.api.notification.NotificationApi;
+import org.checkerframework.checker.units.qual.A;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Map;
@@ -17,7 +19,11 @@ import java.util.Map;
  */
 public interface API {
 
-    static API get() {
+    static API get() throws APIException {
+        API api = ApiCore.getAPI();
+        if(api == null) {
+            throw new APIException();
+        }
         return ApiCore.getAPI();
     }
 
