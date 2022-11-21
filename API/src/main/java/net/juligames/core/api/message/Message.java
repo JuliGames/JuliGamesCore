@@ -13,11 +13,25 @@ import java.util.function.Function;
  */
 public interface Message extends Cloneable {
 
+    /**
+     * @return the data container of this Message
+     */
     @ApiStatus.Internal
     DBMessage getMessageData();
 
+    /**
+     * @return the miniMessage (unresolved obviously)
+     */
     String getMiniMessage();
+
+    /**
+     * @return the Message formatted without colors or decoration
+     */
     String getPlainMessage();
 
+    /**
+     * Modify the data in this message
+     * @param actionToPerform the operation
+     */
     void doWithMiniMessage(Function<String, String> actionToPerform);
 }

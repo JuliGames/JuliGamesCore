@@ -1,6 +1,7 @@
 package net.juligames.core.api.err;
 
 /**
+ * @apiNote This is used to indicate that someone tried to call something that is not provided
  * @author Ture Bentzin
  * 16.11.2022
  */
