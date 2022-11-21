@@ -9,9 +9,9 @@ import net.juligames.core.api.jdbi.mapper.bean.ReplacementBean;
 import net.juligames.core.api.message.Message;
 import net.juligames.core.api.message.MessageApi;
 import net.juligames.core.api.message.MessageRecipient;
+import net.juligames.core.api.message.TagManager;
 import net.juligames.core.jdbi.CoreMessagePostScript;
 import net.juligames.core.jdbi.CoreMultiMessagePostScript;
-import net.juligames.core.message.adventure.AdventureTagManager;
 import org.jdbi.v3.core.extension.ExtensionCallback;
 import org.jetbrains.annotations.*;
 
@@ -29,10 +29,7 @@ public class CoreMessageApi implements MessageApi {
     //TODO switch all Collections / Streams to ? extends X for performance reasons
     //TODO AUTOMATIC FALLBACK!!!
 
-    private final AdventureTagManager adventureTagManager;
-
     public CoreMessageApi() {
-        this.adventureTagManager = new AdventureTagManager();
     }
 
 
@@ -474,11 +471,6 @@ public class CoreMessageApi implements MessageApi {
     @Override
     public CoreMultiMessagePostScript broadcastMessage(Collection<String> messageKeys, String... replacement) {
         return sendMessage(messageKeys, Core.getInstance().getOnlineRecipientProvider().get(), replacement);
-    }
-
-    @Override
-    public AdventureTagManager getTagManager() {
-        return adventureTagManager;
     }
 
     public String defaultLocale() {

@@ -1,6 +1,6 @@
 package net.juligames.core.paper;
 
-import net.juligames.core.Core;
+import net.juligames.core.adventure.api.AdventureAPI;
 import net.juligames.core.api.message.Message;
 import net.juligames.core.api.message.MessageRecipient;
 import net.kyori.adventure.text.Component;
@@ -30,7 +30,7 @@ public class PaperMessageRecipient implements MessageRecipient {
 
     @Override
     public void deliver(Message message) {
-        commandSender.sendMessage(Core.getInstance().getMessageApi().getTagManager().resolve(message));
+        commandSender.sendMessage(AdventureAPI.get().getAdventureTagManager().resolve(message));
     }
 
     /**
@@ -40,7 +40,8 @@ public class PaperMessageRecipient implements MessageRecipient {
      */
     @Override
     public void deliver(String miniMessage) {
-        Component resolve = Core.getInstance().getMessageApi().getTagManager().resolve(miniMessage);
+        //Component resolve = Core.getInstance().getMessageApi().getTagManager().resolve(miniMessage);
+        Component resolve = AdventureAPI.get().getAdventureTagManager().resolve(miniMessage);
         commandSender.sendMessage(resolve);
     }
 

@@ -2,22 +2,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>JuliGamesCore</artifactId>
+        <groupId>net.juligames.core</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>net.juligames.core</groupId>
-    <artifactId>JuliGamesCore</artifactId>
-    <packaging>pom</packaging>
-    <version>1.0-SNAPSHOT</version>
-    <modules>
-        <module>PaperCore</module>
-        <module>Core</module>
-        <module>API</module>
-        <module>Master</module>
-        <module>HazelAPI</module>
-        <module>PaperAPI</module>
-        <module>AdventureAPI</module>
-        <module>AdventureCore</module>
-    </modules>
+    <artifactId>AdventureCore</artifactId>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -25,5 +17,12 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>net.juligames.core</groupId>
+            <artifactId>AdventureAPI</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 
 </project>

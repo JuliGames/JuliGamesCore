@@ -6,7 +6,6 @@ import de.bentzin.tools.logging.Logger;
 import net.juligames.core.Core;
 import net.juligames.core.api.jdbi.*;
 import net.juligames.core.api.jdbi.mapper.bean.LocaleBean;
-import net.juligames.core.message.adventure.JDBITagAdapter;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.sqlobject.SqlObjectPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -97,8 +96,7 @@ public class CoreSQLManager implements SQLManager {
 
 
 
-        //default the replacementTypes:
-        JDBITagAdapter.ReplacementType.defaultToJDBI(Core.getInstance().getSQLManager().getJdbi());
+
 
     }
 

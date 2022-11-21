@@ -1,8 +1,9 @@
-package net.juligames.core.message.adventure;
+package net.juligames.core.adventure;
 
 import com.google.errorprone.annotations.DoNotCall;
 import de.bentzin.tools.logging.Logger;
-import net.juligames.core.Core;
+import net.juligames.core.adventure.api.AdventureAPI;
+import net.juligames.core.api.API;
 import net.juligames.core.api.jdbi.DBReplacement;
 import net.juligames.core.api.jdbi.ReplacementTypeDAO;
 import net.juligames.core.api.jdbi.mapper.bean.ReplacementTypeBean;
@@ -21,7 +22,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public class JDBITagAdapter {
 
-    public static Logger logger = Core.getInstance().getCoreLogger().adopt("adapter");
+
+    public static Logger logger = API.get().getAPILogger().adopt("adapter");
     public static Tag fromJDBI(@NotNull DBReplacement replacement) {
         String s = replacement.getReplacementType();
         ReplacementType replacementType = ReplacementType.valueOf(s);
@@ -64,7 +66,7 @@ public class JDBITagAdapter {
      *WARNING: This uses the fallback resolver
      */
     private static @NotNull Component resolveValue(@NotNull DBReplacement replacement) {
-        return Core.getInstance().getMessageApi().getTagManager().fallbackResolve(replacement.getValue());
+        return AdventureAPI.get().getAdventureTagManager().fallbackResolve(replacement.getValue()); //TODO currently this is hardcode and i intend to leave it that way to insure that fallback resolving never fails
     }
 
     public enum ReplacementType {

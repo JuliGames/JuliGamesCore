@@ -1,6 +1,7 @@
 package net.juligames.core.paper;
 
 import net.juligames.core.Core;
+import net.juligames.core.adventure.AdventureCore;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -19,6 +20,10 @@ public class PaperCorePlugin extends JavaPlugin {
         String serverName = Bukkit.getName() + "@" + ((Bukkit.getServer().getIp().isEmpty())? Bukkit.getServer().getIp() + ":": Bukkit.getServer().getPort());
         getLogger().info("stating core with the following identification: " + serverName);
         core.start("paper-core|" + serverName);
+        //start adventureAPI
+        getLogger().info("starting adventureCore v." + AdventureCore.API_VERSION);
+        AdventureCore adventureCore = new AdventureCore();
+        adventureCore.start();
         core.setOnlineRecipientProvider(() -> {
             List<PaperMessageRecipient> paperMessageRecipients = new java.util.ArrayList<>(Bukkit.getOnlinePlayers().stream().map(PaperMessageRecipient::new).toList());
             paperMessageRecipients.add(new PaperMessageRecipient(Bukkit.getConsoleSender()));

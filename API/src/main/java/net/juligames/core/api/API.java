@@ -6,11 +6,14 @@ import net.juligames.core.api.data.HazelDataApi;
 import net.juligames.core.api.err.APIException;
 import net.juligames.core.api.jdbi.SQLManager;
 import net.juligames.core.api.message.MessageApi;
+import net.juligames.core.api.message.MessageRecipient;
 import net.juligames.core.api.notification.NotificationApi;
 import org.checkerframework.checker.units.qual.A;
 import org.jetbrains.annotations.ApiStatus;
 
+import java.util.Collection;
 import java.util.Map;
+import java.util.function.Supplier;
 
 /**
  * @implNote Main class to be used to get the different parts of the api
@@ -76,6 +79,8 @@ public interface API {
 
     @ApiStatus.Internal
     void collectGarbage();
+
+    Supplier<Collection<? extends MessageRecipient>> getOnlineRecipientProvider();
 
     /*
      *

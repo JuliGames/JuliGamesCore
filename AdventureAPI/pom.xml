@@ -9,21 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>Core</artifactId>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>17</source>
-                    <target>17</target>
-                    <compilerArgs>--enable-preview</compilerArgs>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-
+    <artifactId>AdventureAPI</artifactId>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -31,28 +17,33 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+
     <dependencies>
+
         <dependency>
             <groupId>net.juligames.core</groupId>
-            <artifactId>HazelAPI</artifactId>
+            <artifactId>API</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-        <dependency>
-            <groupId>org.jdbi</groupId>
-            <artifactId>jdbi3-core</artifactId>
-            <version>3.34.0</version>
-        </dependency>
-
-
 
         <dependency>
-            <groupId>org.jetbrains</groupId>
-            <artifactId>annotations</artifactId>
-            <version>20.1.0</version>
+            <groupId>net.kyori</groupId>
+            <artifactId>adventure-text-minimessage</artifactId>
+            <version>4.11.0</version>
             <scope>compile</scope>
         </dependency>
-
-
+        <dependency>
+            <groupId>net.kyori</groupId>
+            <artifactId>adventure-text-serializer-plain</artifactId>
+            <version>4.11.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.kyori</groupId>
+            <artifactId>adventure-text-serializer-legacy</artifactId>
+            <version>4.11.0</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
 </project>

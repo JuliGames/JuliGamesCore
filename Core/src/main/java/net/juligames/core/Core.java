@@ -120,9 +120,7 @@ public final class Core implements API {
         clusterApi = new CoreClusterApi();
         messageApi = new CoreMessageApi();
 
-        logger.info("loading replacements from jdbi...");
-        messageApi.getTagManager().load();
-        logger.info("loaded replacements from jdbi...");
+
         Core.getInstance().getOrThrow().<SerializedNotification>getTopic("notify: " + Core.getInstance().getClusterApi().getLocalUUID().toString())
                 .addMessageListener(coreNotificationApi);
 
