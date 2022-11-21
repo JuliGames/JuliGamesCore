@@ -1,5 +1,6 @@
 package net.juligames.core;
 
+import com.google.errorprone.annotations.InlineMe;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.topic.LocalTopicStats;
 import com.mysql.cj.log.Log;
@@ -143,9 +144,17 @@ public final class Core implements API {
     }
 
     public void stop() {
+        coreLogger.info("dropping api...");
+        dropApiService();
+        coreLogger.info("api is now offline!");
         coreLogger.info("stopping hazelcast client connection");
         hazelConnector.disconnect();
         coreLogger.info("goodbye!");
+    }
+
+    @ApiStatus.Internal
+    private void dropApiService() {
+        ApiCore.CURRENT_API = null;
     }
 
     /**

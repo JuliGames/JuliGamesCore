@@ -47,6 +47,12 @@ public class AdventureCore implements AdventureAPI {
         logger.info("adventureAPI is live!");
     }
 
+    @ApiStatus.Internal
+    public void dropApiService() {
+        logger.info("dropping adventure api...");
+        AdventureAPICore.adventureAPI = null;
+    }
+
     @Override
     public CoreAdventureTagManager getAdventureTagManager() {
         return adventureTagManager;
