@@ -1,4 +1,4 @@
-main: net.juligames.core.paper.PaperCoreDebugPlugin
+main: net.juligames.core.paper.PaperCorePlugin
 version: 0.0.1 - Micheal
 name: PaperCore
 author: Ture Bentzin
