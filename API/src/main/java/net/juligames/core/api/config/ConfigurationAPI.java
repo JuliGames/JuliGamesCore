@@ -5,6 +5,7 @@ import java.util.Comparator;
 /**
  * @author Ture Bentzin
  * 26.11.2022
+
  */
 public interface ConfigurationAPI {
 
@@ -12,4 +13,6 @@ public interface ConfigurationAPI {
     Configuration master();
 
     Comparator<Configuration> comparator();
+
+    //buildInInterpreters
 }
