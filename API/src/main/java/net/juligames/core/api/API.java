@@ -2,6 +2,7 @@ package net.juligames.core.api;
 
 import de.bentzin.tools.logging.Logger;
 import net.juligames.core.api.cluster.ClusterApi;
+import net.juligames.core.api.config.ConfigurationAPI;
 import net.juligames.core.api.data.HazelDataApi;
 import net.juligames.core.api.err.APIException;
 import net.juligames.core.api.jdbi.SQLManager;
@@ -64,6 +65,12 @@ public interface API {
      * @return The MessageAPI used to send Messages via core to players
      */
     MessageApi getMessageApi();
+
+    /**
+     *
+     * @return the {@link ConfigurationAPI}
+     */
+    ConfigurationAPI getConfigurationApi();
 
     /**
      *

@@ -9,6 +9,7 @@ import de.bentzin.tools.logging.Logger;
 import net.juligames.core.api.API;
 import net.juligames.core.api.ApiCore;
 import net.juligames.core.api.TODO;
+import net.juligames.core.api.config.ConfigurationAPI;
 import net.juligames.core.api.err.dev.TODOException;
 import net.juligames.core.api.message.MessageRecipient;
 import net.juligames.core.cluster.CoreClusterApi;
@@ -52,6 +53,7 @@ public final class Core implements API {
     private Logger apiLogger;
     private CoreSQLManager sqlManager;
     private CoreMessageApi messageApi;
+    private ConfigurationAPI configurationAPI;
     private String core_name;
     @NotNull
     private Supplier<Collection<? extends MessageRecipient>> onlineRecipientProvider = () -> List.of(new DummyMessageRecipient());
@@ -234,6 +236,14 @@ public final class Core implements API {
     @Override
     public CoreMessageApi getMessageApi() {
         return messageApi;
+    }
+
+    /**
+     * @return the {@link ConfigurationAPI}
+     */
+    @Override
+    public ConfigurationAPI getConfigurationApi() {
+        return configurationAPI;
     }
 
     /**
