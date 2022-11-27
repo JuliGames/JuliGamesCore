@@ -18,7 +18,7 @@ import java.util.function.Supplier;
  * 26.11.2022
  * @see BuildInInterpreters
  */
-public interface Configuration {
+public interface Configuration extends Comparable<Configuration> {
 
     /**
      * This keys can be requested but never should be overridden (it is possible to override them, but only consider doing this if you really
@@ -134,5 +134,11 @@ public interface Configuration {
 
     <T> void query(TriConsumer<String,T,Supplier<Interpreter<T>>> query, String input, Interpreter<T> interpreter, Supplier<T> t);
 
+    int size();
 
- }
+
+    @Override
+    default int compareTo(@NotNull Configuration o) {
+        return o.size() - size();
+    }
+}

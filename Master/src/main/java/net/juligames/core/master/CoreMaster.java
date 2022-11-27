@@ -6,8 +6,11 @@ import de.bentzin.tools.register.Registerator;
 import net.juligames.core.Core;
 import net.juligames.core.api.jdbi.LocaleDAO;
 import net.juligames.core.api.jdbi.SQLManager;
+import net.juligames.core.master.cmd.ListObjectsCommand;
 import net.juligames.core.master.cmd.MasterCommand;
 import net.juligames.core.master.cmd.MasterCommandRunner;
+import net.juligames.core.master.cmd.ReloadConfigCommand;
+import net.juligames.core.master.config.MasterConfigManager;
 import net.juligames.core.master.data.MasterHazelInformationProvider;
 import net.juligames.core.master.logging.MasterLogger;
 
@@ -27,6 +30,7 @@ public class CoreMaster {
     public static Logger logger;
     private static SQLManager SQLManager;
     private static MasterCommandRunner masterCommandRunner;
+    private static MasterConfigManager masterConfigManager;
 
     public static void main(String[] args) {
 
@@ -34,6 +38,7 @@ public class CoreMaster {
 
         //entry point for Master
         masterCommandRunner = new MasterCommandRunner(logger);
+        masterConfigManager = new MasterConfigManager();
 
         logger.info("welcome to JuliGames-Core Master");
         logger.warning("This is an early development build!");
@@ -68,7 +73,21 @@ public class CoreMaster {
             logger.error(e.getMessage());
             e.printStackTrace();
         }
+        masterConfigManager.load();
+        //HOOK
+
+        Core.getInstance().getJavaRuntime().addShutdownHook(new Thread(() -> {
+            try {
+                logger.info("master is going down!!");
+            }catch (Exception ignored){
+
+            }
+            masterConfigManager.storeAll();
+        }));
+
+        //LAST!!!
         masterCommandRunner.run();
+
     }
 
     public static SQLManager getMasterSQLManager() {
@@ -84,5 +103,11 @@ public class CoreMaster {
                Core.getInstance().getNotificationApi().getNotificationSender().broadcastNotification("bc-all",commandString);
             }
         });
+        masterCommandRunner.register(new ListObjectsCommand());
+        masterCommandRunner.register(new ReloadConfigCommand());
+    }
+
+    public static MasterConfigManager masterConfigManager() {
+        return masterConfigManager;
     }
 }

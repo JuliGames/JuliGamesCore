@@ -9,10 +9,16 @@ import java.util.Comparator;
  */
 public interface ConfigurationAPI {
 
-    Configuration search(String name);
+    /**
+     * This will create a new configuration (if none with the same name is already present)
+     * @param name the name
+     * @return a new Configuration or the old if already one existed
+     */
+    Configuration getOrCreate(String name);
+
     Configuration master();
 
-    Comparator<Configuration> comparator();
+    Comparator<? extends Configuration> comparator();
 
     //buildInInterpreters
 }

@@ -1,12 +1,12 @@
 package net.juligames.core.config;
 
-import com.hazelcast.com.fasterxml.jackson.jr.ob.impl.POJODefinition;
 import com.hazelcast.map.IMap;
 import net.juligames.core.Core;
 import net.juligames.core.api.TODO;
 import net.juligames.core.api.config.Configuration;
 import net.juligames.core.api.config.Interpreter;
 import net.juligames.core.api.misc.TriConsumer;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,7 +30,17 @@ import org.checkerframework.checker.optional.qual.MaybePresent;
 @TODO(doNotcall = true)
 public class CoreConfiguration implements Configuration {
 
-
+    public static @NotNull CoreConfiguration fromProperties(@NotNull Properties properties) {
+        String name = properties.getProperty("configuration_name");
+        CoreConfiguration configuration = new CoreConfiguration(name);
+        Set<Map.Entry<Object, Object>> entries = properties.entrySet();
+        IMap<String, String> map = configuration.accessHazel().get();
+        for (Map.Entry<Object, Object> entry : entries) {
+            map.put(entry.getKey().toString(),entry.getValue().toString()); //oh man... oh man
+        }
+        configuration.updateHazel();
+        return configuration;
+    }
 
     private String header_comment = Core.getFullCoreName() + " :: a default configuration file";
     private final String name;
@@ -40,11 +50,22 @@ public class CoreConfiguration implements Configuration {
         this.name = name;
         data = hazel();
 
+        assert Objects.equals(getStringOrNull("configuration_name"), name); //just to avoid BNick content in the configurationSystem
+
+        String configuration_header = getStringOrNull("configuration_header");
+        if(configuration_header != null) {
+            setHeader_comment(configuration_header);
+        }
     }
 
 
     private @NotNull IMap<String,String> hazel() {
-        return Core.getInstance().getOrThrow().getMap("config:" + name);
+        return hazel(false);
+    }
+
+    @ApiStatus.Internal
+    private @NotNull IMap<String,String> hazel(boolean containingPrefix) {
+        return Core.getInstance().getOrThrow().getMap(containingPrefix?name:"config:" + name);
     }
 
     public void updateHazel() {
@@ -53,6 +74,11 @@ public class CoreConfiguration implements Configuration {
 
     public Map<String,String> export()  {
         return new HashMap<>(data);
+    }
+
+    @ApiStatus.Internal
+    public Supplier<IMap<String,String>> accessHazel() {
+        return this::hazel;
     }
 
     public Set<String> keySet() {
@@ -545,6 +571,28 @@ public class CoreConfiguration implements Configuration {
     }
 
     public String getName() {
+        return name;
+    }
+
+    @Override
+    public int size() {
+        return data.size();
+    }
+
+    public final @NotNull String getConjoinedDescription() {
+        return getName() + "\n" + header_comment;
+    }
+
+    /**
+     * Changes will take effect after regeneration of this object!!!
+     * @param newName the new name
+     */
+    public void updateName(String newName) {
+        setString("configuration_name",newName);
+    }
+
+    @Override
+    public String toString() {
         return name;
     }
 }
