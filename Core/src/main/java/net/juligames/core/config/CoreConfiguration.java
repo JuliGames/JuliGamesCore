@@ -56,10 +56,12 @@ public class CoreConfiguration implements Configuration {
         Set<Map.Entry<Object, Object>> entries = properties.entrySet();
         IMap<String, String> map = configuration.accessHazel().get();
         for (Map.Entry<Object, Object> entry : entries) {
-            if (override)
-                map.put(entry.getKey().toString(), entry.getValue().toString()); //oh man... oh man
-            else if (!map.containsKey(entry.getKey().toString())) {
-                map.put(entry.getKey().toString(), entry.getValue().toString()); //oh man... oh man
+            if (override) {
+                String old = map.put(entry.getKey().toString(), entry.getValue().toString()); //oh man... oh man
+                Core.getInstance().getCoreLogger().info("OVERRIDE: set " + entry.getKey() + "from "  + old + " to " + entry.getValue());
+            }else if (!map.containsKey(entry.getKey().toString())) {
+                String old = map.put(entry.getKey().toString(), entry.getValue().toString()); //oh man... oh man
+                Core.getInstance().getCoreLogger().info("set " + entry.getKey() + "from "  + old + " to " + entry.getValue());
             }
         }
         configuration.updateHazel();
