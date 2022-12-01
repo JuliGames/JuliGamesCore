@@ -30,7 +30,7 @@ public class CoreConfiguration implements Configuration {
     private final String name;
     private String header_comment = Core.getFullCoreName() + " :: a default configuration file";
     private IMap<String, String> data;//May be removed
-    
+
 
     public CoreConfiguration(String name) {
         this.name = name;
@@ -45,10 +45,10 @@ public class CoreConfiguration implements Configuration {
     }
 
     /**
-     * This will not override data in the {@link Map}
+     * This will not override data in the {@link Map} unless override is set to true
      *
-     * @param properties
-     * @return
+     * @param properties the defaults
+     * @return the config
      */
     public static @NotNull CoreConfiguration fromProperties(@NotNull Properties properties, boolean override) {
         String name = properties.getProperty("configuration_name");
@@ -58,14 +58,21 @@ public class CoreConfiguration implements Configuration {
         for (Map.Entry<Object, Object> entry : entries) {
             if (override)
                 map.put(entry.getKey().toString(), entry.getValue().toString()); //oh man... oh man
-            else if (!map.containsKey(entry.getKey().toString()) {
+            else if (!map.containsKey(entry.getKey().toString())) {
                 map.put(entry.getKey().toString(), entry.getValue().toString()); //oh man... oh man
             }
         }
         configuration.updateHazel();
         return configuration;
     }
+    
 
+    /**
+     * This will not override data in the {@link Map}
+     *
+     * @param properties the defaults
+     * @return the config
+     */
     public static @NotNull CoreConfiguration fromProperties(@NotNull Properties properties) {
         return fromProperties(properties, false);
     }
