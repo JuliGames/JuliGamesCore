@@ -30,13 +30,22 @@ import org.checkerframework.checker.optional.qual.MaybePresent;
 @TODO(doNotcall = true)
 public class CoreConfiguration implements Configuration {
 
+    /**
+     * This will not override data in the {@link Map}
+     * @param properties
+     * @return
+     */
     public static @NotNull CoreConfiguration fromProperties(@NotNull Properties properties) {
         String name = properties.getProperty("configuration_name");
         CoreConfiguration configuration = new CoreConfiguration(name);
         Set<Map.Entry<Object, Object>> entries = properties.entrySet();
         IMap<String, String> map = configuration.accessHazel().get();
         for (Map.Entry<Object, Object> entry : entries) {
-            map.put(entry.getKey().toString(),entry.getValue().toString()); //oh man... oh man
+            if(! map.containsKey(entry.getKey().toString())) {
+                String s = map.put(entry.getKey().toString(), entry.getValue().toString());//oh man... oh man
+                Core.getInstance().getCoreLogger().info("changed " + s + " to " + entry.getValue());
+            }else
+                Core.getInstance().getCoreLogger().info("unchanged: " + entry.getValue());
         }
         configuration.updateHazel();
         return configuration;

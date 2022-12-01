@@ -4,20 +4,16 @@ import com.hazelcast.core.DistributedObject;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.map.IMap;
 import de.bentzin.tools.Hardcode;
-import de.bentzin.tools.misc.WorkingLocator;
 import net.juligames.core.Core;
-import net.juligames.core.api.config.CollectionInterpreter;
-import net.juligames.core.api.config.Configuration;
 import net.juligames.core.config.CoreConfiguration;
-import org.checkerframework.checker.units.qual.C;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.text.DateFormatter;
-import java.io.*;
-import java.sql.Date;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -33,8 +29,8 @@ public class MasterConfigManager {
     public static final String FILE_ENDING = ".properties";
 
     static {
-            CONFIG_FOLDER = new File("config");
-            CONFIG_FOLDER.mkdirs();
+        CONFIG_FOLDER = new File("config");
+        CONFIG_FOLDER.mkdirs();
     }
 
     private final Collection<String> configurations;
@@ -51,10 +47,19 @@ public class MasterConfigManager {
         return configurations;
     }
 
+    @Hardcode
     public void storeAll() {
-        for (String configuration : configurations) {
-            store(configuration);
+        for (DistributedObject distributedObject : Core.getInstance().getOrThrow().getDistributedObjects()) {
+            if (distributedObject instanceof IMap<?, ?> map) {
+                if (map.getName().startsWith("config:")) {
+                    store(map.getName().replace("config:", ""));
+                }
+            }
         }
+
+        // for (String configuration : configurations) {
+        //     store(configuration);
+        // }
     }
 
     public void store(String hazel) {
@@ -65,28 +70,29 @@ public class MasterConfigManager {
             file.createNewFile();
             Properties properties = configuration.cloneToProperties();
             try (FileWriter writer = new FileWriter(file)) {
-                Core.getInstance().getCoreLogger().info("trying to store: \"" + configuration +  "\" to \""
+                Core.getInstance().getCoreLogger().info("trying to store: \"" + configuration + "\" to \""
                         + file.getAbsolutePath() + "\"!");
-                properties.store(writer,configuration.header_comment() + " written at: " + currentDateString());
-                Core.getInstance().getCoreLogger().info("file was saved: \"" + file.getName() +  "\"");
+                properties.store(writer, configuration.header_comment() + " written at: " + currentDateString());
+                Core.getInstance().getCoreLogger().info("file was saved: \"" + file.getName() + "\"");
             }
 
         } catch (IOException e) {
             Core.getInstance().getCoreLogger().error("failed to save: " + configuration);
         }
     }
+
     @Hardcode
     public void load() {
         String[] prop = CONFIG_FOLDER.list((dir, name) -> name.endsWith(FILE_ENDING));
         Collection<Properties> properties = new ArrayList<>();
         for (String s : prop) {
-            File file = new File(CONFIG_FOLDER,s);
+            File file = new File(CONFIG_FOLDER, s);
             Properties properties1 = new Properties();
             try {
-            FileReader reader = new FileReader(file);
-            properties1.load(reader);
-            properties1.setProperty("configuration_name",s.replace(FILE_ENDING,""));
-            properties.add(properties1);
+                FileReader reader = new FileReader(file);
+                properties1.load(reader);
+                properties1.setProperty("configuration_name", s.replace(FILE_ENDING, ""));
+                properties.add(properties1);
 
             } catch (Exception e) {
                 Core.getInstance().getCoreLogger().error("failed to load config: " + file + " :: " + e.getMessage());
@@ -100,9 +106,9 @@ public class MasterConfigManager {
         //flush old data
         configurations.clear();
         for (DistributedObject distributedObject : Core.getInstance().getOrThrow().getDistributedObjects()) {
-            if(distributedObject instanceof IMap<?,?> map) {
+            if (distributedObject instanceof IMap<?, ?> map) {
                 Core.getInstance().getCoreLogger().debug("found: " + map.getName() + "<" + map.size() + ">");
-                if(map.getName().startsWith("config:")) {
+                if (map.getName().startsWith("config:")) {
                     Core.getInstance().getCoreLogger().debug("removing: " + map.getName());
                     map.destroy();
                 }

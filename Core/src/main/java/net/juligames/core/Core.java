@@ -1,11 +1,9 @@
 package net.juligames.core;
 
-import com.google.errorprone.annotations.InlineMe;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.topic.LocalTopicStats;
-import com.mysql.cj.log.Log;
 import de.bentzin.tools.logging.JavaLogger;
 import de.bentzin.tools.logging.Logger;
+import de.bentzin.tools.register.Registerator;
 import net.juligames.core.api.API;
 import net.juligames.core.api.ApiCore;
 import net.juligames.core.api.TODO;
@@ -13,6 +11,7 @@ import net.juligames.core.api.config.ConfigurationAPI;
 import net.juligames.core.api.err.dev.TODOException;
 import net.juligames.core.api.message.MessageRecipient;
 import net.juligames.core.cluster.CoreClusterApi;
+import net.juligames.core.config.CoreConfigurationApi;
 import net.juligames.core.data.HazelDataCore;
 import net.juligames.core.hcast.HazelConnector;
 import net.juligames.core.jdbi.CoreSQLManager;
@@ -24,12 +23,10 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
@@ -53,8 +50,9 @@ public final class Core implements API {
     private Logger apiLogger;
     private CoreSQLManager sqlManager;
     private CoreMessageApi messageApi;
-    private ConfigurationAPI configurationAPI;
+    private CoreConfigurationApi configurationAPI;
     private String core_name;
+    private Registerator<Consumer<HazelcastInstance>> hazelcastPostPreparationWorkers = new Registerator<>("hazelcastPostPreparationWorkers");
     @NotNull
     private Supplier<Collection<? extends MessageRecipient>> onlineRecipientProvider = () -> List.of(new DummyMessageRecipient());
     public Core() {
@@ -113,9 +111,18 @@ public final class Core implements API {
             coreLogger.error(e.getClass().getName() + " : " + e.getMessage());
             e.printStackTrace();
         }
+        //postPreperation
+        getHazelcastPostPreparationWorkers().forEach(hazelcastInstanceConsumer -> hazelcastInstanceConsumer.accept(getOrThrow()));
 
-        logger.info("connecting to jdbi... <hardcode>");
-        sqlManager = new CoreSQLManager("jdbc:mysql://admin@localhost:3306/minecraft", logger);
+        configurationAPI = new CoreConfigurationApi();
+
+        logger.info("connecting to jdbi... <loading from config>");
+        Optional<String> jdbc = getConfigurationApi().database().getString("jdbc");
+        if(jdbc.isEmpty()) {
+            Core.getInstance().coreLogger.warning("cant read jdbc data in database...");
+        }
+        logger.warning("database: " + getConfigurationApi().database().cloneToProperties().toString());
+        sqlManager = new CoreSQLManager(jdbc.orElse("jdbc:mysql://root@localhost:3306"), logger); //jdbc:mysql://admin@localhost:3306/minecraft
         logger.info("connected to jdbi -> " + sqlManager);
 
         topicNotificationCore = new TopicNotificationCore(getOrThrow());
@@ -129,6 +136,11 @@ public final class Core implements API {
 
         logger.info("hooking to shutdown...");
         getJavaRuntime().addShutdownHook(new Thread(() -> {
+            try {
+                getOrThrow().shutdown();
+            }catch (Exception e){
+                coreLogger.error(e.getMessage());
+            }
 
         }));
     }
@@ -242,7 +254,7 @@ public final class Core implements API {
      * @return the {@link ConfigurationAPI}
      */
     @Override
-    public ConfigurationAPI getConfigurationApi() {
+    public CoreConfigurationApi getConfigurationApi() {
         return configurationAPI;
     }
 
@@ -289,5 +301,9 @@ public final class Core implements API {
 
     public void setOnlineRecipientProvider(@NotNull Supplier<Collection<? extends MessageRecipient>> onlineRecipientProvider) {
         this.onlineRecipientProvider = onlineRecipientProvider;
+    }
+
+    public Registerator<Consumer<HazelcastInstance>> getHazelcastPostPreparationWorkers() {
+        return hazelcastPostPreparationWorkers;
     }
 }

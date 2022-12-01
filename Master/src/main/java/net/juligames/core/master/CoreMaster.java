@@ -6,10 +6,7 @@ import de.bentzin.tools.register.Registerator;
 import net.juligames.core.Core;
 import net.juligames.core.api.jdbi.LocaleDAO;
 import net.juligames.core.api.jdbi.SQLManager;
-import net.juligames.core.master.cmd.ListObjectsCommand;
-import net.juligames.core.master.cmd.MasterCommand;
-import net.juligames.core.master.cmd.MasterCommandRunner;
-import net.juligames.core.master.cmd.ReloadConfigCommand;
+import net.juligames.core.master.cmd.*;
 import net.juligames.core.master.config.MasterConfigManager;
 import net.juligames.core.master.data.MasterHazelInformationProvider;
 import net.juligames.core.master.logging.MasterLogger;
@@ -42,8 +39,19 @@ public class CoreMaster {
 
         logger.info("welcome to JuliGames-Core Master");
         logger.warning("This is an early development build!");
+
+
+       // masterConfigManager.load();
         logger.info("booting hazelcast (MEMBERCORE):");
         Core core = new Core();
+        try {
+            core.getHazelcastPostPreparationWorkers().register(hazelcastInstance -> {
+                logger.warning("loading config");
+                masterConfigManager.load();
+            });
+        } catch (Registerator.DuplicateEntryException ignored) {}
+
+        //start Core
         core.start("Master",logger,true);
 
         try {
@@ -73,7 +81,7 @@ public class CoreMaster {
             logger.error(e.getMessage());
             e.printStackTrace();
         }
-        masterConfigManager.load();
+
         //HOOK
 
         Core.getInstance().getJavaRuntime().addShutdownHook(new Thread(() -> {
@@ -105,6 +113,7 @@ public class CoreMaster {
         });
         masterCommandRunner.register(new ListObjectsCommand());
         masterCommandRunner.register(new ReloadConfigCommand());
+        masterCommandRunner.register(new SaveConfigCommand());
     }
 
     public static MasterConfigManager masterConfigManager() {

@@ -25,5 +25,12 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <distributionManagement>
+        <repository>
+            <id>juligames</id>
+            <url>https://maven.juligames.net/juligames/</url>
+        </repository>
+    </distributionManagement>
+
 
 </project>
