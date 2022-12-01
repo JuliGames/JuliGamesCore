@@ -6,6 +6,7 @@ import net.juligames.core.api.TODO;
 import net.juligames.core.api.config.Configuration;
 import net.juligames.core.api.config.Interpreter;
 import net.juligames.core.api.misc.TriConsumer;
+import org.checkerframework.checker.optional.qual.MaybePresent;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,49 +19,18 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import org.checkerframework.checker.optional.qual.MaybePresent;
-
 /**
  * @author Ture Bentzin
  * 26.11.2022
- *
- * @implNote
- * RESERVED KEYS: "configuration_header", "configuration_name"
+ * @implNote RESERVED KEYS: "configuration_header", "configuration_name"
  */
 @TODO(doNotcall = true)
 public class CoreConfiguration implements Configuration {
 
-  /**
-   * This will not override data in the {@link Map}
-   * @param properties
-   * @return
-   */
-    public static @NotNull CoreConfiguration fromProperties(@NotNull Properties properties, boolean override) {
-        String name = properties.getProperty("configuration_name");
-        CoreConfiguration configuration = new CoreConfiguration(name);
-        Set<Map.Entry<Object, Object>> entries = properties.entrySet();
-        IMap<String, String> map = configuration.accessHazel().get();
-        for (Map.Entry<Object, Object> entry : entries) {
-			       if(override)
-                  map.put(entry.getKey().toString(),entry.getValue().toString()); //oh man... oh man
-			               else
-				                 if(!map.containsKey(entry.getKey().toString()) {
-					                      map.put(entry.getKey().toString(),entry.getValue().toString()); //oh man... oh man
-                        }
-        }
-        configuration.updateHazel();
-        return configuration;
-    }
-
-public static @NotNull CoreConfiguration fromProperties(@NotNull Properties properties) {
-return fromProperties(properties,false);
-}
-
-
-
-    private String header_comment = Core.getFullCoreName() + " :: a default configuration file";
     private final String name;
-    private IMap<String,String> data; //May be removed
+    private String header_comment = Core.getFullCoreName() + " :: a default configuration file";
+    private IMap<String, String> data;//May be removed
+    
 
     public CoreConfiguration(String name) {
         this.name = name;
@@ -69,31 +39,56 @@ return fromProperties(properties,false);
         assert Objects.equals(getStringOrNull("configuration_name"), name); //just to avoid BNick content in the configurationSystem
 
         String configuration_header = getStringOrNull("configuration_header");
-        if(configuration_header != null) {
+        if (configuration_header != null) {
             setHeader_comment(configuration_header);
         }
     }
 
+    /**
+     * This will not override data in the {@link Map}
+     *
+     * @param properties
+     * @return
+     */
+    public static @NotNull CoreConfiguration fromProperties(@NotNull Properties properties, boolean override) {
+        String name = properties.getProperty("configuration_name");
+        CoreConfiguration configuration = new CoreConfiguration(name);
+        Set<Map.Entry<Object, Object>> entries = properties.entrySet();
+        IMap<String, String> map = configuration.accessHazel().get();
+        for (Map.Entry<Object, Object> entry : entries) {
+            if (override)
+                map.put(entry.getKey().toString(), entry.getValue().toString()); //oh man... oh man
+            else if (!map.containsKey(entry.getKey().toString()) {
+                map.put(entry.getKey().toString(), entry.getValue().toString()); //oh man... oh man
+            }
+        }
+        configuration.updateHazel();
+        return configuration;
+    }
 
-    private @NotNull IMap<String,String> hazel() {
+    public static @NotNull CoreConfiguration fromProperties(@NotNull Properties properties) {
+        return fromProperties(properties, false);
+    }
+
+    private @NotNull IMap<String, String> hazel() {
         return hazel(false);
     }
 
     @ApiStatus.Internal
-    private @NotNull IMap<String,String> hazel(boolean containingPrefix) {
-        return Core.getInstance().getOrThrow().getMap(containingPrefix?name:"config:" + name);
+    private @NotNull IMap<String, String> hazel(boolean containingPrefix) {
+        return Core.getInstance().getOrThrow().getMap(containingPrefix ? name : "config:" + name);
     }
 
     public void updateHazel() {
         data = hazel();
     }
 
-    public Map<String,String> export()  {
+    public Map<String, String> export() {
         return new HashMap<>(data);
     }
 
     @ApiStatus.Internal
-    public Supplier<IMap<String,String>> accessHazel() {
+    public Supplier<IMap<String, String>> accessHazel() {
         return this::hazel;
     }
 
@@ -101,7 +96,7 @@ return fromProperties(properties,false);
         return hazel().keySet();
     }
 
-    public Set<Map.Entry<String,String>> entrySet() {
+    public Set<Map.Entry<String, String>> entrySet() {
         return hazel().entrySet();
     }
 
@@ -117,7 +112,7 @@ return fromProperties(properties,false);
     public Properties cloneToProperties() {
         final Properties properties = new Properties();
         for (Map.Entry<String, String> config : entrySet()) {
-            properties.setProperty(config.getKey(),config.getValue());
+            properties.setProperty(config.getKey(), config.getValue());
         }
         return properties;
     }
@@ -147,7 +142,7 @@ return fromProperties(properties,false);
     @Override
     public Optional<Integer> getInteger(String key) {
         @Nullable String extract = data.get(key);
-        if(extract == null) {
+        if (extract == null) {
             return Optional.empty();
         }
         try {
@@ -165,7 +160,7 @@ return fromProperties(properties,false);
     @Override
     public @Nullable Integer getIntegerOrNull(String key) {
         @Nullable String extract = data.get(key);
-        if(extract == null) {
+        if (extract == null) {
             return null;
         }
         try {
@@ -183,7 +178,7 @@ return fromProperties(properties,false);
     @Override
     public Optional<Double> getDouble(String key) {
         @Nullable String extract = data.get(key);
-        if(extract == null) {
+        if (extract == null) {
             return Optional.empty();
         }
         try {
@@ -201,7 +196,7 @@ return fromProperties(properties,false);
     @Override
     public @Nullable Double getDoubleOrNull(String key) {
         @Nullable String extract = data.get(key);
-        if(extract == null) {
+        if (extract == null) {
             return null;
         }
         try {
@@ -219,7 +214,7 @@ return fromProperties(properties,false);
     @Override
     public Optional<Long> getLong(String key) {
         @Nullable String extract = data.get(key);
-        if(extract == null) {
+        if (extract == null) {
             return Optional.empty();
         }
         try {
@@ -237,7 +232,7 @@ return fromProperties(properties,false);
     @Override
     public @Nullable Long getLongOrNull(String key) {
         @Nullable String extract = data.get(key);
-        if(extract == null) {
+        if (extract == null) {
             return null;
         }
         try {
@@ -255,7 +250,7 @@ return fromProperties(properties,false);
     @Override
     public Optional<Short> getShort(String key) {
         @Nullable String extract = data.get(key);
-        if(extract == null) {
+        if (extract == null) {
             return Optional.empty();
         }
         try {
@@ -273,7 +268,7 @@ return fromProperties(properties,false);
     @Override
     public @Nullable Short getShortOrNull(String key) {
         @Nullable String extract = data.get(key);
-        if(extract == null) {
+        if (extract == null) {
             return null;
         }
         try {
@@ -291,7 +286,7 @@ return fromProperties(properties,false);
     @Override
     public Optional<Byte> getByte(String key) {
         @Nullable String extract = data.get(key);
-        if(extract == null) {
+        if (extract == null) {
             return Optional.empty();
         }
         try {
@@ -309,7 +304,7 @@ return fromProperties(properties,false);
     @Override
     public @Nullable Byte getByteOrNull(String key) {
         @Nullable String extract = data.get(key);
-        if(extract == null) {
+        if (extract == null) {
             return null;
         }
         try {
@@ -327,7 +322,7 @@ return fromProperties(properties,false);
     @Override
     public Optional<Boolean> getBoolean(String key) {
         @Nullable String extract = data.get(key);
-        if(extract == null) {
+        if (extract == null) {
             return Optional.empty();
         }
         try {
@@ -345,7 +340,7 @@ return fromProperties(properties,false);
     @Override
     public @Nullable Boolean getBooleanOrNull(String key) {
         @Nullable String extract = data.get(key);
-        if(extract == null) {
+        if (extract == null) {
             return null;
         }
         try {
@@ -364,7 +359,7 @@ return fromProperties(properties,false);
     @Override
     public @MaybePresent <T> Optional<T> get(String key, Function<String, T> interpreter) {
         @Nullable String extract = data.get(key);
-        if(extract == null) {
+        if (extract == null) {
             return Optional.empty();
         }
         try {
@@ -379,11 +374,12 @@ return fromProperties(properties,false);
     public @MaybePresent <T> Optional<T> get(@NotNull Supplier<String> key, Function<String, T> interpreter) {
         return get(key.get(), interpreter);
     }
+
     //legacy interpreter
     @Override
     public <T> @Nullable T getOrNull(String key, Function<String, T> interpreter) {
         @Nullable String extract = data.get(key);
-        if(extract == null) {
+        if (extract == null) {
             return null;
         }
         try {
@@ -396,13 +392,13 @@ return fromProperties(properties,false);
     //legacy interpreter
     @Override
     public <T> @Nullable T getOrNull(@NotNull Supplier<String> key, Function<String, T> interpreter) {
-        return getOrNull(key.get(),interpreter);
+        return getOrNull(key.get(), interpreter);
     }
 
     @Override
     public @MaybePresent <T> Optional<T> get(String key, Interpreter<T> interpreter) {
         @Nullable String extract = data.get(key);
-        if(extract == null) {
+        if (extract == null) {
             return Optional.empty();
         }
         try {
@@ -414,13 +410,13 @@ return fromProperties(properties,false);
 
     @Override
     public @MaybePresent <T> Optional<T> get(@NotNull Supplier<String> key, Interpreter<T> interpreter) {
-        return get(key.get(),interpreter);
+        return get(key.get(), interpreter);
     }
 
     @Override
     public <T> @Nullable T getOrNull(String key, Interpreter<T> interpreter) {
         @Nullable String extract = data.get(key);
-        if(extract == null) {
+        if (extract == null) {
             return null;
         }
         try {
@@ -432,97 +428,97 @@ return fromProperties(properties,false);
 
     @Override
     public <T> @Nullable T getOrNull(@NotNull Supplier<String> key, Interpreter<T> interpreter) {
-        return getOrNull(key.get(),interpreter);
+        return getOrNull(key.get(), interpreter);
     }
 
     @Override
     public void setString(String key, @NotNull String value) {
-        data.put(key,value.toString());
+        data.put(key, value.toString());
     }
 
     @Override
     public void setString(String key, @NotNull Supplier<String> value) {
-        setString(key,value.get());
+        setString(key, value.get());
     }
 
     @Override
     public void setInteger(String key, @NotNull Integer value) {
-        data.put(key,value.toString());
+        data.put(key, value.toString());
     }
 
     @Override
     public void setInteger(String key, @NotNull Supplier<Integer> value) {
-        setInteger(key,value.get());
+        setInteger(key, value.get());
     }
 
     @Override
     public void setDouble(String key, @NotNull Double value) {
-        data.put(key,value.toString());
+        data.put(key, value.toString());
     }
 
     @Override
     public void setDouble(String key, @NotNull Supplier<Double> value) {
-        setDouble(key,value.get());
+        setDouble(key, value.get());
     }
 
     @Override
     public void setLong(String key, @NotNull Long value) {
-        data.put(key,value.toString());
+        data.put(key, value.toString());
     }
 
     @Override
     public void setLong(String key, @NotNull Supplier<Long> value) {
-        setLong(key,value.get());
+        setLong(key, value.get());
     }
 
     @Override
     public void setShort(String key, @NotNull Short value) {
-        data.put(key,value.toString());
+        data.put(key, value.toString());
     }
 
     @Override
     public void setShort(String key, @NotNull Supplier<Short> value) {
-        setShort(key,value.get());
+        setShort(key, value.get());
     }
 
     @Override
     public void setByte(String key, @NotNull Byte value) {
-        data.put(key,value.toString());
+        data.put(key, value.toString());
     }
 
     @Override
     public void setByte(String key, @NotNull Supplier<Byte> value) {
-        setByte(key,value.get());
+        setByte(key, value.get());
     }
 
     @Override
     public void setBoolean(String key, @NotNull Boolean value) {
-        data.put(key,value.toString());
+        data.put(key, value.toString());
     }
 
     @Override
     public void setBoolean(String key, @NotNull Supplier<Boolean> value) {
-        setBoolean(key,value.get());
+        setBoolean(key, value.get());
     }
 
     @Override
     public <T> void set(String key, T value, @NotNull Interpreter<T> interpreter) {
-        data.put(key,interpreter.reverse(value));
+        data.put(key, interpreter.reverse(value));
     }
 
     @Override
     public <T> void set(String key, @NotNull Supplier<T> value, Interpreter<T> interpreter) {
-        set(key,value.get(),interpreter);
+        set(key, value.get(), interpreter);
     }
 
     @Override
     public <T> void set(@NotNull Supplier<String> key, T value, Interpreter<T> interpreter) {
-        set(key.get(),value,interpreter);
+        set(key.get(), value, interpreter);
     }
 
     @Override
     public <T> void set(@NotNull Supplier<String> key, @NotNull Supplier<T> value, Interpreter<T> interpreter) {
-        set(key.get(),value.get(),interpreter);
+        set(key.get(), value.get(), interpreter);
     }
 
     @Override
@@ -563,19 +559,19 @@ return fromProperties(properties,false);
     @Override
     public <T> T query(@NotNull BiFunction<Supplier<String>, Interpreter<T>, T> query, String input, Interpreter<T> interpreter) {
         updateHazel();
-        return query.apply(() -> input,interpreter);
+        return query.apply(() -> input, interpreter);
     }
 
     @Override
     public <T> void query(@NotNull BiConsumer<String, Supplier<T>> query, String input, Supplier<T> t) {
         updateHazel();
-        query.accept(input,t);
+        query.accept(input, t);
     }
 
     @Override
     public <T> void query(@NotNull TriConsumer<String, T, Supplier<Interpreter<T>>> query, String input, Interpreter<T> interpreter, @NotNull Supplier<T> t) {
         updateHazel();
-        query.consume(input, t.get(),  () -> interpreter);
+        query.consume(input, t.get(), () -> interpreter);
     }
 
     public String header_comment() {
@@ -601,10 +597,11 @@ return fromProperties(properties,false);
 
     /**
      * Changes will take effect after regeneration of this object!!!
+     *
      * @param newName the new name
      */
     public void updateName(String newName) {
-        setString("configuration_name",newName);
+        setString("configuration_name", newName);
     }
 
     @Override
