@@ -65,7 +65,7 @@ public class CoreConfiguration implements Configuration {
         configuration.updateHazel();
         return configuration;
     }
-    
+
 
     /**
      * This will not override data in the {@link Map}

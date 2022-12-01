@@ -6,7 +6,9 @@ import com.hazelcast.map.IMap;
 import de.bentzin.tools.Hardcode;
 import net.juligames.core.Core;
 import net.juligames.core.config.CoreConfiguration;
+import org.checkerframework.checker.units.qual.C;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -65,7 +67,7 @@ public class MasterConfigManager {
     public void store(String hazel) {
         CoreConfiguration configuration = new CoreConfiguration(hazel);
         //generate File
-        File file = new File(CONFIG_FOLDER, configuration.getName() + FILE_ENDING);
+        File file = fileFromName(configuration.getName());
         try {
             file.createNewFile();
             Properties properties = configuration.cloneToProperties();
@@ -85,8 +87,14 @@ public class MasterConfigManager {
     public void load() {
         String[] prop = CONFIG_FOLDER.list((dir, name) -> name.endsWith(FILE_ENDING));
         Collection<Properties> properties = new ArrayList<>();
+        if(prop == null) {
+            Core.getInstance().getCoreLogger().warning("no configs found... skipping step!");
+            return;
+        }
+
+        //s contains fileEnding
         for (String s : prop) {
-            File file = new File(CONFIG_FOLDER, s);
+            File file = fileFromName(s, true);
             Properties properties1 = new Properties();
             try {
                 FileReader reader = new FileReader(file);
@@ -119,20 +127,28 @@ public class MasterConfigManager {
         HazelcastInstance instance = Core.getInstance().getOrThrow();
         for (Properties property : properties) {
             String name = property.getProperty("configuration_name");
-            CoreConfiguration.fromProperties(property);
+            CoreConfiguration.fromProperties(property, true); //override --force
             configurations.add(name);
         }
     }
 
+    @Contract("_ -> new")
+    private @NotNull File fileFromName(String name) {
+        return fileFromName(name,false);
+    }
 
-    public void load(File file) {
-
+    @Contract(value = "_,_ -> new")
+    private @NotNull File fileFromName(String name, boolean containsFileEnding) {
+        if(containsFileEnding)
+            return new File(CONFIG_FOLDER, name);
+        else return new File(CONFIG_FOLDER,name + FILE_ENDING);
     }
 
     @ApiStatus.Internal
     public void deleteConfigFromSystem(String hazel) {
         CoreConfiguration configuration = new CoreConfiguration(hazel);
         configuration.accessHazel().get().destroy();
+        fileFromName(hazel,true);
     }
 
     @ApiStatus.Internal
