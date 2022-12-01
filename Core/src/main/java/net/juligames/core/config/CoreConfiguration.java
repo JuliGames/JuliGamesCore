@@ -30,17 +30,28 @@ import org.checkerframework.checker.optional.qual.MaybePresent;
 @TODO(doNotcall = true)
 public class CoreConfiguration implements Configuration {
 
-    public static @NotNull CoreConfiguration fromProperties(@NotNull Properties properties) {
+    public static @NotNull CoreConfiguration fromProperties(@NotNull Properties properties, boolean override) {
         String name = properties.getProperty("configuration_name");
         CoreConfiguration configuration = new CoreConfiguration(name);
         Set<Map.Entry<Object, Object>> entries = properties.entrySet();
         IMap<String, String> map = configuration.accessHazel().get();
         for (Map.Entry<Object, Object> entry : entries) {
-            map.put(entry.getKey().toString(),entry.getValue().toString()); //oh man... oh man
+			if(override)
+                map.put(entry.getKey().toString(),entry.getValue().toString()); //oh man... oh man
+			else
+				if(!map.containsKey(entry.getKey().toString()) {
+					 map.put(entry.getKey().toString(),entry.getValue().toString()); //oh man... oh man
+                }
         }
         configuration.updateHazel();
         return configuration;
     }
+
+public static @NotNull CoreConfiguration fromProperties(@NotNull Properties properties) {
+return fromProperties(properties,false);
+}
+
+	
 
     private String header_comment = Core.getFullCoreName() + " :: a default configuration file";
     private final String name;
