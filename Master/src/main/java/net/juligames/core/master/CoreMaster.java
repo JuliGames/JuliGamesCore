@@ -6,6 +6,7 @@ import de.bentzin.tools.register.Registerator;
 import net.juligames.core.Core;
 import net.juligames.core.api.jdbi.LocaleDAO;
 import net.juligames.core.api.jdbi.SQLManager;
+import net.juligames.core.jdbi.CoreSQLManager;
 import net.juligames.core.master.cmd.*;
 import net.juligames.core.master.config.MasterConfigManager;
 import net.juligames.core.master.data.MasterHazelInformationProvider;
@@ -25,7 +26,7 @@ public class CoreMaster {
     private CoreMaster() {}
 
     public static Logger logger;
-    private static SQLManager SQLManager;
+    private static CoreSQLManager SQLManager;
     private static MasterCommandRunner masterCommandRunner;
     private static MasterConfigManager masterConfigManager;
 
@@ -37,7 +38,7 @@ public class CoreMaster {
         masterCommandRunner = new MasterCommandRunner(logger);
         masterConfigManager = new MasterConfigManager();
 
-        logger.info("welcome to JuliGames-Core Master");
+        logger.info("welcome to " + Core.getFullCoreName() +  " Master by Ture Bentzin <bentzin@tdrstudios.de>");
         logger.warning("This is an early development build!");
 
 
@@ -57,15 +58,21 @@ public class CoreMaster {
         try {
             hazelcast = core.getOrWait();
         } catch (ExecutionException | InterruptedException e) {
-            logger.error("FAILED TO SETUP HAZELCAST - Master will possibly start anyway but the master should be restarted as soon as possible");
+            logger.error("FAILED TO SETUP HAZELCAST - Master will probably start anyway but the master should be restarted as soon as possible");
         }
 
-        logger.info("hazelcast boot was initiated");
+        logger.info("hazelcast boot was completed - advice: hazelcast could potentially fail to boot for a variety of reasons, so if you should see" +
+                "an error above then you might want to restart the master. In the case that the Clients are put on hold by the core you should also" +
+                "consider restarting.");
 
         logger.debug("sql: start");
         SQLManager = Core.getInstance().getSQLManager();
 
         SQLManager.createTables(); //MASTER CREATES TABLES (NOT THE CORE!!!)
+        SQLManager.getJdbi().withExtension(LocaleDAO.class,extension -> {
+            extension.insert(CoreSQLManager.defaultEnglish()); //adding english
+            return null;
+        });
 
         SQLManager.getJdbi().withExtension(LocaleDAO.class, extension -> {
             extension.listAll();
