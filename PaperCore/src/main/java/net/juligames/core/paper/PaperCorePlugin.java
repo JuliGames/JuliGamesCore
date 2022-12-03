@@ -2,6 +2,7 @@ package net.juligames.core.paper;
 
 import net.juligames.core.Core;
 import net.juligames.core.adventure.AdventureCore;
+import net.juligames.core.adventure.api.AdventureAPI;
 import net.juligames.core.api.API;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -16,6 +17,8 @@ import java.util.prefs.AbstractPreferences;
  */
 public class PaperCorePlugin extends JavaPlugin {
 
+    private AdventureCore adventureCore;
+
     @Override
     public void onEnable() {
         Core core = new Core();
@@ -24,7 +27,7 @@ public class PaperCorePlugin extends JavaPlugin {
         core.start("paper-core|" + serverName);
         //start adventureAPI
         getLogger().info("starting adventureCore v." + AdventureCore.API_VERSION);
-        AdventureCore adventureCore = new AdventureCore();
+        adventureCore = new AdventureCore();
         adventureCore.start();
         core.setOnlineRecipientProvider(() -> {
             List<PaperMessageRecipient> paperMessageRecipients = new java.util.ArrayList<>(Bukkit.getOnlinePlayers().stream().map(PaperMessageRecipient::new).toList());
@@ -43,6 +46,7 @@ public class PaperCorePlugin extends JavaPlugin {
     @Override
     public void onDisable() {
         Core.getInstance().getCoreLogger().info("onDisable() -> Client shutdown!");
+        adventureCore.dropApiService();
         Core.getInstance().stop();
     }
 }
