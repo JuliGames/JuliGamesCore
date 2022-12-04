@@ -20,7 +20,7 @@ import java.util.List;
 public interface MessageDAO {
 
     @SqlUpdate("""
-            create table if not exists minecraft.message
+            create table if not exists message
              (
                  messageKey  varchar(100) not null,
                  locale      varchar(10)  not null,
@@ -47,7 +47,7 @@ public interface MessageDAO {
     @SqlUpdate("DELETE FROM message WHERE messageKey = :key")
     void delete(@Bind("key") String messageKey);
 
-    @SqlUpdate("UPDATE minecraft.message " +
+    @SqlUpdate("UPDATE message " +
             "SET miniMessage = :newMiniMessage " +
             "WHERE locale = :locale AND messageKey;")
     void update(@Bind("key") String key,

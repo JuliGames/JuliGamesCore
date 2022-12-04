@@ -19,7 +19,7 @@ public interface ReplacementTypeDAO {
 
 
     @SqlUpdate("""
-            create table if not exists minecraft.replacement_type
+            create table if not exists replacement_type
              (
                 name varchar(100) not null primary key
              );

@@ -18,7 +18,7 @@ import java.util.List;
 public interface ReplacementDAO {
 
     @SqlUpdate("""
-            create table if not exists minecraft.replacement
+            create table if not exists replacement
             (
             tag varchar(100) not null,
             replacementType varchar(100) not null,
@@ -40,7 +40,7 @@ public interface ReplacementDAO {
     @SqlUpdate("DELETE FROM replacement WHERE tag = :tag")
     void delete(@Bind("tag") String tag);
 
-    @SqlUpdate("UPDATE minecraft.replacement " +
+    @SqlUpdate("UPDATE replacement " +
             "SET value = :value " +
             "WHERE tag LIKE :tag;")
     void update(@Bind("tag") String tag, @Bind("getValue") String newValue);

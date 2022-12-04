@@ -19,7 +19,7 @@ import java.util.UUID;
 public interface PlayerLocalPreferenceDAO {
 
     @SqlUpdate("""
-            create table if not exists minecraft.player_locale_preference
+            create table if not exists player_locale_preference
             (
             uuid        char(36) not null primary key,
             locale      varchar(10)            not null,
@@ -36,12 +36,12 @@ public interface PlayerLocalPreferenceDAO {
     @SqlUpdate("DELETE FROM player_locale_preference WHERE uuid = :uuid")
     void delete(@Bind("uuid") String uuid);
 
-    @SqlUpdate("UPDATE minecraft.player_locale_preference " +
+    @SqlUpdate("UPDATE player_locale_preference " +
             "SET locale = :locale " +
             "WHERE uuid LIKE :uuid;")
     void update(@Bind("uuid") String uuid,@Bind("locale") String newLocale);
 
-    @SqlUpdate("UPDATE minecraft.player_locale_preference " +
+    @SqlUpdate("UPDATE player_locale_preference " +
             "SET fallback = :locale " +
             "WHERE uuid LIKE :uuid;")
     void updateFallback(@Bind("uuid") String uuid,@Bind("locale") String newLocale);

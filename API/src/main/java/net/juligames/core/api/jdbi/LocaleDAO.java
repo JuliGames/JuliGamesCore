@@ -17,7 +17,7 @@ import java.util.List;
 public interface LocaleDAO {
 
     @SqlUpdate("""
-            create table if not exists minecraft.locale
+            create table if not exists locale
             (
             locale      varchar(10)            not null primary key ,
             description varchar(20) default '' not null
@@ -33,7 +33,7 @@ public interface LocaleDAO {
     @SqlUpdate("DELETE FROM locale WHERE locale = :locale")
     void delete(@Bind("locale") String locale);
 
-    @SqlUpdate("UPDATE minecraft.locale " +
+    @SqlUpdate("UPDATE locale " +
             "SET description = :desc " +
             "WHERE locale LIKE :locale;")
     void update(@Bind("locale") String locale,@Bind("desc")  String newDescription);
