@@ -1,4 +1,4 @@
-package net.juligames.core.veloity;
+package net.juligames.core.velocity;
 
 import com.google.inject.Inject;
 import com.velocitypowered.api.event.Subscribe;
@@ -13,9 +13,6 @@ import net.juligames.core.Core;
 import net.juligames.core.adventure.AdventureCore;
 import net.juligames.core.adventure.api.AudienceMessageRecipient;
 import net.juligames.core.api.API;
-import net.juligames.core.velocity.ProxyServerMessageRecipient;
-import net.juligames.core.velocity.ServerMessageRecipient;
-import net.juligames.core.velocity.VelocityPlayerMessageRecipient;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;

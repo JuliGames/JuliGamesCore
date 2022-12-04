@@ -34,6 +34,21 @@
         </repository>
     </distributionManagement>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.google.errorprone</groupId>
+            <artifactId>error_prone_annotations</artifactId>
+            <version>2.16</version>
+        </dependency>
+    </dependencies>
+
+    <repositories>
+        <repository>
+            <id>juligames</id>
+            <url>https://maven.juligames.net/juligames</url>
+        </repository>
+    </repositories>
+
 
     <build>
         <plugins>
@@ -50,6 +65,37 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <!--<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.0</version>
+                <configuration>
+                    <source>17</source>
+                    <target>17</target>
+                    <encoding>UTF-8</encoding>
+                    <compilerArgs>
+                        <arg>-XDcompilePolicy=simple</arg>
+                        <arg>-Xplugin:ErrorProne</arg>
+                        <arg>-add-exports</arg>
+                        <arg>jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED</arg>
+                    </compilerArgs>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>com.google.errorprone</groupId>
+                            <artifactId>error_prone_core</artifactId>
+                            <version>2.16</version>
+                        </path>
+
+                         Other annotation processors go here.
+
+                        If 'annotationProcessorPaths' is set, processors will no longer be
+                        discovered on the regular -classpath; see also 'Using Error Prone
+                        together with other annotation processors' below.
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+        -->
         </plugins>
     </build>
 

@@ -2,6 +2,7 @@ package net.juligames.core.cluster;
 
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.HazelcastInstanceAware;
+import net.juligames.core.api.TODO;
 
 import java.io.Serializable;
 import java.util.concurrent.Callable;
@@ -10,6 +11,7 @@ import java.util.concurrent.Callable;
  * @author Ture Bentzin
  * 26.11.2022
  */
+@TODO(doNotcall = true)
 public abstract class DataRequest<T,R> implements Callable<R>, Serializable, HazelcastInstanceAware {
 
     final T data;
