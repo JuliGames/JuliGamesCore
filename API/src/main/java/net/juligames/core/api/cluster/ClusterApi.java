@@ -1,5 +1,6 @@
 package net.juligames.core.api.cluster;
 
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -28,4 +29,8 @@ public interface ClusterApi {
      * @return Gives always the UUID of this instance (works for members and clients)
      */
     UUID getLocalUUID();
+
+    Map<UUID,InstanceType> getAllUUIDS();
+
+    enum InstanceType{CLIENT, MEMBER}
 }

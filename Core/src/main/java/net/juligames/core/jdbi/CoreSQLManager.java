@@ -10,6 +10,9 @@ import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.sqlobject.SqlObjectPlugin;
 import org.jetbrains.annotations.NotNull;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -41,6 +44,15 @@ public class CoreSQLManager implements SQLManager {
 
     public CoreSQLManager(String connection, @NotNull Logger parentLogger) {
         logger = parentLogger.adopt("jdbi");
+        /*
+        Connection connection1 = null;
+        try {
+              connection1 = DriverManager.getConnection(connection);
+        } catch (SQLException e) {
+            Core.getInstance().getCoreLogger().error("connection failed.. debug");
+        }
+        //jdbi = Jdbi.create(connection);
+         */
         jdbi = Jdbi.create(connection);
         jdbi.installPlugin(new SqlObjectPlugin());
     }

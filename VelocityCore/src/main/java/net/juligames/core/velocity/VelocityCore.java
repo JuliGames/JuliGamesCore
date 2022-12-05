@@ -17,13 +17,14 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.logging.Level;
 
 /**
  * @author Ture Bentzin
  * 03.12.2022
  */
 
-@Plugin(id = "VelocityCore", name = "JuliGames Velocity Core", version = "dev-test",
+@Plugin(id = "velocitycore", name = "JuliGames Velocity Core", version = "dev-test",
         url = "https://github.com/JuliGames/JuliGamesCore", description = "Velocity Client for the core - necessary to provide the API here",
         authors = {"Ture Bentzin"})
 public final class VelocityCore {
@@ -38,6 +39,15 @@ public final class VelocityCore {
         this.server = server;
         this.logger = new JavaLogger("velocityCore", logger);
         logger.info("Core is starting up...");
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            logger.log(Level.SEVERE, "Driver issue - please check installation!");
+            logger.log(Level.SEVERE, "Core will not boot. All Core Features will be disabled automatically!");
+            core = null;
+            return;
+        }
+
         core = new Core();
         logger.info("Core is waiting for \"go\" from velocity to boot up");
     }

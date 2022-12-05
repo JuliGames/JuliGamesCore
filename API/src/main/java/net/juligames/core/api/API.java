@@ -2,6 +2,7 @@ package net.juligames.core.api;
 
 import de.bentzin.tools.logging.Logger;
 import net.juligames.core.api.cluster.ClusterApi;
+import net.juligames.core.api.command.CommandApi;
 import net.juligames.core.api.config.ConfigurationAPI;
 import net.juligames.core.api.data.HazelDataApi;
 import net.juligames.core.api.err.APIException;
@@ -71,6 +72,12 @@ public interface API {
      * @return the {@link ConfigurationAPI}
      */
     ConfigurationAPI getConfigurationApi();
+
+    /**
+     *
+     * @return the {@link CommandApi}
+     */
+    CommandApi getCommandApi();
 
     /**
      *

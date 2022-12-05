@@ -11,9 +11,7 @@ import net.juligames.core.api.cluster.ClusterApi;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author Ture Bentzin
@@ -90,6 +88,25 @@ public final class CoreClusterApi implements ClusterApi {
      */
     public UUID getLocalUUID(){
         return instance().getLocalEndpoint().getUuid();
+    }
+
+    @Override
+    public @NotNull Map<UUID, InstanceType> getAllUUIDS() {
+        HashMap<UUID,InstanceType> hashMap = new HashMap<>();
+        for (UUID clientUUID : getClientUUIDS()) {
+            if(hashMap.put(clientUUID,InstanceType.CLIENT) != null) {
+                Core.getInstance().getCoreLogger().warning("Illegal UUID match seems like value was assigned before. Please report this issue to the developer. " +
+                        "This may cause damage to the integrity of core to core communication and evaluation!");
+            }
+        }
+
+        for (UUID member : getMembers()) {
+            if(hashMap.put(member,InstanceType.MEMBER) != null) {
+                Core.getInstance().getCoreLogger().warning("Illegal UUID match seems like value was assigned before. Please report this issue to the developer. " +
+                        "This may cause damage to the integrity of core to core communication and evaluation!");
+            }
+        }
+        return hashMap;
     }
 
 

@@ -7,10 +7,12 @@ import de.bentzin.tools.register.Registerator;
 import net.juligames.core.api.API;
 import net.juligames.core.api.ApiCore;
 import net.juligames.core.api.TODO;
+import net.juligames.core.api.command.CommandApi;
 import net.juligames.core.api.config.ConfigurationAPI;
 import net.juligames.core.api.err.dev.TODOException;
 import net.juligames.core.api.message.MessageRecipient;
 import net.juligames.core.cluster.CoreClusterApi;
+import net.juligames.core.command.CoreCommandApi;
 import net.juligames.core.config.CoreConfigurationApi;
 import net.juligames.core.data.HazelDataCore;
 import net.juligames.core.hcast.HazelConnector;
@@ -19,6 +21,7 @@ import net.juligames.core.message.CoreMessageApi;
 import net.juligames.core.notification.CoreNotificationApi;
 import net.juligames.core.notification.TopicNotificationCore;
 import net.juligames.core.serialization.SerializedNotification;
+import org.checkerframework.checker.units.qual.C;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -51,6 +54,7 @@ public final class Core implements API {
     private CoreSQLManager sqlManager;
     private CoreMessageApi messageApi;
     private CoreConfigurationApi configurationAPI;
+    private CoreCommandApi coreCommandApi;
     private String core_name;
     private Registerator<Consumer<HazelcastInstance>> hazelcastPostPreparationWorkers = new Registerator<>("hazelcastPostPreparationWorkers");
     @NotNull
@@ -127,6 +131,7 @@ public final class Core implements API {
 
         topicNotificationCore = new TopicNotificationCore(getOrThrow());
         coreNotificationApi = new CoreNotificationApi();
+        coreCommandApi = new CoreCommandApi();
         clusterApi = new CoreClusterApi();
         messageApi = new CoreMessageApi();
 
@@ -256,6 +261,14 @@ public final class Core implements API {
     @Override
     public CoreConfigurationApi getConfigurationApi() {
         return configurationAPI;
+    }
+
+    /**
+     * @return the {@link CommandApi}
+     */
+    @Override
+    public CoreCommandApi getCommandApi() {
+        return coreCommandApi;
     }
 
     /**
