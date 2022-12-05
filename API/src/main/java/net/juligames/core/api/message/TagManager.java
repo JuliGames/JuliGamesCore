@@ -1,5 +1,6 @@
 package net.juligames.core.api.message;
 
+import net.juligames.core.api.NoJavaDoc;
 import net.juligames.core.api.jdbi.DBReplacement;
 
 /**
@@ -8,5 +9,6 @@ import net.juligames.core.api.jdbi.DBReplacement;
  */
 public interface TagManager {
     void register(DBReplacement dbReplacement);
+    @NoJavaDoc
     void reload();
 }

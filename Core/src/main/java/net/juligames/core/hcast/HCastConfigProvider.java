@@ -2,6 +2,7 @@ package net.juligames.core.hcast;
 
 import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.config.Config;
+import com.hazelcast.config.SqlConfig;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,7 +18,7 @@ public class HCastConfigProvider {
     }
 
     public static @NotNull ClientConfig provide(String clientName) {
-        ClientConfig config = new ClientConfig();
+        ClientConfig config = ClientConfig.load();
         config.setInstanceName(clientName);
         config.setClusterName(CLUSTER_NAME);
         return config;
@@ -26,7 +27,7 @@ public class HCastConfigProvider {
 
     @ApiStatus.Internal
     public static @NotNull Config provideMember(String memberName) {
-        Config config = new Config();
+        Config config = Config.load();
         config.setInstanceName(memberName);
         config.setClusterName(CLUSTER_NAME);
         return config;

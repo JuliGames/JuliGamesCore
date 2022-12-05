@@ -1,5 +1,6 @@
 package net.juligames.core.api.jdbi.mapper.bean;
 
+import net.juligames.core.api.NoJavaDoc;
 import net.juligames.core.api.jdbi.DBLocale;
 import org.jetbrains.annotations.NotNull;
 
@@ -7,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Ture Bentzin
  * 16.11.2022
  */
+@NoJavaDoc
 public class LocaleBean implements DBLocale {
 
 

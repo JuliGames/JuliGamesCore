@@ -17,5 +17,8 @@ public interface DBLocale {
 
     @NotNull String getInfo();
 
+    /**
+     * Convert this to a {@link java.util.Locale}
+     */
     java.util.Locale toUtil();
 }

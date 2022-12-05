@@ -1,5 +1,7 @@
 package net.juligames.core.api.data;
 
+import de.bentzin.tools.Hardcode;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
@@ -44,6 +46,7 @@ public interface HazelDataApi {
      * @apiNote For further details of this map look at the wiki
      * @return a {@link Map} with general core information provided by the master.
      */
+    @Hardcode
     default Map<String, String> getMasterInformation() {
         //API.get().getHazelDataApi().<String, String>getMap("master_information").get("default_locale")
         return getMap("master_information");

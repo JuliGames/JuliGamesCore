@@ -12,6 +12,9 @@ import java.util.Objects;
 @FunctionalInterface
 public interface TriConsumer<A,B,C> {
 
+    /**
+     * Performs the given action with the tree given parameters
+     */
     void consume(A a, B b, C c);
 
     @NotNull
