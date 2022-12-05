@@ -36,7 +36,10 @@ public class PaperCorePlugin extends JavaPlugin {
         });
 
         core.getCommandApi().setCommandHandler(s -> {
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(),s);
+            Bukkit.getScheduler().runTask(this,() -> {
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(),s);
+            });
+
         });
 
         Objects.requireNonNull(getCommand("message")).setExecutor(new MessageCommand());

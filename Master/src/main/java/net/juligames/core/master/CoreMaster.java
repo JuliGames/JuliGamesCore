@@ -127,6 +127,7 @@ public class CoreMaster {
         masterCommandRunner.register(new ReloadConfigCommand());
         masterCommandRunner.register(new SaveConfigCommand());
         masterCommandRunner.register(new PrintObjectCommand());
+        masterCommandRunner.register(new ExecuteCommand());
     }
 
     public static MasterConfigManager masterConfigManager() {

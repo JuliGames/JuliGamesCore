@@ -5,6 +5,7 @@ import net.juligames.core.api.command.CommandApi;
 import org.checkerframework.checker.optional.qual.MaybePresent;
 import org.checkerframework.checker.units.qual.C;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -66,6 +67,7 @@ public class CoreCommandApi implements CommandApi {
     /**
      * @return the consumer wich is called when a command should be executed on this instance
      * @apiNote if the optional is empty then the current instance does not support command execution
+     * This should not be used for case 1 command handling use {@link CoreCommandApi#handle(String)} for this case
      */
     @Override
     public @MaybePresent Optional<Consumer<String>> getCommandHandler() {
@@ -87,11 +89,15 @@ public class CoreCommandApi implements CommandApi {
 
     /**
      * This will handle the command with the commandHandler. If the commandHandler is not present then nothing will happen
-     *
+     * @apiNote if you try to handle "internal-debug-BIT-TEST" here nothing will be sent to the handler!
      * @param command the command to handle
      */
     @ApiStatus.Internal
-    protected void handle(String command) {
+    protected void handle(@NotNull String command) {
+        if(command.equalsIgnoreCase("internal-debug-BIT-TEST")) {
+            Core.getInstance().getCoreLogger().info("BIT TEST!"); //DEBUG
+            return;
+        }
         getCommandHandler().ifPresent(stringConsumer -> stringConsumer.accept(command));
     }
 }
