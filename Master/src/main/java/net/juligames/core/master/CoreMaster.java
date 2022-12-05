@@ -25,7 +25,7 @@ public class CoreMaster {
 
     private CoreMaster() {}
 
-    public static Logger logger;
+    private static Logger logger;
     private static CoreSQLManager SQLManager;
     private static MasterCommandRunner masterCommandRunner;
     private static MasterConfigManager masterConfigManager;
@@ -89,6 +89,11 @@ public class CoreMaster {
             e.printStackTrace();
         }
 
+        //CommandSystem
+        logger.info("registering CommandHandler...");
+        core.getCommandApi().setCommandHandler(new CommandHandler());
+        logger.info("master is now ready to receive commands from hazelcast");
+
         //HOOK
 
         Core.getInstance().getJavaRuntime().addShutdownHook(new Thread(() -> {
@@ -126,5 +131,17 @@ public class CoreMaster {
 
     public static MasterConfigManager masterConfigManager() {
         return masterConfigManager;
+    }
+
+    public static HazelcastInstance getHazelcast() {
+        return hazelcast;
+    }
+
+    public static MasterCommandRunner getMasterCommandRunner() {
+        return masterCommandRunner;
+    }
+
+    public static MasterHazelInformationProvider getMasterHazelInformationProvider() {
+        return masterHazelInformationProvider;
     }
 }

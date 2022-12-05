@@ -35,6 +35,10 @@ public class PaperCorePlugin extends JavaPlugin {
             return paperMessageRecipients;
         });
 
+        core.getCommandApi().setCommandHandler(s -> {
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(),s);
+        });
+
         Objects.requireNonNull(getCommand("message")).setExecutor(new MessageCommand());
         Objects.requireNonNull(getCommand("locale")).setExecutor(new LocaleCommand());
         Objects.requireNonNull(getCommand("replacetest")).setExecutor(new ReplaceTestCommand());

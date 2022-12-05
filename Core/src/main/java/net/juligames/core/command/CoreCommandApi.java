@@ -3,6 +3,8 @@ package net.juligames.core.command;
 import net.juligames.core.Core;
 import net.juligames.core.api.command.CommandApi;
 import org.checkerframework.checker.optional.qual.MaybePresent;
+import org.checkerframework.checker.units.qual.C;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -17,9 +19,14 @@ import java.util.function.Predicate;
 public class CoreCommandApi implements CommandApi {
 
     public static final String COMMAND_NOTIFICATION_HEADER = "command";
+    private static final CoreCommandNotificationListener listener = new CoreCommandNotificationListener();
 
     @Nullable
     private Consumer<String> commandHandler;
+
+    public CoreCommandApi() {
+        Core.getInstance().getNotificationApi().registerListener(listener);
+    }
 
     /**
      * Execute a Command for the associated CommandHandling on the target instance. This is an unchecked operation!
@@ -76,5 +83,15 @@ public class CoreCommandApi implements CommandApi {
         Optional<Consumer<String>> buffer = getCommandHandler();
         this.commandHandler = commandHandler;
         return buffer;
+    }
+
+    /**
+     * This will handle the command with the commandHandler. If the commandHandler is not present then nothing will happen
+     *
+     * @param command the command to handle
+     */
+    @ApiStatus.Internal
+    protected void handle(String command) {
+        getCommandHandler().ifPresent(stringConsumer -> stringConsumer.accept(command));
     }
 }
