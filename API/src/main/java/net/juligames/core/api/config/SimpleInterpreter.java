@@ -3,7 +3,7 @@ package net.juligames.core.api.config;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * @apiNote this will default to {@link Object#toString()}
+ * @apiNote this will default to {@link Object#toString()} or {@link CustomInterpretable#toInterpretableString()} if available
  * @author Ture Bentzin
  * 26.11.2022
  */

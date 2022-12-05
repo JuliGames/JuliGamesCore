@@ -14,6 +14,11 @@ public interface MessageRecipient {
      * @return A human-readable name that defines this recipient
      */
     String getName();
+
+    /**
+     * Devlivers the specified Message to this MessageRecipient. The message should always be human-readable!
+     * @param message the message to deliver
+     */
     void deliver(Message message);
 
 

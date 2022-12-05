@@ -1,11 +1,13 @@
 package net.juligames.core.api.jdbi.mapper.bean;
 
+import net.juligames.core.api.NoJavaDoc;
 import net.juligames.core.api.jdbi.DBReplacementType;
 
 /**
  * @author Ture Bentzin
  * 19.11.2022
  */
+@NoJavaDoc
 public class ReplacementTypeBean implements DBReplacementType {
 
     private String name;

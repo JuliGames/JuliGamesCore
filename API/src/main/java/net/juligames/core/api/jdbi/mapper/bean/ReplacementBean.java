@@ -1,6 +1,7 @@
 package net.juligames.core.api.jdbi.mapper.bean;
 
 import net.juligames.core.api.API;
+import net.juligames.core.api.NoJavaDoc;
 import net.juligames.core.api.jdbi.DBReplacement;
 import net.juligames.core.api.jdbi.DBReplacementType;
 import net.juligames.core.api.jdbi.ReplacementDAO;
@@ -10,6 +11,7 @@ import net.juligames.core.api.jdbi.ReplacementTypeDAO;
  * @author Ture Bentzin
  * 19.11.2022
  */
+@NoJavaDoc
 public class ReplacementBean implements DBReplacement {
 
     private String replacementType;

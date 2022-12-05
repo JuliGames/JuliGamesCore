@@ -1,11 +1,13 @@
 package net.juligames.core.api.jdbi.mapper.bean;
 
+import net.juligames.core.api.NoJavaDoc;
 import net.juligames.core.api.jdbi.DBPlayerLocalPreference;
 
 /**
  * @author Ture Bentzin
  * 19.11.2022
  */
+@NoJavaDoc
 public class PlayerLocalPreferenceBean implements DBPlayerLocalPreference {
 
     private String uuid;
