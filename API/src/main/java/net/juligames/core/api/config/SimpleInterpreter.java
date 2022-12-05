@@ -12,6 +12,9 @@ public interface SimpleInterpreter<T> extends Interpreter<T> {
 
     @Override
     default String reverse(@NotNull T t) {
+        if(t instanceof CustomInterpretable customInterpretable) {
+            return customInterpretable.toInterpretableString();
+        }
         return t.toString();
     }
 }

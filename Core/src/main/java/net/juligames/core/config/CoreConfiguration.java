@@ -14,10 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.*;
-import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
-import java.util.function.Function;
-import java.util.function.Supplier;
+import java.util.function.*;
 
 /**
  * @author Ture Bentzin
@@ -581,6 +578,11 @@ public class CoreConfiguration implements Configuration {
     public <T> void query(@NotNull TriConsumer<String, T, Supplier<Interpreter<T>>> query, String input, Interpreter<T> interpreter, @NotNull Supplier<T> t) {
         updateHazel();
         query.consume(input, t.get(), () -> interpreter);
+    }
+
+    @Override
+    public void feed(String key, @NotNull Consumer<String> rawConsumer) {
+        rawConsumer.accept(getStringOrNull(key));
     }
 
     public String header_comment() {
