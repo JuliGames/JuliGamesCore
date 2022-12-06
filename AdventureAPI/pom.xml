@@ -5,7 +5,7 @@
     <parent>
         <artifactId>JuliGamesCore</artifactId>
         <groupId>net.juligames.core</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0-RELEASE-CANDIDATE-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -23,7 +23,7 @@
         <dependency>
             <groupId>net.juligames.core</groupId>
             <artifactId>API</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0-RELEASE-CANDIDATE-SNAPSHOT</version>
         </dependency>
 
         <dependency>

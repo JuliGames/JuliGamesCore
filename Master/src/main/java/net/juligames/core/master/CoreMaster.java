@@ -38,7 +38,7 @@ public class CoreMaster {
         masterConfigManager = new MasterConfigManager();
 
         logger.info("welcome to " + Core.getFullCoreName() + " Master by Ture Bentzin <bentzin@tdrstudios.de>");
-        logger.warning("This is an early development build!");
+        logger.warning("This is still an development build!");
 
 
         // masterConfigManager.load();
