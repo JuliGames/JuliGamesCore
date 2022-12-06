@@ -24,12 +24,14 @@ public class AdventureCore implements AdventureAPI {
         AdventureAPICore.adventureAPI = this;
 
         //version check:
-        if (!CORE_VERSION.equals(API_VERSION)) {
+        final String buildVersion = API.get().getBuildVersion();
+        if (!CORE_VERSION.equals(API_VERSION) && CORE_VERSION.equals(buildVersion)) {
             //warning
             logger.warning("---------------------------------------------------------------------------------");
             logger.warning("A version mismatch was detected (please make sure that both versions are equal)!");
             logger.warning("AdventureAPI is at: " + API_VERSION);
             logger.warning("AdventureCore is at: " + CORE_VERSION);
+            logger.warning("Core is at: " + buildVersion);
             logger.warning("---------------------------------------------------------------------------------");
         }
 

@@ -103,6 +103,8 @@ public interface API {
 
     String getVersion();
 
+    String getBuildVersion();
+
     Map<String, String> getJavaEnvironment();
 
     Runtime getJavaRuntime();

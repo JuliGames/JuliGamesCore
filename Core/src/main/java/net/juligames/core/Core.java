@@ -43,7 +43,8 @@ public final class Core implements API {
      */
     public static final String CORE_BRAND = "Core";
     public static final String CORE_VERSION_NUMBER = "1.0";
-    public static final String CORE_SPECIFICATION = "Gustav"; //Development Specification: Michael(.n)
+    public static final String CORE_SPECIFICATION = "Gustav";//Development Specification: Michael(.n)
+    private static final String BUILD_VERSION = "1.0-RELEASE-CANDIDATE-SNAPSHOT"; //POM VERSION
     private static Core core;
     private HazelConnector hazelConnector;
     private TopicNotificationCore topicNotificationCore;
@@ -293,6 +294,11 @@ public final class Core implements API {
     @Override
     public @NotNull String getVersion() {
         return getFullCoreName();
+    }
+
+    @Override
+    public String getBuildVersion() {
+        return BUILD_VERSION;
     }
 
     @Override
