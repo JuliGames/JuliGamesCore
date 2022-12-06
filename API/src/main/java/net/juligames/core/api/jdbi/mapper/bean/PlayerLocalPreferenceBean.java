@@ -20,7 +20,7 @@ public class PlayerLocalPreferenceBean implements DBPlayerLocalPreference {
         this.fallback = fallback;
     }
 
-    private PlayerLocalPreferenceBean(){
+    private PlayerLocalPreferenceBean() {
 
     }
 

@@ -23,28 +23,28 @@ public interface HazelDataApi {
 
     /**
      * @param hazel the name of the queue in the cluster
+     * @param <T>   Type Parameter for the {@link Queue}
      * @return the Queue from hazelcast
-     * @param <T> Type Parameter for the {@link Queue}
      */
     <T> Queue<T> getQueue(String hazel);
 
     /**
      * @param hazel the name of the set in the cluster
+     * @param <T>   Type Parameter for the {@link Set}
      * @return the Queue from hazelcast
-     * @param <T> Type Parameter for the {@link Set}
      */
     <T> Set<T> getSet(String hazel);
 
     /**
      * @param hazel the name of the set in the cluster
+     * @param <E>   Type Parameter for the {@link List}
      * @return the Queue from hazelcast
-     * @param <E> Type Parameter for the {@link List}
      */
     <E> List<E> getList(String hazel);
 
     /**
-     * @apiNote For further details of this map look at the wiki
      * @return a {@link Map} with general core information provided by the master.
+     * @apiNote For further details of this map look at the wiki
      */
     @Hardcode
     default Map<String, String> getMasterInformation() {

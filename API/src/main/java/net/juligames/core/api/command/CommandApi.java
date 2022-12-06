@@ -1,4 +1,5 @@
 package net.juligames.core.api.command;
+
 import org.checkerframework.checker.optional.qual.MaybePresent;
 
 import java.util.Optional;
@@ -14,6 +15,7 @@ public interface CommandApi {
 
     /**
      * Execute a Command for the associated CommandHandling on the target instance. This is an unchecked operation!
+     *
      * @param command the command to execute
      * @param targets the targets
      */
@@ -21,7 +23,8 @@ public interface CommandApi {
 
     /**
      * Executes a Command on every instance that matches the given Predicate
-     * @param command the command to execute
+     *
+     * @param command          the command to execute
      * @param targetIdentifier the predicate to identify the target
      */
     void sendCommand(String command, Predicate<UUID> targetIdentifier);
@@ -33,14 +36,13 @@ public interface CommandApi {
     void broadcastCommand(String command);
 
     /**
-     * @apiNote if the optional is empty then the current instance does not support command execution
      * @return the consumer wich is called when a command should be executed on this instance
+     * @apiNote if the optional is empty then the current instance does not support command execution
      */
     @MaybePresent
     Optional<Consumer<String>> getCommandHandler();
 
     /**
-     *
      * @return true if getCommandHandler is present
      * @see CommandApi#getCommandHandler()
      */

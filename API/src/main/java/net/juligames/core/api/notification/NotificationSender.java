@@ -9,8 +9,10 @@ import java.util.UUID;
  */
 public interface NotificationSender {
     void sendNotification(SimpleNotification notification, UUID... addresses);
+
     void broadcastNotification(SimpleNotification notification);
 
     void sendNotification(String header, String message, UUID... addressees);
+
     void broadcastNotification(String header, String message);
 }

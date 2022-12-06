@@ -4,9 +4,9 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * @apiNote This gives you access to some limited information about hazelcast
  * @author Ture Bentzin
  * 16.11.2022
+ * @apiNote This gives you access to some limited information about hazelcast
  */
 public interface ClusterApi {
 
@@ -30,7 +30,7 @@ public interface ClusterApi {
      */
     UUID getLocalUUID();
 
-    Map<UUID,InstanceType> getAllUUIDS();
+    Map<UUID, InstanceType> getAllUUIDS();
 
-    enum InstanceType{CLIENT, MEMBER}
+    enum InstanceType {CLIENT, MEMBER}
 }

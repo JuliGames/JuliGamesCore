@@ -6,12 +6,12 @@ import java.util.Properties;
 /**
  * @author Ture Bentzin
  * 26.11.2022
-
  */
 public interface ConfigurationAPI {
 
     /**
      * This will create a new configuration (if none with the same name is already present)
+     *
      * @param name the name
      * @return a new Configuration or the old if already one existed
      */
@@ -19,6 +19,7 @@ public interface ConfigurationAPI {
 
     /**
      * This will create a new configuration (if none with the same name is already present)
+     *
      * @param name the name
      * @return a new Configuration or the old if already one existed
      */

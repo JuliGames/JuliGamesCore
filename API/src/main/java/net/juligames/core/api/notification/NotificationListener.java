@@ -8,6 +8,7 @@ public interface NotificationListener {
 
     /**
      * This will be executed when a Notification arrives at this Core
+     *
      * @param notification the notification
      */
     void onNotification(Notification notification);

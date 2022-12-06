@@ -17,6 +17,7 @@ public interface MessageRecipient {
 
     /**
      * Devlivers the specified Message to this MessageRecipient. The message should always be human-readable!
+     *
      * @param message the message to deliver
      */
     void deliver(Message message);
@@ -24,7 +25,6 @@ public interface MessageRecipient {
 
     /**
      * delivers a miniMessage string to the recipient
-     *
      */
     @ApiStatus.Internal
     @Deprecated
@@ -33,8 +33,8 @@ public interface MessageRecipient {
     @Nullable
     String supplyLocale();
 
-    default String supplyLocaleOrDefault(){
-        if(supplyLocale() != null) return supplyLocale();
+    default String supplyLocaleOrDefault() {
+        if (supplyLocale() != null) return supplyLocale();
         return API.get().getHazelDataApi().getMasterInformation().get("default_locale");
     }
 }

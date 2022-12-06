@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
  * 16.11.2022
  * @apiNote should be used in coexistence with @{@link net.juligames.core.api.TODO}
  */
-public final class TODOException extends RuntimeException{
+public final class TODOException extends RuntimeException {
 
     @Contract(pure = true)
     @Override

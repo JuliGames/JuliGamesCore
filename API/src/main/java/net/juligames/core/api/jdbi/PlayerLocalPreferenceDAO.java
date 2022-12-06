@@ -39,12 +39,12 @@ public interface PlayerLocalPreferenceDAO {
     @SqlUpdate("UPDATE player_locale_preference " +
             "SET locale = :locale " +
             "WHERE uuid LIKE :uuid;")
-    void update(@Bind("uuid") String uuid,@Bind("locale") String newLocale);
+    void update(@Bind("uuid") String uuid, @Bind("locale") String newLocale);
 
     @SqlUpdate("UPDATE player_locale_preference " +
             "SET fallback = :locale " +
             "WHERE uuid LIKE :uuid;")
-    void updateFallback(@Bind("uuid") String uuid,@Bind("locale") String newLocale);
+    void updateFallback(@Bind("uuid") String uuid, @Bind("locale") String newLocale);
 
     default void delete(@NotNull UUID uuid) {
         delete(uuid.toString());

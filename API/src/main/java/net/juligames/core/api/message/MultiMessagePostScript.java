@@ -26,7 +26,6 @@ public interface MultiMessagePostScript {
     Collection<? extends MessageRecipient> recipients();
 
     /**
-     *
      * convert this {@link MultiMessagePostScript} to a {@link Collection} of {@link MessagePostScript}s
      */
     Collection<MessagePostScript> toSingles();

@@ -51,14 +51,14 @@ public interface MessageDAO {
             "SET miniMessage = :newMiniMessage " +
             "WHERE locale = :locale AND messageKey;")
     void update(@Bind("key") String key,
-                @Bind("locale")  String locale,
+                @Bind("locale") String locale,
                 @Bind("miniMessage") String newMiniMesssage);
 
     @SqlQuery("SELECT * FROM message where messageKey = :key AND locale = :locale")
     MessageBean selectBean(@Bind("key") String key, @Bind("locale") String locale);
 
     default DBMessage select(String key, String locale) {
-        return selectBean(key,locale);
+        return selectBean(key, locale);
     }
 
     default MessageBean selectBean(String key, @NotNull DBLocale locale) {

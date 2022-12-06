@@ -3,6 +3,7 @@ package net.juligames.core.api.config;
 import net.juligames.core.api.TODO;
 import net.juligames.core.api.err.dev.TODOException;
 import org.jetbrains.annotations.NotNull;
+
 import java.util.Collection;
 import java.util.StringJoiner;
 
@@ -11,7 +12,7 @@ import java.util.StringJoiner;
  * 27.11.2022
  */
 @TODO(doNotcall = true)
-public class CollectionInterpreter<T> implements Interpreter<Collection<? extends T>>{
+public class CollectionInterpreter<T> implements Interpreter<Collection<? extends T>> {
 
     private final Interpreter<T> tInterpreter;
 
@@ -42,7 +43,7 @@ public class CollectionInterpreter<T> implements Interpreter<Collection<? extend
         return builder.toString();
     }
 
-    private @NotNull StringBuilder appendObject(T object){
+    private @NotNull StringBuilder appendObject(T object) {
         StringBuilder appender = new StringBuilder();
         appender.append("[").append(tInterpreter.reverse(object)).append("]");
         return appender;

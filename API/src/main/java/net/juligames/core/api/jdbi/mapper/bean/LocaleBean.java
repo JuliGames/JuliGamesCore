@@ -19,6 +19,7 @@ public class LocaleBean implements DBLocale {
         this.locale = locale;
         this.description = description;
     }
+
     public LocaleBean() {
 
     }

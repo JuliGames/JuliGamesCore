@@ -1,6 +1,5 @@
 package net.juligames.core.api.jdbi;
 
-import net.juligames.core.api.API;
 import net.juligames.core.api.jdbi.mapper.bean.ReplacementTypeBean;
 import org.jdbi.v3.sqlobject.config.RegisterBeanMapper;
 import org.jdbi.v3.sqlobject.customizer.Bind;

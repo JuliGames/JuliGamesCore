@@ -10,20 +10,17 @@ import net.juligames.core.api.jdbi.DBMessage;
 @NoJavaDoc
 public class MessageBean implements DBMessage {
 
+    private String messageKey;
+    private String locale;
+    private String miniMessage;
     public MessageBean(String messageKey, String locale, String miniMessage) {
         this.messageKey = messageKey;
         this.locale = locale;
         this.miniMessage = miniMessage;
     }
-
     public MessageBean() {
 
     }
-
-    private String messageKey;
-    private String locale;
-    private String miniMessage;
-
 
     @Override
     public String getMiniMessage() {
@@ -56,7 +53,7 @@ public class MessageBean implements DBMessage {
     }
 
     @Override
-    public DBMessage clone(){
-        return new MessageBean(messageKey,locale,miniMessage);
+    public DBMessage clone() {
+        return new MessageBean(messageKey, locale, miniMessage);
     }
 }

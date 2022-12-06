@@ -1,10 +1,8 @@
 package net.juligames.core.api.message;
 
 import net.juligames.core.api.jdbi.DBMessage;
-import net.juligames.core.api.jdbi.MessageDAO;
 import org.jetbrains.annotations.ApiStatus;
 
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -31,6 +29,7 @@ public interface Message extends Cloneable {
 
     /**
      * Modify the data in this message
+     *
      * @param actionToPerform the operation
      */
     void doWithMiniMessage(Function<String, String> actionToPerform);

@@ -11,6 +11,7 @@ public interface SQLManager {
 
     /**
      * used by the core to create the tables in the database.
+     *
      * @apiNote this could be called at any time without bad effects... but its highly unrecommended unless you know what you are doing
      */
     @ApiStatus.Internal

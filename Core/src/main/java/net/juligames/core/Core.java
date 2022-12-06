@@ -30,6 +30,7 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
@@ -171,6 +172,14 @@ public final class Core implements API {
         coreLogger.info("goodbye!");
     }
 
+    public @NotNull Optional<? extends MessageRecipient> findRecipient(Predicate<MessageRecipient> searchQuery) {
+        return onlineRecipientProvider.get().stream().filter(searchQuery).findFirst();
+    }
+
+    public @NotNull Optional<? extends MessageRecipient> findRecipientByName(String name) {
+        return findRecipient(messageRecipient -> messageRecipient.getName().equals(name));
+    }
+
     @ApiStatus.Internal
     private void dropApiService() {
         ApiCore.CURRENT_API = null;
@@ -310,6 +319,11 @@ public final class Core implements API {
 
     public Supplier<Collection<? extends MessageRecipient>> getOnlineRecipientProvider() {
         return onlineRecipientProvider;
+    }
+
+    @Override
+    public Collection<? extends MessageRecipient> supplyOnlineRecipients() {
+        return getOnlineRecipientProvider().get();
     }
 
     public void setOnlineRecipientProvider(@NotNull Supplier<Collection<? extends MessageRecipient>> onlineRecipientProvider) {

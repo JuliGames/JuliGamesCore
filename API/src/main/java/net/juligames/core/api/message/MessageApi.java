@@ -1,6 +1,5 @@
 package net.juligames.core.api.message;
 
-import de.bentzin.tools.pair.Pair;
 import net.juligames.core.api.jdbi.*;
 import org.jdbi.v3.core.extension.ExtensionCallback;
 import org.jetbrains.annotations.ApiStatus;
@@ -24,52 +23,60 @@ public interface MessageApi {
     @ApiStatus.Internal
     @ApiStatus.Experimental
     <R>
-    R callMessageExtension(ExtensionCallback<R,MessageDAO,RuntimeException> extensionCallback);
+    R callMessageExtension(ExtensionCallback<R, MessageDAO, RuntimeException> extensionCallback);
 
     @ApiStatus.Internal
     @ApiStatus.Experimental
     <R>
-    R callLocaleExtension(ExtensionCallback<R,LocaleDAO,RuntimeException> extensionCallback);
+    R callLocaleExtension(ExtensionCallback<R, LocaleDAO, RuntimeException> extensionCallback);
 
     @ApiStatus.Internal
     @ApiStatus.Experimental
     <R>
-    R callPreferenceExtension(ExtensionCallback<R,PlayerLocalPreferenceDAO,RuntimeException> extensionCallback);
+    R callPreferenceExtension(ExtensionCallback<R, PlayerLocalPreferenceDAO, RuntimeException> extensionCallback);
 
     @ApiStatus.Internal
     @ApiStatus.Experimental
     <R>
-    R callReplacementExtension(ExtensionCallback<R,ReplacementDAO,RuntimeException> extensionCallback);
+    R callReplacementExtension(ExtensionCallback<R, ReplacementDAO, RuntimeException> extensionCallback);
 
     @ApiStatus.Internal
     @ApiStatus.Experimental
     <R>
-    R callReplacementTypeExtension(ExtensionCallback<R,ReplacementTypeDAO,RuntimeException> extensionCallback);
+    R callReplacementTypeExtension(ExtensionCallback<R, ReplacementTypeDAO, RuntimeException> extensionCallback);
 
     //get
     Message getMessage(String messageKey, Locale locale);
+
     Message getMessage(String messageKey, Locale locale, String... replacements);
 
     Message getMessage(String messageKey, String locale);
+
     Message getMessage(String messageKey, String locale, String... replacements);
 
     Message getMessage(String messageKey, DBLocale dbLocale);
+
     Message getMessage(String messageKey, DBLocale dbLocale, String... replacements);
 
     Collection<? extends Message> getMessage(String messageKey);
+
     Collection<? extends Message> getMessage(String messageKey, String... replacements);
 
     Collection<? extends Message> getAllFromLocale(Locale locale);
+
     Collection<? extends Message> getAllFromLocale(Locale locale, String... replacements);
 
     Collection<? extends Message> getAllFromLocale(String locale);
+
     Collection<? extends Message> getAllFromLocale(String locale, String... replacements);
 
     Collection<? extends Message> getAllFromLocale(DBLocale dbLocale);
+
     Collection<? extends Message> getAllFromLocale(DBLocale dbLocale, String... replacements);
 
     @ApiStatus.Experimental
     Collection<? extends Message> getAll();
+
     @ApiStatus.Experimental
     Collection<? extends Message> getAll(String... replacements);
 
@@ -88,7 +95,9 @@ public interface MessageApi {
     boolean hasMessage(String messageKey);
 
     boolean hasMessage(String messageKey, String locale);
+
     boolean hasMessage(String messageKey, Locale locale);
+
     boolean hasMessage(String messageKey, DBLocale locale);
 
     MessagePostScript sendMessage(String messageKey, MessageRecipient messageRecipient);
@@ -112,11 +121,15 @@ public interface MessageApi {
     MultiMessagePostScript sendMessage(Collection<String> messageKeys, Collection<? extends MessageRecipient> messageRecipients);
 
     MultiMessagePostScript sendMessage(Collection<String> messageKeys, MessageRecipient messageRecipient, String overrideLocale);
+
     MultiMessagePostScript sendMessage(Collection<String> messageKeys, MessageRecipient messageRecipient, Locale overrideLocale);
+
     MultiMessagePostScript sendMessage(Collection<String> messageKeys, MessageRecipient messageRecipient, DBLocale overrideLocale);
 
     MultiMessagePostScript sendMessage(Collection<String> messageKeys, Collection<? extends MessageRecipient> messageRecipients, String overrideLocale);
+
     MultiMessagePostScript sendMessage(Collection<String> messageKeys, Collection<? extends MessageRecipient> messageRecipients, Locale overrideLocale);
+
     MultiMessagePostScript sendMessage(Collection<String> messageKeys, Collection<? extends MessageRecipient> messageRecipients, DBLocale overrideLocale);
 
     MultiMessagePostScript broadcastMessage(Collection<String> messageKeys, Locale defaultLocale);
@@ -149,11 +162,15 @@ public interface MessageApi {
     MultiMessagePostScript sendMessage(Collection<String> messageKeys, Collection<? extends MessageRecipient> messageRecipients, String... replacement);
 
     MultiMessagePostScript sendMessage(Collection<String> messageKeys, MessageRecipient messageRecipient, String overrideLocale, String... replacement);
+
     MultiMessagePostScript sendMessage(Collection<String> messageKeys, MessageRecipient messageRecipient, Locale overrideLocale, String... replacement);
+
     MultiMessagePostScript sendMessage(Collection<String> messageKeys, MessageRecipient messageRecipient, DBLocale overrideLocale, String... replacement);
 
     MultiMessagePostScript sendMessage(Collection<String> messageKeys, Collection<? extends MessageRecipient> messageRecipients, String overrideLocale, String... replacement);
+
     MultiMessagePostScript sendMessage(Collection<String> messageKeys, Collection<? extends MessageRecipient> messageRecipients, Locale overrideLocale, String... replacement);
+
     MultiMessagePostScript sendMessage(Collection<String> messageKeys, Collection<? extends MessageRecipient> messageRecipients, DBLocale overrideLocale, String... replacement);
 
     MultiMessagePostScript broadcastMessage(Collection<String> messageKeys, Locale defaultLocale, String... replacement);

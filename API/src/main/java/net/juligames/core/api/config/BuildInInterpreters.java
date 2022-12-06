@@ -17,23 +17,34 @@ import java.util.UUID;
  */
 public interface BuildInInterpreters {
     @Contract(pure = true)
-    static @NotNull SimpleInterpreter<UUID> uuidInterpreter() {return UUID::fromString;}
+    static @NotNull SimpleInterpreter<UUID> uuidInterpreter() {
+        return UUID::fromString;
+    }
 
     @Contract(pure = true)
-    static @NotNull SimpleInterpreter<URI> uriInterpreter() {return URI::create;}
+    static @NotNull SimpleInterpreter<URI> uriInterpreter() {
+        return URI::create;
+    }
 
     @Contract(pure = true)
-    static @NotNull SimpleInterpreter<URL> urlInterpreter() {return URL::new;}
+    static @NotNull SimpleInterpreter<URL> urlInterpreter() {
+        return URL::new;
+    }
 
     @Contract(pure = true)
-    static @NotNull SimpleInterpreter<File> fileInterpreter() {return File::new;}
+    static @NotNull SimpleInterpreter<File> fileInterpreter() {
+        return File::new;
+    }
 
     @Contract(pure = true)
-    static @NotNull SimpleInterpreter<Instant> instantInterpreter() {return Instant::parse;}
+    static @NotNull SimpleInterpreter<Instant> instantInterpreter() {
+        return Instant::parse;
+    }
 
     @Contract(pure = true)
-    static @NotNull SimpleInterpreter<Date> dateInterpreter() {return s -> DateFormat.getDateInstance().parse(s);}
-
+    static @NotNull SimpleInterpreter<Date> dateInterpreter() {
+        return s -> DateFormat.getDateInstance().parse(s);
+    }
 
 
 }

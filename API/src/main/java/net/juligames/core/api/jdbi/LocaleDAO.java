@@ -36,7 +36,7 @@ public interface LocaleDAO {
     @SqlUpdate("UPDATE locale " +
             "SET description = :desc " +
             "WHERE locale LIKE :locale;")
-    void update(@Bind("locale") String locale,@Bind("desc")  String newDescription);
+    void update(@Bind("locale") String locale, @Bind("desc") String newDescription);
 
     @SqlQuery("SELECT * FROM locale where locale = :locale")
     LocaleBean selectBean(@Bind("locale") String locale);

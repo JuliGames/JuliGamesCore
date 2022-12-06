@@ -1,8 +1,6 @@
 package net.juligames.core.api;
 
-import com.google.errorprone.annotations.DoNotCall;
 import org.checkerframework.checker.optional.qual.MaybePresent;
-import org.checkerframework.checker.units.qual.C;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,11 +9,14 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 
 /**
- * @apiNote This is for distribution of the API
  * @author Ture Bentzin
  * 16.11.2022
+ * @apiNote This is for distribution of the API. If you want to get the API then please use {@link API#get()}
  */
 public class ApiCore {
+
+    public static API CURRENT_API;
+    private static CompletableFuture<API> completableFuture = new CompletableFuture<>();
 
     @ApiStatus.Internal
     public static void insert(API api) {
@@ -33,8 +34,6 @@ public class ApiCore {
         completableFuture = new CompletableFuture<>();
     }
 
-    public static API CURRENT_API;
-
     @Nullable
     public static API getAPI() {
         return CURRENT_API;
@@ -44,8 +43,6 @@ public class ApiCore {
     public static Optional<API> optionalApi() {
         return Optional.ofNullable(CURRENT_API);
     }
-
-    private static CompletableFuture<API> completableFuture = new CompletableFuture<>();
 
     public static Future<API> futureApi() {
         return completableFuture;

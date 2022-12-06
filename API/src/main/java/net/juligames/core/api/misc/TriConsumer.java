@@ -10,7 +10,7 @@ import java.util.Objects;
  * @see java.util.function.Consumer
  */
 @FunctionalInterface
-public interface TriConsumer<A,B,C> {
+public interface TriConsumer<A, B, C> {
 
     /**
      * Performs the given action with the tree given parameters
@@ -18,8 +18,11 @@ public interface TriConsumer<A,B,C> {
     void consume(A a, B b, C c);
 
     @NotNull
-    default TriConsumer<A,B,C> andThen(TriConsumer<? super A,? super B,? super C> after) {
+    default TriConsumer<A, B, C> andThen(TriConsumer<? super A, ? super B, ? super C> after) {
         Objects.requireNonNull(after);
-        return (A a, B b, C c) -> { consume(a,b,c); after.consume(a,b,c); };
+        return (A a, B b, C c) -> {
+            consume(a, b, c);
+            after.consume(a, b, c);
+        };
     }
 }
