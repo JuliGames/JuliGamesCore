@@ -18,8 +18,8 @@ public class HazelDebug {
         core.start("test");
         core.await();
         System.out.println("core should be online! - testing db");
-        API.get().getSQLManager().getJdbi().withExtension(MessageDAO.class,extension ->{
-            extension.insert(new MessageBean("test.test","EN_US","<gray>hallo"));
+        API.get().getSQLManager().getJdbi().withExtension(MessageDAO.class, extension -> {
+            extension.insert(new MessageBean("test.test", "EN_US", "<gray>hallo"));
             return null;
         });
     }

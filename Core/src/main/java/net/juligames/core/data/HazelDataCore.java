@@ -16,6 +16,10 @@ import org.jetbrains.annotations.NotNull;
  * 16.11.2022
  */
 public final class HazelDataCore implements HazelDataApi, NativeHazelDataAPI {
+    private static HazelcastInstance getHazelcastInstance() {
+        return Core.getInstance().getOrThrow();
+    }
+
     /**
      * @param hazel the name of the map in the cluster
      * @return the map from hazelCast
@@ -23,10 +27,6 @@ public final class HazelDataCore implements HazelDataApi, NativeHazelDataAPI {
     @Override
     public <A, B> @NotNull IMap<A, B> getMap(String hazel) {
         return getHazelcastInstance().getMap(hazel);
-    }
-
-    private static HazelcastInstance getHazelcastInstance() {
-        return Core.getInstance().getOrThrow();
     }
 
     @Override

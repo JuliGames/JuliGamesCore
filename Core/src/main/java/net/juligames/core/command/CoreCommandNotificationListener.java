@@ -17,7 +17,7 @@ public class CoreCommandNotificationListener implements NotificationListener {
      */
     @Override
     public void onNotification(@NotNull Notification notification) {
-        if(notification.header().equals(CoreCommandApi.COMMAND_NOTIFICATION_HEADER))
+        if (notification.header().equals(CoreCommandApi.COMMAND_NOTIFICATION_HEADER))
             Core.getInstance().getCommandApi().handle(notification.message());
     }
 }

@@ -6,10 +6,10 @@ import net.juligames.core.api.notification.SimpleNotification;
  * @author Ture Bentzin
  * 16.11.2022
  */
- class CoreSimpleNotification implements SimpleNotification {
+class CoreSimpleNotification implements SimpleNotification {
 
-     private final String header;
-     private final String message;
+    private final String header;
+    private final String message;
 
     CoreSimpleNotification(String header, String message) {
         this.header = header;

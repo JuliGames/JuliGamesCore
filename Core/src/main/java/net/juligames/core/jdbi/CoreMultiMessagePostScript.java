@@ -11,9 +11,9 @@ import java.util.Collection;
 import java.util.Date;
 
 /**
- * @apiNote every recipient got all the Messages in order as they are in the collection (if there is an order)
  * @author Ture Bentzin
  * 19.11.2022
+ * @apiNote every recipient got all the Messages in order as they are in the collection (if there is an order)
  */
 public class CoreMultiMessagePostScript implements MultiMessagePostScript {
 
@@ -53,7 +53,7 @@ public class CoreMultiMessagePostScript implements MultiMessagePostScript {
         Collection<MessagePostScript> messagePostScripts = new ArrayList<>();
         for (MessageRecipient recipient : recipients)
             for (Message message : messages)
-                messagePostScripts.add(new CoreMessagePostScript(message,recipient,timeSent));
+                messagePostScripts.add(new CoreMessagePostScript(message, recipient, timeSent));
         return messagePostScripts;
     }
 }

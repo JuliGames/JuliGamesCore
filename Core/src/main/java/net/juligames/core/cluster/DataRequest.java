@@ -12,7 +12,7 @@ import java.util.concurrent.Callable;
  * 26.11.2022
  */
 @TODO(doNotcall = true)
-public abstract class DataRequest<T,R> implements Callable<R>, Serializable, HazelcastInstanceAware {
+public abstract class DataRequest<T, R> implements Callable<R>, Serializable, HazelcastInstanceAware {
 
     final T data;
 

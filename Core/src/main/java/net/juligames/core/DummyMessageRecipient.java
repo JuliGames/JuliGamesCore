@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class DummyMessageRecipient implements MessageRecipient {
 
-    private APIException provideException(){
+    private APIException provideException() {
         throw new APIException("It seems like your core provides DummyMessageRecipients here. If you are the developer or maintainer of" +
                 " your core then consider checking Core#setOnlineRecipientProvider(...)!");
     }

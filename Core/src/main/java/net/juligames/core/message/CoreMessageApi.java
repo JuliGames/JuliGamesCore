@@ -9,7 +9,6 @@ import net.juligames.core.api.jdbi.mapper.bean.ReplacementBean;
 import net.juligames.core.api.message.Message;
 import net.juligames.core.api.message.MessageApi;
 import net.juligames.core.api.message.MessageRecipient;
-import net.juligames.core.api.message.TagManager;
 import net.juligames.core.jdbi.CoreMessagePostScript;
 import net.juligames.core.jdbi.CoreMultiMessagePostScript;
 import org.jdbi.v3.core.extension.ExtensionCallback;

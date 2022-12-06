@@ -21,12 +21,16 @@ public class HazelConnector {
 
     private final CompletableFuture<HazelcastInstance> instance = new CompletableFuture<>();
 
+    private HazelConnector(String memberName) {
+        this.clientName = memberName;
+    }
+
     @Contract("_ -> new")
-    public static @NotNull HazelConnector getInstance(String name){
+    public static @NotNull HazelConnector getInstance(String name) {
         return new HazelConnector(name);
     }
 
-    public static HazelConnector getInstanceAndConnect(String name){
+    public static HazelConnector getInstanceAndConnect(String name) {
         return new HazelConnector(name).connect();
     }
 
@@ -35,12 +39,7 @@ public class HazelConnector {
         return new HazelConnector(name).connectMember();
     }
 
-
-    private HazelConnector(String memberName){
-        this.clientName = memberName;
-    }
-
-    public HazelConnector connect(){
+    public HazelConnector connect() {
         ClientConfig clientConfig = HCastConfigProvider.provide(clientName);
         HazelcastInstance hazelcastInstance = HazelcastClient.newHazelcastClient(clientConfig);
         instance.complete(hazelcastInstance);
@@ -48,7 +47,7 @@ public class HazelConnector {
     }
 
     @ApiStatus.Internal
-    public HazelConnector connectMember(){
+    public HazelConnector connectMember() {
         Config config = HCastConfigProvider.provideMember(clientName);
         config.getJetConfig().setEnabled(true);
         HazelcastInstance hazelcastInstance = Hazelcast.getOrCreateHazelcastInstance(config);
@@ -56,7 +55,7 @@ public class HazelConnector {
         return this;
     }
 
-    public void disconnect(){
+    public void disconnect() {
         try {
             instance.get().shutdown();
         } catch (InterruptedException | ExecutionException e) {

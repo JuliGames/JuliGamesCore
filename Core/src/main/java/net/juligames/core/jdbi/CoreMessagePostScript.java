@@ -1,6 +1,9 @@
 package net.juligames.core.jdbi;
 
-import net.juligames.core.api.message.*;
+import net.juligames.core.api.message.Message;
+import net.juligames.core.api.message.MessagePostScript;
+import net.juligames.core.api.message.MessageRecipient;
+import net.juligames.core.api.message.MultiMessagePostScript;
 
 import java.time.Instant;
 import java.util.Date;
@@ -46,6 +49,6 @@ public class CoreMessagePostScript implements MessagePostScript {
 
     @Override
     public MultiMessagePostScript toMulti() {
-        return new CoreMultiMessagePostScript(List.of(message),List.of(recipient()), timeSent);
+        return new CoreMultiMessagePostScript(List.of(message), List.of(recipient()), timeSent);
     }
 }

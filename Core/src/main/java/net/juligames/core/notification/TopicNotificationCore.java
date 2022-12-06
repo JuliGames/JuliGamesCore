@@ -15,14 +15,14 @@ import java.util.UUID;
  * 17.11.2022
  */
 public class TopicNotificationCore {
-    
+
     private final HazelcastInstance hazelcastInstance;
 
     public TopicNotificationCore(HazelcastInstance hazelcastInstance) {
         this.hazelcastInstance = hazelcastInstance;
     }
 
-    public void sendNotification(@NotNull CoreNotification coreNotification){
+    public void sendNotification(@NotNull CoreNotification coreNotification) {
         List<DividedPair<UUID, String>> dividedPairs = Arrays.stream(coreNotification.addresses()).toList(); //copy data
         for (DividedPair<UUID, String> addressee : dividedPairs) {
             UUID uuid = addressee.getFirst();

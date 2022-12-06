@@ -14,11 +14,17 @@ import java.util.function.Function;
  */
 public class CoreMessage implements Message {
 
+    private final DBMessage messageData;
+
+    public CoreMessage(@Nullable DBMessage messageData) {
+        this.messageData = messageData;
+    }
+
     @Contract("_, _ -> new")
     public static @NotNull CoreMessage fromData(@Nullable DBMessage messageData, String messageKey) {
-        if(messageData == null) {
+        if (messageData == null) {
             return new FallBackMessage(messageKey);
-        }else {
+        } else {
             return new CoreMessage(messageData);
         }
     }
@@ -26,17 +32,11 @@ public class CoreMessage implements Message {
     @Deprecated
     @Contract("_ -> new")
     public static @NotNull CoreMessage fromData(@Nullable DBMessage messageData) {
-        if(messageData == null) {
+        if (messageData == null) {
             return new FallBackMessage();
-        }else {
+        } else {
             return new CoreMessage(messageData);
         }
-    }
-
-    private final DBMessage messageData;
-
-    public CoreMessage(@Nullable DBMessage messageData) {
-        this.messageData = messageData;
     }
 
     @Override

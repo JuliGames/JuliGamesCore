@@ -14,9 +14,21 @@ import java.util.UUID;
  */
 public class CoreNotification implements net.juligames.core.api.notification.Notification {
 
+    private final String message;
+    private final String header;
+    private final DividedPair<UUID, String> sender;
+    private final DividedPair<UUID, String>[] addresses;
+
+    public CoreNotification(String message, String header, DividedPair<UUID, String> sender, DividedPair<UUID, String>[] addresses) {
+        this.message = message;
+        this.header = header;
+        this.sender = sender;
+        this.addresses = addresses;
+    }
+
     @Contract("_, _, _ -> new")
-    public static @NotNull CoreNotification craft(@NotNull SimpleNotification notification, DividedPair<UUID,String> sender, DividedPair<UUID,String>[] addresses) {
-        return new CoreNotification(notification.message(),notification.header(),sender,addresses);
+    public static @NotNull CoreNotification craft(@NotNull SimpleNotification notification, DividedPair<UUID, String> sender, DividedPair<UUID, String>[] addresses) {
+        return new CoreNotification(notification.message(), notification.header(), sender, addresses);
     }
 
     @Contract("_ -> new")
@@ -24,10 +36,10 @@ public class CoreNotification implements net.juligames.core.api.notification.Not
         int length = serializedNotification.addresses_names().length;
         assert length == serializedNotification.addresses_uuids().length;
 
-        DividedPair<UUID,String> sender = new DividedPair<>(
-                serializedNotification.sender_uuid(),serializedNotification.sender_name());
+        DividedPair<UUID, String> sender = new DividedPair<>(
+                serializedNotification.sender_uuid(), serializedNotification.sender_name());
 
-        DividedPair<UUID,String>[] addresses = new DividedPair[length];
+        DividedPair<UUID, String>[] addresses = new DividedPair[length];
         for (int i = 0; i < addresses.length; i++) {
             addresses[i] = new DividedPair<>(
                     UUID.fromString(serializedNotification.addresses_uuids()[i]),
@@ -38,19 +50,6 @@ public class CoreNotification implements net.juligames.core.api.notification.Not
         return new CoreNotification(serializedNotification.message(),
                 serializedNotification.header(),
                 sender, addresses);
-    }
-
-    private final String message;
-    private final String header;
-
-    private final DividedPair<UUID,String> sender;
-    private final DividedPair<UUID,String>[] addresses;
-
-    public CoreNotification(String message, String header, DividedPair<UUID, String> sender, DividedPair<UUID, String>[] addresses) {
-        this.message = message;
-        this.header = header;
-        this.sender = sender;
-        this.addresses = addresses;
     }
 
     /**

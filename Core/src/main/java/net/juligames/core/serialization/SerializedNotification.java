@@ -8,9 +8,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 /**
- * @apiNote This is the "data-container" for a {@link CoreNotification} so it can be serialized using compactSerialization
  * @author Ture Bentzin
  * 18.11.2022
+ * @apiNote This is the "data-container" for a {@link CoreNotification} so it can be serialized using compactSerialization
  */
 public class SerializedNotification {
 
@@ -24,6 +24,9 @@ public class SerializedNotification {
     private String[] addresses_uuids;
     private String[] addresses_names;
 
+
+    private SerializedNotification() {
+    }
 
     @Contract(pure = true)
     public static @NotNull SerializedNotification serialize(@NotNull CoreNotification coreNotification) {
@@ -52,8 +55,6 @@ public class SerializedNotification {
         return serializedNotification;
     }
 
-    private SerializedNotification() {}
-
     public String message() {
         return message;
     }
@@ -78,7 +79,7 @@ public class SerializedNotification {
         return addresses_names;
     }
 
-    public CoreNotification deserialize(){
+    public CoreNotification deserialize() {
         return CoreNotification.deserialize(this);
     }
 }

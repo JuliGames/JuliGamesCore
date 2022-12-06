@@ -24,9 +24,9 @@ public class CoreConfigurationApi implements ConfigurationAPI {
     /**
      * This will create a new configuration (if none with the same name is already present)
      *
-     * @apiNote configuration_name is the reserved key for the name!!
      * @param defaults the defaults
      * @return a new Configuration or the old if already one existed
+     * @apiNote configuration_name is the reserved key for the name!!
      */
     @Override
     public Configuration getOrCreate(Properties defaults) {

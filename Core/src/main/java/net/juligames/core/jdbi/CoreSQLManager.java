@@ -10,9 +10,6 @@ import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.sqlobject.SqlObjectPlugin;
 import org.jetbrains.annotations.NotNull;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -20,6 +17,23 @@ import java.util.List;
  * 19.11.2022
  */
 public class CoreSQLManager implements SQLManager {
+
+    private final Jdbi jdbi;
+    private final Logger logger;
+    public CoreSQLManager(String connection, @NotNull Logger parentLogger) {
+        logger = parentLogger.adopt("jdbi");
+        /*
+        Connection connection1 = null;
+        try {
+              connection1 = DriverManager.getConnection(connection);
+        } catch (SQLException e) {
+            Core.getInstance().getCoreLogger().error("connection failed.. debug");
+        }
+        //jdbi = Jdbi.create(connection);
+         */
+        jdbi = Jdbi.create(connection);
+        jdbi.installPlugin(new SqlObjectPlugin());
+    }
 
     /**
      * This does not save anything to the DB it just gets if there is a locale for EN_US and returns it when found and if not it will generate one!
@@ -35,26 +49,6 @@ public class CoreSQLManager implements SQLManager {
             }
             return new LocaleBean("EN_US", "English (USA)");
         });
-    }
-
-
-    private final Jdbi jdbi;
-    private final Logger logger;
-
-
-    public CoreSQLManager(String connection, @NotNull Logger parentLogger) {
-        logger = parentLogger.adopt("jdbi");
-        /*
-        Connection connection1 = null;
-        try {
-              connection1 = DriverManager.getConnection(connection);
-        } catch (SQLException e) {
-            Core.getInstance().getCoreLogger().error("connection failed.. debug");
-        }
-        //jdbi = Jdbi.create(connection);
-         */
-        jdbi = Jdbi.create(connection);
-        jdbi.installPlugin(new SqlObjectPlugin());
     }
 
     @Override
@@ -107,12 +101,9 @@ public class CoreSQLManager implements SQLManager {
         logger.info("created: replacement");
 
 
-
-
-
     }
 
-    protected Logger getLogger(){
+    protected Logger getLogger() {
         return logger;
     }
 

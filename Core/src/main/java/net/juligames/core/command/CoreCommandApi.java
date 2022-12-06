@@ -3,7 +3,6 @@ package net.juligames.core.command;
 import net.juligames.core.Core;
 import net.juligames.core.api.command.CommandApi;
 import org.checkerframework.checker.optional.qual.MaybePresent;
-import org.checkerframework.checker.units.qual.C;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -89,12 +88,13 @@ public class CoreCommandApi implements CommandApi {
 
     /**
      * This will handle the command with the commandHandler. If the commandHandler is not present then nothing will happen
-     * @apiNote if you try to handle "internal-debug-BIT-TEST" here nothing will be sent to the handler!
+     *
      * @param command the command to handle
+     * @apiNote if you try to handle "internal-debug-BIT-TEST" here nothing will be sent to the handler!
      */
     @ApiStatus.Internal
     protected void handle(@NotNull String command) {
-        if(command.equalsIgnoreCase("internal-debug-BIT-TEST")) {
+        if (command.equalsIgnoreCase("internal-debug-BIT-TEST")) {
             Core.getInstance().getCoreLogger().info("BIT TEST!"); //DEBUG
             return;
         }

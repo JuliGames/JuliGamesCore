@@ -45,7 +45,7 @@ public final class CoreNotificationApi implements NotificationApi, MessageListen
         try {
             listenerRegisterator.unregister(listener);
             return true;
-        }catch (Registerator.NoSuchEntryException ignored){
+        } catch (Registerator.NoSuchEntryException ignored) {
             return false;
         }
     }
@@ -62,6 +62,7 @@ public final class CoreNotificationApi implements NotificationApi, MessageListen
 
     /**
      * This is used for notification
+     *
      * @return the current Blacklist
      */
     public Set<Address> getBlacklist() {
@@ -71,6 +72,7 @@ public final class CoreNotificationApi implements NotificationApi, MessageListen
 
     /**
      * handler for notificationsApi
+     *
      * @param message the message that is received for the topic
      */
     @Override

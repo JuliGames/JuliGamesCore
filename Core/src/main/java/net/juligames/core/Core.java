@@ -21,7 +21,6 @@ import net.juligames.core.message.CoreMessageApi;
 import net.juligames.core.notification.CoreNotificationApi;
 import net.juligames.core.notification.TopicNotificationCore;
 import net.juligames.core.serialization.SerializedNotification;
-import org.checkerframework.checker.units.qual.C;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -60,11 +59,13 @@ public final class Core implements API {
     private Registerator<Consumer<HazelcastInstance>> hazelcastPostPreparationWorkers = new Registerator<>("hazelcastPostPreparationWorkers");
     @NotNull
     private Supplier<Collection<? extends MessageRecipient>> onlineRecipientProvider = () -> List.of(new DummyMessageRecipient());
+
     public Core() {
     }
 
     /**
      * This will create AND START the Core!
+     *
      * @param core_name the core name
      */
     @ApiStatus.Experimental
@@ -123,7 +124,7 @@ public final class Core implements API {
 
         logger.info("connecting to jdbi... <loading from config>");
         Optional<String> jdbc = getConfigurationApi().database().getString("jdbc");
-        if(jdbc.isEmpty()) {
+        if (jdbc.isEmpty()) {
             Core.getInstance().coreLogger.warning("cant read jdbc data in database...");
         }
         logger.warning("database: " + getConfigurationApi().database().cloneToProperties().toString());
@@ -144,7 +145,7 @@ public final class Core implements API {
         getJavaRuntime().addShutdownHook(new Thread(() -> {
             try {
                 getOrThrow().shutdown();
-            }catch (Exception e){
+            } catch (Exception e) {
                 coreLogger.error(e.getMessage());
             }
 
@@ -239,7 +240,7 @@ public final class Core implements API {
         throw new NoSuchElementException("HazelcastInstance is not present!");
     }
 
-    private HazelcastInstance getForce(){
+    private HazelcastInstance getForce() {
         return getHazelConnector().getForce();
     }
 
@@ -321,13 +322,13 @@ public final class Core implements API {
         return onlineRecipientProvider;
     }
 
+    public void setOnlineRecipientProvider(@NotNull Supplier<Collection<? extends MessageRecipient>> onlineRecipientProvider) {
+        this.onlineRecipientProvider = onlineRecipientProvider;
+    }
+
     @Override
     public Collection<? extends MessageRecipient> supplyOnlineRecipients() {
         return getOnlineRecipientProvider().get();
-    }
-
-    public void setOnlineRecipientProvider(@NotNull Supplier<Collection<? extends MessageRecipient>> onlineRecipientProvider) {
-        this.onlineRecipientProvider = onlineRecipientProvider;
     }
 
     public Registerator<Consumer<HazelcastInstance>> getHazelcastPostPreparationWorkers() {
