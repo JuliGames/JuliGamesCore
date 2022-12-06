@@ -1,6 +1,5 @@
 package net.juligames.core.paper;
 
-import net.juligames.core.Core;
 import net.juligames.core.api.API;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -16,9 +15,9 @@ public class ReplaceTestCommand implements CommandExecutor {
 
     private final String messageKey;
 
-    public ReplaceTestCommand(){
+    public ReplaceTestCommand() {
         messageKey = "papercore.test.replace";
-        API.get().getMessageApi().registerMessage(messageKey,"<prefix><info_color>input: {0}, {1}, {3}");
+        API.get().getMessageApi().registerMessage(messageKey, "<prefix><info_color>input: {0}, {1}, {3}");
     }
 
     /**
@@ -37,7 +36,7 @@ public class ReplaceTestCommand implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
         API.get().getMessageApi().sendMessage(messageKey,
-                new PaperMessageRecipient(sender),args);
+                new PaperMessageRecipient(sender), args);
 
         return true;
     }

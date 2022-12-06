@@ -5,7 +5,6 @@ import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.event.proxy.ProxyShutdownEvent;
 import com.velocitypowered.api.plugin.Plugin;
-
 import com.velocitypowered.api.proxy.ProxyServer;
 import de.bentzin.tools.logging.JavaLogger;
 import de.bentzin.tools.logging.Logger;
@@ -79,7 +78,7 @@ public final class VelocityCore {
         });
 
         core.getCommandApi().setCommandHandler(s -> {
-            server.getCommandManager().executeAsync(server.getConsoleCommandSource(),s);
+            server.getCommandManager().executeAsync(server.getConsoleCommandSource(), s);
         });
 
         API.get().getMessageApi().registerMessage("internal.core.velocity.boot", "<gold>DEBUG: Velocity is up! :: {0}");

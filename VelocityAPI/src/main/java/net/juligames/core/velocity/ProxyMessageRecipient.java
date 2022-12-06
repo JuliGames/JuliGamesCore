@@ -9,7 +9,6 @@ import java.util.function.Supplier;
  * @author Ture Bentzin
  * 03.12.2022#
  * This is used for messaging this proxy. use {@link VelocityPlayerMessageRecipient} to message a player and {@link ServerMessageRecipient} to message a specific server
- *
  * @deprecated see {@link ProxyServerMessageRecipient}
  */
 @Deprecated

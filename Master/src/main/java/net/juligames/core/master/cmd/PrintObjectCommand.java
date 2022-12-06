@@ -7,9 +7,9 @@ import net.juligames.core.Core;
  * @author Ture Bentzin
  * 01.12.2022
  */
-public class PrintObjectCommand extends MasterCommand{
+public class PrintObjectCommand extends MasterCommand {
 
-    public PrintObjectCommand(){
+    public PrintObjectCommand() {
         super("printObj");
     }
 
@@ -26,7 +26,7 @@ public class PrintObjectCommand extends MasterCommand{
             } else {
                 Core.getInstance().getCoreLogger().error("command input malformed! - > expect hazel");
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             Core.getInstance().getCoreLogger().error("failed to print object: " + e.getMessage());
         }
     }

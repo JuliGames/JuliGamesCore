@@ -10,7 +10,7 @@ import java.util.UUID;
  * 05.12.2022
  */
 //execute <uuid>/@all <command...>
-public class ExecuteCommand extends MasterCommand{
+public class ExecuteCommand extends MasterCommand {
     public ExecuteCommand() {
         super("execute");
     }
@@ -20,18 +20,17 @@ public class ExecuteCommand extends MasterCommand{
         commandString = commandString.replaceFirst(" ", "");
         String[] s = commandString.split(" ");
         String command = commandString.substring(commandString.indexOf(" ")).replaceFirst(" ", "");
-        if(s.length >= 2) {
+        if (s.length >= 2) {
             String target = s[0];
             Core.getInstance().getCoreLogger().warning("trying to execute \"" + command + "\" on \"" + target + "\"");
-            if(target.equalsIgnoreCase("@all")) {
+            if (target.equalsIgnoreCase("@all")) {
                 Core.getInstance().getCoreLogger().warning("@all is unsafe to use!");
                 Core.getInstance().getCommandApi().broadcastCommand(command);
-            }
-            else {
+            } else {
                 Core.getInstance().getCommandApi().sendCommand(command, UUID.fromString(target));
             }
 
-        }else {
+        } else {
             Core.getInstance().getCoreLogger().error("execute <uuid>/@all <command...>");
         }
     }

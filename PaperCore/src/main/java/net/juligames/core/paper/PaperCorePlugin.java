@@ -2,14 +2,11 @@ package net.juligames.core.paper;
 
 import net.juligames.core.Core;
 import net.juligames.core.adventure.AdventureCore;
-import net.juligames.core.adventure.api.AdventureAPI;
-import net.juligames.core.api.API;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.prefs.AbstractPreferences;
 
 /**
  * @author Ture Bentzin
@@ -22,7 +19,7 @@ public class PaperCorePlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         Core core = new Core();
-        String serverName = Bukkit.getName() + "@" + ((Bukkit.getServer().getIp().isEmpty())? Bukkit.getServer().getIp() + ":": Bukkit.getServer().getPort());
+        String serverName = Bukkit.getName() + "@" + ((Bukkit.getServer().getIp().isEmpty()) ? Bukkit.getServer().getIp() + ":" : Bukkit.getServer().getPort());
         getLogger().info("stating core with the following identification: " + serverName);
         core.start("paper-core|" + serverName);
         //start adventureAPI
@@ -36,8 +33,8 @@ public class PaperCorePlugin extends JavaPlugin {
         });
 
         core.getCommandApi().setCommandHandler(s -> {
-            Bukkit.getScheduler().runTask(this,() -> {
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(),s);
+            Bukkit.getScheduler().runTask(this, () -> {
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), s);
             });
 
         });

@@ -20,6 +20,7 @@ public class CoreSQLManager implements SQLManager {
 
     private final Jdbi jdbi;
     private final Logger logger;
+
     public CoreSQLManager(String connection, @NotNull Logger parentLogger) {
         logger = parentLogger.adopt("jdbi");
         /*

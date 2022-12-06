@@ -7,9 +7,9 @@ package net.juligames.core.adventure.api;
 public class AdventureAPICore {
 
 
-
     public static AdventureAPI adventureAPI;
-    public static AdventureAPI getAPI(){
+
+    public static AdventureAPI getAPI() {
         return adventureAPI;
     }
 }

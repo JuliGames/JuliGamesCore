@@ -24,6 +24,8 @@ import java.util.List;
  */
 public final class CoreAdventureTagManager implements TagManager, AdventureTagManager {
 
+    private TagResolver internalResolver = TagResolver.standard();
+
     @Contract(pure = true)
     public @NotNull MiniMessage getMiniMessage() {
         return MiniMessage.miniMessage();
@@ -39,9 +41,6 @@ public final class CoreAdventureTagManager implements TagManager, AdventureTagMa
         return getMiniMessage().deserialize(miniMessage, getFallbackResolver());
     }
 
-
-    private TagResolver internalResolver = TagResolver.standard();
-
     @Override
     public void register(@NotNull DBReplacement dbReplacement) {
         register(dbReplacement.getTag(), JDBITagAdapter.fromJDBI(dbReplacement));
@@ -55,7 +54,7 @@ public final class CoreAdventureTagManager implements TagManager, AdventureTagMa
 
     @Override
     public void register(String name, Tag tag) {
-        internalResolver = TagResolver.builder().resolver(internalResolver).tag(name,tag).build();
+        internalResolver = TagResolver.builder().resolver(internalResolver).tag(name, tag).build();
     }
 
     @Override
@@ -65,18 +64,18 @@ public final class CoreAdventureTagManager implements TagManager, AdventureTagMa
     }
 
     @Override
-    public @NotNull TagResolver getResolver(){
+    public @NotNull TagResolver getResolver() {
         return internalResolver;
     }
 
     @Override
     public @NotNull Component resolve(String miniMessage) {
-        return getMiniMessage().deserialize(miniMessage,getResolver());
+        return getMiniMessage().deserialize(miniMessage, getResolver());
     }
 
     @Override
     public @NotNull Component resolve(@NotNull Message message) {
-        return getMiniMessage().deserialize(message.getMiniMessage(),getResolver());
+        return getMiniMessage().deserialize(message.getMiniMessage(), getResolver());
     }
 
     @Override

@@ -6,14 +6,12 @@ import net.juligames.core.adventure.api.AdventureAPICore;
 import net.juligames.core.api.API;
 import org.jetbrains.annotations.ApiStatus;
 
-import java.util.Locale;
-
 /**
+ * @author Ture Bentzin
+ * 21.11.2022
  * @apiNote The AdventureCore and AdventureAPI are additional modules that are not associated with the Master
  * or the Core, they represent additional features. Because of this the AdventureCore will be started by Cores that
  * support it. Because of this the AdventureAPI will only function as intended when bundled with the API you are using!
- * @author Ture Bentzin
- * 21.11.2022
  */
 public class AdventureCore implements AdventureAPI {
     String CORE_VERSION = "1.0-SNAPSHOT";
@@ -21,12 +19,12 @@ public class AdventureCore implements AdventureAPI {
     private CoreAdventureTagManager adventureTagManager;
     private Logger logger;
 
-    public void start(){
+    public void start() {
         logger = API.get().getAPILogger().adopt("adventure");
         AdventureAPICore.adventureAPI = this;
 
         //version check:
-        if(!CORE_VERSION.equals(API_VERSION)) {
+        if (!CORE_VERSION.equals(API_VERSION)) {
             //warning
             logger.warning("---------------------------------------------------------------------------------");
             logger.warning("A version mismatch was detected (please make sure that both versions are equal)!");

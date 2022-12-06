@@ -17,20 +17,18 @@ import java.util.function.Supplier;
  */
 public class AudienceMessageRecipient implements MessageRecipient {
 
-    @Contract(pure = true)
-    public static @NotNull Supplier<String> english() {
-        return () -> "EN";
-    }
-
-
     private final String name;
     private final Supplier<String> locale;
     private final Audience audience;
-
     public AudienceMessageRecipient(String name, Supplier<String> locale, Audience audience) {
         this.name = name;
         this.locale = locale;
         this.audience = audience;
+    }
+
+    @Contract(pure = true)
+    public static @NotNull Supplier<String> english() {
+        return () -> "EN";
     }
 
     /**

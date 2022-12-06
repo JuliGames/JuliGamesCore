@@ -13,11 +13,13 @@ public class MessageBean implements DBMessage {
     private String messageKey;
     private String locale;
     private String miniMessage;
+
     public MessageBean(String messageKey, String locale, String miniMessage) {
         this.messageKey = messageKey;
         this.locale = locale;
         this.miniMessage = miniMessage;
     }
+
     public MessageBean() {
 
     }

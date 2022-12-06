@@ -8,7 +8,7 @@ import net.juligames.core.Core;
  * @author Ture Bentzin
  * 27.11.2022
  */
-public class ListObjectsCommand extends MasterCommand{
+public class ListObjectsCommand extends MasterCommand {
     public ListObjectsCommand() {
         super("listobjects");
     }

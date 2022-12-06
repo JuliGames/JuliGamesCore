@@ -17,14 +17,14 @@ public class MasterHazelInformationProvider {
 
     private final HazelcastInstance hazelcast;
 
-    private @NotNull Map<String,String> informationMap() {
-        return getHazelcast().getMap(INFORMATION_MAP_NAME);
-    }
-
-    public MasterHazelInformationProvider(HazelcastInstance hazelcast){
+    public MasterHazelInformationProvider(HazelcastInstance hazelcast) {
         this.hazelcast = hazelcast;
         genMap();
         update();
+    }
+
+    private @NotNull Map<String, String> informationMap() {
+        return getHazelcast().getMap(INFORMATION_MAP_NAME);
     }
 
     protected void genMap() {

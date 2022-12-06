@@ -22,13 +22,12 @@ public class CoreMaster {
 
     private static MasterHazelInformationProvider masterHazelInformationProvider;
     private static HazelcastInstance hazelcast;
-
-    private CoreMaster() {}
-
     private static Logger logger;
     private static CoreSQLManager SQLManager;
     private static MasterCommandRunner masterCommandRunner;
     private static MasterConfigManager masterConfigManager;
+    private CoreMaster() {
+    }
 
     public static void main(String[] args) {
 
@@ -38,11 +37,11 @@ public class CoreMaster {
         masterCommandRunner = new MasterCommandRunner(logger);
         masterConfigManager = new MasterConfigManager();
 
-        logger.info("welcome to " + Core.getFullCoreName() +  " Master by Ture Bentzin <bentzin@tdrstudios.de>");
+        logger.info("welcome to " + Core.getFullCoreName() + " Master by Ture Bentzin <bentzin@tdrstudios.de>");
         logger.warning("This is an early development build!");
 
 
-       // masterConfigManager.load();
+        // masterConfigManager.load();
         logger.info("booting hazelcast (MEMBERCORE):");
         Core core = new Core();
         try {
@@ -50,10 +49,11 @@ public class CoreMaster {
                 logger.warning("loading config");
                 masterConfigManager.load();
             });
-        } catch (Registerator.DuplicateEntryException ignored) {}
+        } catch (Registerator.DuplicateEntryException ignored) {
+        }
 
         //start Core
-        core.start("Master",logger,true);
+        core.start("Master", logger, true);
 
         try {
             hazelcast = core.getOrWait();
@@ -69,7 +69,7 @@ public class CoreMaster {
         SQLManager = Core.getInstance().getSQLManager();
 
         SQLManager.createTables(); //MASTER CREATES TABLES (NOT THE CORE!!!)
-        SQLManager.getJdbi().withExtension(LocaleDAO.class,extension -> {
+        SQLManager.getJdbi().withExtension(LocaleDAO.class, extension -> {
             extension.insert(CoreSQLManager.defaultEnglish()); //adding english
             return null;
         });
@@ -99,7 +99,7 @@ public class CoreMaster {
         Core.getInstance().getJavaRuntime().addShutdownHook(new Thread(() -> {
             try {
                 logger.info("master is going down!!");
-            }catch (Exception ignored){
+            } catch (Exception ignored) {
 
             }
             masterConfigManager.storeAll();
@@ -120,7 +120,7 @@ public class CoreMaster {
             public void executeCommand(String commandString) {
                 logger.info("send message to all: " + commandString);
 
-               Core.getInstance().getNotificationApi().getNotificationSender().broadcastNotification("bc-all",commandString);
+                Core.getInstance().getNotificationApi().getNotificationSender().broadcastNotification("bc-all", commandString);
             }
         });
         masterCommandRunner.register(new ListObjectsCommand());

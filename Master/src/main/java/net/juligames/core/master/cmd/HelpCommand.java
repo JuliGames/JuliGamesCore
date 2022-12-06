@@ -6,7 +6,7 @@ import net.juligames.core.Core;
  * @author Ture Bentzin
  * 17.11.2022
  */
-public class HelpCommand extends MasterCommand{
+public class HelpCommand extends MasterCommand {
     private final MasterCommandRunner runner;
 
     public HelpCommand(MasterCommandRunner runner) {

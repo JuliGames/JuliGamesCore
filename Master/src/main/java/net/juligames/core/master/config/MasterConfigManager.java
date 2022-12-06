@@ -6,7 +6,6 @@ import com.hazelcast.map.IMap;
 import de.bentzin.tools.Hardcode;
 import net.juligames.core.Core;
 import net.juligames.core.config.CoreConfiguration;
-import org.checkerframework.checker.units.qual.C;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -87,7 +86,7 @@ public class MasterConfigManager {
     public void load() {
         String[] prop = CONFIG_FOLDER.list((dir, name) -> name.endsWith(FILE_ENDING));
         Collection<Properties> properties = new ArrayList<>();
-        if(prop == null) {
+        if (prop == null) {
             Core.getInstance().getCoreLogger().warning("no configs found... skipping step!");
             return;
         }
@@ -134,21 +133,21 @@ public class MasterConfigManager {
 
     @Contract("_ -> new")
     private @NotNull File fileFromName(String name) {
-        return fileFromName(name,false);
+        return fileFromName(name, false);
     }
 
     @Contract(value = "_,_ -> new")
     private @NotNull File fileFromName(String name, boolean containsFileEnding) {
-        if(containsFileEnding)
+        if (containsFileEnding)
             return new File(CONFIG_FOLDER, name);
-        else return new File(CONFIG_FOLDER,name + FILE_ENDING);
+        else return new File(CONFIG_FOLDER, name + FILE_ENDING);
     }
 
     @ApiStatus.Internal
     public void deleteConfigFromSystem(String hazel) {
         CoreConfiguration configuration = new CoreConfiguration(hazel);
         configuration.accessHazel().get().destroy();
-        fileFromName(hazel,true);
+        fileFromName(hazel, true);
     }
 
     @ApiStatus.Internal

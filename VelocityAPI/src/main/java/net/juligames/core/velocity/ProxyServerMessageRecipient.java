@@ -1,6 +1,5 @@
 package net.juligames.core.velocity;
 
-import com.velocitypowered.api.proxy.ConsoleCommandSource;
 import com.velocitypowered.api.proxy.ProxyServer;
 import net.juligames.core.adventure.api.AudienceMessageRecipient;
 
@@ -12,7 +11,7 @@ import java.util.function.Supplier;
  */
 public class ProxyServerMessageRecipient extends AudienceMessageRecipient {
     public ProxyServerMessageRecipient(ProxyServer proxyServer) {
-        super(proxyServer.getVersion().getName(),english(),proxyServer);
+        super(proxyServer.getVersion().getName(), english(), proxyServer);
     }
 
     public ProxyServerMessageRecipient(String name, Supplier<String> localeSupplier,

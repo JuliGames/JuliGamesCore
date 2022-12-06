@@ -16,7 +16,7 @@ public class PaperMessageRecipient implements MessageRecipient {
 
     private CommandSender commandSender;
 
-    public PaperMessageRecipient(CommandSender commandSender){
+    public PaperMessageRecipient(CommandSender commandSender) {
         this.commandSender = commandSender;
     }
 
@@ -47,10 +47,9 @@ public class PaperMessageRecipient implements MessageRecipient {
 
     @Override
     public @Nullable String supplyLocale() {
-        if(commandSender instanceof Player player) {
+        if (commandSender instanceof Player player) {
             return player.locale().toString();
-        }
-        else
+        } else
             return null;
     }
 }

@@ -33,7 +33,7 @@ public class MessageCommand implements CommandExecutor {
         }
         String arg = joiner.toString();
 
-        Core.getInstance().getMessageApi().sendMessage(arg,new PaperMessageRecipient(sender));
+        Core.getInstance().getMessageApi().sendMessage(arg, new PaperMessageRecipient(sender));
 
         return true;
     }
