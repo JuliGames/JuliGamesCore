@@ -1,17 +1,17 @@
 package net.juligames.core.api.config;
 
-import net.juligames.core.api.TODO;
-import net.juligames.core.api.err.dev.TODOException;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.StringJoiner;
+import java.util.List;
 
 /**
- * @author Ture Bentzin
- * 27.11.2022
+ * @author Ture Bentzin 27.11.2022
+ * @author Bommels05
+ * @see SlimCollectionInterpreter
  */
-@TODO(doNotcall = true)
+
 public class CollectionInterpreter<T> implements Interpreter<Collection<? extends T>> {
 
     private final Interpreter<T> tInterpreter;
@@ -21,14 +21,51 @@ public class CollectionInterpreter<T> implements Interpreter<Collection<? extend
     }
 
     @Override
-    public Collection<? extends T> interpret(final String input) throws Exception {
-       /* String[] firstSplit = input.split("\\{");
-        assert firstSplit.length > 1;
-        int sizer = Integer.parseInt(firstSplit[0]);
-        String data = input.replace(sizer + "","");
-        */
+    public Collection<? extends T> interpret(final @NotNull String input) throws Exception {
+        if (!input.startsWith("{") || !input.endsWith("}")) {
+            throw new IllegalArgumentException("Input has to start with { and end with }");
+        }
+        if (input.length() == 2) {
+            return new ArrayList<>();
+        }
 
-        throw new TODOException();
+        String converted = input.replaceFirst("\\{", "");
+
+        List<T> output = new ArrayList<>();
+
+        while (!converted.startsWith("}")) {
+            if (!converted.startsWith(":length=")) {
+                throw new IllegalArgumentException("Expected length");
+            }
+            checkLength(converted);
+
+            converted = converted.replaceFirst(":length=", "");
+            String number = converted.substring(0, converted.indexOf(":"));
+            int length;
+            try {
+                length = Integer.parseInt(number);
+            } catch (NumberFormatException e) {
+                throw new IllegalArgumentException("Length not valid");
+            }
+            converted = converted.replaceFirst(number, "");
+            converted = converted.replaceFirst(":", "");
+
+            if (converted.charAt(length) != ':') {
+                throw new IllegalArgumentException("Expected end of value");
+            }
+            String value = converted.substring(0, length);
+            output.add(tInterpreter.interpret(value));
+
+            converted = converted.substring(length + 1);
+        }
+
+        return output;
+    }
+
+    private void checkLength(@NotNull String input) {
+        if (input.length() == 0) {
+            throw new IllegalArgumentException("Unexpected end of Sequence");
+        }
     }
 
 
@@ -36,11 +73,13 @@ public class CollectionInterpreter<T> implements Interpreter<Collection<? extend
     public String reverse(@NotNull Collection<? extends T> ts) {
         StringBuilder builder = new StringBuilder();
 
-        StringJoiner innerJoiner = new StringJoiner(",");
-        ts.forEach(t -> innerJoiner.add(appendObject(t)));
-        builder.append(ts.size()).append(":");
-        builder.append("{").append(innerJoiner).append("}");
-        return builder.toString();
+        for (T value : ts) {
+            String converted = tInterpreter.reverse(value);
+            builder.append(":length=" + converted.length() + ":" + converted + ":");
+        }
+
+        String output = "{" + builder + "}";
+        return output;
     }
 
     private @NotNull StringBuilder appendObject(T object) {
