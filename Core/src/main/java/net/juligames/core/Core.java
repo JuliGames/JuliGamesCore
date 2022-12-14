@@ -169,6 +169,7 @@ public final class Core implements API {
         coreLogger.info("dropping api...");
         dropApiService();
         coreLogger.info("api is now offline!");
+        Core.getInstance().getOrThrow().getTopic("notify: " + Core.getInstance().getClusterApi().getLocalUUID()).destroy();
         coreLogger.info("stopping hazelcast client connection");
         hazelConnector.disconnect();
         coreLogger.info("goodbye!");
