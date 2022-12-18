@@ -169,6 +169,8 @@ public final class Core implements API {
         coreLogger.info("dropping api...");
         dropApiService();
         coreLogger.info("api is now offline!");
+
+
         try {
             Core.getInstance().getOrThrow().getTopic("notify: " + Core.getInstance().getClusterApi().getLocalUUID()).destroy();
         }catch(NoSuchElementException noSuchElementException){
