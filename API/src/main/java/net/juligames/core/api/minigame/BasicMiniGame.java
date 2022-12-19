@@ -20,11 +20,11 @@ public interface BasicMiniGame {
     Optional<String> getDeveloperContactEmail();
 
     default String getDescription() {
-        return getPlainName() + "v. " + getVersion();
+        return getPlainName() + " v." + getVersion();
     }
 
     default String getFullDescription() {
-        return getPlainName() + "v. " + getVersion() + " by " + getDeveloperName();
+        return getPlainName() + " v." + getVersion() + " by " + getDeveloperName();
     }
 
     /**
