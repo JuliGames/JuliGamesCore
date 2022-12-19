@@ -1,5 +1,7 @@
 package net.juligames.core.minigame.api.team;
 
+import de.bentzin.tools.collection.SubscribableSet;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Range;
 
 import java.util.HashSet;
@@ -17,12 +19,13 @@ public final class Team {
 
     private final TeamColor color;
     private final Supplier<Integer> maxCapacity;
-    private final Set<UUID> members;
+    private final SubscribableSet<UUID> members;
 
     public Team(TeamColor color, @Range(from = 1, to = Integer.MAX_VALUE) Supplier<Integer> maxCapacity, Set<UUID> initialMembers) {
         this.color = color;
         this.maxCapacity = maxCapacity;
-        this.members = initialMembers;
+        this.members = new SubscribableSet<>();
+        members.addAll(initialMembers);
     }
 
     public Team(TeamColor color, @Range(from = 1, to = Integer.MAX_VALUE) Supplier<Integer> maxCapacity) {
@@ -41,8 +44,7 @@ public final class Team {
         return maxCapacity;
     }
 
-    //TODO SubscribableList!!!! -> maybe SubscribableSet via subscription....
-    public Set<UUID> getMembers() {
+    public SubscribableSet<UUID> getMembers() {
         return members;
     }
 
@@ -54,5 +56,25 @@ public final class Team {
         }else {
             return false;
         }
+    }
+
+    /**
+     * Indicates that this Team is not full
+     */
+    public boolean hasCapacity() {
+        return getMembers().size() < maxCapacity.get();
+    }
+
+    public boolean isFull() {
+        return getMembers().size() == maxCapacity.get();
+    }
+
+    @ApiStatus.Internal
+    public boolean isOverflown() {
+        return getMembers().size() > maxCapacity.get();
+    }
+
+    public boolean isEmpty() {
+        return getMembers().isEmpty();
     }
 }
