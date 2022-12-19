@@ -18,20 +18,24 @@ public final class Team {
 
 
     private final TeamColor color;
+    @Range(from = 0,to = 1_000_000)
     private final Supplier<Integer> maxCapacity;
     private final SubscribableSet<UUID> members;
 
-    public Team(TeamColor color, @Range(from = 1, to = Integer.MAX_VALUE) Supplier<Integer> maxCapacity, Set<UUID> initialMembers) {
+    public Team(TeamColor color, @Range(from = 0,to = 1_000_000) Supplier<Integer> maxCapacity,
+                Set<UUID> initialMembers) {
+
         this.color = color;
         this.maxCapacity = maxCapacity;
         this.members = new SubscribableSet<>();
         members.addAll(initialMembers);
     }
 
-    public Team(TeamColor color, @Range(from = 1, to = Integer.MAX_VALUE) Supplier<Integer> maxCapacity) {
+    public Team(TeamColor color, @Range(from = 0,to = 1_000_000) Supplier<Integer> maxCapacity) {
         this(color,maxCapacity,new HashSet<>());
     }
 
+    @Range(from = 0,to = 1_000_000)
     public int maxCapacity() {
         return Objects.requireNonNull(maxCapacity.get());
     }
