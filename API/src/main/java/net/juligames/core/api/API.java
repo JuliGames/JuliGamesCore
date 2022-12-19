@@ -1,6 +1,7 @@
 package net.juligames.core.api;
 
 import de.bentzin.tools.logging.Logger;
+import de.bentzin.tools.misc.SubscribableType;
 import net.juligames.core.api.cluster.ClusterApi;
 import net.juligames.core.api.command.CommandApi;
 import net.juligames.core.api.config.ConfigurationAPI;
@@ -9,6 +10,7 @@ import net.juligames.core.api.err.APIException;
 import net.juligames.core.api.jdbi.SQLManager;
 import net.juligames.core.api.message.MessageApi;
 import net.juligames.core.api.message.MessageRecipient;
+import net.juligames.core.api.minigame.BasicMiniGame;
 import net.juligames.core.api.notification.NotificationApi;
 import org.checkerframework.checker.optional.qual.MaybePresent;
 import org.jetbrains.annotations.ApiStatus;
@@ -95,6 +97,11 @@ public interface API {
      * @return the {@link CommandApi}
      */
     CommandApi getCommandApi();
+
+    /**
+     * @return a possible local running MiniGame
+     */
+    SubscribableType<BasicMiniGame> getLocalMiniGame();
 
     /**
      * @return The Name this core is assigned to

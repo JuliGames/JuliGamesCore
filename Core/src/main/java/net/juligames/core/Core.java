@@ -3,6 +3,7 @@ package net.juligames.core;
 import com.hazelcast.core.HazelcastInstance;
 import de.bentzin.tools.logging.JavaLogger;
 import de.bentzin.tools.logging.Logger;
+import de.bentzin.tools.misc.SubscribableType;
 import de.bentzin.tools.register.Registerator;
 import net.juligames.core.api.API;
 import net.juligames.core.api.ApiCore;
@@ -11,6 +12,7 @@ import net.juligames.core.api.command.CommandApi;
 import net.juligames.core.api.config.ConfigurationAPI;
 import net.juligames.core.api.err.dev.TODOException;
 import net.juligames.core.api.message.MessageRecipient;
+import net.juligames.core.api.minigame.BasicMiniGame;
 import net.juligames.core.cluster.CoreClusterApi;
 import net.juligames.core.command.CoreCommandApi;
 import net.juligames.core.config.CoreConfigurationApi;
@@ -56,6 +58,7 @@ public final class Core implements API {
     private CoreMessageApi messageApi;
     private CoreConfigurationApi configurationAPI;
     private CoreCommandApi coreCommandApi;
+    private SubscribableType<BasicMiniGame> basicMiniGame;
     private String core_name;
     private Registerator<Consumer<HazelcastInstance>> hazelcastPostPreparationWorkers = new Registerator<>("hazelcastPostPreparationWorkers");
     @NotNull
@@ -287,6 +290,15 @@ public final class Core implements API {
     @Override
     public CoreCommandApi getCommandApi() {
         return coreCommandApi;
+    }
+
+    @Override
+    public SubscribableType<BasicMiniGame> getLocalMiniGame() {
+        return basicMiniGame;
+    }
+
+    public void introduceMiniGame(BasicMiniGame basicMiniGame) {
+        this.basicMiniGame.set(basicMiniGame);
     }
 
     /**
