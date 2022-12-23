@@ -16,3 +16,6 @@ commands:
   bctest:
     description: test broadcast
     usage: /bctest key
+  start:
+    description: start the installed miniGame
+    usage: /start

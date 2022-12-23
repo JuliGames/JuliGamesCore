@@ -2,6 +2,7 @@ package net.juligames.core.paper;
 
 import net.juligames.core.Core;
 import net.juligames.core.adventure.AdventureCore;
+import net.juligames.core.paper.minigame.StartCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -43,14 +44,27 @@ public class PaperCorePlugin extends JavaPlugin {
         Objects.requireNonNull(getCommand("locale")).setExecutor(new LocaleCommand());
         Objects.requireNonNull(getCommand("replacetest")).setExecutor(new ReplaceTestCommand());
         Objects.requireNonNull(getCommand("bctest")).setExecutor(new BCTestCommand());
+        Objects.requireNonNull(getCommand("start")).setExecutor(new StartCommand());
 
-        //PaperAPI
+        //Try to load miniGame (if present)
+        core.getLocalMiniGame().ifPresent(basicMiniGame -> {
+            getLogger().info("detected MiniGame: " + basicMiniGame.getPlainName());
+            basicMiniGame.load();
+        });
     }
 
     @Override
     public void onDisable() {
-        Core.getInstance().getCoreLogger().info("onDisable() -> Client shutdown!");
+        Core core = Core.getInstance();
+        core.getCoreLogger().info("onDisable() -> Client shutdown!");
         adventureCore.dropApiService();
-        Core.getInstance().stop();
+        //Try to abort miniGame (if present)
+        core.getLocalMiniGame().ifPresent(basicMiniGame -> {
+            getLogger().info("aborting MiniGame: " + basicMiniGame.getPlainName());
+            basicMiniGame.abort();
+        });
+        core.stop();
+
+
     }
 }
