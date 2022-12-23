@@ -72,13 +72,13 @@ public abstract class MiniGame extends LoggingClass implements BasicMiniGame {
             try {
                 onLoad();
                 getLogger().info("finished loading of " + getDescription());
+				loaded = true;
             } catch (Exception e) {
                 getLogger().error("Error while loading MiniGame: " + e.getMessage() + "! Is it up to date?");
                 e.printStackTrace();
                 setMiniGameState(FATAL);
                 abort();
             }
-            loaded = true;
         }
 
     }
