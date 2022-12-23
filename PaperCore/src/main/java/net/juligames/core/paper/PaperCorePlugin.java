@@ -2,6 +2,7 @@ package net.juligames.core.paper;
 
 import net.juligames.core.Core;
 import net.juligames.core.adventure.AdventureCore;
+import net.juligames.core.paper.events.ServerBootFinishedEvent;
 import net.juligames.core.paper.minigame.StartCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -16,10 +17,16 @@ import java.util.Objects;
 public class PaperCorePlugin extends JavaPlugin {
 
     private AdventureCore adventureCore;
+    private static PaperCorePlugin plugin;
+
+    public static PaperCorePlugin getPlugin() {
+        return plugin;
+    }
 
     @Override
     public void onEnable() {
         Core core = new Core();
+        plugin = this;
         String serverName = Bukkit.getName() + "@" + ((Bukkit.getServer().getIp().isEmpty()) ? Bukkit.getServer().getIp() + ":" : Bukkit.getServer().getPort());
         getLogger().info("stating core with the following identification: " + serverName);
         core.start("paper-core|" + serverName);
@@ -46,11 +53,12 @@ public class PaperCorePlugin extends JavaPlugin {
         Objects.requireNonNull(getCommand("bctest")).setExecutor(new BCTestCommand());
         Objects.requireNonNull(getCommand("start")).setExecutor(new StartCommand());
 
+        Bukkit.getPluginManager().registerEvents(new PaperCoreEventListener(),this);
+
         //Try to load miniGame (if present)
-        core.getLocalMiniGame().ifPresent(basicMiniGame -> {
-            getLogger().info("detected MiniGame: " + basicMiniGame.getPlainName());
-            basicMiniGame.load();
-        });
+
+        getServer().getScheduler().scheduleSyncDelayedTask(this, () -> Bukkit.getPluginManager().callEvent(new ServerBootFinishedEvent()));
+
     }
 
     @Override
