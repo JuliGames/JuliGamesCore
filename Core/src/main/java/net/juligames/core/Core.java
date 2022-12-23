@@ -140,6 +140,7 @@ public final class Core implements API {
         coreCommandApi = new CoreCommandApi();
         clusterApi = new CoreClusterApi();
         messageApi = new CoreMessageApi();
+        basicMiniGame = new SubscribableType<>();
 
 
         Core.getInstance().getOrThrow().<SerializedNotification>getTopic("notify: " + Core.getInstance().getClusterApi().getLocalUUID().toString())
