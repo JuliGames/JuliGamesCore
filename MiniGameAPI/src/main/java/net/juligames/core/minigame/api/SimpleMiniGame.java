@@ -21,7 +21,7 @@ public abstract class SimpleMiniGame extends MiniGame{
         super(plainName, parentLogger);
         this.version = version;
         this.developerName = developerName;
-        this.developerContactEmail = Optional.ofNullable(developerContactEmail)
+        this.developerContactEmail = Optional.ofNullable(developerContactEmail);
     }
 
     @Override

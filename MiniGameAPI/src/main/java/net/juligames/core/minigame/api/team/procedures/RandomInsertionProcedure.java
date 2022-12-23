@@ -1,32 +1,39 @@
 package net.juligames.core.minigame.api.team.procedures;
 
-import net.juligames.core.minigame.api.team.TeamColor;
+import net.juligames.core.minigame.api.team.Team;
+import net.juligames.core.util.ShuffleUtil;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * This Procedure selects one random Team and assigns the UUID to it
+ *
  * @author Ture Bentzin
  * 18.12.2022
  */
-public class RandomInsertionProcedure implements InsertionProcedure{
+public record RandomInsertionProcedure(boolean fillFirst) implements InsertionProcedure {
 
-    private final boolean fillFirst;
-
-    public RandomInsertionProcedure(final boolean fillFirst) {
-
-        this.fillFirst = fillFirst;
-    }
-
+    @SuppressWarnings("AssignmentUsedAsCondition")
     @Override
-    public void accept(Map<UUID, TeamColor> uuidTeamColorMap, UUID uuid) {
-        if(isFillFirst()) {
-
+    public @NotNull Boolean apply(Set<Team> teams, UUID uuid) {
+        boolean success = false;
+        final Collection<Team> shuffled = ShuffleUtil.shuffleToNew(teams);
+        if(fillFirst) {
+            for (Team team : shuffled) {
+                if(!success && !team.isEmpty() && team.hasCapacity()) {
+                    success = team.tryAdd(uuid);
+                }
+            }
+            if(!success) {
+                return new RandomInsertionProcedure(false).apply(teams,uuid);
+            }else {
+                return true;
+            }
+        }else {
+            //normal procedure
+            for (Team team : shuffled) if(success = team.tryAdd(uuid)) break; //deal?
+            return success;
         }
-    }
-
-    public boolean isFillFirst() {
-        return fillFirst;
     }
 }
