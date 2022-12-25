@@ -22,6 +22,7 @@
             <groupId>net.juligames.core</groupId>
             <artifactId>PaperAPI</artifactId>
             <version>1.0-RELEASE-CANDIDATE-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>cloud.timo</groupId>
