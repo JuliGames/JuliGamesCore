@@ -30,7 +30,7 @@ import java.util.function.Supplier;
 public interface API {
 
     /**
-     * This is the primary way for getting your API Instance. WIth this Instance you have access to all build in features in the core
+     * This is the primary way for getting your API Instance. With this Instance you have access to all build in features in the core
      * that are explicitly exposed to the API. If the API should not be provided by a core then this will throw a {@link APIException}
      * to indicate that a Core is necessary to get this Instance. For further Information on how to use the {@link API} please check out
      * the GitHub Wiki. For further information on this method check out {@link ApiCore}
