@@ -93,6 +93,14 @@ public interface Configuration extends Comparable<Configuration> {
 
     @Nullable Boolean getBooleanOrNull(Supplier<String> key);
 
+    Optional<Float> getFloat(String key);
+
+    Optional<Float> getFloat(Supplier<String> key);
+
+    @Nullable Float getFloatOrNull(String key);
+
+    @Nullable Float getFloatOrNull(Supplier<String> key);
+
     @Deprecated
     @MaybePresent <T> Optional<T> get(String key, Function<String, T> interpreter);
 
@@ -141,6 +149,10 @@ public interface Configuration extends Comparable<Configuration> {
     void setBoolean(String key, Boolean value);
 
     void setBoolean(String key, Supplier<Boolean> value);
+
+    void setFloat(String key, Float value);
+
+    void setFloat(String key, Supplier<Float> value);
 
     <T> void set(String key, T value, Interpreter<T> interpreter);
 

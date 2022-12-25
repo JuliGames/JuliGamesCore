@@ -361,6 +361,42 @@ public class CoreConfiguration implements Configuration {
         return getBooleanOrNull(key.get());
     }
 
+    @Override
+    public Optional<Float> getFloat(String key) {
+        @Nullable String extract = data.get(key);
+        if (extract == null) {
+            return Optional.empty();
+        }
+        try {
+            return Optional.of(Float.parseFloat(key));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Optional<Float> getFloat(@NotNull Supplier<String> key) {
+        return getFloat(key.get());
+    }
+
+    @Override
+    public @Nullable Float getFloatOrNull(String key) {
+        @Nullable String extract = data.get(key);
+        if (extract == null) {
+            return null;
+        }
+        try {
+            return Float.parseFloat(key);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @Override
+    public @Nullable Float getFloatOrNull(@NotNull Supplier<String> key) {
+        return getFloatOrNull(key.get());
+    }
+
     //legacy interpreter
     @Override
     public @MaybePresent <T> Optional<T> get(String key, Function<String, T> interpreter) {
@@ -505,6 +541,16 @@ public class CoreConfiguration implements Configuration {
     @Override
     public void setBoolean(String key, @NotNull Supplier<Boolean> value) {
         setBoolean(key, value.get());
+    }
+
+    @Override
+    public void setFloat(String key, @NotNull Float value) {
+        data.put(key,value.toString());
+    }
+
+    @Override
+    public void setFloat(String key, @NotNull Supplier<Float> value) {
+        setFloat(key,value.get());
     }
 
     @Override
