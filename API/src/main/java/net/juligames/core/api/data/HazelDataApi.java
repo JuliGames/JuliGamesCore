@@ -24,21 +24,21 @@ public interface HazelDataApi {
     /**
      * @param hazel the name of the queue in the cluster
      * @param <T>   Type Parameter for the {@link Queue}
-     * @return the Queue from hazelcast
+     * @return the {@link Queue} from hazelcast
      */
     <T> Queue<T> getQueue(String hazel);
 
     /**
      * @param hazel the name of the set in the cluster
      * @param <T>   Type Parameter for the {@link Set}
-     * @return the Queue from hazelcast
+     * @return the {@link Set} from hazelcast
      */
     <T> Set<T> getSet(String hazel);
 
     /**
-     * @param hazel the name of the set in the cluster
+     * @param hazel the name of the list in the cluster
      * @param <E>   Type Parameter for the {@link List}
-     * @return the Queue from hazelcast
+     * @return the {@link List} from hazelcast
      */
     <E> List<E> getList(String hazel);
 

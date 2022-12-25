@@ -18,9 +18,9 @@ public interface ConfigurationAPI {
     Configuration getOrCreate(String name);
 
     /**
-     * This will create a new configuration (if none with the same name is already present)
+     * This will create a new configuration based of the given defaults
      *
-     * @param name the name
+     * @param defaults the defaults to set
      * @return a new Configuration or the old if already one existed
      */
     Configuration getOrCreate(Properties defaults);
