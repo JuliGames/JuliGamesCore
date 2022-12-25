@@ -27,7 +27,7 @@ public interface Notification extends SimpleNotification {
     DividedPair<UUID, String>[] addresses();
 
     /**
-     * @return Something that identifies that Notification
+     * @return Something that identifies this Notification
      */
     @Override
     String header();
