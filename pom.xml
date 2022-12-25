@@ -17,8 +17,8 @@
         <module>PaperAPI</module>
         <module>AdventureAPI</module>
         <module>AdventureCore</module>
-        <module>VelocityCore</module>
         <module>VelocityAPI</module>
+        <module>VelocityCore</module>
         <module>MiniGameAPI</module>
     </modules>
 
