@@ -12,6 +12,7 @@ import net.juligames.core.Core;
 import net.juligames.core.adventure.AdventureCore;
 import net.juligames.core.adventure.api.AudienceMessageRecipient;
 import net.juligames.core.api.API;
+import net.juligames.core.api.TODO;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -58,7 +59,7 @@ public final class VelocityCore {
 
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) {
-        logger.info("received \"go\" from velocity - stating core!");
+        logger.info("received \"go\" from velocity - starting core!");
         logger.info(" -- handing over logging to different instance! --"); //core will create own logger - no checking possible for this logger
         core.start(assembleName());
         logger.info("core seems to be running... booting AdventureCore");
@@ -98,6 +99,7 @@ public final class VelocityCore {
 
 
     //unfinished
+    @TODO(doNotcall = false)
     private @NotNull String assembleName() {
         return "velocityCore|" + server.getVersion().getName();
     }
