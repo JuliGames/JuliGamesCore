@@ -53,7 +53,7 @@ public final class Team {
     }
 
     public boolean tryAdd(UUID newMember) {
-        if(members.size() < maxCapacity()) {
+        if(hasCapacity()) {
 
             return getMembers().add(newMember);
 
