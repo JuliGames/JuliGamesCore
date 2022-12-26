@@ -25,8 +25,8 @@ public class PaperCorePlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        Core core = new Core();
         plugin = this;
+        Core core = new Core();
         String serverName = Bukkit.getName() + "@" + ((Bukkit.getServer().getIp().isEmpty()) ? Bukkit.getServer().getIp() + ":" : Bukkit.getServer().getPort());
         getLogger().info("stating core with the following identification: " + serverName);
         core.start("paper-core|" + serverName);
