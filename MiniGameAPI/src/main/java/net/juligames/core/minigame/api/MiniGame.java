@@ -8,6 +8,7 @@ import cloud.timo.TimoCloud.api.objects.ServerObject;
 import de.bentzin.tools.logging.Logger;
 import de.bentzin.tools.logging.LoggingClass;
 import net.juligames.core.api.minigame.BasicMiniGame;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
@@ -89,15 +90,33 @@ public abstract class MiniGame extends LoggingClass implements BasicMiniGame {
         getLogger().info("starting " + getPlainName());
         if (isLoaded()) {
             try {
-                boolean b = onStart(); //if false -> error while starting
+                if(!onStart()) //if false -> error while starting
+                    handleStartingError(Optional.empty());
                 getLogger().info("started " + getPlainName());
             } catch (Exception e) {
-                getLogger().error("Error while starting MiniGame: " + e.getMessage() + "! Is it up to date?");
-                e.printStackTrace();
-                setMiniGameState(FATAL);
-                abort();
+                handleStartingError(Optional.of(e));
             }
         }
+    }
+
+    @ApiStatus.Internal
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+    private void handleStartingError(Optional<Throwable> throwable) {
+        boolean equals = StackWalker.getInstance().getCallerClass().equals(this.getClass()); //EXPERIMENTAL
+        if(!equals) {
+            throw new SecurityException();
+        }
+        String message;
+        if(throwable.isPresent()) {
+            Throwable e = throwable.get();
+            message = e.getMessage();
+        } else {
+            message = "MiniGame indicated an internal error";
+        }
+        getLogger().error("Error while starting MiniGame: " + message + "! Is it up to date?");
+        throwable.ifPresent(Throwable::printStackTrace);
+        setMiniGameState(FATAL);
+        abort();
     }
 
     @Override
