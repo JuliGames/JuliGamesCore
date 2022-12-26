@@ -123,7 +123,6 @@ public class MasterConfigManager {
         }
 
         //create new hazelObjects
-        HazelcastInstance instance = Core.getInstance().getOrThrow();
         for (Properties property : properties) {
             String name = property.getProperty("configuration_name");
             CoreConfiguration.fromProperties(property, true); //override --force

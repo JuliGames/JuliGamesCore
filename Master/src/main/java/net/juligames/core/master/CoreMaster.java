@@ -75,10 +75,6 @@ public class CoreMaster {
             return null;
         });
 
-        SQLManager.getJdbi().withExtension(LocaleDAO.class, extension -> {
-            extension.listAll();
-            return null;
-        });
 
         //Data
         masterHazelInformationProvider = new MasterHazelInformationProvider(hazelcast);
