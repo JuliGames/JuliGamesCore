@@ -92,7 +92,7 @@ public final class Teamer {
      * @return true if the uuid was teamed and false if not
      */
     public boolean addUUID(UUID uuid) {
-        if (teaming().containsKey(uuid)) {
+        if (containsUUID(uuid)) {
             return false; //already teamed
         }
         return insertionProcedure.apply(possibleTeams, uuid);
