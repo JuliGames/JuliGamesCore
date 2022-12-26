@@ -143,11 +143,20 @@ public class MasterConfigManager {
         else return new File(CONFIG_FOLDER, name + FILE_ENDING);
     }
 
+    /**
+     * @param hazel the hazelcast namespace
+     * @return {@code true} if and only if the file or directory is
+     * successfully deleted; {@code false} otherwise
+     * @throws SecurityException If a security manager exists and its {@link
+     *                           java.lang.SecurityManager#checkDelete} method denies
+     *                           delete access to the file
+     */
+    @SuppressWarnings({"UnstableApiUsage", "UnusedReturnValue"})
     @ApiStatus.Internal
-    public void deleteConfigFromSystem(String hazel) {
+    public boolean deleteConfigFromSystem(String hazel) {
         CoreConfiguration configuration = new CoreConfiguration(hazel);
         configuration.accessHazel().get().destroy();
-        fileFromName(hazel, true);
+        return fileFromName(hazel, true).delete();
     }
 
     @ApiStatus.Internal
