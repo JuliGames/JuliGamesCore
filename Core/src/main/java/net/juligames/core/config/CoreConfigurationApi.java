@@ -46,6 +46,9 @@ public class CoreConfigurationApi implements ConfigurationAPI {
         return getOrCreate(properties);
     }
 
+/**
+This comparator compares the configurations by size
+*/
     @Override
     public Comparator<? extends Configuration> comparator() {
         return (o1, o2) -> Comparator.<Configuration>naturalOrder().compare(o1, o2);
