@@ -8,7 +8,7 @@ import java.util.function.Consumer;
  * @author Ture Bentzin
  * 05.12.2022
  */
-// Oh, wow that class was minimized a lot… I promise one it was way bigger and had a sence
+// Oh, wow that class was minimized a lot… I promise once it was way bigger and had a sense
 public class CommandHandler implements Consumer<String> {
 
     @Override
