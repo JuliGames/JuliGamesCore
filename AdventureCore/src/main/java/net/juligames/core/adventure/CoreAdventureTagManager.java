@@ -80,14 +80,24 @@ public final class CoreAdventureTagManager implements TagManager, AdventureTagMa
 
     @Override
     public @NotNull String resolvePlain(@NotNull Message message) {
-        Component deserialize = getMiniMessage().deserialize(message.getMiniMessage(), getResolver());
-        return PlainTextComponentSerializer.plainText().serialize(deserialize);
+        return resolvePlain(message.getMiniMessage());
     }
 
     @Override
     @Deprecated
     public @NotNull String resolveLegacy(@NotNull Message message) {
-        Component deserialize = getMiniMessage().deserialize(message.getMiniMessage(), getResolver());
+        return resolveLegacy(message.getMiniMessage());
+    }
+
+    @Override
+    public @NotNull String resolvePlain(@NotNull String miniMessage) {
+        Component deserialize = getMiniMessage().deserialize(miniMessage, getResolver());
+        return PlainTextComponentSerializer.plainText().serialize(deserialize);
+    }
+
+    @Override
+    public @NotNull String resolveLegacy(@NotNull String miniMessage) {
+        Component deserialize = getMiniMessage().deserialize(miniMessage, getResolver());
         return LegacyComponentSerializer.legacyAmpersand().serialize(deserialize);
     }
 

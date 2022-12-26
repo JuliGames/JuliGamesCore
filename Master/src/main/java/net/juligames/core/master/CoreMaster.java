@@ -42,17 +42,18 @@ public class CoreMaster {
 
 
         // masterConfigManager.load();
-        logger.info("booting hazelcast (MEMBERCORE):");
+        logger.info("booting hazelcast (MEMBER CORE):");
         Core core = new Core();
         try {
             core.getHazelcastPostPreparationWorkers().register(hazelcastInstance -> {
-                logger.warning("loading config");
+                logger.info("loading config");
                 masterConfigManager.load();
             });
         } catch (Registerator.DuplicateEntryException ignored) {
         }
 
         //start Core
+        //noinspection UnstableApiUsage
         core.start("Master", logger, true);
 
         try {
@@ -81,7 +82,7 @@ public class CoreMaster {
 
         //Data
         masterHazelInformationProvider = new MasterHazelInformationProvider(hazelcast);
-        logger.warning("not all code execution on master is stable because the master DOES NOT PROVIDE a usable core!!!");
+        logger.warning("not all code execution on master is stable because the master DOES NOT PROVIDE a fully usable core!!!");
         try {
             registerCommands();
         } catch (Registerator.DuplicateEntryException e) {

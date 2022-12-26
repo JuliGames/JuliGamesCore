@@ -3,6 +3,7 @@ package net.juligames.core.adventure;
 import com.google.errorprone.annotations.DoNotCall;
 import net.juligames.core.api.jdbi.DBReplacement;
 import net.juligames.core.api.message.Message;
+import net.juligames.core.api.message.MiniMessageSerializer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.Tag;
@@ -15,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Ture Bentzin
  * 21.11.2022
  */
-public interface AdventureTagManager {
+public interface AdventureTagManager extends MiniMessageSerializer {
     @Contract(pure = true)
     @NotNull MiniMessage getMiniMessage();
 

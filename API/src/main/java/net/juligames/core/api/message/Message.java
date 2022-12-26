@@ -23,9 +23,19 @@ public interface Message extends Cloneable {
     String getMiniMessage();
 
     /**
+     * This Method should only be used for logging to systems that do not support MiniMessage or Components
      * @return the Message formatted without colors or decoration
+     * @apiNote To get a {@link MiniMessageSerializer} you should install the AdventureAPI that provides an AdventureTagManager.
+     * This {@link TagManager} can be inserted here.
+     * @see net.juligames.core.adventure.AdventureTagManager
      */
-    String getPlainMessage();
+    @SuppressWarnings("JavadocReference")
+    String getPlainMessage(MiniMessageSerializer serializer);
+
+    @Deprecated
+    String getLegacyMessage(MiniMessageSerializer serializer);
+
+    //String getANSIMessage(); //would be cool to have - maybe one day
 
     /**
      * Modify the data in this message

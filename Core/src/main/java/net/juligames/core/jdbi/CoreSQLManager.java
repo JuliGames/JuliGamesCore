@@ -52,13 +52,13 @@ public class CoreSQLManager implements SQLManager {
         });
     }
 
-    @Override
-    @Hardcode //TODO: Make Dynamic
-    @DoNotCall
     /**
      * This should only be called by a master instance. If you don't know when this method should be called or what a master
      * is then you are the one I have written this message for.
      */
+    @Override
+    @Hardcode //TODO: Make Dynamic
+    @DoNotCall
     public void createTables() {
         //Locale
         logger.info("creating: locale");

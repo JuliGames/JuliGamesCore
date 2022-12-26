@@ -2,6 +2,7 @@ package net.juligames.core.message;
 
 import net.juligames.core.api.jdbi.DBMessage;
 import net.juligames.core.api.message.Message;
+import net.juligames.core.api.message.MiniMessageSerializer;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -50,8 +51,14 @@ public class CoreMessage implements Message {
     }
 
     @Override
-    public String getPlainMessage() {
-        return null; //TODO tag resolving
+    public String getPlainMessage(@NotNull MiniMessageSerializer serializer) {
+        return serializer.resolvePlain(this);
+    }
+
+    @Override
+    @Deprecated
+    public String getLegacyMessage(@NotNull MiniMessageSerializer serializer) {
+        return serializer.resolveLegacy(this);
     }
 
     @Override
