@@ -28,7 +28,7 @@ public class PaperCorePlugin extends JavaPlugin {
         Core core = new Core();
         plugin = this;
         String serverName = Bukkit.getName() + "@" + ((Bukkit.getServer().getIp().isEmpty()) ? Bukkit.getServer().getIp() + ":" : Bukkit.getServer().getPort());
-        getLogger().info("stating core with the following identification: " + serverName);
+        getLogger().info("starting core with the following identification: " + serverName);
         core.start("paper-core|" + serverName);
         //start adventureAPI
         getLogger().info("starting adventureCore v." + AdventureCore.API_VERSION);
