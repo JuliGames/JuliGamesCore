@@ -1,5 +1,6 @@
 package net.juligames.core.minigame.api.team.procedures;
 
+import net.juligames.core.api.TODO;
 import net.juligames.core.minigame.api.team.Team;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -9,9 +10,11 @@ import java.util.Set;
 import java.util.UUID;
 
 /**
+ * This is currently not working because the {@link SwitchingInsertionProcedure} has no idea what the {@link IterativeInsertionProcedure} did.
  * @author Ture Bentzin
  * 23.12.2022
  */
+@TODO(doNotcall = true)
 public final class SwitchingInsertionProcedure implements InsertionProcedure {
 
     @Nullable
