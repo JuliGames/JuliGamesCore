@@ -42,7 +42,7 @@ public interface ReplacementDAO {
     @SqlUpdate("UPDATE replacement " +
             "SET value = :value " +
             "WHERE tag LIKE :tag;")
-    void update(@Bind("tag") String tag, @Bind("getValue") String newValue);
+    void update(@Bind("tag") String tag, @Bind("value") String value);
 
     @SqlQuery("SELECT * FROM replacement where tag = :tag")
     ReplacementBean selectBean(@Bind("tag") String tag);
