@@ -137,11 +137,12 @@ public final class Teamer {
      * @param uuid uuid to remove
      * @return an Optional with the team the uuid was removed from
      */
-    public Optional<Team> removeUUID(UUID uuid) {
+    public synchronized Optional<Team> removeUUID(UUID uuid) {
         for (Team usedTeam : usedTeams()) {
-            for (UUID member : usedTeam.getMembers()) {
+            for (UUID member : List.copyOf(usedTeam.getMembers())) {
                 if (member.equals(uuid)) {
                     //found!
+                    usedTeam.getMembers().remove(uuid);
                     return Optional.of(usedTeam);
                 }
             }

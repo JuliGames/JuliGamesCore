@@ -4,6 +4,7 @@ import net.juligames.core.Core;
 import net.juligames.core.adventure.AdventureCore;
 import net.juligames.core.paper.events.ServerBootFinishedEvent;
 import net.juligames.core.paper.minigame.StartCommand;
+import net.juligames.core.paper.notification.EventNotificationListener;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -55,8 +56,10 @@ public class PaperCorePlugin extends JavaPlugin {
 
         Bukkit.getPluginManager().registerEvents(new PaperCoreEventListener(),this);
 
-        //Try to load miniGame (if present)
+        //Register NotificationEvent
+        core.getNotificationApi().registerListener(new EventNotificationListener());
 
+        //Try to load miniGame (if present)
         getServer().getScheduler().scheduleSyncDelayedTask(this, () -> Bukkit.getPluginManager().callEvent(new ServerBootFinishedEvent()));
 
     }

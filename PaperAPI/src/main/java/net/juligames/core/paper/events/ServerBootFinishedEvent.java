@@ -2,7 +2,6 @@ package net.juligames.core.paper.events;
 
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.server.ServerEvent;
-import org.bukkit.plugin.PluginManager;
 import org.jetbrains.annotations.NotNull;
 
 /**
