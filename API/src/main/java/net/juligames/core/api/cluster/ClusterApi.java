@@ -3,10 +3,7 @@ package net.juligames.core.api.cluster;
 import de.bentzin.tools.pair.BasicPair;
 import org.jetbrains.annotations.ApiStatus;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author Ture Bentzin
@@ -59,6 +56,12 @@ public interface ClusterApi {
      * @return Gives always the UUID of this instance (works for members and clients)
      */
     UUID getLocalUUID();
+
+    /**
+     * This will return an {@link Optional} containing the name of the local Hazelcast Instance if present. Otherwise
+     * the Optional will be empty
+     */
+    Optional<String> getLocalName();
 
     Map<UUID, InstanceType> getAllUUIDS();
 

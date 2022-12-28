@@ -7,8 +7,10 @@ import com.hazelcast.cluster.Member;
 import com.hazelcast.core.HazelcastInstance;
 import de.bentzin.tools.pair.DividedPair;
 import net.juligames.core.Core;
+import net.juligames.core.api.API;
 import net.juligames.core.api.notification.NotificationSender;
 import net.juligames.core.api.notification.SimpleNotification;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -25,8 +27,7 @@ public class CoreNotificationSender implements NotificationSender {
     }
 
     @Override
-    public void sendNotification(SimpleNotification notification, UUID... addresses) {
-        //TODO
+    public void sendNotification(SimpleNotification notification, UUID @NotNull ... addresses) {
 
         final HazelcastInstance hazelcastInstance = Core.getInstance().getOrThrow();
         final ClientService clientService = hazelcastInstance.getClientService();
@@ -34,7 +35,7 @@ public class CoreNotificationSender implements NotificationSender {
 
         final Member localMember = Core.getInstance().getClusterApi().getLocalMember();
 
-        final DividedPair<UUID, String> us = new DividedPair<>(localMember.getUuid(), "TODO");
+        final DividedPair<UUID, String> us = new DividedPair<>(localMember.getUuid(), API.get().getClusterApi().getLocalName().orElse("null"));
         final ArrayList<DividedPair<UUID, String>> addressPairs = new ArrayList<>();
 
         //check Members
