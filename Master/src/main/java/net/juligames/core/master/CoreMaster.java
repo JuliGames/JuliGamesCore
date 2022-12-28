@@ -38,7 +38,7 @@ public class CoreMaster {
         masterConfigManager = new MasterConfigManager();
 
         logger.info("welcome to " + Core.getFullCoreName() + " Master by Ture Bentzin <bentzin@tdrstudios.de>");
-        logger.warning("This is still an development build!");
+        //logger.warning("This is still an development build!");
 
 
         // masterConfigManager.load();
@@ -97,7 +97,7 @@ public class CoreMaster {
             try {
                 logger.info("master is going down!!");
             } catch (Exception ignored) {
-
+                System.out.println("Seems like everything is cursed right now. Please report this!");
             }
             masterConfigManager.storeAll();
         }));

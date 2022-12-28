@@ -4,6 +4,7 @@ import com.hazelcast.client.Client;
 import com.hazelcast.client.ClientService;
 import com.hazelcast.cluster.Cluster;
 import com.hazelcast.cluster.ClusterState;
+import com.hazelcast.cluster.Endpoint;
 import com.hazelcast.cluster.Member;
 import com.hazelcast.core.HazelcastInstance;
 import de.bentzin.tools.pair.DividedPair;
@@ -119,17 +120,32 @@ public final class CoreClusterApi implements ClusterApi {
      * @return Gives always the UUID of this instance (works for members and clients)
      */
     public UUID getLocalUUID() {
-        return instance().getLocalEndpoint().getUuid();
+        return getEndpoint().getUuid();
     }
 
+    /**
+     * Returns the name of this Hazelcast instance.
+     */
     @Contract(" -> new")
     @Override
     public @NotNull Optional<String> getLocalName() {
         return Optional.of(instance().getName());
     }
 
+    /**
+     * The SocketAddress of the local Endpoint
+     * @apiNote Has no relevance for the API
+     */
     public SocketAddress getLocalAddress() {
-        return instance().getLocalEndpoint().getSocketAddress();
+        return getEndpoint().getSocketAddress();
+    }
+
+    /**
+     * This method is not exposed to the public API but may be in the future
+     * @return the endpoint of the local instance
+     */
+    public @NotNull Endpoint getEndpoint() {
+        return instance().getLocalEndpoint();
     }
 
     @Override

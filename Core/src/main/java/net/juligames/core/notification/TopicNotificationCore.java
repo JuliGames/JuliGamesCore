@@ -1,7 +1,9 @@
 package net.juligames.core.notification;
 
 import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.topic.ITopic;
 import com.hazelcast.topic.MessageListener;
+import com.hazelcast.topic.impl.TopicProxy;
 import de.bentzin.tools.pair.DividedPair;
 import net.juligames.core.serialization.SerializedNotification;
 import org.jetbrains.annotations.NotNull;
@@ -9,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletionStage;
 
 /**
  * @author Ture Bentzin
@@ -34,5 +37,13 @@ public class TopicNotificationCore {
     public void subscribeOnUUID(@NotNull UUID uuid, MessageListener<SerializedNotification> notificationListener) {
         hazelcastInstance.<SerializedNotification>getTopic("notify: " + uuid.toString()).
                 addMessageListener(notificationListener);
+    }
+
+    public <E> CompletionStage<Void> sendRaw(@NotNull ITopic<E> eTopic, E e) {
+        return eTopic.publishAsync(e);
+    }
+
+    public <E> CompletionStage<Void> sendRaw(String hazel, E e) {
+        return sendRaw(hazelcastInstance.getTopic(hazel),e);
     }
 }

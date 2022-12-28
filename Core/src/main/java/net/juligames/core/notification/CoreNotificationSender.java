@@ -7,7 +7,6 @@ import com.hazelcast.cluster.Member;
 import com.hazelcast.core.HazelcastInstance;
 import de.bentzin.tools.pair.DividedPair;
 import net.juligames.core.Core;
-import net.juligames.core.api.API;
 import net.juligames.core.api.notification.NotificationSender;
 import net.juligames.core.api.notification.SimpleNotification;
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +19,8 @@ import java.util.*;
  */
 public class CoreNotificationSender implements NotificationSender {
 
-    private CoreNotificationApi notificationApi;
+    @Deprecated
+    private final CoreNotificationApi notificationApi;
 
     public CoreNotificationSender(CoreNotificationApi notificationApi) {
         this.notificationApi = notificationApi;
@@ -30,12 +30,13 @@ public class CoreNotificationSender implements NotificationSender {
     public void sendNotification(SimpleNotification notification, UUID @NotNull ... addresses) {
 
         final HazelcastInstance hazelcastInstance = Core.getInstance().getOrThrow();
-        final ClientService clientService = hazelcastInstance.getClientService();
+        final ClientService clientService = hazelcastInstance.getClientService(); //Maybe removed
         final Set<Member> hazelMembers = Core.getInstance().getClusterApi().getHazelMembers();
 
-        final Member localMember = Core.getInstance().getClusterApi().getLocalMember();
+        final UUID localUUID = Core.getInstance().getClusterApi().getLocalUUID();
+        final String localName = Core.getInstance().getClusterApi().getLocalName().orElse("null");
 
-        final DividedPair<UUID, String> us = new DividedPair<>(localMember.getUuid(), API.get().getClusterApi().getLocalName().orElse("null"));
+        final DividedPair<UUID, String> us = new DividedPair<>(localUUID, localName);
         final ArrayList<DividedPair<UUID, String>> addressPairs = new ArrayList<>();
 
         //check Members
@@ -50,7 +51,6 @@ public class CoreNotificationSender implements NotificationSender {
         }
 
         //check Clients
-
         for (UUID address : addresses) {
             Collection<Client> clients = Core.getInstance().getClusterApi().getClients();
             for (Client client : clients) {
