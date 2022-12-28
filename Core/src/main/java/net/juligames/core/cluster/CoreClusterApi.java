@@ -6,12 +6,17 @@ import com.hazelcast.cluster.Cluster;
 import com.hazelcast.cluster.ClusterState;
 import com.hazelcast.cluster.Member;
 import com.hazelcast.core.HazelcastInstance;
+import de.bentzin.tools.pair.BasicPair;
+import de.bentzin.tools.pair.DividedPair;
 import net.juligames.core.Core;
 import net.juligames.core.api.cluster.ClusterApi;
+import net.juligames.core.api.cluster.ClusterClient;
+import net.juligames.core.api.cluster.ClusterMember;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Ture Bentzin
@@ -30,7 +35,7 @@ public final class CoreClusterApi implements ClusterApi {
     }
 
     @Override
-    public String[] getClientNames() {
+    public String @NotNull [] getClientNames() {
         //manual converter
         Collection<Client> clients = getClients();
         String[] names = new String[clients.size()];
@@ -53,6 +58,21 @@ public final class CoreClusterApi implements ClusterApi {
             i++;
         }
         return names;
+    }
+
+    @Override
+    public Collection<DividedPair<UUID, String>> getClientPairs() {
+        return getClients().stream().map(client -> new DividedPair<>(client.getUuid(), client.getName())).toList();
+    }
+
+    @Override
+    public Set<ClusterClient> getClusterClients() {
+        return getClients().stream().map(CoreClusterClient::ofHazelcast).collect(Collectors.toUnmodifiableSet());
+    }
+
+    @Override
+    public Set<ClusterMember> getClusterMembers() {
+        return getHazelMembers().stream().map(CoreClusterMember::ofHazelcast).collect(Collectors.toUnmodifiableSet());
     }
 
     public @NotNull Collection<Client> getClients() {
