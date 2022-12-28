@@ -11,7 +11,7 @@ import java.util.UUID;
 /**
  * @author Ture Bentzin
  * 16.11.2022
- * @apiNote This gives you access to some limited information about hazelcast
+ * @apiNote This gives you access to some limited information about hazelcast.
  */
 public interface ClusterApi {
 
