@@ -1,0 +1,12 @@
+{
+  "id": "velocitycore",
+  "name": "JuliGames Velocity Core",
+  "version": "1.0",
+  "url": "https://github.com/JuliGames/JuliGamesCore",
+  "description": "Velocity Client for the core - necessary to provide the API here",
+  "authors": [
+    "Ture Bentzin"
+  ],
+  "dependencies": [],
+  "main": "net.juligames.core.velocity.VelocityCore"
+}

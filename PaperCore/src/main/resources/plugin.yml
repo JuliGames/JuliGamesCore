@@ -1,0 +1,21 @@
+main: net.juligames.core.paper.PaperCorePlugin
+version: '${project.version}'
+name: PaperCore
+author: Ture Bentzin
+api-version: 1.18
+commands:
+  message:
+    description: test message core
+    usage: /message messageKey
+  locale:
+    description: get your own locale
+    usage: /locale (Only for Players)
+  replacetest:
+    description: test replacers
+    usage: /replacetest args
+  bctest:
+    description: test broadcast
+    usage: /bctest key
+  start:
+    description: start the installed miniGame
+    usage: /start
