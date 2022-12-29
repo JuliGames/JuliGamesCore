@@ -1,7 +1,6 @@
 package net.juligames.core.master.config;
 
 import com.hazelcast.core.DistributedObject;
-import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.map.IMap;
 import de.bentzin.tools.Hardcode;
 import net.juligames.core.Core;

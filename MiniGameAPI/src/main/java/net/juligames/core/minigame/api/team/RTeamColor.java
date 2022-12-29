@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
  * @author Ture Bentzin
  * 18.12.2022
  */
-public record RTeamColor(String prefix, Tag nameDecoration, String suffix) implements TeamColor{
+public record RTeamColor(String prefix, Tag nameDecoration, String suffix) implements TeamColor {
 
     @Override
     public @Nullable String prefix() {

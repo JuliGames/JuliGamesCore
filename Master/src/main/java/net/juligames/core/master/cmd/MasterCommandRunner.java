@@ -27,6 +27,7 @@ public class MasterCommandRunner extends Registerator<MasterCommand> {
             throw new RuntimeException(e);
         }
     }
+
     public MasterCommandRunner(@NotNull Logger parentLogger) {
         this(parentLogger, System.in);
     }

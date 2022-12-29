@@ -11,6 +11,7 @@ import java.util.UUID;
 
 /**
  * This is currently not working because the {@link SwitchingInsertionProcedure} has no idea what the {@link IterativeInsertionProcedure} did.
+ *
  * @author Ture Bentzin
  * 23.12.2022
  */
@@ -23,7 +24,7 @@ public final class SwitchingInsertionProcedure implements InsertionProcedure {
     @Contract(pure = true)
     @Override
     public @NotNull Boolean apply(@NotNull Set<Team> teams, UUID uuid) {
-        if(!teams.contains(lastTeam)) {
+        if (!teams.contains(lastTeam)) {
             throw new IllegalArgumentException("lastTeam of this SwitchingInsertionProcedure is not part of teams!");
         }
         return new ComparatorInsertionProcedure((o1, o2) -> { //needs testing - maybe reversed order

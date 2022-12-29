@@ -10,6 +10,7 @@ import net.juligames.core.minigame.api.SimpleMiniGame;
 public class ExampleMiniGame extends SimpleMiniGame {
     private boolean running = false;
     private boolean finished = false;
+
     public ExampleMiniGame() {
         super("Example", "0.1", "Ture Bentzin", "bentzin@tdrstudios,de", API.get().getAPILogger());
     }

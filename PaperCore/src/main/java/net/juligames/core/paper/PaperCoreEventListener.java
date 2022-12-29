@@ -33,7 +33,7 @@ public class PaperCoreEventListener implements Listener {
         for (Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
             if (plugin.getDescription().getDepend().contains("PaperCore")) {
                 apis.add(plugin);
-                if(!Objects.equals(plugin.getDescription().getAPIVersion(), apiVersion)) {
+                if (!Objects.equals(plugin.getDescription().getAPIVersion(), apiVersion)) {
                     plugin.getLogger().warning("Nag Author! " + Core.getFullCoreName() + " requires api-version " + apiVersion + " but " +
                             "im not smart enough to set the right api-version...");
                 }

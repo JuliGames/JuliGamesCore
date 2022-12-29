@@ -26,6 +26,7 @@ public class CoreMaster {
     private static CoreSQLManager SQLManager;
     private static MasterCommandRunner masterCommandRunner;
     private static MasterConfigManager masterConfigManager;
+
     private CoreMaster() {
     }
 

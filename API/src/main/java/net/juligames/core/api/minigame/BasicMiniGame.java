@@ -12,10 +12,13 @@ public interface BasicMiniGame {
     //Description
     @NotNull
     String getPlainName();
+
     @NotNull
     String getVersion();
+
     @NotNull
     String getDeveloperName();
+
     @NotNull
     Optional<String> getDeveloperContactEmail();
 
@@ -43,19 +46,16 @@ public interface BasicMiniGame {
     void abort();
 
     /**
-     *
      * @return true if the game is still running and not finished, in lobby or loading
      */
     boolean isRunning();
 
     /**
-     *
      * @return true if the game has finished or was aborted
      */
     boolean isFinished();
 
     /**
-     *
      * @return true if load() has been successfully executed
      */
     boolean isLoaded();

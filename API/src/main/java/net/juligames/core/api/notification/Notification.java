@@ -6,6 +6,7 @@ import java.util.UUID;
 
 /**
  * This can be used to notify other core instances with information and data
+ *
  * @author Ture Bentzin
  * 16.11.2022
  */

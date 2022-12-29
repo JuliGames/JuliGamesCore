@@ -18,11 +18,11 @@ public final class Team {
 
 
     private final TeamColor color;
-    @Range(from = 0,to = 1_000_000)
+    @Range(from = 0, to = 1_000_000)
     private final Supplier<Integer> maxCapacity;
     private final SubscribableSet<UUID> members;
 
-    public Team(TeamColor color, @Range(from = 0,to = 1_000_000) Supplier<Integer> maxCapacity,
+    public Team(TeamColor color, @Range(from = 0, to = 1_000_000) Supplier<Integer> maxCapacity,
                 Set<UUID> initialMembers) {
 
         this.color = color;
@@ -31,11 +31,11 @@ public final class Team {
         members.addAll(initialMembers);
     }
 
-    public Team(TeamColor color, @Range(from = 0,to = 1_000_000) Supplier<Integer> maxCapacity) {
-        this(color,maxCapacity,new HashSet<>());
+    public Team(TeamColor color, @Range(from = 0, to = 1_000_000) Supplier<Integer> maxCapacity) {
+        this(color, maxCapacity, new HashSet<>());
     }
 
-    @Range(from = 0,to = 1_000_000)
+    @Range(from = 0, to = 1_000_000)
     public int maxCapacity() {
         return Objects.requireNonNull(maxCapacity.get());
     }
@@ -53,11 +53,11 @@ public final class Team {
     }
 
     public boolean tryAdd(UUID newMember) {
-        if(hasCapacity()) {
+        if (hasCapacity()) {
 
             return getMembers().add(newMember);
 
-        }else {
+        } else {
             return false;
         }
     }

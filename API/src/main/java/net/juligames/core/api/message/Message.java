@@ -24,6 +24,7 @@ public interface Message extends Cloneable {
 
     /**
      * This Method should only be used for logging to systems that do not support MiniMessage or Components
+     *
      * @return the Message formatted without colors or decoration
      * @apiNote To get a {@link MiniMessageSerializer} you should install the AdventureAPI that provides an AdventureTagManager.
      * This {@link TagManager} can be inserted here.

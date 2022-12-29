@@ -3,7 +3,10 @@ package net.juligames.core.minigame.api.team.procedures;
 import net.juligames.core.minigame.api.team.Team;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**

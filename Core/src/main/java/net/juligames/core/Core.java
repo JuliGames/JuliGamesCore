@@ -177,8 +177,8 @@ public final class Core implements API {
 
         try {
             Core.getInstance().getOrThrow().getTopic("notify: " + Core.getInstance().getClusterApi().getLocalUUID()).destroy();
-        }catch(NoSuchElementException noSuchElementException){
-            coreLogger.error("failed to destroy hazel -- master reboot maybe required :: " +noSuchElementException.getMessage());
+        } catch (NoSuchElementException noSuchElementException) {
+            coreLogger.error("failed to destroy hazel -- master reboot maybe required :: " + noSuchElementException.getMessage());
         }
         coreLogger.info("stopping hazelcast client connection");
         hazelConnector.disconnect();

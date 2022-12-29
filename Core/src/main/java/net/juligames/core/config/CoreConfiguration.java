@@ -2,7 +2,6 @@ package net.juligames.core.config;
 
 import com.hazelcast.map.IMap;
 import net.juligames.core.Core;
-import net.juligames.core.api.TODO;
 import net.juligames.core.api.config.Configuration;
 import net.juligames.core.api.config.Interpreter;
 import net.juligames.core.api.misc.TriConsumer;
@@ -544,12 +543,12 @@ public class CoreConfiguration implements Configuration {
 
     @Override
     public void setFloat(String key, @NotNull Float value) {
-        data.put(key,value.toString());
+        data.put(key, value.toString());
     }
 
     @Override
     public void setFloat(String key, @NotNull Supplier<Float> value) {
-        setFloat(key,value.get());
+        setFloat(key, value.get());
     }
 
     @Override

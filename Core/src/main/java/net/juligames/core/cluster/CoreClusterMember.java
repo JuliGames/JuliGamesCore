@@ -16,11 +16,12 @@ import java.util.UUID;
  */
 @ApiStatus.Internal
 public record CoreClusterMember(boolean localMember, boolean liteMember,
-                                InetSocketAddress inetSocketAddress, UUID uuid, Map<String,String> attributes) implements ClusterMember {
+                                InetSocketAddress inetSocketAddress, UUID uuid,
+                                Map<String, String> attributes) implements ClusterMember {
 
     @Contract("_ -> new")
     public static @NotNull CoreClusterMember ofHazelcast(@NotNull Member member) {
-        return new CoreClusterMember(member.localMember(),member.isLiteMember(),member.getSocketAddress(),member.getUuid(),member.getAttributes());
+        return new CoreClusterMember(member.localMember(), member.isLiteMember(), member.getSocketAddress(), member.getUuid(), member.getAttributes());
     }
 
     @Override

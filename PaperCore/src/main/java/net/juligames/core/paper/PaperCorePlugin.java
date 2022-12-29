@@ -17,8 +17,8 @@ import java.util.Objects;
  */
 public class PaperCorePlugin extends JavaPlugin {
 
-    private AdventureCore adventureCore;
     private static PaperCorePlugin plugin;
+    private AdventureCore adventureCore;
 
     public static PaperCorePlugin getPlugin() {
         return plugin;
@@ -54,7 +54,7 @@ public class PaperCorePlugin extends JavaPlugin {
         Objects.requireNonNull(getCommand("bctest")).setExecutor(new BCTestCommand());
         Objects.requireNonNull(getCommand("start")).setExecutor(new StartCommand());
 
-        Bukkit.getPluginManager().registerEvents(new PaperCoreEventListener(),this);
+        Bukkit.getPluginManager().registerEvents(new PaperCoreEventListener(), this);
 
         //Register NotificationEvent
         core.getNotificationApi().registerListener(new EventNotificationListener());

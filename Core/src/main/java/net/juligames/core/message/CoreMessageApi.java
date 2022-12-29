@@ -80,7 +80,7 @@ public class CoreMessageApi implements MessageApi {
      * @return the Message
      */
     @Override
-    public CoreMessage getMessage(String messageKey, Locale locale, String... replacements) {
+    public CoreMessage getMessage(String messageKey, @NotNull Locale locale, String... replacements) {
         return getMessage(messageKey, locale.toString(), replacements);
     }
 
