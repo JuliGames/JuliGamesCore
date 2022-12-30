@@ -14,8 +14,6 @@ import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.PluginBase;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginLoader;
-import org.bukkit.plugin.java.CorePlugin;
-import org.bukkit.plugin.java.CorePluginLoader;
 import org.bukkit.plugin.java.JavaPluginLoader;
 import org.bukkit.plugin.java.PluginClassLoader;
 import org.jetbrains.annotations.NotNull;
@@ -48,12 +46,12 @@ public abstract class CorePlugin extends PluginBase {
     public CorePlugin() {
         final ClassLoader classLoader = this.getClass().getClassLoader();
         if (!(classLoader instanceof PluginClassLoader)) {
-            throw new IllegalStateException("CorePlugin requires " + PluginClassLoader.class.getName());
+            throw new IllegalStateException("CorePlugin requires " + CorePluginClassLoader.class.getName());
         }
-        ((PluginClassLoader) classLoader).initialize(this);
+        ((CorePluginClassLoader) classLoader).initialize(this);
     }
 
-    protected CorePlugin(@NotNull final JavaPluginLoader loader, @NotNull final PluginDescriptionFile description, @NotNull final File dataFolder, @NotNull final File file) {
+    protected CorePlugin(@NotNull final CorePluginLoader loader, @NotNull final PluginDescriptionFile description, @NotNull final File dataFolder, @NotNull final File file) {
         final ClassLoader classLoader = this.getClass().getClassLoader();
         if (classLoader instanceof PluginClassLoader) {
             throw new IllegalStateException("Cannot use initialization constructor at runtime");
@@ -401,7 +399,7 @@ public abstract class CorePlugin extends PluginBase {
         if (!(cl instanceof PluginClassLoader)) {
             throw new IllegalArgumentException(clazz + " is not initialized by " + PluginClassLoader.class);
         }
-        CorePlugin plugin = ((PluginClassLoader) cl).getPlugin();
+        CorePlugin plugin = ((CorePluginClassLoader) cl).getPlugin();
         if (plugin == null) {
             throw new IllegalStateException("Cannot get plugin for " + clazz + " from a static initializer");
         }
@@ -424,10 +422,10 @@ public abstract class CorePlugin extends PluginBase {
     public static CorePlugin getProvidingPlugin(@NotNull Class<?> clazz) {
         Validate.notNull(clazz, "Null class cannot have a plugin");
         final ClassLoader cl = clazz.getClassLoader();
-        if (!(cl instanceof PluginClassLoader)) {
+        if (!(cl instanceof CorePluginClassLoader)) {
             throw new IllegalArgumentException(clazz + " is not provided by " + PluginClassLoader.class);
         }
-        CorePlugin plugin = ((PluginClassLoader) cl).plugin;
+        CorePlugin plugin = ((CorePluginClassLoader) cl).plugin;
         if (plugin == null) {
             throw new IllegalStateException("Cannot get plugin for " + clazz + " from a static initializer");
         }

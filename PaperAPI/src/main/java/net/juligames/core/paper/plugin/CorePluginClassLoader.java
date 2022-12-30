@@ -23,6 +23,7 @@ import org.apache.commons.lang.Validate;
 import org.bukkit.plugin.InvalidPluginException;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.SimplePluginManager;
+import org.bukkit.plugin.java.JavaPluginLoader;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -31,7 +32,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public final class CorePluginClassLoader extends URLClassLoader { // Spigot
     public CorePlugin getPlugin() { return plugin; } // Spigot
-    private final JavaPluginLoader loader;
+    private final CorePluginLoader loader;
     private final Map<String, Class<?>> classes = new ConcurrentHashMap<String, Class<?>>();
     private final PluginDescriptionFile description; PluginDescriptionFile getDescription() { return description; } // Paper
     private final File dataFolder;
@@ -40,8 +41,8 @@ public final class CorePluginClassLoader extends URLClassLoader { // Spigot
     private final Manifest manifest;
     private final URL url;
     private final ClassLoader libraryLoader;
-    final JavaPlugin plugin;
-    private JavaPlugin pluginInit;
+    final CorePlugin plugin;
+    private CorePlugin pluginInit;
     private IllegalStateException pluginState;
     private final Set<String> seenIllegalAccess = Collections.newSetFromMap(new ConcurrentHashMap<>());
     private java.util.logging.Logger logger; // Paper - add field
@@ -50,7 +51,7 @@ public final class CorePluginClassLoader extends URLClassLoader { // Spigot
         ClassLoader.registerAsParallelCapable();
     }
 
-    CorePluginClassLoader(@NotNull final JavaPluginLoader loader, @Nullable final ClassLoader parent, @NotNull final PluginDescriptionFile description, @NotNull final File dataFolder, @NotNull final File file, @Nullable ClassLoader libraryLoader) throws IOException, InvalidPluginException, MalformedURLException {
+    CorePluginClassLoader(@NotNull final CorePluginLoader loader, @Nullable final ClassLoader parent, @NotNull final PluginDescriptionFile description, @NotNull final File dataFolder, @NotNull final File file, @Nullable ClassLoader libraryLoader) throws IOException, InvalidPluginException, MalformedURLException {
         super(file.getName(), new URL[] {file.toURI().toURL()}, parent); // Paper - rewrite LogEvents to contain source jar info
         Validate.notNull(loader, "Loader cannot be null");
 
@@ -73,11 +74,11 @@ public final class CorePluginClassLoader extends URLClassLoader { // Spigot
                 throw new InvalidPluginException("Cannot find main class `" + description.getMain() + "'", ex);
             }
 
-            Class<? extends JavaPlugin> pluginClass;
+            Class<? extends CorePlugin> pluginClass;
             try {
-                pluginClass = jarClass.asSubclass(JavaPlugin.class);
+                pluginClass = jarClass.asSubclass(CorePlugin.class);
             } catch (ClassCastException ex) {
-                throw new InvalidPluginException("main class `" + description.getMain() + "' does not extend JavaPlugin", ex);
+                throw new InvalidPluginException("main class `" + description.getMain() + "' does not extend CorePlugin", ex);
             }
 
             plugin = pluginClass.newInstance();
@@ -127,8 +128,8 @@ public final class CorePluginClassLoader extends URLClassLoader { // Spigot
 
             if (result != null) {
                 // If the class was loaded from a library instead of a PluginClassLoader, we can assume that its associated plugin is a transitive dependency and can therefore skip this check.
-                if (result.getClassLoader() instanceof PluginClassLoader) {
-                    PluginDescriptionFile provider = ((PluginClassLoader) result.getClassLoader()).description;
+                if (result.getClassLoader() instanceof CorePluginClassLoader) {
+                    PluginDescriptionFile provider = ((CorePluginClassLoader) result.getClassLoader()).description;
 
                     if (provider != description
                             && !seenIllegalAccess.contains(provider.getName())
@@ -222,24 +223,24 @@ public final class CorePluginClassLoader extends URLClassLoader { // Spigot
         return classes.values();
     }
 
-    synchronized void initialize(@NotNull JavaPlugin javaPlugin) {
-        Validate.notNull(javaPlugin, "Initializing plugin cannot be null");
-        Validate.isTrue(javaPlugin.getClass().getClassLoader() == this, "Cannot initialize plugin outside of this class loader");
+    synchronized void initialize(@NotNull CorePlugin corePlugin) {
+        Validate.notNull(corePlugin, "Initializing plugin cannot be null");
+        Validate.isTrue(corePlugin.getClass().getClassLoader() == this, "Cannot initialize plugin outside of this class loader");
         if (this.plugin != null || this.pluginInit != null) {
             throw new IllegalArgumentException("Plugin already initialized!", pluginState);
         }
 
         pluginState = new IllegalStateException("Initial initialization");
-        this.pluginInit = javaPlugin;
+        this.pluginInit = corePlugin;
 
-        javaPlugin.logger = this.logger; // Paper - set logger
-        javaPlugin.init(loader, loader.server, description, dataFolder, file, this);
+        corePlugin.logger = this.logger; // Paper - set logger
+        corePlugin.init(loader, loader.server, description, dataFolder, file, this);
     }
 
     // Paper start
     @Override
     public String toString() {
-        JavaPlugin currPlugin = plugin != null ? plugin : pluginInit;
+        CorePlugin currPlugin = plugin != null ? plugin : pluginInit;
         return "PluginClassLoader{" +
                 "plugin=" + currPlugin +
                 ", pluginEnabled=" + (currPlugin == null ? "uninitialized" : currPlugin.isEnabled()) +

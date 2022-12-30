@@ -11,9 +11,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.plugin.*;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.plugin.java.LibraryLoader;
-import org.bukkit.plugin.java.PluginClassLoader;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.yaml.snakeyaml.error.YAMLException;
@@ -42,7 +39,6 @@ public class CorePluginLoader implements PluginLoader {
     private final Map<String, ReentrantReadWriteLock> classLoadLock = new java.util.HashMap<String, java.util.concurrent.locks.ReentrantReadWriteLock>(); // Paper
     private final Map<String, Integer> classLoadLockCount = new java.util.HashMap<String, Integer>(); // Paper
     private final List<CorePluginClassLoader> loaders = new CopyOnWriteArrayList<CorePluginClassLoader>();
-    private final LibraryLoader libraryLoader;
 
     /**
      * This class was not meant to be constructed explicitly
@@ -54,6 +50,7 @@ public class CorePluginLoader implements PluginLoader {
         Validate.notNull(instance, "Server cannot be null");
         server = instance;
 
+        /*
         LibraryLoader libraryLoader = null;
         try {
             libraryLoader = new LibraryLoader(server.getLogger());
@@ -62,6 +59,8 @@ public class CorePluginLoader implements PluginLoader {
             server.getLogger().warning("Could not initialize LibraryLoader (missing dependencies?)");
         }
         this.libraryLoader = libraryLoader;
+
+         */
     }
 
     @Override
@@ -134,9 +133,9 @@ public class CorePluginLoader implements PluginLoader {
 
         server.getUnsafe().checkSupported(description);
 
-        final PluginClassLoader loader;
+        final CorePluginClassLoader loader;
         try {
-            loader = new PluginClassLoader(this, getClass().getClassLoader(), description, dataFolder, file, (libraryLoader != null) ? libraryLoader.createLoader(description) : null);
+            loader = new CorePluginClassLoader(this, getClass().getClassLoader(), description, dataFolder, file, (libraryLoader != null) ? libraryLoader.createLoader(description) : null);
         } catch (InvalidPluginException ex) {
             throw ex;
         } catch (Throwable ex) {
@@ -199,7 +198,7 @@ public class CorePluginLoader implements PluginLoader {
         // Paper start - prioritize self
         return getClassByName(name, resolve, description, null);
     }
-    Class<?> getClassByName(final String name, boolean resolve, PluginDescriptionFile description, PluginClassLoader requester) {
+    Class<?> getClassByName(final String name, boolean resolve, PluginDescriptionFile description, CorePluginClassLoader requester) {
         // Paper end
         // Paper start - make MT safe
         java.util.concurrent.locks.ReentrantReadWriteLock lock;
@@ -216,7 +215,7 @@ public class CorePluginLoader implements PluginLoader {
             }
             // Paper end
             // Paper end
-            for (PluginClassLoader loader : loaders) {
+            for (CorePluginClassLoader loader : loaders) {
                 try {
                     return loader.loadClass0(name, resolve, false, ((SimplePluginManager) server.getPluginManager()).isTransitiveDepend(description, loader.plugin.getDescription()));
                 } catch (ClassNotFoundException cnfe) {
@@ -331,7 +330,7 @@ public class CorePluginLoader implements PluginLoader {
 
     @Override
     public void enablePlugin(@NotNull final Plugin plugin) {
-        Validate.isTrue(plugin instanceof JavaPlugin, "Plugin is not associated with this PluginLoader");
+        Validate.isTrue(plugin instanceof CorePlugin, "Plugin is not associated with this PluginLoader");
 
         if (!plugin.isEnabled()) {
             // Paper start - Add an asterisk to legacy plugins (so admins are aware)
@@ -343,9 +342,9 @@ public class CorePluginLoader implements PluginLoader {
             plugin.getLogger().info(enableMsg);
             // Paper end
 
-            JavaPlugin jPlugin = (JavaPlugin) plugin;
+            CorePlugin jPlugin = (CorePlugin) plugin;
 
-            PluginClassLoader pluginLoader = (PluginClassLoader) jPlugin.getClassLoader();
+            CorePluginClassLoader pluginLoader = (CorePluginClassLoader) jPlugin.getClassLoader();
 
             if (!loaders.contains(pluginLoader)) {
                 loaders.add(pluginLoader);
