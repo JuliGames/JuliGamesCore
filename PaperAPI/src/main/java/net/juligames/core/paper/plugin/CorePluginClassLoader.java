@@ -115,12 +115,17 @@ public final class CorePluginClassLoader extends URLClassLoader { // Spigot
         } catch (ClassNotFoundException ex) {
         }
 
+        /*
+
+
         if (checkLibraries && libraryLoader != null) {
             try {
                 return libraryLoader.loadClass(name);
             } catch (ClassNotFoundException ex) {
             }
         }
+
+         */
 
         if (checkGlobal) {
             // This ignores the libraries of other plugins, unless they are transitive dependencies.

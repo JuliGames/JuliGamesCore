@@ -135,7 +135,7 @@ public class CorePluginLoader implements PluginLoader {
 
         final CorePluginClassLoader loader;
         try {
-            loader = new CorePluginClassLoader(this, getClass().getClassLoader(), description, dataFolder, file, (libraryLoader != null) ? libraryLoader.createLoader(description) : null);
+            loader = new CorePluginClassLoader(this, getClass().getClassLoader(), description, dataFolder, file, null); //can be present but cant
         } catch (InvalidPluginException ex) {
             throw ex;
         } catch (Throwable ex) {
