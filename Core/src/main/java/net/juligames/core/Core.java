@@ -143,7 +143,7 @@ public final class Core implements API {
         basicMiniGame = new SubscribableType<>();
 
 
-        Core.getInstance().getOrThrow().<SerializedNotification>getTopic("notify: " + Core.getInstance().getClusterApi().getLocalUUID().toString())
+        Core.getInstance().getOrThrow().<SerializedNotification>getTopic("notify:" + Core.getInstance().getClusterApi().getLocalUUID().toString())
                 .addMessageListener(coreNotificationApi);
 
         logger.info("hooking to shutdown...");
@@ -176,7 +176,7 @@ public final class Core implements API {
 
 
         try {
-            Core.getInstance().getOrThrow().getTopic("notify: " + Core.getInstance().getClusterApi().getLocalUUID()).destroy();
+            Core.getInstance().getOrThrow().getTopic("notify:" + Core.getInstance().getClusterApi().getLocalUUID()).destroy();
         } catch (NoSuchElementException noSuchElementException) {
             coreLogger.error("failed to destroy hazel -- master reboot maybe required :: " + noSuchElementException.getMessage());
         }

@@ -28,13 +28,13 @@ public class TopicNotificationCore {
         List<DividedPair<UUID, String>> dividedPairs = Arrays.stream(coreNotification.addresses()).toList(); //copy data
         for (DividedPair<UUID, String> addressee : dividedPairs) {
             UUID uuid = addressee.getFirst();
-            hazelcastInstance.<SerializedNotification>getTopic("notify: " + uuid.toString())
+            hazelcastInstance.<SerializedNotification>getTopic("notify:" + uuid.toString())
                     .publish(coreNotification.serialize());
         }
     }
 
     public void subscribeOnUUID(@NotNull UUID uuid, MessageListener<SerializedNotification> notificationListener) {
-        hazelcastInstance.<SerializedNotification>getTopic("notify: " + uuid.toString()).
+        hazelcastInstance.<SerializedNotification>getTopic("notify:" + uuid.toString()).
                 addMessageListener(notificationListener);
     }
 
