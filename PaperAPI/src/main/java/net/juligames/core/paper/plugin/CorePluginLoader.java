@@ -37,10 +37,10 @@ import java.util.regex.Pattern;
 public class CorePluginLoader implements PluginLoader {
     private static final boolean DISABLE_CLASS_PRIORITIZATION = Boolean.getBoolean("Paper.DisableClassPrioritization"); // Paper
     final Server server;
-    private final Pattern[] fileFilters = new Pattern[]{Pattern.compile("\\.jar$")};
+    private final Pattern[] fileFilters = new Pattern[]{Pattern.compile("\\.jar$")}; //check that bnick does not try to load 7zip files here
     private final Map<String, ReentrantReadWriteLock> classLoadLock = new java.util.HashMap<String, java.util.concurrent.locks.ReentrantReadWriteLock>(); // Paper
-    private final Map<String, Integer> classLoadLockCount = new java.util.HashMap<String, Integer>(); // Paper
-    private final List<CorePluginClassLoader> loaders = new CopyOnWriteArrayList<CorePluginClassLoader>();
+    private final Map<String, Integer> classLoadLockCount = new java.util.HashMap<>(); // Paper
+    private final List<CorePluginClassLoader> loaders = new CopyOnWriteArrayList<>();
 
     /**
      * This class was not meant to be constructed explicitly
@@ -52,6 +52,8 @@ public class CorePluginLoader implements PluginLoader {
         Validate.notNull(instance, "Server cannot be null");
         server = instance;
 
+        //I Think that Library loaders are not used enough to support them here.
+        // They are basically only used to power IngwerDownloader
         /*
         LibraryLoader libraryLoader = null;
         try {
@@ -61,7 +63,6 @@ public class CorePluginLoader implements PluginLoader {
             server.getLogger().warning("Could not initialize LibraryLoader (missing dependencies?)");
         }
         this.libraryLoader = libraryLoader;
-
          */
     }
 
@@ -81,44 +82,45 @@ public class CorePluginLoader implements PluginLoader {
             throw new InvalidPluginException(ex);
         }
 
-        final File parentFile = this.server.getPluginsFolder(); // Paper
+        final File parentFile = this.server.getPluginsFolder(); // Paper //TODO Own CorePluginsFolder
         final File dataFolder = new File(parentFile, description.getName());
-        @SuppressWarnings("deprecation") final File oldDataFolder = new File(parentFile, description.getRawName());
+        @SuppressWarnings("deprecation")
+        final File legacyDataFolder = new File(parentFile, description.getRawName()); //Support it?
 
         // Found old data folder
-        if (dataFolder.equals(oldDataFolder)) {
+        if (dataFolder.equals(legacyDataFolder)) {
             // They are equal -- nothing needs to be done!
-        } else if (dataFolder.isDirectory() && oldDataFolder.isDirectory()) {
+        } else if (dataFolder.isDirectory() && legacyDataFolder.isDirectory()) {
             server.getLogger().warning(String.format(
                     "While loading %s (%s) found old-data folder: `%s' next to the new one `%s'",
                     description.getFullName(),
                     file,
-                    oldDataFolder,
+                    legacyDataFolder,
                     dataFolder
             ));
-        } else if (oldDataFolder.isDirectory() && !dataFolder.exists()) {
-            if (!oldDataFolder.renameTo(dataFolder)) {
-                throw new InvalidPluginException("Unable to rename old data folder: `" + oldDataFolder + "' to: `" + dataFolder + "'");
+        } else if (legacyDataFolder.isDirectory() && !dataFolder.exists()) {
+            if (!legacyDataFolder.renameTo(dataFolder)) {
+                throw new InvalidPluginException("Unable to rename old data folder: `" + legacyDataFolder + "' to: `" + dataFolder + "'");
             }
             server.getLogger().log(Level.INFO, String.format(
                     "While loading %s (%s) renamed data folder: `%s' to `%s'",
                     description.getFullName(),
                     file,
-                    oldDataFolder,
+                    legacyDataFolder,
                     dataFolder
             ));
         }
 
         if (dataFolder.exists() && !dataFolder.isDirectory()) {
             throw new InvalidPluginException(String.format(
-                    "Projected datafolder: `%s' for %s (%s) exists and is not a directory",
+                    "Projected datafolder: `%s' for %s (%s) exists and is not a directory", //ok wtf?
                     dataFolder,
                     description.getFullName(),
                     file
             ));
         }
 
-        Set<String> missingHardDependencies = new HashSet<>(description.getDepend().size()); // Paper - list all missing hard depends
+        Set<String> missingHardDependencies = new HashSet<>(description.getDepend().size()); // HardDependency = "depend"
         for (final String pluginName : description.getDepend()) {
             Plugin current = server.getPluginManager().getPlugin(pluginName);
 
@@ -132,11 +134,11 @@ public class CorePluginLoader implements PluginLoader {
         }
         // Paper end
 
-        server.getUnsafe().checkSupported(description);
+        server.getUnsafe().checkSupported(description); //TODO Figure out what this does...
 
         final CorePluginClassLoader loader;
         try {
-            loader = new CorePluginClassLoader(this, getClass().getClassLoader(), description, dataFolder, file, null); //can be present but cant
+            loader = new CorePluginClassLoader(this, getClass().getClassLoader(), description, dataFolder, file); //can be present but cant
         } catch (InvalidPluginException ex) {
             throw ex;
         } catch (Throwable ex) {
@@ -168,22 +170,18 @@ public class CorePluginLoader implements PluginLoader {
 
             return new PluginDescriptionFile(stream);
 
-        } catch (IOException ex) {
-            throw new InvalidDescriptionException(ex);
-        } catch (YAMLException ex) {
+        } catch (IOException | YAMLException ex) {
             throw new InvalidDescriptionException(ex);
         } finally {
             if (jar != null) {
                 try {
                     jar.close();
-                } catch (IOException e) {
-                }
+                } catch (IOException ignored) {}
             }
             if (stream != null) {
                 try {
                     stream.close();
-                } catch (IOException e) {
-                }
+                } catch (IOException ignored) {}
             }
         }
     }
@@ -194,7 +192,11 @@ public class CorePluginLoader implements PluginLoader {
         return fileFilters.clone();
     }
 
+    /**
+     * @deprecated unused
+     */
     @Nullable
+    @Deprecated
     Class<?> getClassByName(final String name, boolean resolve, PluginDescriptionFile description) {
         // Paper start - prioritize self
         return getClassByName(name, resolve, description, null);
@@ -213,11 +215,10 @@ public class CorePluginLoader implements PluginLoader {
             // Paper start - prioritize self
             if (!DISABLE_CLASS_PRIORITIZATION && requester != null) {
                 try {
-                    return requester.loadClass0(name, false, false, ((SimplePluginManager) server.getPluginManager()).isTransitiveDepend(description, requester.getDescription()));
+                    return requester.loadClass0(name, false, false, ((SimplePluginManager) server.getPluginManager()).isTransitiveDepend(description, requester.getDescription())); //Maybe unsafe
                 } catch (ClassNotFoundException cnfe) {
                 }
             }
-            // Paper end
             // Paper end
             for (CorePluginClassLoader loader : loaders) {
                 try {
@@ -233,7 +234,7 @@ public class CorePluginLoader implements PluginLoader {
                     classLoadLock.remove(name);
                     classLoadLockCount.remove(name);
                 } else {
-                    classLoadLockCount.compute(name, (x, prev) -> prev - 1);
+                    classLoadLockCount.compute(name, (x, prev) -> prev - 1); //may cause null
                 }
             }
         }
@@ -319,11 +320,7 @@ public class CorePluginLoader implements PluginLoader {
             }
 
             EventExecutor executor = new co.aikar.timings.TimedEventExecutor(EventExecutor.create(method, eventClass), plugin, method, eventClass); // Paper // Paper (Yes.) - Use factory method `EventExecutor.create()`
-            if (false) { // Spigot - RL handles useTimings check now
-                eventSet.add(new TimedRegisteredListener(listener, executor, eh.priority(), plugin, eh.ignoreCancelled()));
-            } else {
-                eventSet.add(new RegisteredListener(listener, executor, eh.priority(), plugin, eh.ignoreCancelled()));
-            }
+            eventSet.add(new RegisteredListener(listener, executor, eh.priority(), plugin, eh.ignoreCancelled())); //removed if-statement
         }
         return ret;
     }
@@ -334,7 +331,7 @@ public class CorePluginLoader implements PluginLoader {
 
         if (!plugin.isEnabled()) {
             // Paper start - Add an asterisk to legacy plugins (so admins are aware)
-            String enableMsg = "Enabling " + plugin.getDescription().getFullName();
+            String enableMsg = "CorePluginEnable -> Enabling " + plugin.getDescription().getFullName();
             if (org.bukkit.UnsafeValues.isLegacyPlugin(plugin)) {
                 enableMsg += "*";
             }
@@ -354,15 +351,13 @@ public class CorePluginLoader implements PluginLoader {
             try {
                 jPlugin.setEnabled(true);
             } catch (Throwable ex) {
-                server.getLogger().log(Level.SEVERE, "Error occurred while enabling " + plugin.getDescription().getFullName() + " (Is it up to date?)", ex);
+                server.getLogger().log(Level.SEVERE, "Error occurred while enabling " + plugin.getDescription().getFullName() + " (Is it up to date?)", ex); // Is it?
                 // Paper start - Disable plugins that fail to load
                 this.server.getPluginManager().disablePlugin(jPlugin);
                 return;
                 // Paper end
             }
 
-            // Perhaps abort here, rather than continue going, but as it stands,
-            // an abort is not possible the way it's currently written
             server.getPluginManager().callEvent(new PluginEnableEvent(plugin));
         }
     }
@@ -383,7 +378,7 @@ public class CorePluginLoader implements PluginLoader {
             try {
                 cPlugin.setEnabled(false);
             } catch (Throwable ex) {
-                server.getLogger().log(Level.SEVERE, "Error occurred while disabling " + plugin.getDescription().getFullName() + " (Is it up to date?)", ex);
+                server.getLogger().log(Level.SEVERE, "Error occurred while disabling " + plugin.getDescription().getFullName() + " (Is it up to date?)", ex); //is it?
             }
 
             if (cloader instanceof CorePluginClassLoader loader) {

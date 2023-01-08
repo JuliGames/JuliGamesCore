@@ -6,13 +6,13 @@ import org.apache.commons.lang.Validate;
 import org.bukkit.plugin.InvalidPluginException;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.SimplePluginManager;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.security.CodeSigner;
@@ -42,12 +42,12 @@ public final class CorePluginClassLoader extends URLClassLoader { // Spigot
     private final JarFile jar;
     private final Manifest manifest;
     private final URL url;
-    private final ClassLoader libraryLoader;
     private final Set<String> seenIllegalAccess = Collections.newSetFromMap(new ConcurrentHashMap<>());
+    private final java.util.logging.Logger logger; // Paper - add field
     private CorePlugin pluginInit;
     private IllegalStateException pluginState;
-    private final java.util.logging.Logger logger; // Paper - add field
-    CorePluginClassLoader(@NotNull final CorePluginLoader loader, @Nullable final ClassLoader parent, @NotNull final PluginDescriptionFile description, @NotNull final File dataFolder, @NotNull final File file, @Nullable ClassLoader libraryLoader) throws IOException, InvalidPluginException {
+
+    CorePluginClassLoader(@NotNull final CorePluginLoader loader, @Nullable final ClassLoader parent, @NotNull final PluginDescriptionFile description, @NotNull final File dataFolder, @NotNull final File file) throws IOException, InvalidPluginException {
         super(file.getName(), new URL[]{file.toURI().toURL()}, parent); // Paper - rewrite LogEvents to contain source jar info
         Validate.notNull(loader, "Loader cannot be null");
 
@@ -58,7 +58,6 @@ public final class CorePluginClassLoader extends URLClassLoader { // Spigot
         this.jar = new JarFile(file, true, java.util.zip.ZipFile.OPEN_READ, JarFile.runtimeVersion()); // Paper - enable multi-release jars for Java 9+
         this.manifest = jar.getManifest();
         this.url = file.toURI().toURL();
-        this.libraryLoader = libraryLoader;
 
         this.logger = com.destroystokyo.paper.utils.PaperPluginLogger.getLogger(description); // Paper - Register logger early
 
@@ -81,7 +80,7 @@ public final class CorePluginClassLoader extends URLClassLoader { // Spigot
         } catch (IllegalAccessException ex) {
             throw new InvalidPluginException("No public constructor", ex);
         } catch (InstantiationException ex) {
-            throw new InvalidPluginException("Abnormal plugin type", ex);
+            throw new InvalidPluginException("Abnormal plugin type. Is it a Legacy-non-Core Plugin?", ex);
         }
     }
 
@@ -163,8 +162,8 @@ public final class CorePluginClassLoader extends URLClassLoader { // Spigot
 
     @Override
     protected Class<?> findClass(String name) throws ClassNotFoundException {
-        if (name.startsWith("org.bukkit.") || name.startsWith("net.minecraft.")) {
-            throw new ClassNotFoundException(name);
+        if (name.startsWith("org.bukkit.") || name.startsWith("net.minecraft.")) { //sus
+            throw new ClassNotFoundException(name + " is not allowed");
         }
         Class<?> result = classes.get(name);
 
@@ -247,8 +246,9 @@ public final class CorePluginClassLoader extends URLClassLoader { // Spigot
     }
 
     // Paper start
+    @Contract(pure = true)
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         CorePlugin currPlugin = plugin != null ? plugin : pluginInit;
         return "PluginClassLoader{" +
                 "plugin=" + currPlugin +

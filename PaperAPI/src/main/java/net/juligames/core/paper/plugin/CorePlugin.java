@@ -13,8 +13,6 @@ import org.bukkit.generator.BiomeProvider;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.PluginBase;
 import org.bukkit.plugin.PluginDescriptionFile;
-import org.bukkit.plugin.PluginLoader;
-import org.bukkit.plugin.java.PluginClassLoader;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,7 +31,7 @@ import java.util.logging.Logger;
 public abstract class CorePlugin extends PluginBase {
     Logger logger = null; // Paper - PluginLogger -> Logger, package-private
     private boolean isEnabled = false;
-    private PluginLoader loader = null;
+    private CorePluginLoader loader = null;
     private Server server = null;
     private File file = null;
     private PluginDescriptionFile description = null;
@@ -45,7 +43,7 @@ public abstract class CorePlugin extends PluginBase {
 
     public CorePlugin() {
         final ClassLoader classLoader = this.getClass().getClassLoader();
-        if (!(classLoader instanceof PluginClassLoader)) {
+        if (!(classLoader instanceof CorePluginClassLoader)) {
             throw new IllegalStateException("CorePlugin requires " + CorePluginClassLoader.class.getName());
         }
         ((CorePluginClassLoader) classLoader).initialize(this);
@@ -53,7 +51,7 @@ public abstract class CorePlugin extends PluginBase {
 
     protected CorePlugin(@NotNull final CorePluginLoader loader, @NotNull final PluginDescriptionFile description, @NotNull final File dataFolder, @NotNull final File file) {
         final ClassLoader classLoader = this.getClass().getClassLoader();
-        if (classLoader instanceof PluginClassLoader) {
+        if (classLoader instanceof CorePluginClassLoader) {
             throw new IllegalStateException("Cannot use initialization constructor at runtime");
         }
         init(loader, loader.server, description, dataFolder, file, classLoader);
@@ -89,8 +87,8 @@ public abstract class CorePlugin extends PluginBase {
             throw new IllegalArgumentException(clazz + " does not extend " + CorePlugin.class);
         }
         final ClassLoader cl = clazz.getClassLoader();
-        if (!(cl instanceof PluginClassLoader)) {
-            throw new IllegalArgumentException(clazz + " is not initialized by " + PluginClassLoader.class);
+        if (!(cl instanceof CorePluginClassLoader)) {
+            throw new IllegalArgumentException(clazz + " is not initialized by " + CorePluginClassLoader.class);
         }
         CorePlugin plugin = ((CorePluginClassLoader) cl).getPlugin();
         if (plugin == null) {
@@ -116,7 +114,7 @@ public abstract class CorePlugin extends PluginBase {
         Validate.notNull(clazz, "Null class cannot have a plugin");
         final ClassLoader cl = clazz.getClassLoader();
         if (!(cl instanceof CorePluginClassLoader)) {
-            throw new IllegalArgumentException(clazz + " is not provided by " + PluginClassLoader.class);
+            throw new IllegalArgumentException(clazz + " is not provided by " + CorePluginClassLoader.class);
         }
         CorePlugin plugin = ((CorePluginClassLoader) cl).plugin;
         if (plugin == null) {
@@ -144,7 +142,7 @@ public abstract class CorePlugin extends PluginBase {
      */
     @NotNull
     @Override
-    public final PluginLoader getPluginLoader() {
+    public final CorePluginLoader getPluginLoader() {
         return loader;
     }
 
@@ -332,14 +330,14 @@ public abstract class CorePlugin extends PluginBase {
         return classLoader;
     }
 
-    final void init(@NotNull PluginLoader loader, @NotNull Server server, @NotNull PluginDescriptionFile description, @NotNull File dataFolder, @NotNull File file, @NotNull ClassLoader classLoader) {
+    final void init(@NotNull CorePluginLoader loader, @NotNull Server server, @NotNull PluginDescriptionFile description, @NotNull File dataFolder, @NotNull File file, @NotNull ClassLoader classLoader) {
         this.loader = loader;
         this.server = server;
         this.file = file;
         this.description = description;
         this.dataFolder = dataFolder;
         this.classLoader = classLoader;
-        this.configFile = new File(dataFolder, "config.yml");
+        this.configFile = new File(dataFolder, "configuration.yml");
         // Paper start
         if (this.logger == null) {
             this.logger = com.destroystokyo.paper.utils.PaperPluginLogger.getLogger(this.description);
