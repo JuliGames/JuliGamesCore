@@ -37,7 +37,7 @@ import java.util.regex.Pattern;
 public class CorePluginLoader implements PluginLoader {
     private static final boolean DISABLE_CLASS_PRIORITIZATION = Boolean.getBoolean("Paper.DisableClassPrioritization"); // Paper
     final Server server;
-    private final Pattern[] fileFilters = new Pattern[]{Pattern.compile("\\.jar$")}; //check that bnick does not try to load 7zip files here
+    private final Pattern fileFilter = Pattern.compile("\\.core$"); //check that bnick does not try to load 7zip files here
     private final Map<String, ReentrantReadWriteLock> classLoadLock = new java.util.HashMap<String, java.util.concurrent.locks.ReentrantReadWriteLock>(); // Paper
     private final Map<String, Integer> classLoadLockCount = new java.util.HashMap<>(); // Paper
     private final List<CorePluginClassLoader> loaders = new CopyOnWriteArrayList<>();
@@ -189,7 +189,12 @@ public class CorePluginLoader implements PluginLoader {
     @Override
     @NotNull
     public Pattern[] getPluginFileFilters() {
-        return fileFilters.clone();
+        return new Pattern[]{fileFilter};
+    }
+
+    @NotNull
+    protected Pattern getPluginFileFilter() {
+        return fileFilter;
     }
 
     /**
