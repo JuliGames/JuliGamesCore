@@ -1,5 +1,6 @@
 package net.juligames.core.paper.plugin;
 
+import net.juligames.core.api.TODO;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Server;
 import org.bukkit.Warning;
@@ -32,9 +33,10 @@ import java.util.regex.Pattern;
  * @author Ture Bentzin
  * 30.12.2022
  */
+@TODO(doNotcall = true)
 public class CorePluginLoader implements PluginLoader {
-    final Server server;
     private static final boolean DISABLE_CLASS_PRIORITIZATION = Boolean.getBoolean("Paper.DisableClassPrioritization"); // Paper
+    final Server server;
     private final Pattern[] fileFilters = new Pattern[]{Pattern.compile("\\.jar$")};
     private final Map<String, ReentrantReadWriteLock> classLoadLock = new java.util.HashMap<String, java.util.concurrent.locks.ReentrantReadWriteLock>(); // Paper
     private final Map<String, Integer> classLoadLockCount = new java.util.HashMap<String, Integer>(); // Paper
@@ -81,8 +83,7 @@ public class CorePluginLoader implements PluginLoader {
 
         final File parentFile = this.server.getPluginsFolder(); // Paper
         final File dataFolder = new File(parentFile, description.getName());
-        @SuppressWarnings("deprecation")
-        final File oldDataFolder = new File(parentFile, description.getRawName());
+        @SuppressWarnings("deprecation") final File oldDataFolder = new File(parentFile, description.getRawName());
 
         // Found old data folder
         if (dataFolder.equals(oldDataFolder)) {
@@ -198,6 +199,7 @@ public class CorePluginLoader implements PluginLoader {
         // Paper start - prioritize self
         return getClassByName(name, resolve, description, null);
     }
+
     Class<?> getClassByName(final String name, boolean resolve, PluginDescriptionFile description, CorePluginClassLoader requester) {
         // Paper end
         // Paper start - make MT safe
@@ -206,12 +208,14 @@ public class CorePluginLoader implements PluginLoader {
             lock = classLoadLock.computeIfAbsent(name, (x) -> new java.util.concurrent.locks.ReentrantReadWriteLock());
             classLoadLockCount.compute(name, (x, prev) -> prev != null ? prev + 1 : 1);
         }
-        lock.writeLock().lock();try {
+        lock.writeLock().lock();
+        try {
             // Paper start - prioritize self
             if (!DISABLE_CLASS_PRIORITIZATION && requester != null) {
                 try {
                     return requester.loadClass0(name, false, false, ((SimplePluginManager) server.getPluginManager()).isTransitiveDepend(description, requester.getDescription()));
-                } catch (ClassNotFoundException cnfe) {}
+                } catch (ClassNotFoundException cnfe) {
+                }
             }
             // Paper end
             // Paper end
@@ -264,12 +268,8 @@ public class CorePluginLoader implements PluginLoader {
             Method[] publicMethods = listener.getClass().getMethods();
             Method[] privateMethods = listener.getClass().getDeclaredMethods();
             methods = new HashSet<Method>(publicMethods.length + privateMethods.length, 1.0f);
-            for (Method method : publicMethods) {
-                methods.add(method);
-            }
-            for (Method method : privateMethods) {
-                methods.add(method);
-            }
+            Collections.addAll(methods, publicMethods);
+            Collections.addAll(methods, privateMethods);
         } catch (NoClassDefFoundError e) {
             plugin.getLogger().severe("Plugin " + plugin.getDescription().getFullName() + " has failed to register events for " + listener.getClass() + " because " + e.getMessage() + " does not exist.");
             return ret;

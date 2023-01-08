@@ -1,6 +1,14 @@
 package net.juligames.core.paper.plugin;
 
 import com.google.common.io.ByteStreams;
+import net.juligames.core.api.TODO;
+import org.apache.commons.lang.Validate;
+import org.bukkit.plugin.InvalidPluginException;
+import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.plugin.SimplePluginManager;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,50 +17,38 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.security.CodeSigner;
 import java.security.CodeSource;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 import java.util.logging.Level;
-import org.apache.commons.lang.Validate;
-import org.bukkit.plugin.InvalidPluginException;
-import org.bukkit.plugin.PluginDescriptionFile;
-import org.bukkit.plugin.SimplePluginManager;
-import org.bukkit.plugin.java.JavaPluginLoader;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * A ClassLoader for plugins, to allow shared classes across multiple plugins
  */
+@TODO(doNotcall = true)
 public final class CorePluginClassLoader extends URLClassLoader { // Spigot
-    public CorePlugin getPlugin() { return plugin; } // Spigot
+    static {
+        ClassLoader.registerAsParallelCapable();
+    }
+
+    final CorePlugin plugin;
     private final CorePluginLoader loader;
     private final Map<String, Class<?>> classes = new ConcurrentHashMap<String, Class<?>>();
-    private final PluginDescriptionFile description; PluginDescriptionFile getDescription() { return description; } // Paper
+    private final PluginDescriptionFile description;
     private final File dataFolder;
     private final File file;
     private final JarFile jar;
     private final Manifest manifest;
     private final URL url;
     private final ClassLoader libraryLoader;
-    final CorePlugin plugin;
+    private final Set<String> seenIllegalAccess = Collections.newSetFromMap(new ConcurrentHashMap<>());
     private CorePlugin pluginInit;
     private IllegalStateException pluginState;
-    private final Set<String> seenIllegalAccess = Collections.newSetFromMap(new ConcurrentHashMap<>());
-    private java.util.logging.Logger logger; // Paper - add field
-
-    static {
-        ClassLoader.registerAsParallelCapable();
-    }
-
-    CorePluginClassLoader(@NotNull final CorePluginLoader loader, @Nullable final ClassLoader parent, @NotNull final PluginDescriptionFile description, @NotNull final File dataFolder, @NotNull final File file, @Nullable ClassLoader libraryLoader) throws IOException, InvalidPluginException, MalformedURLException {
-        super(file.getName(), new URL[] {file.toURI().toURL()}, parent); // Paper - rewrite LogEvents to contain source jar info
+    private final java.util.logging.Logger logger; // Paper - add field
+    CorePluginClassLoader(@NotNull final CorePluginLoader loader, @Nullable final ClassLoader parent, @NotNull final PluginDescriptionFile description, @NotNull final File dataFolder, @NotNull final File file, @Nullable ClassLoader libraryLoader) throws IOException, InvalidPluginException {
+        super(file.getName(), new URL[]{file.toURI().toURL()}, parent); // Paper - rewrite LogEvents to contain source jar info
         Validate.notNull(loader, "Loader cannot be null");
 
         this.loader = loader;
@@ -88,6 +84,14 @@ public final class CorePluginClassLoader extends URLClassLoader { // Spigot
             throw new InvalidPluginException("Abnormal plugin type", ex);
         }
     }
+
+    public CorePlugin getPlugin() {
+        return plugin;
+    } // Spigot
+
+    PluginDescriptionFile getDescription() {
+        return description;
+    } // Paper
 
     @Override
     public URL getResource(String name) {

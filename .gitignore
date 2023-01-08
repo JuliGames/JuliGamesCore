@@ -31,3 +31,4 @@ JDBITEST.java
 .idea/
 target/
 
+config/database.properties
