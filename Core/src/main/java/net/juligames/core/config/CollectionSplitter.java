@@ -32,7 +32,7 @@ public final class CollectionSplitter {
     }
 
     @Contract(pure = true)
-    public static <T> @NotNull ConfigWriter splitToWriter(Collection<T> collection, Interpreter<T> interpreter) {
+    public static <T> @NotNull SplitCollectionConfigWriter splitToWriter(Collection<T> collection, Interpreter<T> interpreter) {
         return new SplitCollectionConfigWriter(simpleSplit(collection, interpreter));
     }
 

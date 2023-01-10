@@ -70,18 +70,18 @@ public class CoreConfigurationApi implements ConfigurationAPI {
 
     @Override
     public <T> Collection<T> tryReadSplitCollection(@NotNull Configuration configuration, String keySpace, Interpreter<T> interpreter) {
+        return tryReadSplitCollection(configuration.entrySet().stream().filter(entry ->
+                        entry.getKey().startsWith(keySpace)).map(Map.Entry::getValue)
+                .collect(Collectors.toUnmodifiableSet()), interpreter);
+    }
+
+    @Override
+    public <T> Collection<T> tryReadSplitCollection(@NotNull Iterable<String> strings, Interpreter<T> interpreter) {
         final Collection<T> ts = new ArrayList<>();
-        for (String value : configuration.entrySet().stream().filter(entry ->
-                entry.getKey().startsWith(keySpace)).map(Map.Entry::getValue)
-                .collect(Collectors.toUnmodifiableSet()))
+        for (String value : strings)
             try {
                 ts.add(interpreter.interpret(value));
             }catch (Exception ignored) {}
         return ts;
-    }
-
-    @Override
-    public <T> Collection<T> tryReadSplitCollection(Iterable<String> strings, Interpreter<T> interpreter) {
-        return null;
     }
 }
