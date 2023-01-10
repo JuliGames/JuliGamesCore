@@ -1,13 +1,13 @@
 package net.juligames.core.config;
-import com.hazelcast.map.IMap;
+
 import net.juligames.core.Core;
 import net.juligames.core.api.config.Configuration;
 import net.juligames.core.api.config.Interpreter;
 import net.juligames.core.api.misc.TriConsumer;
 import org.checkerframework.checker.optional.qual.MaybePresent;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.TestOnly;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -15,11 +15,12 @@ import java.util.*;
 import java.util.function.*;
 
 /**
- * @apiNote Only for testing! Not connected to hazelcast!
  * @author Ture Bentzin
  * 10.01.2023
+ * @apiNote Only for testing! Not connected to hazelcast!
  * @implNote RESERVED KEYS: "configuration_header", "configuration_name"
  */
+@TestOnly
 public class OfflineConfiguration implements Configuration {
 
     private final String name;
@@ -30,7 +31,7 @@ public class OfflineConfiguration implements Configuration {
     public OfflineConfiguration(String name) {
         this.name = name;
         data = new HashMap<>();
-        data.put("configuration_name",name);
+        data.put("configuration_name", name);
         assert Objects.equals(getStringOrNull("configuration_name"), name); //just to avoid BNick content in the configurationSystem
     }
 

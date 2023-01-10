@@ -46,5 +46,8 @@ public interface BuildInInterpreters {
         return s -> DateFormat.getDateInstance().parse(s);
     }
 
+    @Contract(pure = true)
+    static @NotNull SimpleInterpreter<String> interpreter() {return s -> s;}
+
 
 }
