@@ -79,7 +79,7 @@ public class CoreConfiguration implements Configuration {
     }
 
     @ApiStatus.Internal
-    private @NotNull IMap<String, String> hazel(boolean containingPrefix) {
+    private @NotNull IMap<String, String> hazel(@SuppressWarnings("SameParameterValue") boolean containingPrefix) {
         return Core.getInstance().getOrThrow().getMap(containingPrefix ? name : "config:" + name);
     }
 
