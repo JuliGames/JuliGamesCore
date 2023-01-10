@@ -20,9 +20,9 @@ public final class IterableSplitter {
 
 
     @Contract(pure = true)
-    public static <T> @NotNull List<String> simpleSplit(@NotNull Collection<T> collection, Interpreter<T> interpreter) {
+    public static <T> @NotNull List<String> simpleSplit(@NotNull Iterable<T> iterable, Interpreter<T> interpreter) {
         final ArrayList<String> data = new ArrayList<>();
-        for (T t : collection) {
+        for (T t : iterable) {
             String reverse = interpreter.reverse(t);
             data.add(reverse);
         }
@@ -30,8 +30,8 @@ public final class IterableSplitter {
     }
 
     @Contract(pure = true)
-    public static <T> @NotNull SplitCollectionConfigWriter splitToWriter(Collection<T> collection, Interpreter<T> interpreter) {
-        return new SplitCollectionConfigWriter(simpleSplit(collection, interpreter));
+    public static <T> @NotNull SplitCollectionConfigWriter splitToWriter(Iterable<T> iterable, Interpreter<T> interpreter) {
+        return new SplitCollectionConfigWriter(simpleSplit(iterable, interpreter));
     }
 
     public static <T> @NotNull Collection<T> tryReadStrings(@NotNull Iterable<String> strings, Interpreter<T> interpreter) {
