@@ -14,6 +14,7 @@ import java.util.UUID;
  * You should also avoid support for this Container in extensions to the core! A SerializedNotification can be
  * deserialized back to a usable and supported Notification using one of the provided deserialize Methods!
  * In all other occasions this can be handled like a record
+ *
  * @author Ture Bentzin
  * 18.11.2022
  * @apiNote This is the "data-container" for a {@link CoreNotification} so it can be serialized using compactSerialization

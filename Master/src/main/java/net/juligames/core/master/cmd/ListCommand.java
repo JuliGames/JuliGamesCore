@@ -1,6 +1,5 @@
 package net.juligames.core.master.cmd;
 
-import com.hazelcast.cluster.Member;
 import de.bentzin.tools.logging.Logger;
 import net.juligames.core.Core;
 import net.juligames.core.api.cluster.ClusterClient;

@@ -17,9 +17,9 @@ public class PrintObjectCommand extends MasterCommand {
     public void executeCommand(String commandString) {
         try {
             if (commandString != null) {
-                commandString = commandString.replaceFirst(" ","");
+                commandString = commandString.replaceFirst(" ", "");
                 String[] s = commandString.split(" ");
-                if(s.length != 2) {
+                if (s.length != 2) {
                     throw new IllegalArgumentException("\"" + commandString + "\" was not accepted!");
                 }
                 String service = s[0];

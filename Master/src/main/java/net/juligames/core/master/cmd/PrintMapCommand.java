@@ -13,7 +13,7 @@ import java.util.Optional;
  * 01.01.2023
  */
 @TODO(doNotcall = false)
-public class PrintMapCommand extends MasterCommand{
+public class PrintMapCommand extends MasterCommand {
 
     public PrintMapCommand() {
         super("printMap");
@@ -27,7 +27,7 @@ public class PrintMapCommand extends MasterCommand{
                 Core.getInstance().getOrThrow().getDistributedObjects().stream()
                         .filter(distributedObject -> distributedObject.getName().equals(ident))
                         .findFirst();
-        if(optionalDistributedObject.isEmpty()) {
+        if (optionalDistributedObject.isEmpty()) {
             throw new IllegalArgumentException("cant find: " + ident);
         }
         IMap<Object, Object> map = Core.getInstance().getOrThrow().getMap(ident);
@@ -35,7 +35,7 @@ public class PrintMapCommand extends MasterCommand{
         final boolean[] first = {true};
         map.forEach((o, o2) -> {
 
-            if(first[0]) {
+            if (first[0]) {
                 first[0] = false;
                 Core.getInstance().getCoreLogger().warning("The here referenced classes may be inaccurate");
                 Core.getInstance().getCoreLogger().info("keyClass: " + o.getClass().getSimpleName());
@@ -44,6 +44,6 @@ public class PrintMapCommand extends MasterCommand{
 
             Core.getInstance().getCoreLogger().info(o.toString() + " : " + o2.toString());
 
-                });
+        });
     }
 }

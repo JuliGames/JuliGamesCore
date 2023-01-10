@@ -8,13 +8,14 @@ import java.util.List;
 
 /**
  * The {@link CollectionInterpreter} can be used to semi-human-readable enter stuff into the configuration
+ *
  * @author Ture Bentzin 27.11.2022
  * @author Bommels05
  * @see SlimCollectionInterpreter
  * @see IterableInterpreter
  */
 @SuppressWarnings("unused")
-public class CollectionInterpreter<T> implements IterableInterpreter<T,Collection<T>> {
+public class CollectionInterpreter<T> implements IterableInterpreter<T, Collection<T>> {
 
     private final Interpreter<T> tInterpreter;
 

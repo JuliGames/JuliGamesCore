@@ -6,10 +6,11 @@ import java.util.Iterator;
 
 /**
  * Interpreter implementing this will be able to interpret {@link Iterator}s in regard of their order
- * @author Ture Bentzin
- * 10.01.2023
+ *
  * @param <I> The Iterable
  * @param <T> Type to iterate
+ * @author Ture Bentzin
+ * 10.01.2023
  */
 @ApiStatus.Internal
 @ApiStatus.Experimental
