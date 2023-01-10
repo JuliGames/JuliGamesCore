@@ -37,7 +37,6 @@ public final class CollectionSplitter {
     }
 
 
-
     public static final class SplitCollectionConfigWriter implements ConfigWriter {
 
         final List<String> data;

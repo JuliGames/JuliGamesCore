@@ -84,8 +84,7 @@ public class CorePluginLoader implements PluginLoader {
 
         final File parentFile = this.server.getPluginsFolder(); // Paper //TODO Own CorePluginsFolder
         final File dataFolder = new File(parentFile, description.getName());
-        @SuppressWarnings("deprecation")
-        final File legacyDataFolder = new File(parentFile, description.getRawName()); //Support it?
+        @SuppressWarnings("deprecation") final File legacyDataFolder = new File(parentFile, description.getRawName()); //Support it?
 
         // Found old data folder
         if (dataFolder.equals(legacyDataFolder)) {
@@ -176,12 +175,14 @@ public class CorePluginLoader implements PluginLoader {
             if (jar != null) {
                 try {
                     jar.close();
-                } catch (IOException ignored) {}
+                } catch (IOException ignored) {
+                }
             }
             if (stream != null) {
                 try {
                     stream.close();
-                } catch (IOException ignored) {}
+                } catch (IOException ignored) {
+                }
             }
         }
     }

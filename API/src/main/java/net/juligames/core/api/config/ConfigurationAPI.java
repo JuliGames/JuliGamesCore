@@ -36,50 +36,55 @@ public interface ConfigurationAPI {
 
     /**
      * This will split the given collection using the given interpreter
-     * @param collection the collection
+     *
+     * @param collection  the collection
      * @param interpreter the interpreter
+     * @param <T>         Type
      * @return a {@link Collection} out of the interpreted Ts
-     * @param <T> Type
      */
     <T> Collection<String> split(Collection<T> collection, Interpreter<T> interpreter);
 
     /**
      * This will split the given {@link Collection} and return a writer that will
-     * @param collection the collection to spilt
+     *
+     * @param collection  the collection to spilt
      * @param interpreter the interpreter to use
+     * @param <T>         Type
      * @return a {@link ConfigWriter} ready to write the split data
-     * @param <T> Type
      */
     <T> ConfigWriter splitToWriter(Collection<T> collection, Interpreter<T> interpreter);
 
     /**
      * This will split and write the Collection using {@link #splitToWriter(Collection, Interpreter)}
-     * @param collection the collection
-     * @param interpreter the interpreter
+     *
+     * @param collection    the collection
+     * @param interpreter   the interpreter
      * @param configuration the configuration
-     * @param keySpace the (empty) keyspace
-     * @param <T> type
+     * @param keySpace      the (empty) keyspace
+     * @param <T>           type
      */
     default <T> void spitAndWrite(Collection<T> collection, Interpreter<T> interpreter, Configuration configuration, String keySpace) {
-        splitToWriter(collection,interpreter).write(configuration,keySpace);
+        splitToWriter(collection, interpreter).write(configuration, keySpace);
     }
 
     /**
      * This will try to read a {@link Collection} that was split by {@link #splitToWriter(Collection, Interpreter)}
-     * @param keySpace the keyspace
+     *
+     * @param keySpace    the keyspace
      * @param interpreter the interpreter
+     * @param <T>         Type
      * @return a {@link java.util.Collection} with all Ts that where read successfully
-     * @param <T> Type
      */
     <T> Collection<T> tryReadSplitCollection(Configuration configuration, String keySpace, Interpreter<T> interpreter);
 
 
     /**
      * This will try to read a {@link Collection} that was split by {@link #splitToWriter(Collection, Interpreter)}
-     * @param strings the raw values
+     *
+     * @param strings     the raw values
      * @param interpreter the interpreter
+     * @param <T>         Type
      * @return a {@link java.util.Collection} with all Ts that where read successfully
-     * @param <T> Type
      */
     @ApiStatus.Experimental
     <T> Collection<T> tryReadSplitCollection(Iterable<String> strings, Interpreter<T> interpreter);

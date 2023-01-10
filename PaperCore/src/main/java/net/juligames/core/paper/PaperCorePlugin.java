@@ -2,17 +2,14 @@ package net.juligames.core.paper;
 
 import net.juligames.core.Core;
 import net.juligames.core.adventure.AdventureCore;
-import net.juligames.core.api.API;
 import net.juligames.core.paper.events.ServerBootFinishedEvent;
 import net.juligames.core.paper.minigame.StartCommand;
 import net.juligames.core.paper.notification.EventNotificationListener;
 import net.juligames.core.paper.plugin.CorePluginLoadManager;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.checkerframework.checker.units.qual.C;
 
 import java.io.File;
-import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
@@ -71,7 +68,7 @@ public class PaperCorePlugin extends JavaPlugin {
 
         //CorePlugin
         {
-            final File file = new File(Bukkit.getPluginsFolder().getParentFile(),"coreplugins"); //always parallel
+            final File file = new File(Bukkit.getPluginsFolder().getParentFile(), "coreplugins"); //always parallel
             corePluginLoadManager = new CorePluginLoadManager(file, Bukkit.getServer());
             loadCorePlugins();
         }
@@ -92,12 +89,12 @@ public class PaperCorePlugin extends JavaPlugin {
     }
 
     private void loadCorePlugins() {
-        if(corePluginLoadManager != null) {
+        if (corePluginLoadManager != null) {
 
             corePluginLoadManager.load(); //TODO
 
-        }else {
-            getLogger().log(Level.SEVERE,"cant load Plugins!");
+        } else {
+            getLogger().log(Level.SEVERE, "cant load Plugins!");
         }
     }
 }

@@ -60,12 +60,12 @@ public class CoreConfigurationApi implements ConfigurationAPI {
 
     @Override
     public <T> Collection<String> split(Collection<T> collection, Interpreter<T> interpreter) {
-        return CollectionSplitter.simpleSplit(collection,interpreter);
+        return CollectionSplitter.simpleSplit(collection, interpreter);
     }
 
     @Override
     public <T> ConfigWriter splitToWriter(Collection<T> collection, Interpreter<T> interpreter) {
-        return CollectionSplitter.splitToWriter(collection,interpreter);
+        return CollectionSplitter.splitToWriter(collection, interpreter);
     }
 
     @Override
@@ -81,7 +81,8 @@ public class CoreConfigurationApi implements ConfigurationAPI {
         for (String value : strings)
             try {
                 ts.add(interpreter.interpret(value));
-            }catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
         return ts;
     }
 }

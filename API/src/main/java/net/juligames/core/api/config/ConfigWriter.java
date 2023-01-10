@@ -10,8 +10,9 @@ import org.jetbrains.annotations.ApiStatus;
 public interface ConfigWriter {
     /**
      * Writes the data of this {@link ConfigWriter} to the configuration
+     *
      * @param configuration the configuration
-     * @param keyspace the keyspace to write data to
+     * @param keyspace      the keyspace to write data to
      */
     void write(Configuration configuration, String keyspace);
 }

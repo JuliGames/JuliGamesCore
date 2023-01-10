@@ -11,11 +11,13 @@ import org.jetbrains.annotations.NotNull;
  * PaperCore. With Version 1.1 for safety reasons this Event provides you a {@link #getAPI()} method that should
  * always provide a usable {@link API} and prevents misleading calls of this {@link org.bukkit.event.Event} at least
  * in the case that the {@link API} is not even present.
+ *
  * @author Ture Bentzin
  * 23.12.2022
  */
 public final class ServerBootFinishedEvent extends ServerEvent {
     private static final HandlerList handlerList = new HandlerList();
+    private final @NotNull API api;
 
     public ServerBootFinishedEvent(API api) {
         this.api = api;
@@ -34,8 +36,6 @@ public final class ServerBootFinishedEvent extends ServerEvent {
     public @NotNull HandlerList getHandlers() {
         return handlerList;
     }
-
-    private final @NotNull API api;
 
     public @NotNull API getAPI() {
         return api;

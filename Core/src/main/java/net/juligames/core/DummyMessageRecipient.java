@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * This can be used to fill a needed recipient parameter as fallback. On execution of methods for this recipient execptions will
  * be thrown with a small explanation of the issue.
+ *
  * @author Ture Bentzin
  * 19.11.2022
  */
