@@ -62,7 +62,9 @@ public interface ConfigurationAPI {
      * @param configuration the configuration
      * @param keySpace      the (empty) keyspace
      * @param <T>           type
+     * @deprecated moved to {@link Configuration#setIterable(String, Iterable, Interpreter)}
      */
+    @Deprecated
     default <T> void spitAndWrite(Collection<T> collection, Interpreter<T> interpreter, Configuration configuration, String keySpace) {
         splitToWriter(collection, interpreter).write(configuration, keySpace);
     }
@@ -74,7 +76,9 @@ public interface ConfigurationAPI {
      * @param interpreter the interpreter
      * @param <T>         Type
      * @return a {@link java.util.Collection} with all Ts that where read successfully
+     * @deprecated Moved to {@link Configuration#getCollection(String, Interpreter)}
      */
+    @Deprecated
     <T> Collection<T> tryReadSplitCollection(Configuration configuration, String keySpace, Interpreter<T> interpreter);
 
 

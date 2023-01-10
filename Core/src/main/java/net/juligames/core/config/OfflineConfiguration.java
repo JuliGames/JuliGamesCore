@@ -614,5 +614,39 @@ public class OfflineConfiguration implements Configuration {
     public String toString() {
         return name;
     }
+
+    //iterable
+
+    @Override
+    public <T> void setIterable(String keySpace, Iterable<T> iterable, Interpreter<T> interpreter) {
+        IterableSplitter.splitAndWrite(iterable,interpreter,this,keySpace);
+    }
+
+    @Override
+    public <T> void setIterable(@NotNull Supplier<String> keySpace, Iterable<T> iterable, Interpreter<T> interpreter) {
+        setIterable(keySpace.get(),iterable,interpreter);
+    }
+
+    @Override
+    public <T> void setIterable(String keySpace, @NotNull Supplier<Iterable<T>> iterable, Interpreter<T> interpreter) {
+        setIterable(keySpace,iterable.get(),interpreter);
+    }
+
+    @Override
+    public <T> void setIterable(Supplier<String> keySpace, @NotNull Supplier<Iterable<T>> iterable, Interpreter<T> interpreter) {
+        setIterable(keySpace,iterable.get(),interpreter);
+    }
+
+    //collection get
+
+    @Override
+    public <T> Collection<T> getCollection(String keyspace, Interpreter<T> interpreter) {
+        return IterableSplitter.tryReadSplitCollection(this,keyspace,interpreter);
+    }
+
+    @Override
+    public <T> Collection<T> getCollection(@NotNull Supplier<String> keyspace, Interpreter<T> interpreter) {
+        return getCollection(keyspace.get(),interpreter);
+    }
 }
 
