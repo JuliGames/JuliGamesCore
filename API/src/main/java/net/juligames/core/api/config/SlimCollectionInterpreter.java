@@ -11,7 +11,7 @@ import java.util.*;
  * @author DSeeLP
  */
 @TODO(doNotcall = true)
-public class SlimCollectionInterpreter<T> implements Interpreter<Collection<? extends T>> {
+public class SlimCollectionInterpreter<T> implements IterableInterpreter<T, Collection<T>> {
 
     private final Interpreter<T> tInterpreter;
 
@@ -20,9 +20,9 @@ public class SlimCollectionInterpreter<T> implements Interpreter<Collection<? ex
     }
 
     @Override
-    public Collection<? extends T> interpret(final @NotNull String input) throws Exception {
+    public List<T> interpret(final @NotNull String input) throws Exception {
         if (input.isEmpty()) {
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
         int cLength = -1;
         String inp = input;
@@ -88,7 +88,7 @@ public class SlimCollectionInterpreter<T> implements Interpreter<Collection<? ex
     }
 
     @Override
-    public String reverse(@NotNull Collection<? extends T> ts) {
+    public String reverse(@NotNull Collection<T> ts) {
         StringBuilder builder = new StringBuilder();
         String collectionLength = encodeLength(ts.size());
         StringJoiner innerJoiner = new StringJoiner("");

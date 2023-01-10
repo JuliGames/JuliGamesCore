@@ -2,17 +2,24 @@ package net.juligames.core.serialization;
 
 import de.bentzin.tools.pair.DividedPair;
 import net.juligames.core.notification.CoreNotification;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
 /**
+ * The SerializedNotification should only be used for the transfer of the Notification via hazelcast.
+ * The SerializedNotification should never be exposed over the API, because it is formally not a Notification!
+ * You should also avoid support for this Container in extensions to the core! A SerializedNotification can be
+ * deserialized back to a usable and supported Notification using one of the provided deserialize Methods!
+ * In all other occasions this can be handled like a record
  * @author Ture Bentzin
  * 18.11.2022
  * @apiNote This is the "data-container" for a {@link CoreNotification} so it can be serialized using compactSerialization
  */
-public class SerializedNotification {
+@ApiStatus.Internal
+public final class SerializedNotification {
 
     private String message;
     private String header;
@@ -28,6 +35,13 @@ public class SerializedNotification {
     private SerializedNotification() {
     }
 
+    /**
+     * The SerializedNotification should only be used for the transfer of the Notification via hazelcast.
+     * The SerializedNotification should never be exposed over the API, because it is formally not a Notification!
+     * You should also avoid support for this Container in extensions to the core! A SerializedNotification can be
+     * deserialized back to a usable and supported Notification using one of the provided deserialize Methods!
+     * In all other occasions this can be handled like a record
+     */
     @Contract(pure = true)
     public static @NotNull SerializedNotification serialize(@NotNull CoreNotification coreNotification) {
         SerializedNotification serializedNotification = new SerializedNotification();
