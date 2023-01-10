@@ -166,13 +166,13 @@ public interface Configuration extends Comparable<Configuration> {
 
     <T> void set(Supplier<String> key, Supplier<T> value, Interpreter<T> interpreter);
 
-    <T> void setIterable(String key, Iterable<T> iterable, Interpreter<T> interpreter);
+    <T> void setIterable(String keySpace, Iterable<T> iterable, Interpreter<T> interpreter);
 
-    <T> void setIterable(Supplier<String> key, Iterable<T> iterable, Interpreter<T> interpreter);
+    <T> void setIterable(Supplier<String> keySpace, Iterable<T> iterable, Interpreter<T> interpreter);
 
-    <T> void setIterable(String key, Supplier<Iterable<T>> iterable, Interpreter<T> interpreter);
+    <T> void setIterable(String keySpace, Supplier<Iterable<T>> iterable, Interpreter<T> interpreter);
 
-    <T> void setIterable(Supplier<String> key, Supplier<Iterable<T>> iterable, Interpreter<T> interpreter);
+    <T> void setIterable(Supplier<String> keySpace, Supplier<Iterable<T>> iterable, Interpreter<T> interpreter);
 
     void del(String key);
 

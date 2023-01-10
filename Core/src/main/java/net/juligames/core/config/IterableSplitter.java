@@ -34,6 +34,10 @@ public final class IterableSplitter {
         return new SplitCollectionConfigWriter(simpleSplit(iterable, interpreter));
     }
 
+    public static <T> void splitAndWrite(Iterable<T> iterable, Interpreter<T> interpreter, Configuration configuration, String keySpace) {
+        splitToWriter(iterable,interpreter).write(configuration, keySpace);
+    }
+
     public static <T> @NotNull Collection<T> tryReadStrings(@NotNull Iterable<String> strings, Interpreter<T> interpreter) {
         final Collection<T> ts = new ArrayList<>();
         for (String value : strings)

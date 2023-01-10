@@ -582,23 +582,23 @@ public class CoreConfiguration implements Configuration {
     }
 
     @Override
-    public <T> void setIterable(String key, Iterable<T> iterable, Interpreter<T> interpreter) {
-
+    public <T> void setIterable(String keySpace, Iterable<T> iterable, Interpreter<T> interpreter) {
+        IterableSplitter.splitAndWrite(iterable,interpreter,this,keySpace);
     }
 
     @Override
-    public <T> void setIterable(Supplier<String> key, Iterable<T> iterable, Interpreter<T> interpreter) {
-
+    public <T> void setIterable(@NotNull Supplier<String> keySpace, Iterable<T> iterable, Interpreter<T> interpreter) {
+        setIterable(keySpace.get(),iterable,interpreter);
     }
 
     @Override
-    public <T> void setIterable(String key, Supplier<Iterable<T>> iterable, Interpreter<T> interpreter) {
-
+    public <T> void setIterable(String keySpace, @NotNull Supplier<Iterable<T>> iterable, Interpreter<T> interpreter) {
+        setIterable(keySpace,iterable.get(),interpreter);
     }
 
     @Override
-    public <T> void setIterable(Supplier<String> key, Supplier<Iterable<T>> iterable, Interpreter<T> interpreter) {
-
+    public <T> void setIterable(Supplier<String> keySpace, @NotNull Supplier<Iterable<T>> iterable, Interpreter<T> interpreter) {
+        setIterable(keySpace,iterable.get(),interpreter);
     }
 
     @Override
