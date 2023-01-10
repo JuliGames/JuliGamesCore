@@ -192,6 +192,7 @@ public class CorePluginLoader implements PluginLoader {
         return new Pattern[]{fileFilter};
     }
 
+    @SuppressWarnings("unused")
     @NotNull
     protected Pattern getPluginFileFilter() {
         return fileFilter;
@@ -221,14 +222,14 @@ public class CorePluginLoader implements PluginLoader {
             if (!DISABLE_CLASS_PRIORITIZATION && requester != null) {
                 try {
                     return requester.loadClass0(name, false, false, ((SimplePluginManager) server.getPluginManager()).isTransitiveDepend(description, requester.getDescription())); //Maybe unsafe
-                } catch (ClassNotFoundException cnfe) {
+                } catch (ClassNotFoundException ignored) {
                 }
             }
             // Paper end
             for (CorePluginClassLoader loader : loaders) {
                 try {
                     return loader.loadClass0(name, resolve, false, ((SimplePluginManager) server.getPluginManager()).isTransitiveDepend(description, loader.plugin.getDescription()));
-                } catch (ClassNotFoundException cnfe) {
+                } catch (ClassNotFoundException ignored) {
                 }
             }
             // Paper start - make MT safe
@@ -239,6 +240,7 @@ public class CorePluginLoader implements PluginLoader {
                     classLoadLock.remove(name);
                     classLoadLockCount.remove(name);
                 } else {
+                    //noinspection ConstantConditions
                     classLoadLockCount.compute(name, (x, prev) -> prev - 1); //may cause null
                 }
             }
@@ -296,11 +298,7 @@ public class CorePluginLoader implements PluginLoader {
             }
             final Class<? extends Event> eventClass = checkClass.asSubclass(Event.class);
             method.setAccessible(true);
-            Set<RegisteredListener> eventSet = ret.get(eventClass);
-            if (eventSet == null) {
-                eventSet = new HashSet<RegisteredListener>();
-                ret.put(eventClass, eventSet);
-            }
+            Set<RegisteredListener> eventSet = ret.computeIfAbsent(eventClass, k -> new HashSet<>());
 
             for (Class<?> clazz = eventClass; Event.class.isAssignableFrom(clazz); clazz = clazz.getSuperclass()) {
                 // This loop checks for extending deprecated events
@@ -335,7 +333,7 @@ public class CorePluginLoader implements PluginLoader {
         Validate.isTrue(plugin instanceof CorePlugin, "Plugin is not associated with this PluginLoader");
 
         if (!plugin.isEnabled()) {
-            // Paper start - Add an asterisk to legacy plugins (so admins are aware)
+            // Paper start - Add an asterisk to legacy plugins (so admins are aware) - copied from paper
             String enableMsg = "CorePluginEnable -> Enabling " + plugin.getDescription().getFullName();
             if (org.bukkit.UnsafeValues.isLegacyPlugin(plugin)) {
                 enableMsg += "*";
@@ -378,7 +376,7 @@ public class CorePluginLoader implements PluginLoader {
             server.getPluginManager().callEvent(new PluginDisableEvent(plugin));
 
             CorePlugin cPlugin = (CorePlugin) plugin;
-            ClassLoader cloader = cPlugin.getClassLoader();
+            ClassLoader cLoader = cPlugin.getClassLoader();
 
             try {
                 cPlugin.setEnabled(false);
@@ -386,7 +384,7 @@ public class CorePluginLoader implements PluginLoader {
                 server.getLogger().log(Level.SEVERE, "Error occurred while disabling " + plugin.getDescription().getFullName() + " (Is it up to date?)", ex); //is it?
             }
 
-            if (cloader instanceof CorePluginClassLoader loader) {
+            if (cLoader instanceof CorePluginClassLoader loader) {
                 loaders.remove(loader);
 
                 Collection<Class<?>> classes = loader.getClasses();
