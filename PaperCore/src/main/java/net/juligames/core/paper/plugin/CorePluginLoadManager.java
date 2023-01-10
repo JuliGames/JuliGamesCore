@@ -68,7 +68,7 @@ public class CorePluginLoadManager {
         return plugins;
     }
 
-    public List<Plugin> load() {
+    public List<Plugin> load() throws RuntimeException {
         final ArrayList<Plugin> plugins = new ArrayList<>();
         final File[] files = directory.listFiles();
         final List<File> fileList = Arrays.stream(files).toList();

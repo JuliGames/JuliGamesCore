@@ -6,6 +6,7 @@ import org.apache.commons.lang.Validate;
 import org.bukkit.plugin.InvalidPluginException;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.SimplePluginManager;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -27,7 +28,7 @@ import java.util.logging.Level;
 /**
  * A ClassLoader for plugins, to allow shared classes across multiple plugins
  */
-@TODO(doNotcall = true)
+@ApiStatus.Experimental
 public final class CorePluginClassLoader extends URLClassLoader { // Spigot
     static {
         ClassLoader.registerAsParallelCapable();

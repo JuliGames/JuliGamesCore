@@ -68,7 +68,7 @@ public class PaperCorePlugin extends JavaPlugin {
 
         //CorePlugin
         {
-            final File file = new File(Bukkit.getPluginsFolder().getParentFile(), "coreplugins"); //always parallel
+            final File file = Bukkit.getPluginsFolder();
             corePluginLoadManager = new CorePluginLoadManager(file, Bukkit.getServer());
             loadCorePlugins();
         }
@@ -90,8 +90,14 @@ public class PaperCorePlugin extends JavaPlugin {
 
     private void loadCorePlugins() {
         if (corePluginLoadManager != null) {
-
-            corePluginLoadManager.load(); //TODO
+            try {
+                corePluginLoadManager.load(); // Experimental
+            }catch (Exception e){
+                getLogger().log(Level.SEVERE, "An issue was recorded while trying to load experimental CorePlugins: " + e.getMessage());
+                e.printStackTrace();
+                getLogger().log(Level.SEVERE, "Please be aware that issues regarding this system will have low priority duo to the unclear" +
+                        " situation about the future of this system!");
+            }
 
         } else {
             getLogger().log(Level.SEVERE, "cant load Plugins!");

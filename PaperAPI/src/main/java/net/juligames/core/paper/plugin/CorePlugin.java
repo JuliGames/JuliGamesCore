@@ -1,7 +1,6 @@
 package net.juligames.core.paper.plugin;
 
 import com.google.common.base.Charsets;
-import net.juligames.core.api.TODO;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Server;
 import org.bukkit.command.Command;
@@ -13,6 +12,7 @@ import org.bukkit.generator.BiomeProvider;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.PluginBase;
 import org.bukkit.plugin.PluginDescriptionFile;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,7 +27,8 @@ import java.util.logging.Logger;
  * @author Ture Bentzin
  * 30.12.2022
  */
-@TODO(doNotcall = true)
+@SuppressWarnings("unused")
+@ApiStatus.Experimental
 public abstract class CorePlugin extends PluginBase {
     Logger logger = null; // Paper - PluginLogger -> Logger, package-private
     private boolean isEnabled = false;
@@ -339,11 +340,9 @@ public abstract class CorePlugin extends PluginBase {
         this.dataFolder = dataFolder;
         this.classLoader = classLoader;
         this.configFile = new File(dataFolder, "configuration.yml");
-        // Paper start
         if (this.logger == null) {
             this.logger = com.destroystokyo.paper.utils.PaperPluginLogger.getLogger(this.description);
         }
-        // Paper end
     }
 
     /**
@@ -410,7 +409,7 @@ public abstract class CorePlugin extends PluginBase {
     }
 
     @Override
-    public final boolean isNaggable() {
+    public final boolean isNaggable() { //Papers JavaDoc is very uppish about this...
         return naggable;
     }
 

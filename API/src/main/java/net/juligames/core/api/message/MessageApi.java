@@ -181,8 +181,5 @@ public interface MessageApi {
 
     MultiMessagePostScript broadcastMessage(Collection<String> messageKeys, String... replacement);
 
-
-    //TODO prefer locals
-
     //TagManager getTagManager(); removed in favor of AdventureCore / AdventureAPI
 }

@@ -25,8 +25,8 @@ import java.util.stream.Stream;
  */
 public class CoreMessageApi implements MessageApi {
 
-    //TODO switch all Collections / Streams to ? extends X for performance reasons
-    //TODO AUTOMATIC FALLBACK!!!
+    //TODO switch all Collections / Streams to ? extends X for performance reasons (maybe 1.2?)
+    //TODO Further testing on automatic fallback (new implementation? Whats current status?)
 
     public CoreMessageApi() {
     }

@@ -12,6 +12,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.plugin.*;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.yaml.snakeyaml.error.YAMLException;
@@ -33,13 +34,13 @@ import java.util.regex.Pattern;
  * @author Ture Bentzin
  * 30.12.2022
  */
-@TODO(doNotcall = true)
+@ApiStatus.Experimental
 public class CorePluginLoader implements PluginLoader {
-    private static final boolean DISABLE_CLASS_PRIORITIZATION = Boolean.getBoolean("Paper.DisableClassPrioritization"); // Paper
+    private static final boolean DISABLE_CLASS_PRIORITIZATION = Boolean.getBoolean("Paper.DisableClassPrioritization");
     final Server server;
     private final Pattern fileFilter = Pattern.compile("\\.core$"); //check that bnick does not try to load 7zip files here
-    private final Map<String, ReentrantReadWriteLock> classLoadLock = new java.util.HashMap<String, java.util.concurrent.locks.ReentrantReadWriteLock>(); // Paper
-    private final Map<String, Integer> classLoadLockCount = new java.util.HashMap<>(); // Paper
+    private final Map<String, ReentrantReadWriteLock> classLoadLock = new java.util.HashMap<String, java.util.concurrent.locks.ReentrantReadWriteLock>();
+    private final Map<String, Integer> classLoadLockCount = new java.util.HashMap<>();
     private final List<CorePluginClassLoader> loaders = new CopyOnWriteArrayList<>();
 
     /**
@@ -51,19 +52,6 @@ public class CorePluginLoader implements PluginLoader {
     public CorePluginLoader(@NotNull Server instance) {
         Validate.notNull(instance, "Server cannot be null");
         server = instance;
-
-        //I Think that Library loaders are not used enough to support them here.
-        // They are basically only used to power IngwerDownloader
-        /*
-        LibraryLoader libraryLoader = null;
-        try {
-            libraryLoader = new LibraryLoader(server.getLogger());
-        } catch (NoClassDefFoundError ex) {
-            // Provided depends were not added back
-            server.getLogger().warning("Could not initialize LibraryLoader (missing dependencies?)");
-        }
-        this.libraryLoader = libraryLoader;
-         */
     }
 
     @Override
@@ -82,7 +70,7 @@ public class CorePluginLoader implements PluginLoader {
             throw new InvalidPluginException(ex);
         }
 
-        final File parentFile = this.server.getPluginsFolder(); // Paper //TODO Own CorePluginsFolder
+        final File parentFile = this.server.getPluginsFolder();
         final File dataFolder = new File(parentFile, description.getName());
         @SuppressWarnings("deprecation") final File legacyDataFolder = new File(parentFile, description.getRawName()); //Support it?
 
@@ -133,7 +121,7 @@ public class CorePluginLoader implements PluginLoader {
         }
         // Paper end
 
-        server.getUnsafe().checkSupported(description); //TODO Figure out what this does...
+        server.getUnsafe().checkSupported(description); //TODO Figure out what this does... - figured it out maybe?
 
         final CorePluginClassLoader loader;
         try {
@@ -219,14 +207,13 @@ public class CorePluginLoader implements PluginLoader {
         }
         lock.writeLock().lock();
         try {
-            // Paper start - prioritize self
+            //prioritize self
             if (!DISABLE_CLASS_PRIORITIZATION && requester != null) {
                 try {
                     return requester.loadClass0(name, false, false, ((SimplePluginManager) server.getPluginManager()).isTransitiveDepend(description, requester.getDescription())); //Maybe unsafe
                 } catch (ClassNotFoundException ignored) {
                 }
             }
-            // Paper end
             for (CorePluginClassLoader loader : loaders) {
                 try {
                     return loader.loadClass0(name, resolve, false, ((SimplePluginManager) server.getPluginManager()).isTransitiveDepend(description, loader.plugin.getDescription()));

@@ -26,7 +26,7 @@ public interface TeamColor {
 
     @Contract("_ -> new")
     static @NotNull TeamColor fromNamedTextColor(@NotNull NamedTextColor namedTextColor) {
-        //TODO: fix prefix...
+        //TODO: fix prefix... This needs further testing in 1.1 (wait for reports)
         Tag colorTag = Tag.styling(builder -> builder.color(namedTextColor));
         TextComponent color = Component.text().color(namedTextColor).build();
         String miniMessage = MiniMessage.miniMessage().serialize(color);
