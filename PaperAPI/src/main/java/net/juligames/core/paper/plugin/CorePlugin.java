@@ -236,7 +236,7 @@ public abstract class CorePlugin extends PluginBase {
     public void reloadConfig() {
         newConfig = YamlConfiguration.loadConfiguration(configFile);
 
-        final InputStream defConfigStream = getResource("config.yml");
+        final InputStream defConfigStream = getResource("configuration.yml");
         if (defConfigStream == null) {
             return;
         }
@@ -256,13 +256,13 @@ public abstract class CorePlugin extends PluginBase {
     @Override
     public void saveDefaultConfig() {
         if (!configFile.exists()) {
-            saveResource("config.yml", false);
+            saveResource("configuration.yml", false);
         }
     }
 
     @Override
     public void saveResource(@NotNull String resourcePath, boolean replace) {
-        if (resourcePath == null || resourcePath.equals("")) {
+        if (resourcePath.equals("")) {
             throw new IllegalArgumentException("ResourcePath cannot be null or empty");
         }
 
@@ -274,9 +274,10 @@ public abstract class CorePlugin extends PluginBase {
 
         File outFile = new File(dataFolder, resourcePath);
         int lastIndex = resourcePath.lastIndexOf('/');
-        File outDir = new File(dataFolder, resourcePath.substring(0, lastIndex >= 0 ? lastIndex : 0));
+        File outDir = new File(dataFolder, resourcePath.substring(0, Math.max(lastIndex, 0)));
 
         if (!outDir.exists()) {
+            //noinspection ResultOfMethodCallIgnored
             outDir.mkdirs();
         }
 
@@ -302,7 +303,7 @@ public abstract class CorePlugin extends PluginBase {
     @Override
     public InputStream getResource(@NotNull String filename) {
         if (filename == null) {
-            throw new IllegalArgumentException("Filename cannot be null");
+            throw new IllegalArgumentException("Filename cannot be null"); //may not be even thrown due to NotNull in parameter
         }
 
         try {

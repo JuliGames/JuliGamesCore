@@ -13,14 +13,44 @@ import com.hazelcast.topic.ITopic;
  */
 public interface NativeHazelDataAPI {
 
-
+    /**
+     * Used to access the hazelcast implementation of the Map
+     * @param hazel the hazel
+     * @return the IMap associated to the hazel
+     * @param <A> Key
+     * @param <B> Value
+     */
     <A, B> IMap<A, B> getMap(String hazel);
 
+    /**
+     * Used to access the hazelcast implementation of the Queue
+     * @param hazel the hazel
+     * @return the IQueue associated to the hazel
+     * @param <T> Type
+     */
     <T> IQueue<T> getQueue(String hazel);
 
+    /**
+     * Used to access the hazelcast implementation of the Set
+     * @param hazel the hazel
+     * @return the ISet associated to the hazel
+     * @param <T> Type
+     */
     <T> ISet<T> getSet(String hazel);
 
+    /**
+     * Used to access the hazelcast implementation of the List
+     * @param hazel the hazel
+     * @return the IList associated to the hazel
+     * @param <E> Type
+     */
     <E> IList<E> getList(String hazel);
 
+    /**
+     * Used to access the hazelcast Topic via the given hazel
+     * @param hazel the hazel
+     * @return the ITopic associated to the hazel
+     * @param <T> Type
+     */
     <T> ITopic<T> getTopic(String hazel);
 }
