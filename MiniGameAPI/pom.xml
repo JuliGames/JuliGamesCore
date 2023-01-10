@@ -25,9 +25,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>cloud.timo</groupId>
-            <artifactId>TimoCloud-Universal</artifactId>
-            <version>6.0.0</version>
+            <groupId>cloud.timo.TimoCloud</groupId>
+            <artifactId>TimoCloud-API</artifactId>
+            <version>6.5.1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
