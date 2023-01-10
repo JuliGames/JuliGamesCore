@@ -13,8 +13,10 @@ import java.util.List;
  * @author Bommels05
  * @see SlimCollectionInterpreter
  * @see IterableInterpreter
+ * @deprecated use {@link ConfigurationAPI#splitToWriter(Collection, Interpreter)} and similar instead
  */
 @SuppressWarnings("unused")
+@Deprecated
 public class CollectionInterpreter<T> implements IterableInterpreter<T, Collection<T>> {
 
     private final Interpreter<T> tInterpreter;

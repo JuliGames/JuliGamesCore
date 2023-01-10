@@ -6,18 +6,16 @@ import net.juligames.core.api.config.Interpreter;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Ture Bentzin
  * 10.01.2023
  */
-public final class CollectionSplitter {
+public final class IterableSplitter {
 
-    private CollectionSplitter() {
+    private IterableSplitter() {
     }
 
 
@@ -36,6 +34,21 @@ public final class CollectionSplitter {
         return new SplitCollectionConfigWriter(simpleSplit(collection, interpreter));
     }
 
+    public static <T> @NotNull Collection<T> tryReadStrings(@NotNull Iterable<String> strings, Interpreter<T> interpreter) {
+        final Collection<T> ts = new ArrayList<>();
+        for (String value : strings)
+            try {
+                ts.add(interpreter.interpret(value));
+            } catch (Exception ignored) {
+            }
+        return ts;
+    }
+
+    public static <T> @NotNull Collection<T> tryReadSplitCollection(@NotNull Configuration configuration, String keySpace, Interpreter<T> interpreter) {
+        return tryReadStrings(configuration.entrySet().stream().filter(entry ->
+                        entry.getKey().startsWith(keySpace)).map(Map.Entry::getValue)
+                .collect(Collectors.toUnmodifiableSet()), interpreter);
+    }
 
     public static final class SplitCollectionConfigWriter implements ConfigWriter {
 

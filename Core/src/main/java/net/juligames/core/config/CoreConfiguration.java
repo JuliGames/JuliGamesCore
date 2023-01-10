@@ -395,6 +395,16 @@ public class CoreConfiguration implements Configuration {
         return getFloatOrNull(key.get());
     }
 
+    @Override
+    public <T> Collection<T> getCollection(String keyspace, Interpreter<T> interpreter) {
+        return IterableSplitter.tryReadSplitCollection(this,keyspace,interpreter);
+    }
+
+    @Override
+    public <T> Collection<T> getCollection(@NotNull Supplier<String> keyspace, Interpreter<T> interpreter) {
+        return getCollection(keyspace.get(),interpreter);
+    }
+
     //legacy interpreter
     @Override
     public @MaybePresent <T> Optional<T> get(String key, Function<String, T> interpreter) {
@@ -572,6 +582,26 @@ public class CoreConfiguration implements Configuration {
     }
 
     @Override
+    public <T> void setIterable(String key, Iterable<T> iterable, Interpreter<T> interpreter) {
+
+    }
+
+    @Override
+    public <T> void setIterable(Supplier<String> key, Iterable<T> iterable, Interpreter<T> interpreter) {
+
+    }
+
+    @Override
+    public <T> void setIterable(String key, Supplier<Iterable<T>> iterable, Interpreter<T> interpreter) {
+
+    }
+
+    @Override
+    public <T> void setIterable(Supplier<String> key, Supplier<Iterable<T>> iterable, Interpreter<T> interpreter) {
+
+    }
+
+    @Override
     public void del(String key) {
         data.remove(key);
     }
@@ -657,6 +687,13 @@ public class CoreConfiguration implements Configuration {
      */
     public void updateName(String newName) {
         setString("configuration_name", newName);
+    }
+
+    @ApiStatus.Internal
+    private <T> @NotNull List<T> collectIterable(@NotNull Iterable<T> iterable) {
+        List<T> result = new ArrayList<>();
+        iterable.forEach(result::add);
+        return result;
     }
 
     @Override

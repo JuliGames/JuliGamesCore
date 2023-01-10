@@ -60,12 +60,12 @@ public class CoreConfigurationApi implements ConfigurationAPI {
 
     @Override
     public <T> Collection<String> split(Collection<T> collection, Interpreter<T> interpreter) {
-        return CollectionSplitter.simpleSplit(collection, interpreter);
+        return IterableSplitter.simpleSplit(collection, interpreter);
     }
 
     @Override
     public <T> ConfigWriter splitToWriter(Collection<T> collection, Interpreter<T> interpreter) {
-        return CollectionSplitter.splitToWriter(collection, interpreter);
+        return IterableSplitter.splitToWriter(collection, interpreter);
     }
 
     @Override

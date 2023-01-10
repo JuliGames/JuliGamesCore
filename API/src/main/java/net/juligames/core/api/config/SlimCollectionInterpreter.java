@@ -1,6 +1,5 @@
 package net.juligames.core.api.config;
 
-import net.juligames.core.api.TODO;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -9,8 +8,9 @@ import java.util.*;
 /**
  * @author Ture Bentzin 27.11.2022
  * @author DSeeLP
+ * @deprecated use {@link ConfigurationAPI#splitToWriter(Collection, Interpreter)} and similar instead
  */
-@TODO(doNotcall = true)
+@Deprecated(forRemoval = false)
 public class SlimCollectionInterpreter<T> implements IterableInterpreter<T, Collection<T>> {
 
     private final Interpreter<T> tInterpreter;
