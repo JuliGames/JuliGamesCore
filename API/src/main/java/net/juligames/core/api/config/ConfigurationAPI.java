@@ -65,7 +65,7 @@ public interface ConfigurationAPI {
      * @deprecated moved to {@link Configuration#setIterable(String, Iterable, Interpreter)}
      */
     @Deprecated
-    default <T> void spitAndWrite(Collection<T> collection, Interpreter<T> interpreter, Configuration configuration, String keySpace) {
+    default <T> void spiltAndWrite(Collection<T> collection, Interpreter<T> interpreter, Configuration configuration, String keySpace) {
         splitToWriter(collection, interpreter).write(configuration, keySpace);
     }
 
