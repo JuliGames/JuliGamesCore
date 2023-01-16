@@ -360,4 +360,11 @@ public final class Core implements API {
     public Registerator<Consumer<HazelcastInstance>> getHazelcastPostPreparationWorkers() {
         return hazelcastPostPreparationWorkers;
     }
+
+    @Override
+    protected void finalize() { //Currently only for testing around with GarbageCollector!! Should be removed before 2.0
+        if(getCoreLogger() != null) {
+            getCoreLogger().debug("This API implementation is no longer available!");
+        }
+    }
 }
