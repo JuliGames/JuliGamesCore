@@ -60,7 +60,7 @@ public final class Core implements API {
     private CoreCommandApi coreCommandApi;
     private SubscribableType<BasicMiniGame> basicMiniGame;
     private String core_name;
-    private Registerator<Consumer<HazelcastInstance>> hazelcastPostPreparationWorkers = new Registerator<>("hazelcastPostPreparationWorkers");
+    private final Registerator<Consumer<HazelcastInstance>> hazelcastPostPreparationWorkers = new Registerator<>("hazelcastPostPreparationWorkers");
     @NotNull
     private Supplier<Collection<? extends MessageRecipient>> onlineRecipientProvider = () -> List.of(new DummyMessageRecipient());
 
@@ -344,7 +344,7 @@ public final class Core implements API {
         throw new TODOException();
     }
 
-    public Supplier<Collection<? extends MessageRecipient>> getOnlineRecipientProvider() {
+    public @NotNull Supplier<Collection<? extends MessageRecipient>> getOnlineRecipientProvider() {
         return onlineRecipientProvider;
     }
 

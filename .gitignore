@@ -32,3 +32,4 @@ JDBITEST.java
 target/
 
 config/database.properties
+Test.java
