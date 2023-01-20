@@ -58,7 +58,7 @@ public class CorePluginLoadManager {
             try {
                 Plugin plugin = corePluginLoader.loadPlugin(file);
                 logger.info(plugin.getName() + " was loaded by the Core!");
-                plugin.getLogger().log(Level.SEVERE, "YES BABY!");
+                //plugin.getLogger().log(Level.SEVERE, "YES BABY!");
                 plugins.add(plugin);
             } catch (InvalidPluginException e) {
                 logger.error("Cant identify corePlugin :" + file.getAbsolutePath() + " -> " + e.getMessage());
