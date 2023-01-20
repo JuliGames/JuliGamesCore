@@ -17,9 +17,13 @@ public class PrintObjectCommand extends MasterCommand {
     public void executeCommand(String commandString) {
         try {
             if (commandString != null) {
-                int cut = commandString.indexOf(" ");
-                String service = commandString.substring(0, cut);
-                String hazel = commandString.substring(cut);
+                commandString = commandString.replaceFirst(" ", "");
+                String[] s = commandString.split(" ");
+                if (s.length != 2) {
+                    throw new IllegalArgumentException("\"" + commandString + "\" was not accepted!");
+                }
+                String service = s[0];
+                String hazel = s[1];
                 DistributedObject distributedObject = Core.getInstance().getOrThrow()
                         .getDistributedObject(service, hazel);
                 Core.getInstance().getCoreLogger().info("Object: " + hazel + "@@" + service + ": " + distributedObject);

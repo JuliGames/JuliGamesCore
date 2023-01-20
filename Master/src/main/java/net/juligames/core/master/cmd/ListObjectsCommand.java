@@ -17,7 +17,7 @@ public class ListObjectsCommand extends MasterCommand {
     public void executeCommand(String commandString) {
         Logger coreLogger = Core.getInstance().getCoreLogger();
         for (DistributedObject distributedObject : Core.getInstance().getOrThrow().getDistributedObjects()) {
-            coreLogger.info(distributedObject.toString());
+            coreLogger.info(distributedObject.getServiceName() + " -> " + distributedObject);
         }
     }
 }

@@ -1,7 +1,6 @@
 package net.juligames.core.minigame.api;
 
 import de.bentzin.tools.collection.Subscription;
-import net.juligames.core.api.API;
 import net.juligames.core.minigame.api.team.Team;
 import net.juligames.core.minigame.api.team.TeamColor;
 import net.juligames.core.minigame.api.team.procedures.InsertionProcedure;

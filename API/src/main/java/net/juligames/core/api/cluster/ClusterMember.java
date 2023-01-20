@@ -5,14 +5,13 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * @apiNote This interface provides you with information about a Member in the Cluster.
  * @author Ture Bentzin
  * 27.12.2022
+ * @apiNote This interface provides you with information about a Member in the Cluster.
  */
 public interface ClusterMember {
 
     /**
-     *
      * @return <code>true</code> if this member is the local member, <code>false</code> otherwise.
      */
     boolean localMember();

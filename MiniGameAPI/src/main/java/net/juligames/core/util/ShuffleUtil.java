@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -17,10 +16,6 @@ import java.util.stream.Collectors;
  */
 public final class ShuffleUtil {
 
-    private ShuffleUtil() {
-
-    }
-
     private static final Collector<?, ?, ?> SHUFFLER = Collectors.collectingAndThen(
             Collectors.toCollection(ArrayList::new),
             list -> {
@@ -29,13 +24,17 @@ public final class ShuffleUtil {
             }
     );
 
+    private ShuffleUtil() {
+
+    }
+
     @SuppressWarnings("unchecked")
     public static <T> Collector<T, ?, List<T>> toShuffledList() {
         return (Collector<T, ?, List<T>>) SHUFFLER;
     }
 
     @Contract("_ -> param1")
-    public static <T,C extends Collection<T>> @NotNull C shuffle(final @NotNull C c) {
+    public static <T, C extends Collection<T>> @NotNull C shuffle(final @NotNull C c) {
         c.clear();
         c.addAll(List.copyOf(c).stream().collect(toShuffledList()).stream().toList());
         return c;

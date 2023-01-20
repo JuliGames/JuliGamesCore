@@ -25,8 +25,8 @@ import java.util.stream.Stream;
  */
 public class CoreMessageApi implements MessageApi {
 
-    //TODO switch all Collections / Streams to ? extends X for performance reasons
-    //TODO AUTOMATIC FALLBACK!!!
+    //TODO switch all Collections / Streams to ? extends X for performance reasons (maybe 1.2?)
+    //TODO Further testing on automatic fallback (new implementation? Whats current status?)
 
     public CoreMessageApi() {
     }
@@ -80,7 +80,7 @@ public class CoreMessageApi implements MessageApi {
      * @return the Message
      */
     @Override
-    public CoreMessage getMessage(String messageKey, Locale locale, String... replacements) {
+    public CoreMessage getMessage(String messageKey, @NotNull Locale locale, String... replacements) {
         return getMessage(messageKey, locale.toString(), replacements);
     }
 

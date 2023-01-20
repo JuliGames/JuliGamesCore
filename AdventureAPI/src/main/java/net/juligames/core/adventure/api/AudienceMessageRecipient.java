@@ -20,6 +20,7 @@ public class AudienceMessageRecipient implements MessageRecipient {
     private final String name;
     private final Supplier<String> locale;
     private final Audience audience;
+
     public AudienceMessageRecipient(String name, Supplier<String> locale, Audience audience) {
         this.name = name;
         this.locale = locale;

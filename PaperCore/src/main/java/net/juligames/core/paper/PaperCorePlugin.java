@@ -5,11 +5,14 @@ import net.juligames.core.adventure.AdventureCore;
 import net.juligames.core.paper.events.ServerBootFinishedEvent;
 import net.juligames.core.paper.minigame.StartCommand;
 import net.juligames.core.paper.notification.EventNotificationListener;
+import net.juligames.core.paper.plugin.CorePluginLoadManager;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Level;
 
 /**
  * @author Ture Bentzin
@@ -17,8 +20,9 @@ import java.util.Objects;
  */
 public class PaperCorePlugin extends JavaPlugin {
 
-    private AdventureCore adventureCore;
     private static PaperCorePlugin plugin;
+    private AdventureCore adventureCore;
+    private CorePluginLoadManager corePluginLoadManager;
 
     public static PaperCorePlugin getPlugin() {
         return plugin;
@@ -54,13 +58,20 @@ public class PaperCorePlugin extends JavaPlugin {
         Objects.requireNonNull(getCommand("bctest")).setExecutor(new BCTestCommand());
         Objects.requireNonNull(getCommand("start")).setExecutor(new StartCommand());
 
-        Bukkit.getPluginManager().registerEvents(new PaperCoreEventListener(),this);
+        Bukkit.getPluginManager().registerEvents(new PaperCoreEventListener(), this);
 
         //Register NotificationEvent
         core.getNotificationApi().registerListener(new EventNotificationListener());
 
         //Try to load miniGame (if present)
-        getServer().getScheduler().scheduleSyncDelayedTask(this, () -> Bukkit.getPluginManager().callEvent(new ServerBootFinishedEvent()));
+        getServer().getScheduler().scheduleSyncDelayedTask(this, () -> Bukkit.getPluginManager().callEvent(new ServerBootFinishedEvent(core))); //experimental use of core
+
+        //CorePlugin
+        {
+            final File file = Bukkit.getPluginsFolder();
+            corePluginLoadManager = new CorePluginLoadManager(file, Bukkit.getServer());
+            loadCorePlugins();
+        }
 
     }
 
@@ -75,7 +86,21 @@ public class PaperCorePlugin extends JavaPlugin {
             basicMiniGame.abort();
         });
         core.stop();
+    }
 
+    private void loadCorePlugins() {
+        if (corePluginLoadManager != null) {
+            try {
+                corePluginLoadManager.load(); // Experimental
+            }catch (Exception e){
+                getLogger().log(Level.SEVERE, "An issue was recorded while trying to load experimental CorePlugins: " + e.getMessage());
+                e.printStackTrace();
+                getLogger().log(Level.SEVERE, "Please be aware that issues regarding this system will have low priority duo to the unclear" +
+                        " situation about the future of this system!");
+            }
 
+        } else {
+            getLogger().log(Level.SEVERE, "cant load Plugins!");
+        }
     }
 }

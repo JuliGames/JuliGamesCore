@@ -1,14 +1,13 @@
 package net.juligames.core.config;
 
-import com.hazelcast.map.IMap;
 import net.juligames.core.Core;
 import net.juligames.core.api.config.Configuration;
 import net.juligames.core.api.config.Interpreter;
 import net.juligames.core.api.misc.TriConsumer;
 import org.checkerframework.checker.optional.qual.MaybePresent;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.TestOnly;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -17,95 +16,45 @@ import java.util.function.*;
 
 /**
  * @author Ture Bentzin
- * 26.11.2022
+ * 10.01.2023
+ * @apiNote Only for testing! Not connected to hazelcast!
  * @implNote RESERVED KEYS: "configuration_header", "configuration_name"
  */
-public class CoreConfiguration implements Configuration {
+@TestOnly
+public class OfflineConfiguration implements Configuration {
 
     private final String name;
     private String header_comment = Core.getFullCoreName() + " :: a default configuration file";
-    private IMap<String, String> data;//May be removed
+    private Map<String, String> data;
 
 
-    public CoreConfiguration(String name) {
+    public OfflineConfiguration(String name) {
         this.name = name;
-        data = hazel();
-
+        data = new HashMap<>();
+        data.put("configuration_name", name);
         assert Objects.equals(getStringOrNull("configuration_name"), name); //just to avoid BNick content in the configurationSystem
-
-        String configuration_header = getStringOrNull("configuration_header");
-        if (configuration_header != null) {
-            setHeader_comment(configuration_header);
-        }
-    }
-
-    /**
-     * This will not override data in the {@link Map} unless override is set to true
-     *
-     * @param properties the defaults
-     * @return the config
-     */
-    public static @NotNull CoreConfiguration fromProperties(@NotNull Properties properties, boolean override) {
-        String name = properties.getProperty("configuration_name");
-        CoreConfiguration configuration = new CoreConfiguration(name);
-        Set<Map.Entry<Object, Object>> entries = properties.entrySet();
-        IMap<String, String> map = configuration.accessHazel().get();
-        for (Map.Entry<Object, Object> entry : entries) {
-            if (override) {
-                String old = map.put(entry.getKey().toString(), entry.getValue().toString()); //oh man... oh man
-                Core.getInstance().getCoreLogger().info("OVERRIDE: set " + entry.getKey() + "from " + old + " to " + entry.getValue());
-            } else if (!map.containsKey(entry.getKey().toString())) {
-                String old = map.put(entry.getKey().toString(), entry.getValue().toString()); //oh man... oh man
-                Core.getInstance().getCoreLogger().info("set " + entry.getKey() + "from " + old + " to " + entry.getValue());
-            }
-        }
-        configuration.updateHazel();
-        return configuration;
     }
 
 
-    /**
-     * This will not override data in the {@link Map}
-     *
-     * @param properties the defaults
-     * @return the config
-     */
-    public static @NotNull CoreConfiguration fromProperties(@NotNull Properties properties) {
-        return fromProperties(properties, false);
-    }
-
-    private @NotNull IMap<String, String> hazel() {
-        return hazel(false);
-    }
-
-    @ApiStatus.Internal
-    private @NotNull IMap<String, String> hazel(@SuppressWarnings("SameParameterValue") boolean containingPrefix) {
-        return Core.getInstance().getOrThrow().getMap(containingPrefix ? name : "config:" + name);
-    }
-
+    @Override
     public void updateHazel() {
-        data = hazel();
+        throw new UnsupportedOperationException();
     }
 
     public Map<String, String> export() {
         return new HashMap<>(data);
     }
 
-    @ApiStatus.Internal
-    public Supplier<IMap<String, String>> accessHazel() {
-        return this::hazel;
-    }
-
     public Set<String> keySet() {
-        return hazel().keySet();
+        return data.keySet();
     }
 
     public Set<Map.Entry<String, String>> entrySet() {
-        return hazel().entrySet();
+        return data.entrySet();
     }
 
     public Collection<String> values() {
-        return hazel().values();
+        return data.values();
     }
 
     public void writeTo(OutputStream dataStream) throws IOException {
@@ -395,16 +344,6 @@ public class CoreConfiguration implements Configuration {
         return getFloatOrNull(key.get());
     }
 
-    @Override
-    public <T> Collection<T> getCollection(String keyspace, Interpreter<T> interpreter) {
-        return IterableSplitter.tryReadSplitCollection(this,keyspace,interpreter);
-    }
-
-    @Override
-    public <T> Collection<T> getCollection(@NotNull Supplier<String> keyspace, Interpreter<T> interpreter) {
-        return getCollection(keyspace.get(),interpreter);
-    }
-
     //legacy interpreter
     @Override
     public @MaybePresent <T> Optional<T> get(String key, Function<String, T> interpreter) {
@@ -582,26 +521,6 @@ public class CoreConfiguration implements Configuration {
     }
 
     @Override
-    public <T> void setIterable(String keySpace, Iterable<T> iterable, Interpreter<T> interpreter) {
-        IterableSplitter.splitAndWrite(iterable,interpreter,this,keySpace);
-    }
-
-    @Override
-    public <T> void setIterable(@NotNull Supplier<String> keySpace, Iterable<T> iterable, Interpreter<T> interpreter) {
-        setIterable(keySpace.get(),iterable,interpreter);
-    }
-
-    @Override
-    public <T> void setIterable(String keySpace, @NotNull Supplier<Iterable<T>> iterable, Interpreter<T> interpreter) {
-        setIterable(keySpace,iterable.get(),interpreter);
-    }
-
-    @Override
-    public <T> void setIterable(Supplier<String> keySpace, @NotNull Supplier<Iterable<T>> iterable, Interpreter<T> interpreter) {
-        setIterable(keySpace,iterable.get(),interpreter);
-    }
-
-    @Override
     public void del(String key) {
         data.remove(key);
     }
@@ -622,8 +541,10 @@ public class CoreConfiguration implements Configuration {
         dellAllFromCollection(collection);
     }
 
-    public void dellAllFromCollection(Collection<String> keys) {
-        data.removeAll(mapEntry -> keys.contains(mapEntry.getKey()));
+    public void dellAllFromCollection(@NotNull Collection<String> keys) {
+        for (String key : keys) {
+            data.remove(key);
+        }
     }
 
 
@@ -689,15 +610,43 @@ public class CoreConfiguration implements Configuration {
         setString("configuration_name", newName);
     }
 
-    @ApiStatus.Internal
-    private <T> @NotNull List<T> collectIterable(@NotNull Iterable<T> iterable) {
-        List<T> result = new ArrayList<>();
-        iterable.forEach(result::add);
-        return result;
-    }
-
     @Override
     public String toString() {
         return name;
     }
+
+    //iterable
+
+    @Override
+    public <T> void setIterable(String keySpace, Iterable<T> iterable, Interpreter<T> interpreter) {
+        IterableSplitter.splitAndWrite(iterable,interpreter,this,keySpace);
+    }
+
+    @Override
+    public <T> void setIterable(@NotNull Supplier<String> keySpace, Iterable<T> iterable, Interpreter<T> interpreter) {
+        setIterable(keySpace.get(),iterable,interpreter);
+    }
+
+    @Override
+    public <T> void setIterable(String keySpace, @NotNull Supplier<Iterable<T>> iterable, Interpreter<T> interpreter) {
+        setIterable(keySpace,iterable.get(),interpreter);
+    }
+
+    @Override
+    public <T> void setIterable(Supplier<String> keySpace, @NotNull Supplier<Iterable<T>> iterable, Interpreter<T> interpreter) {
+        setIterable(keySpace,iterable.get(),interpreter);
+    }
+
+    //collection get
+
+    @Override
+    public <T> Collection<T> getCollection(String keyspace, Interpreter<T> interpreter) {
+        return IterableSplitter.tryReadSplitCollection(this,keyspace,interpreter);
+    }
+
+    @Override
+    public <T> Collection<T> getCollection(@NotNull Supplier<String> keyspace, Interpreter<T> interpreter) {
+        return getCollection(keyspace.get(),interpreter);
+    }
 }
+

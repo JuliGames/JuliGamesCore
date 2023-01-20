@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class PaperMessageRecipient implements MessageRecipient {
 
-    private CommandSender commandSender;
+    private final CommandSender commandSender;
 
     public PaperMessageRecipient(CommandSender commandSender) {
         this.commandSender = commandSender;
@@ -36,7 +36,7 @@ public class PaperMessageRecipient implements MessageRecipient {
     /**
      * delivers a miniMessage string to the recipient
      *
-     * @param miniMessage
+     * @param miniMessage the miniMessage to deliver to the commandSender
      */
     @Override
     public void deliver(String miniMessage) {

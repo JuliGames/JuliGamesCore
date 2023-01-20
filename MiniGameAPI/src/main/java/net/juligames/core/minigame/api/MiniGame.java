@@ -73,7 +73,7 @@ public abstract class MiniGame extends LoggingClass implements BasicMiniGame {
             try {
                 onLoad();
                 getLogger().info("finished loading of " + getDescription());
-				loaded = true;
+                loaded = true;
             } catch (Exception e) {
                 getLogger().error("Error while loading MiniGame: " + e.getMessage() + "! Is it up to date?");
                 e.printStackTrace();
@@ -90,7 +90,7 @@ public abstract class MiniGame extends LoggingClass implements BasicMiniGame {
         getLogger().info("starting " + getPlainName());
         if (isLoaded()) {
             try {
-                if(!onStart()) //if false -> error while starting
+                if (!onStart()) //if false -> error while starting
                     handleStartingError(Optional.empty());
                 getLogger().info("started " + getPlainName());
             } catch (Exception e) {
@@ -103,11 +103,11 @@ public abstract class MiniGame extends LoggingClass implements BasicMiniGame {
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     private void handleStartingError(Optional<Throwable> throwable) {
         boolean equals = StackWalker.getInstance().getCallerClass().equals(this.getClass()); //EXPERIMENTAL
-        if(!equals) {
+        if (!equals) {
             throw new SecurityException();
         }
         String message;
-        if(throwable.isPresent()) {
+        if (throwable.isPresent()) {
             Throwable e = throwable.get();
             message = e.getMessage();
         } else {
@@ -125,13 +125,13 @@ public abstract class MiniGame extends LoggingClass implements BasicMiniGame {
         Class<?> callerClass = StackWalker.getInstance().getCallerClass(); //Deal?
         getLogger().warning("aborting " + getFullDescription() + " caused by: " + callerClass.getName());
         try {
-            onAbort(); 
+            onAbort();
         } catch (Exception e) {
             getLogger().error("Error while aborting (force-shutdown) MiniGame: " + e.getMessage() + "! Is it up to date?");
             e.printStackTrace();
             setMiniGameState(FATAL);
             getLogger().error("MiniGame cant be recovered. Please contact the developer of this MiniGame!"
-                    + (getDeveloperContactEmail().isPresent()? " Contact via: "  + getDeveloperContactEmail().get(): ""));
+                    + (getDeveloperContactEmail().isPresent() ? " Contact via: " + getDeveloperContactEmail().get() : ""));
         }
     }
 

@@ -1,6 +1,5 @@
 package net.juligames.core.api.config;
 
-import net.juligames.core.api.TODO;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -9,9 +8,10 @@ import java.util.*;
 /**
  * @author Ture Bentzin 27.11.2022
  * @author DSeeLP
+ * @deprecated use {@link ConfigurationAPI#splitToWriter(Collection, Interpreter)} and similar instead
  */
-@TODO(doNotcall = true)
-public class SlimCollectionInterpreter<T> implements Interpreter<Collection<? extends T>> {
+@Deprecated(forRemoval = false)
+public class SlimCollectionInterpreter<T> implements IterableInterpreter<T, Collection<T>> {
 
     private final Interpreter<T> tInterpreter;
 
@@ -20,9 +20,9 @@ public class SlimCollectionInterpreter<T> implements Interpreter<Collection<? ex
     }
 
     @Override
-    public Collection<? extends T> interpret(final @NotNull String input) throws Exception {
+    public List<T> interpret(final @NotNull String input) throws Exception {
         if (input.isEmpty()) {
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
         int cLength = -1;
         String inp = input;
@@ -31,16 +31,16 @@ public class SlimCollectionInterpreter<T> implements Interpreter<Collection<? ex
             if (textLength == null) {
                 throw new IllegalArgumentException("Unable to find text Length");
             }
-            if (textLength.length != inp.length()-textLength.used) {
+            if (textLength.length != inp.length() - textLength.used) {
                 throw new IllegalArgumentException("Decoded length doesn't match text length");
             }
-            inp = inp.substring(textLength.used, textLength.length+textLength.used);
+            inp = inp.substring(textLength.used, textLength.length + textLength.used);
             TextLength collectionLength = readLength(inp);
             if (collectionLength == null) {
                 throw new IllegalArgumentException("Unable to find collection Length");
             }
             cLength = collectionLength.length;
-            inp = inp.substring(textLength.used-1);
+            inp = inp.substring(textLength.used - 1);
         }
 
         List<T> list = new ArrayList<>();
@@ -50,8 +50,8 @@ public class SlimCollectionInterpreter<T> implements Interpreter<Collection<? ex
             if (length == null) {
                 throw new IllegalArgumentException("length not found... fuck");
             }
-            String text = inp.substring(length.used, length.length+length.used);
-            inp = inp.substring(text.length()+ length.used);
+            String text = inp.substring(length.used, length.length + length.used);
+            inp = inp.substring(text.length() + length.used);
             list.add(tInterpreter.interpret(text));
         }
 
@@ -62,15 +62,13 @@ public class SlimCollectionInterpreter<T> implements Interpreter<Collection<? ex
         return list;
     }
 
-    private record TextLength(int length, int used) {}
-
     private @Nullable TextLength readLength(@NotNull String input) throws NumberFormatException {
-        if (input.isEmpty()){
+        if (input.isEmpty()) {
             return null;
         }
 
         char c = input.charAt(0);
-        var num_length = Integer.parseUnsignedInt(""+c);
+        var num_length = Integer.parseUnsignedInt("" + c);
         if (num_length == 0) {
             return null;
         }
@@ -79,24 +77,23 @@ public class SlimCollectionInterpreter<T> implements Interpreter<Collection<? ex
         if (actualLength <= len) {
             return null;
         }
-        String text = input.substring(1, num_length+1);
+        String text = input.substring(1, num_length + 1);
         int length = Integer.parseUnsignedInt(text);
-        return new TextLength(length, text.length()+1);
+        return new TextLength(length, text.length() + 1);
     }
 
     private @NotNull String encodeLength(int length) {
         String text = Integer.toString(length);
-        return ""+text.length() + ""+ text;
+        return "" + text.length() + "" + text;
     }
 
-
     @Override
-    public String reverse(@NotNull Collection<? extends T> ts) {
+    public String reverse(@NotNull Collection<T> ts) {
         StringBuilder builder = new StringBuilder();
         String collectionLength = encodeLength(ts.size());
         StringJoiner innerJoiner = new StringJoiner("");
         ts.forEach(t -> innerJoiner.add(appendObject(t)));
-        builder.append(encodeLength(innerJoiner.length()+collectionLength.length()));
+        builder.append(encodeLength(innerJoiner.length() + collectionLength.length()));
         builder.append(collectionLength);
         builder.append(innerJoiner);
         return builder.toString();
@@ -105,10 +102,13 @@ public class SlimCollectionInterpreter<T> implements Interpreter<Collection<? ex
     private @NotNull String appendObject(T object) {
         String text = tInterpreter.reverse(object);
         String length = encodeLength(text.length());
-        return length+text;
+        return length + text;
     }
 
     public Interpreter<T> tInterpreter() {
         return tInterpreter;
+    }
+
+    private record TextLength(int length, int used) {
     }
 }

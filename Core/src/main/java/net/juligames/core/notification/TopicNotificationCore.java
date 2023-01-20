@@ -3,7 +3,6 @@ package net.juligames.core.notification;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.topic.ITopic;
 import com.hazelcast.topic.MessageListener;
-import com.hazelcast.topic.impl.TopicProxy;
 import de.bentzin.tools.pair.DividedPair;
 import net.juligames.core.serialization.SerializedNotification;
 import org.jetbrains.annotations.NotNull;
@@ -29,13 +28,13 @@ public class TopicNotificationCore {
         List<DividedPair<UUID, String>> dividedPairs = Arrays.stream(coreNotification.addresses()).toList(); //copy data
         for (DividedPair<UUID, String> addressee : dividedPairs) {
             UUID uuid = addressee.getFirst();
-            hazelcastInstance.<SerializedNotification>getTopic("notify: " + uuid.toString())
+            hazelcastInstance.<SerializedNotification>getTopic("notify:" + uuid.toString())
                     .publish(coreNotification.serialize());
         }
     }
 
     public void subscribeOnUUID(@NotNull UUID uuid, MessageListener<SerializedNotification> notificationListener) {
-        hazelcastInstance.<SerializedNotification>getTopic("notify: " + uuid.toString()).
+        hazelcastInstance.<SerializedNotification>getTopic("notify:" + uuid.toString()).
                 addMessageListener(notificationListener);
     }
 
@@ -44,6 +43,6 @@ public class TopicNotificationCore {
     }
 
     public <E> CompletionStage<Void> sendRaw(String hazel, E e) {
-        return sendRaw(hazelcastInstance.getTopic(hazel),e);
+        return sendRaw(hazelcastInstance.getTopic(hazel), e);
     }
 }

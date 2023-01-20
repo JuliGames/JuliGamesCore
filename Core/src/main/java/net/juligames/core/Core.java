@@ -143,7 +143,7 @@ public final class Core implements API {
         basicMiniGame = new SubscribableType<>();
 
 
-        Core.getInstance().getOrThrow().<SerializedNotification>getTopic("notify: " + Core.getInstance().getClusterApi().getLocalUUID().toString())
+        Core.getInstance().getOrThrow().<SerializedNotification>getTopic("notify:" + Core.getInstance().getClusterApi().getLocalUUID().toString())
                 .addMessageListener(coreNotificationApi);
 
         logger.info("hooking to shutdown...");
@@ -176,9 +176,9 @@ public final class Core implements API {
 
 
         try {
-            Core.getInstance().getOrThrow().getTopic("notify: " + Core.getInstance().getClusterApi().getLocalUUID()).destroy();
-        }catch(NoSuchElementException noSuchElementException){
-            coreLogger.error("failed to destroy hazel -- master reboot maybe required :: " +noSuchElementException.getMessage());
+            Core.getInstance().getOrThrow().getTopic("notify:" + Core.getInstance().getClusterApi().getLocalUUID()).destroy();
+        } catch (NoSuchElementException noSuchElementException) {
+            coreLogger.error("failed to destroy hazel -- master reboot maybe required :: " + noSuchElementException.getMessage());
         }
         coreLogger.info("stopping hazelcast client connection");
         hazelConnector.disconnect();
@@ -359,5 +359,12 @@ public final class Core implements API {
 
     public Registerator<Consumer<HazelcastInstance>> getHazelcastPostPreparationWorkers() {
         return hazelcastPostPreparationWorkers;
+    }
+
+    @Override
+    protected void finalize() { //Currently only for testing around with GarbageCollector!! Should be removed before 2.0
+        if(getCoreLogger() != null) {
+            getCoreLogger().debug("This API implementation is no longer available!");
+        }
     }
 }

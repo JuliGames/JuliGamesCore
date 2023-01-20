@@ -128,6 +128,4 @@ public interface API {
      * @return if the core is connected and ready for operation
      */
     // boolean isAlive();
-
-
 }

@@ -134,6 +134,7 @@ public final class CoreClusterApi implements ClusterApi {
 
     /**
      * The SocketAddress of the local Endpoint
+     *
      * @apiNote Has no relevance for the API
      */
     public SocketAddress getLocalAddress() {
@@ -142,6 +143,7 @@ public final class CoreClusterApi implements ClusterApi {
 
     /**
      * This method is not exposed to the public API but may be in the future
+     *
      * @return the endpoint of the local instance
      */
     public @NotNull Endpoint getEndpoint() {

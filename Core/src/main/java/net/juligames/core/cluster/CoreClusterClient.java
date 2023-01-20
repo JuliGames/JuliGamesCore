@@ -13,11 +13,12 @@ import java.util.UUID;
  * @author Ture Bentzin
  * 27.12.2022
  */
-public record CoreClusterClient(UUID uuid, InetSocketAddress inetSocketAddress, String clientType, String name, Set<String> labels) implements ClusterClient {
+public record CoreClusterClient(UUID uuid, InetSocketAddress inetSocketAddress, String clientType, String name,
+                                Set<String> labels) implements ClusterClient {
 
     @Contract("_ -> new")
     public static @NotNull CoreClusterClient ofHazelcast(@NotNull Client client) {
-        return new CoreClusterClient(client.getUuid(),client.getSocketAddress(),client.getClientType(),client.getName(),client.getLabels());
+        return new CoreClusterClient(client.getUuid(), client.getSocketAddress(), client.getClientType(), client.getName(), client.getLabels());
     }
 
     @Override

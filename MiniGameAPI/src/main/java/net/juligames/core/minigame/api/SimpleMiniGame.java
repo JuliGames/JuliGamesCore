@@ -10,7 +10,7 @@ import java.util.Optional;
  * @author Ture Bentzin
  * 19.12.2022
  */
-public abstract class SimpleMiniGame extends MiniGame{
+public abstract class SimpleMiniGame extends MiniGame {
 
     private final String version;
     private final String developerName;

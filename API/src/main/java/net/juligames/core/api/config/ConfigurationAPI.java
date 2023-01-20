@@ -1,5 +1,8 @@
 package net.juligames.core.api.config;
 
+import org.jetbrains.annotations.ApiStatus;
+
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.Properties;
 
@@ -29,5 +32,65 @@ public interface ConfigurationAPI {
 
     Comparator<? extends Configuration> comparator();
 
-    //buildInInterpreters
+    //collections on demand - 1.1
+
+    /**
+     * This will split the given collection using the given interpreter
+     *
+     * @param collection  the collection
+     * @param interpreter the interpreter
+     * @param <T>         Type
+     * @return a {@link Collection} out of the interpreted Ts
+     */
+    <T> Collection<String> split(Collection<T> collection, Interpreter<T> interpreter);
+
+    /**
+     * This will split the given {@link Collection} and return a writer that will
+     *
+     * @param collection  the collection to spilt
+     * @param interpreter the interpreter to use
+     * @param <T>         Type
+     * @return a {@link ConfigWriter} ready to write the split data
+     */
+    <T> ConfigWriter splitToWriter(Collection<T> collection, Interpreter<T> interpreter);
+
+    /**
+     * This will split and write the Collection using {@link #splitToWriter(Collection, Interpreter)}
+     *
+     * @param collection    the collection
+     * @param interpreter   the interpreter
+     * @param configuration the configuration
+     * @param keySpace      the (empty) keyspace
+     * @param <T>           type
+     * @deprecated moved to {@link Configuration#setIterable(String, Iterable, Interpreter)}
+     */
+    @Deprecated
+    default <T> void spiltAndWrite(Collection<T> collection, Interpreter<T> interpreter, Configuration configuration, String keySpace) {
+        splitToWriter(collection, interpreter).write(configuration, keySpace);
+    }
+
+    /**
+     * This will try to read a {@link Collection} that was split by {@link #splitToWriter(Collection, Interpreter)}
+     *
+     * @param keySpace    the keyspace
+     * @param interpreter the interpreter
+     * @param <T>         Type
+     * @return a {@link java.util.Collection} with all Ts that where read successfully
+     * @deprecated Moved to {@link Configuration#getCollection(String, Interpreter)}
+     */
+    @Deprecated
+    <T> Collection<T> tryReadSplitCollection(Configuration configuration, String keySpace, Interpreter<T> interpreter);
+
+
+    /**
+     * This will try to read a {@link Collection} that was split by {@link #splitToWriter(Collection, Interpreter)}
+     *
+     * @param strings     the raw values
+     * @param interpreter the interpreter
+     * @param <T>         Type
+     * @return a {@link java.util.Collection} with all Ts that where read successfully
+     */
+    @ApiStatus.Experimental
+    <T> Collection<T> tryReadSplitCollection(Iterable<String> strings, Interpreter<T> interpreter);
+
 }

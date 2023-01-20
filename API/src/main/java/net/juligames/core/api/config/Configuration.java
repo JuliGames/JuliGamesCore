@@ -101,6 +101,10 @@ public interface Configuration extends Comparable<Configuration> {
 
     @Nullable Float getFloatOrNull(Supplier<String> key);
 
+    <T> Collection<T> getCollection(String keyspace, Interpreter<T> interpreter);
+
+    <T> Collection<T> getCollection(Supplier<String> keyspace, Interpreter<T> interpreter);
+
     @Deprecated
     @MaybePresent <T> Optional<T> get(String key, Function<String, T> interpreter);
 
@@ -161,6 +165,14 @@ public interface Configuration extends Comparable<Configuration> {
     <T> void set(Supplier<String> key, T value, Interpreter<T> interpreter);
 
     <T> void set(Supplier<String> key, Supplier<T> value, Interpreter<T> interpreter);
+
+    <T> void setIterable(String keySpace, Iterable<T> iterable, Interpreter<T> interpreter);
+
+    <T> void setIterable(Supplier<String> keySpace, Iterable<T> iterable, Interpreter<T> interpreter);
+
+    <T> void setIterable(String keySpace, Supplier<Iterable<T>> iterable, Interpreter<T> interpreter);
+
+    <T> void setIterable(Supplier<String> keySpace, Supplier<Iterable<T>> iterable, Interpreter<T> interpreter);
 
     void del(String key);
 

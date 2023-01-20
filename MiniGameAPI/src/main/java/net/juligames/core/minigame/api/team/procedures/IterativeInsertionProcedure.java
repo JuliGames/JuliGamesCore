@@ -13,6 +13,8 @@ import java.util.UUID;
 @SuppressWarnings("AssignmentUsedAsCondition")
 public record IterativeInsertionProcedure(boolean fillFirst) implements InsertionProcedure {
 
+    private static final IterativeInsertionProcedure instance = new IterativeInsertionProcedure(false);
+
     /**
      * @return an instance of {@link IterativeInsertionProcedure} that does not fill non-empty Teams first!
      */
@@ -20,23 +22,21 @@ public record IterativeInsertionProcedure(boolean fillFirst) implements Insertio
         return instance;
     }
 
-    private static final IterativeInsertionProcedure instance = new IterativeInsertionProcedure(false);
-
     @Override
     public Boolean apply(final @NotNull Set<Team> teams, final UUID uuid) {
         boolean success = false;
         //return success;
-        if(fillFirst) {
+        if (fillFirst) {
             for (Team team : teams) {
-                if(!success && !team.isEmpty() && team.hasCapacity())
+                if (!success && !team.isEmpty() && team.hasCapacity())
                     success = team.tryAdd(uuid);
             }
-            if(!success) {
-                return new IterativeInsertionProcedure(false).apply(teams,uuid);
-            }else {
+            if (!success) {
+                return new IterativeInsertionProcedure(false).apply(teams, uuid);
+            } else {
                 return true;
             }
-        }else {
+        } else {
             //normal procedure
             for (Team team : teams) if (success = team.tryAdd(uuid)) break; //deal?
             return success;

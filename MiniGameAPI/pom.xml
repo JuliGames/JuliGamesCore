@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>JuliGamesCore</artifactId>
         <groupId>net.juligames.core</groupId>
-        <version>1.0</version>
+        <version>1.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -21,19 +21,19 @@
         <dependency>
             <groupId>net.juligames.core</groupId>
             <artifactId>PaperAPI</artifactId>
-            <version>1.0</version>
+            <version>1.1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>cloud.timo</groupId>
-            <artifactId>TimoCloud-Universal</artifactId>
-            <version>6.0.0</version>
+            <groupId>cloud.timo.TimoCloud</groupId>
+            <artifactId>TimoCloud-API</artifactId>
+            <version>6.5.1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-text-minimessage</artifactId>
-            <version>4.11.0</version>
+            <version>4.12.0</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
@@ -44,13 +44,12 @@
             <name>Juligames Maven</name>
             <url>https://maven.juligames.net/juligames</url>
         </repository>
-            <!--<repository>
-                <id>TimoCloud-API</id>
-                <url>https://maven.timo.cloud/repository/TimoCloud-API/</url>
-            </repository>
-            -->
+        <!--<repository>
+            <id>TimoCloud-API</id>
+            <url>https://maven.timo.cloud/repository/TimoCloud-API/</url>
+        </repository>
+        -->
     </repositories>
-
 
 
 </project>

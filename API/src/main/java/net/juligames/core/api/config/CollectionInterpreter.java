@@ -7,12 +7,17 @@ import java.util.Collection;
 import java.util.List;
 
 /**
+ * The {@link CollectionInterpreter} can be used to semi-human-readable enter stuff into the configuration
+ *
  * @author Ture Bentzin 27.11.2022
  * @author Bommels05
  * @see SlimCollectionInterpreter
+ * @see IterableInterpreter
+ * @deprecated use {@link ConfigurationAPI#splitToWriter(Collection, Interpreter)} and similar instead
  */
-
-public class CollectionInterpreter<T> implements Interpreter<Collection<? extends T>> {
+@SuppressWarnings("unused")
+@Deprecated
+public class CollectionInterpreter<T> implements IterableInterpreter<T, Collection<T>> {
 
     private final Interpreter<T> tInterpreter;
 
@@ -21,7 +26,7 @@ public class CollectionInterpreter<T> implements Interpreter<Collection<? extend
     }
 
     @Override
-    public Collection<? extends T> interpret(final @NotNull String input) throws Exception {
+    public Collection<T> interpret(final @NotNull String input) throws Exception {
         if (!input.startsWith("{") || !input.endsWith("}")) {
             throw new IllegalArgumentException("Input has to start with { and end with }");
         }
@@ -70,16 +75,15 @@ public class CollectionInterpreter<T> implements Interpreter<Collection<? extend
 
 
     @Override
-    public String reverse(@NotNull Collection<? extends T> ts) {
+    public String reverse(@NotNull Collection<T> ts) {
         StringBuilder builder = new StringBuilder();
 
         for (T value : ts) {
             String converted = tInterpreter.reverse(value);
-            builder.append(":length=" + converted.length() + ":" + converted + ":");
+            builder.append(":length=").append(converted.length()).append(":").append(converted).append(":");
         }
 
-        String output = "{" + builder + "}";
-        return output;
+        return "{" + builder + "}";
     }
 
     private @NotNull StringBuilder appendObject(T object) {
