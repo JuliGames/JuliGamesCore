@@ -33,11 +33,11 @@ public class PrintMapCommand extends MasterCommand {
         IMap<Object, Object> map = Core.getInstance().getOrThrow().getMap(ident);
         Core.getInstance().getCoreLogger().info("printing result of printMap: " + ident);
         final boolean[] first = {true};
+        Core.getInstance().getCoreLogger().warning("The here referenced classes may be inaccurate");
         map.forEach((o, o2) -> {
 
             if (first[0]) {
                 first[0] = false;
-                Core.getInstance().getCoreLogger().warning("The here referenced classes may be inaccurate");
                 Core.getInstance().getCoreLogger().info("keyClass: " + o.getClass().getSimpleName());
                 Core.getInstance().getCoreLogger().info("valueClass: " + o2.getClass().getSimpleName());
             }
