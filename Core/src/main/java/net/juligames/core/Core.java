@@ -8,11 +8,14 @@ import de.bentzin.tools.register.Registerator;
 import net.juligames.core.api.API;
 import net.juligames.core.api.ApiCore;
 import net.juligames.core.api.TODO;
+import net.juligames.core.api.cacheing.CacheApi;
 import net.juligames.core.api.command.CommandApi;
 import net.juligames.core.api.config.ConfigurationAPI;
 import net.juligames.core.api.err.dev.TODOException;
 import net.juligames.core.api.message.MessageRecipient;
 import net.juligames.core.api.minigame.BasicMiniGame;
+import net.juligames.core.caching.CoreCacheApi;
+import net.juligames.core.caching.MessageCaching;
 import net.juligames.core.cluster.CoreClusterApi;
 import net.juligames.core.command.CoreCommandApi;
 import net.juligames.core.config.CoreConfigurationApi;
@@ -59,6 +62,7 @@ public final class Core implements API {
     private CoreMessageApi messageApi;
     private CoreConfigurationApi configurationAPI;
     private CoreCommandApi coreCommandApi;
+    private CoreCacheApi coreCacheApi;
     private SubscribableType<BasicMiniGame> basicMiniGame;
     private String core_name;
     private final Registerator<Consumer<HazelcastInstance>> hazelcastPostPreparationWorkers = new Registerator<>("hazelcastPostPreparationWorkers");
@@ -141,8 +145,10 @@ public final class Core implements API {
         coreCommandApi = new CoreCommandApi();
         clusterApi = new CoreClusterApi();
         messageApi = new CoreMessageApi();
+        coreCacheApi = new CoreCacheApi();
         basicMiniGame = new SubscribableType<>();
 
+        MessageCaching.init();
 
         Core.getInstance().getOrThrow().<SerializedNotification>getTopic("notify:" + Core.getInstance().getClusterApi().getLocalUUID().toString())
                 .addMessageListener(coreNotificationApi);
@@ -309,6 +315,11 @@ public final class Core implements API {
     @Override
     public SubscribableType<BasicMiniGame> getLocalMiniGame() {
         return basicMiniGame;
+    }
+
+    @Override
+    public CacheApi getCacheAPI() {
+        return coreCacheApi;
     }
 
     public void introduceMiniGame(BasicMiniGame basicMiniGame) {

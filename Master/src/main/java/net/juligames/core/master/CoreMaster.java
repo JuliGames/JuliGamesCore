@@ -31,7 +31,7 @@ public class CoreMaster {
     private static MasterCommandRunner masterCommandRunner;
     private static MasterConfigManager masterConfigManager;
 
-    private static CompletableFuture<Long> bootMillis;
+    private static final CompletableFuture<Long> bootMillis = new CompletableFuture<>();
 
     private CoreMaster() {
     }

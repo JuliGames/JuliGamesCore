@@ -57,6 +57,7 @@ public class PaperCorePlugin extends JavaPlugin {
         Objects.requireNonNull(getCommand("replacetest")).setExecutor(new ReplaceTestCommand());
         Objects.requireNonNull(getCommand("bctest")).setExecutor(new BCTestCommand());
         Objects.requireNonNull(getCommand("start")).setExecutor(new StartCommand());
+        Objects.requireNonNull(getCommand("printMessageCache")).setExecutor(new PrintMessageCacheCommand());
 
         Bukkit.getPluginManager().registerEvents(new PaperCoreEventListener(), this);
 

@@ -1,6 +1,8 @@
 package net.juligames.core.message;
 
+import com.github.benmanes.caffeine.cache.Cache;
 import de.bentzin.tools.Hardcode;
+import de.bentzin.tools.pair.Pair;
 import net.juligames.core.Core;
 import net.juligames.core.api.API;
 import net.juligames.core.api.jdbi.*;
@@ -9,6 +11,7 @@ import net.juligames.core.api.jdbi.mapper.bean.ReplacementBean;
 import net.juligames.core.api.message.Message;
 import net.juligames.core.api.message.MessageApi;
 import net.juligames.core.api.message.MessageRecipient;
+import net.juligames.core.caching.MessageCaching;
 import net.juligames.core.jdbi.CoreMessagePostScript;
 import net.juligames.core.jdbi.CoreMultiMessagePostScript;
 import org.jdbi.v3.core.extension.ExtensionCallback;
@@ -86,14 +89,13 @@ public class CoreMessageApi implements MessageApi {
 
     @Override
     public CoreMessage getMessage(String messageKey, String locale) {
-        DBMessage dbMessage = callMessageExtension(extension -> extension.select(messageKey, locale));
-        return CoreMessage.fromData(dbMessage, locale);
+        return CoreMessage.fromData(getMessageFromCache(messageKey, locale).orElseGet(() ->
+                callMessageExtension(extension -> extension.select(messageKey, locale))), locale);
     }
 
     @Override
     public CoreMessage getMessage(String messageKey, String locale, String... replacements) {
-        DBMessage dbMessage = callMessageExtension(extension -> extension.select(messageKey, locale));
-        CoreMessage message = CoreMessage.fromData(dbMessage, messageKey);
+        CoreMessage message = getMessage(messageKey,locale);
         message.doWithMiniMessage(insertReplacements(replacements));
         return message;
     }
@@ -564,5 +566,14 @@ public class CoreMessageApi implements MessageApi {
         return parse;
     }
 
+    private Cache<Pair<String>, DBMessage> getMessageCache() {
+        return MessageCaching.messageCache();
+    }
+
+    private Optional<DBMessage> getMessageFromCache(String messageKey, String locale) {
+        if (MessageCaching.enabled)
+            return Optional.ofNullable(getMessageCache().getIfPresent(new Pair<>(messageKey, locale)));
+        return Optional.empty();
+    }
 
 }
