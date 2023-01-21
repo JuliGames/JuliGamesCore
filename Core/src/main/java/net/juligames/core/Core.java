@@ -26,6 +26,7 @@ import net.juligames.core.serialization.SerializedNotification;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -252,10 +253,22 @@ public final class Core implements API {
         throw new NoSuchElementException("HazelcastInstance is not present!");
     }
 
+    /**
+     * This will return the {@link HazelcastInstance} or null if not possible
+     * @return the hazelcastInstance or null
+     */
+    @Nullable
     private HazelcastInstance getForce() {
         return getHazelConnector().getForce();
     }
 
+    /**
+     * This will return the {@link HazelcastInstance} or wait until its possible to provide it.
+     * It is recommended to use this if you execute code asynchronously and don´t know if the Core is already connected
+     * @return the {@link HazelcastInstance}
+     * @throws ExecutionException - hazelcast will not be possible to be provided
+     * @throws InterruptedException - waiting got interrupted
+     */
     public HazelcastInstance getOrWait() throws ExecutionException, InterruptedException {
         CompletableFuture<HazelcastInstance> instance = getHazelConnector().getInstance();
         return instance.get();

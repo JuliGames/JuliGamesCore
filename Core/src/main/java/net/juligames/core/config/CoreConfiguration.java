@@ -47,16 +47,17 @@ public class CoreConfiguration implements Configuration {
      */
     public static @NotNull CoreConfiguration fromProperties(@NotNull Properties properties, boolean override) {
         String name = properties.getProperty("configuration_name");
+        if(name == null) throw new IllegalArgumentException("properties does not specify a valid configuration_name!");
         CoreConfiguration configuration = new CoreConfiguration(name);
         Set<Map.Entry<Object, Object>> entries = properties.entrySet();
         IMap<String, String> map = configuration.accessHazel().get();
         for (Map.Entry<Object, Object> entry : entries) {
             if (override) {
                 String old = map.put(entry.getKey().toString(), entry.getValue().toString()); //oh man... oh man
-                Core.getInstance().getCoreLogger().info("OVERRIDE: set " + entry.getKey() + "from " + old + " to " + entry.getValue());
+                Core.getInstance().getCoreLogger().debug("OVERRIDE: set " + entry.getKey() + "from " + old + " to " + entry.getValue());
             } else if (!map.containsKey(entry.getKey().toString())) {
                 String old = map.put(entry.getKey().toString(), entry.getValue().toString()); //oh man... oh man
-                Core.getInstance().getCoreLogger().info("set " + entry.getKey() + "from " + old + " to " + entry.getValue());
+                Core.getInstance().getCoreLogger().debug("set " + entry.getKey() + "from " + old + " to " + entry.getValue());
             }
         }
         configuration.updateHazel();
@@ -620,6 +621,28 @@ public class CoreConfiguration implements Configuration {
     public void delAll(@NotNull Supplier<Collection<String>> keys) {
         Collection<String> collection = keys.get();
         dellAllFromCollection(collection);
+    }
+
+    @Override
+    public void delRecursive(String key) {
+        data.removeAll(mapEntry -> mapEntry.getKey().startsWith(key));
+    }
+
+    @Override
+    public void delRecursive(@NotNull Supplier<String> key) {
+        delRecursive(key.get());
+    }
+
+    @Override
+    public void delRecursive(String... keys) {
+        delAllRecursive(() -> List.of(keys));
+    }
+
+    @Override
+    public void delAllRecursive(@NotNull Supplier<Collection<String>> keys) {
+        for (String s : keys.get()) {
+            delRecursive(s);
+        }
     }
 
     public void dellAllFromCollection(Collection<String> keys) {

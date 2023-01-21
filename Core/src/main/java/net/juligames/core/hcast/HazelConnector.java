@@ -8,6 +8,7 @@ import com.hazelcast.core.HazelcastInstance;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -64,6 +65,7 @@ public class HazelConnector {
     }
 
     @ApiStatus.Internal
+    @Nullable
     public HazelcastInstance getForce() {
         return getInstance().getNow(null);
     }

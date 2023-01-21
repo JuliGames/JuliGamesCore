@@ -182,6 +182,14 @@ public interface Configuration extends Comparable<Configuration> {
 
     void delAll(Supplier<Collection<String>> keys);
 
+    void delRecursive(String key);
+
+    void delRecursive(Supplier<String> key);
+
+    void delRecursive(String... keys);
+
+    void delAllRecursive(Supplier<Collection<String>> keys);
+
     <T> T query(Function<Supplier<String>, T> query, String input);
 
     <T> T query(BiFunction<Supplier<String>, Interpreter<T>, T> query, String input, Interpreter<T> interpreter);

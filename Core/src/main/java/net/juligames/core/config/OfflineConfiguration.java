@@ -547,6 +547,32 @@ public class OfflineConfiguration implements Configuration {
         }
     }
 
+    @Override
+    public void delRecursive(String key) {
+        for (Map.Entry<String, String> stringStringEntry : data.entrySet()) {
+            if(stringStringEntry.getKey().startsWith(key)) {
+                data.remove(stringStringEntry.getKey());
+            }
+        }
+    }
+
+    @Override
+    public void delRecursive(@NotNull Supplier<String> key) {
+        delRecursive(key.get());
+    }
+
+    @Override
+    public void delRecursive(String... keys) {
+        delAllRecursive(() -> List.of(keys));
+    }
+
+    @Override
+    public void delAllRecursive(@NotNull Supplier<Collection<String>> keys) {
+        for (String s : keys.get()) {
+            delRecursive(s);
+        }
+    }
+
 
     //query's
 
