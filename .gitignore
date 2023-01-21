@@ -32,3 +32,4 @@ JDBITEST.java
 target/
 
 config/database.properties
+Core/src/main/java/net/juligames/core/Test.java

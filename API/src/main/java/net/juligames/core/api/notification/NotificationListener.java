@@ -13,5 +13,4 @@ public interface NotificationListener {
      */
     void onNotification(Notification notification);
 
-
 }
