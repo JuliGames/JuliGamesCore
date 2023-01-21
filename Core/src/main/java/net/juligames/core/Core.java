@@ -44,9 +44,9 @@ public final class Core implements API {
      * This can be set depending on the build of the Core
      */
     public static final String CORE_BRAND = "Core";
-    public static final String CORE_VERSION_NUMBER = "1.0";
+    public static final String CORE_VERSION_NUMBER = "1.1";
     public static final String CORE_SPECIFICATION = "Gustav";//Development Specification: Michael(.n)
-    private static final String BUILD_VERSION = "1.0"; //POM VERSION
+    private static final String BUILD_VERSION = "1.1"; //POM VERSION
     private static Core core;
     private HazelConnector hazelConnector;
     private TopicNotificationCore topicNotificationCore;
