@@ -121,7 +121,7 @@ public final class Core implements API {
             coreLogger.error(e.getClass().getName() + " : " + e.getMessage());
             e.printStackTrace();
         }
-        //postPreperation
+        //postPreparation
         getHazelcastPostPreparationWorkers().forEach(hazelcastInstanceConsumer -> hazelcastInstanceConsumer.accept(getOrThrow()));
 
         configurationAPI = new CoreConfigurationApi();
