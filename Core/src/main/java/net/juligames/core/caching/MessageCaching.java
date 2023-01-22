@@ -18,6 +18,7 @@ import java.util.concurrent.TimeUnit;
  * @author Ture Bentzin
  * 21.01.2023
  */
+@SuppressWarnings("unused")
 public class MessageCaching {
     public static boolean enabled = false;
     private static Cache<Pair<String>, DBMessage> messageCache;
@@ -43,13 +44,22 @@ public class MessageCaching {
         Long maximumSize = configuration.getLongOrNull("maximum_size");
         Caffeine<Object, Object> builder = Caffeine.newBuilder();
         if (refreshAfterWriteMillis != null) {
-            builder.refreshAfterWrite(refreshAfterWriteMillis, TimeUnit.MICROSECONDS);
+            builder.refreshAfterWrite(refreshAfterWriteMillis, TimeUnit.MILLISECONDS);
         }
         if (invalidateAfterReadMillis != null) {
             builder.expireAfterAccess(invalidateAfterReadMillis, TimeUnit.MILLISECONDS);
         }
         if (maximumSize != null) {
             builder.maximumSize(maximumSize);
+        }
+
+        if(logger.isDebugEnabled()) {
+            builder.removalListener((key, value, cause) -> {
+                logger.debug("removal: " + value + "@" + key + " because of: " + cause);
+            });
+            builder.evictionListener((key, value, cause) -> {
+                logger.debug("eviction: " + value + "@" + key + " because of: " + cause);
+            });
         }
 
         messageCache = builder.build(cacheLoader);

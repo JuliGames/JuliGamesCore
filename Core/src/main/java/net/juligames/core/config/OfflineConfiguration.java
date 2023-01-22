@@ -25,8 +25,8 @@ import java.util.function.*;
 public class OfflineConfiguration implements Configuration {
 
     private final String name;
+    private final Map<String, String> data;
     private String header_comment = Core.getFullCoreName() + " :: a default configuration file";
-    private Map<String, String> data;
 
 
     public OfflineConfiguration(String name) {

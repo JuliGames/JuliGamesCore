@@ -90,7 +90,7 @@ public class CoreMessageApi implements MessageApi {
     @Override
     public CoreMessage getMessage(String messageKey, String locale) {
         return CoreMessage.fromData(getMessageFromCache(messageKey, locale).orElseGet(() ->
-                callMessageExtension(extension -> extension.select(messageKey, locale))), locale);
+                cache(callMessageExtension(extension -> extension.select(messageKey, locale)))), locale);
     }
 
     @Override
@@ -113,7 +113,7 @@ public class CoreMessageApi implements MessageApi {
     @Override
     public Collection<CoreMessage> getMessage(String messageKey) {
         List<MessageBean> messageBeans = callMessageExtension(extension -> extension.selectFromKey(messageKey));
-        return messageBeans.stream().map(messageBean -> CoreMessage.fromData(messageBean, messageKey)).toList();
+        return messageBeans.stream().map(messageBean -> CoreMessage.fromData(cache(messageBean), messageKey)).toList();
     }
 
     @Override
@@ -139,6 +139,7 @@ public class CoreMessageApi implements MessageApi {
     public Collection<CoreMessage> getAllFromLocale(String locale) {
         //EMPTY COLLECTION
         List<MessageBean> messageBeans = callMessageExtension(extension -> extension.selectFromLocale(locale));
+        messageBeans.forEach(this::cache);
         return messageBeans.stream().map(CoreMessage::fromData).toList();
     }
 
@@ -164,12 +165,14 @@ public class CoreMessageApi implements MessageApi {
     @Override
     public Collection<CoreMessage> getAll() {
         List<MessageBean> messageBeans = callMessageExtension(MessageDAO::listAllBeans);
+        messageBeans.forEach(this::cache);
         return messageBeans.stream().map(CoreMessage::new).toList();
     }
 
     @Override
     public Collection<CoreMessage> getAll(String... replacements) {
         List<MessageBean> messageBeans = callMessageExtension(MessageDAO::listAllBeans);
+        messageBeans.forEach(this::cache);
         List<CoreMessage> coreMessages = messageBeans.stream().map(CoreMessage::new).toList();
         coreMessages.forEach(coreMessage -> coreMessage.doWithMiniMessage(insertReplacements(replacements)));
         return coreMessages;
@@ -178,6 +181,7 @@ public class CoreMessageApi implements MessageApi {
     @Override
     public Stream<DBMessage> streamData() {
         List<MessageBean> messageBeans = callMessageExtension(MessageDAO::listAllBeans);
+        messageBeans.forEach(this::cache);
         return messageBeans.stream().map(messageBean -> (DBMessage) messageBeans);
     }
 
@@ -574,6 +578,12 @@ public class CoreMessageApi implements MessageApi {
         if (MessageCaching.enabled)
             return Optional.ofNullable(getMessageCache().getIfPresent(new Pair<>(messageKey, locale)));
         return Optional.empty();
+    }
+
+    @Contract("_ -> param1")
+    private @NotNull DBMessage cache(DBMessage dbMessage) {
+        getMessageCache().put(new Pair<>(dbMessage.getMessageKey(),dbMessage.getLocale()),dbMessage);
+        return dbMessage;
     }
 
 }

@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 public class PrintMessageCacheCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        String s = MessageCaching.messageCache().toString();
+        String s = MessageCaching.messageCache().asMap().toString();
         sender.sendMessage("NATIVE: " + s);
         return true;
     }
