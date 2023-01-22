@@ -102,7 +102,16 @@ public final class Core implements API {
     }
 
     @ApiStatus.Internal
-    public void start(String core_name, Logger logger, boolean member) {
+    public void start(String core_name, @NotNull Logger logger, boolean member) {
+        {
+            final boolean core_debug_property = Boolean.getBoolean("coreDebug");
+            if(core_debug_property){
+                logger.info("Detected SystemProperty \"coreDebug=true\" -> Debug was enabled");
+                logger.setDebug(true);
+                logger.debug("Debug is now enabled!");
+            }
+
+        }
         this.core_name = core_name;
         if (core != null) throw new IllegalStateException("seems like a core is already running!");
         core = this;
@@ -113,7 +122,6 @@ public final class Core implements API {
             hazelConnector = HazelConnector.getInstanceAndConnectAsMember(core_name);
 
         coreLogger = logger;
-        coreLogger.setDebug(true);
         apiLogger = coreLogger.adopt("api");
         coreLogger.info("------> " + getFullCoreName());
         coreLogger.info(core_name + " was started! - waiting for HazelCast to connect!");

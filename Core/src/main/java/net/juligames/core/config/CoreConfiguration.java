@@ -313,7 +313,7 @@ public class CoreConfiguration implements Configuration {
             return null;
         }
         try {
-            return Byte.parseByte(key);
+            return Byte.parseByte(extract);
         } catch (Exception e) {
             return null;
         }
@@ -331,7 +331,7 @@ public class CoreConfiguration implements Configuration {
             return Optional.empty();
         }
         try {
-            return Optional.of(Boolean.parseBoolean(key));
+            return Optional.of(Boolean.parseBoolean(extract));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

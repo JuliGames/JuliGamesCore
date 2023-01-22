@@ -10,6 +10,7 @@ import net.juligames.core.api.config.Configuration;
 import net.juligames.core.api.jdbi.DBMessage;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.PrintStream;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
@@ -32,9 +33,10 @@ public class MessageCaching {
     }
 
     public static void loadFromConfiguration(@NotNull Configuration configuration) {
+        logger.debug(configuration.cloneToProperties().toString());
         enabled = configuration.getBoolean("enabled").orElse(false);
         if (!enabled) return;
-        Core.getInstance().getCoreLogger().info("Preparing MessageCaching...");
+        logger.info("Preparing MessageCaching...");
         MessageCacheLoader cacheLoader = new MessageCacheLoader();
         Long refreshAfterWriteMillis = configuration.getLongOrNull("refresh_after_write_millis");
         Long invalidateAfterReadMillis = configuration.getLongOrNull("invalidate_after_read_millis");
@@ -51,7 +53,7 @@ public class MessageCaching {
         }
 
         messageCache = builder.build(cacheLoader);
-        Core.getInstance().getCoreLogger().info("MessageCaching is now ready!");
+        logger.info("MessageCaching is now ready!");
     }
 
     public static Configuration produceMessageCachingConfiguration() {
@@ -67,5 +69,9 @@ public class MessageCaching {
 
     public static Cache<Pair<String>, DBMessage> messageCache() {
         return messageCache;
+    }
+
+    public static void printCache(@NotNull PrintStream printStream) {
+        printStream.println(messageCache.asMap().toString());
     }
 }
