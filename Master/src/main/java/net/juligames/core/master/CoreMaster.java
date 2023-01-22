@@ -24,14 +24,13 @@ import java.util.concurrent.ExecutionException;
  */
 public class CoreMaster {
 
+    private static final CompletableFuture<Long> bootMillis = new CompletableFuture<>();
     private static MasterHazelInformationProvider masterHazelInformationProvider;
     private static HazelcastInstance hazelcast;
     private static Logger logger;
     private static CoreSQLManager SQLManager;
     private static MasterCommandRunner masterCommandRunner;
     private static MasterConfigManager masterConfigManager;
-
-    private static final CompletableFuture<Long> bootMillis = new CompletableFuture<>();
 
     private CoreMaster() {
     }

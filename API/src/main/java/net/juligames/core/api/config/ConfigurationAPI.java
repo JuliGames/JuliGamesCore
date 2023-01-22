@@ -6,7 +6,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.Optional;
 import java.util.Properties;
 
 /**
@@ -98,8 +97,7 @@ public interface ConfigurationAPI {
 
 
     /**
-     *
-     * @param name stored as configuration_name
+     * @param name   stored as configuration_name
      * @param header stored as configuration_header
      * @return initialized Properties to be used with the {@link ConfigurationAPI}
      */

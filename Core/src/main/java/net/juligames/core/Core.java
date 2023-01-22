@@ -52,6 +52,7 @@ public final class Core implements API {
     public static final String CORE_SPECIFICATION = "Gustav";//Development Specification: Michael(.n)
     private static final String BUILD_VERSION = "1.2"; //POM VERSION
     private static Core core;
+    private final Registerator<Consumer<HazelcastInstance>> hazelcastPostPreparationWorkers = new Registerator<>("hazelcastPostPreparationWorkers");
     private HazelConnector hazelConnector;
     private TopicNotificationCore topicNotificationCore;
     private CoreNotificationApi coreNotificationApi;
@@ -65,7 +66,6 @@ public final class Core implements API {
     private CoreCacheApi coreCacheApi;
     private SubscribableType<BasicMiniGame> basicMiniGame;
     private String core_name;
-    private final Registerator<Consumer<HazelcastInstance>> hazelcastPostPreparationWorkers = new Registerator<>("hazelcastPostPreparationWorkers");
     @NotNull
     private Supplier<Collection<? extends MessageRecipient>> onlineRecipientProvider = () -> List.of(new DummyMessageRecipient());
 
@@ -261,6 +261,7 @@ public final class Core implements API {
 
     /**
      * This will return the {@link HazelcastInstance} or null if not possible
+     *
      * @return the hazelcastInstance or null
      */
     @Nullable
@@ -271,8 +272,9 @@ public final class Core implements API {
     /**
      * This will return the {@link HazelcastInstance} or wait until its possible to provide it.
      * It is recommended to use this if you execute code asynchronously and don´t know if the Core is already connected
+     *
      * @return the {@link HazelcastInstance}
-     * @throws ExecutionException - hazelcast will not be possible to be provided
+     * @throws ExecutionException   - hazelcast will not be possible to be provided
      * @throws InterruptedException - waiting got interrupted
      */
     public HazelcastInstance getOrWait() throws ExecutionException, InterruptedException {
@@ -387,7 +389,7 @@ public final class Core implements API {
 
     @Override
     protected void finalize() { //Currently only for testing around with GarbageCollector!! Should be removed before 2.0
-        if(getCoreLogger() != null) {
+        if (getCoreLogger() != null) {
             getCoreLogger().debug("This API implementation is no longer available!");
         }
     }
