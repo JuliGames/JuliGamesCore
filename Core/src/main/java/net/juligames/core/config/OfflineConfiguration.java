@@ -550,7 +550,7 @@ public class OfflineConfiguration implements Configuration {
     @Override
     public void delRecursive(String key) {
         for (Map.Entry<String, String> stringStringEntry : data.entrySet()) {
-            if(stringStringEntry.getKey().startsWith(key)) {
+            if (stringStringEntry.getKey().startsWith(key)) {
                 data.remove(stringStringEntry.getKey());
             }
         }
@@ -645,34 +645,34 @@ public class OfflineConfiguration implements Configuration {
 
     @Override
     public <T> void setIterable(String keySpace, Iterable<T> iterable, Interpreter<T> interpreter) {
-        IterableSplitter.splitAndWrite(iterable,interpreter,this,keySpace);
+        IterableSplitter.splitAndWrite(iterable, interpreter, this, keySpace);
     }
 
     @Override
     public <T> void setIterable(@NotNull Supplier<String> keySpace, Iterable<T> iterable, Interpreter<T> interpreter) {
-        setIterable(keySpace.get(),iterable,interpreter);
+        setIterable(keySpace.get(), iterable, interpreter);
     }
 
     @Override
     public <T> void setIterable(String keySpace, @NotNull Supplier<Iterable<T>> iterable, Interpreter<T> interpreter) {
-        setIterable(keySpace,iterable.get(),interpreter);
+        setIterable(keySpace, iterable.get(), interpreter);
     }
 
     @Override
     public <T> void setIterable(Supplier<String> keySpace, @NotNull Supplier<Iterable<T>> iterable, Interpreter<T> interpreter) {
-        setIterable(keySpace,iterable.get(),interpreter);
+        setIterable(keySpace, iterable.get(), interpreter);
     }
 
     //collection get
 
     @Override
     public <T> Collection<T> getCollection(String keyspace, Interpreter<T> interpreter) {
-        return IterableSplitter.tryReadSplitCollection(this,keyspace,interpreter);
+        return IterableSplitter.tryReadSplitCollection(this, keyspace, interpreter);
     }
 
     @Override
     public <T> Collection<T> getCollection(@NotNull Supplier<String> keyspace, Interpreter<T> interpreter) {
-        return getCollection(keyspace.get(),interpreter);
+        return getCollection(keyspace.get(), interpreter);
     }
 }
 

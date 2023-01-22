@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Ture Bentzin
  * 21.01.2023
  */
-public class MessageCacheLoader implements CacheLoader<Pair<String>,DBMessage> {
+public class MessageCacheLoader implements CacheLoader<Pair<String>, DBMessage> {
 
     @Override
     public @Nullable DBMessage load(@NotNull Pair<String> key) {

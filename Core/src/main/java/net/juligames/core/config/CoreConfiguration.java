@@ -47,7 +47,7 @@ public class CoreConfiguration implements Configuration {
      */
     public static @NotNull CoreConfiguration fromProperties(@NotNull Properties properties, boolean override) {
         String name = properties.getProperty("configuration_name");
-        if(name == null) throw new IllegalArgumentException("properties does not specify a valid configuration_name!");
+        if (name == null) throw new IllegalArgumentException("properties does not specify a valid configuration_name!");
         CoreConfiguration configuration = new CoreConfiguration(name);
         Set<Map.Entry<Object, Object>> entries = properties.entrySet();
         IMap<String, String> map = configuration.accessHazel().get();
@@ -398,12 +398,12 @@ public class CoreConfiguration implements Configuration {
 
     @Override
     public <T> Collection<T> getCollection(String keyspace, Interpreter<T> interpreter) {
-        return IterableSplitter.tryReadSplitCollection(this,keyspace,interpreter);
+        return IterableSplitter.tryReadSplitCollection(this, keyspace, interpreter);
     }
 
     @Override
     public <T> Collection<T> getCollection(@NotNull Supplier<String> keyspace, Interpreter<T> interpreter) {
-        return getCollection(keyspace.get(),interpreter);
+        return getCollection(keyspace.get(), interpreter);
     }
 
     //legacy interpreter
@@ -584,22 +584,22 @@ public class CoreConfiguration implements Configuration {
 
     @Override
     public <T> void setIterable(String keySpace, Iterable<T> iterable, Interpreter<T> interpreter) {
-        IterableSplitter.splitAndWrite(iterable,interpreter,this,keySpace);
+        IterableSplitter.splitAndWrite(iterable, interpreter, this, keySpace);
     }
 
     @Override
     public <T> void setIterable(@NotNull Supplier<String> keySpace, Iterable<T> iterable, Interpreter<T> interpreter) {
-        setIterable(keySpace.get(),iterable,interpreter);
+        setIterable(keySpace.get(), iterable, interpreter);
     }
 
     @Override
     public <T> void setIterable(String keySpace, @NotNull Supplier<Iterable<T>> iterable, Interpreter<T> interpreter) {
-        setIterable(keySpace,iterable.get(),interpreter);
+        setIterable(keySpace, iterable.get(), interpreter);
     }
 
     @Override
     public <T> void setIterable(Supplier<String> keySpace, @NotNull Supplier<Iterable<T>> iterable, Interpreter<T> interpreter) {
-        setIterable(keySpace,iterable.get(),interpreter);
+        setIterable(keySpace, iterable.get(), interpreter);
     }
 
     @Override

@@ -35,7 +35,7 @@ public final class IterableSplitter {
     }
 
     public static <T> void splitAndWrite(Iterable<T> iterable, Interpreter<T> interpreter, Configuration configuration, String keySpace) {
-        splitToWriter(iterable,interpreter).write(configuration, keySpace);
+        splitToWriter(iterable, interpreter).write(configuration, keySpace);
     }
 
     public static <T> @NotNull Collection<T> tryReadStrings(@NotNull Iterable<String> strings, Interpreter<T> interpreter) {

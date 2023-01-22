@@ -7,7 +7,7 @@ import net.juligames.core.master.CoreMaster;
  * @author Ture Bentzin
  * 17.01.2023
  */
-public class UpdateMasterInformationCommand extends MasterCommand{
+public class UpdateMasterInformationCommand extends MasterCommand {
 
     public UpdateMasterInformationCommand() {
         super("updateInfo");

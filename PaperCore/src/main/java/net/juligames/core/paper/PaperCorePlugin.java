@@ -93,7 +93,7 @@ public class PaperCorePlugin extends JavaPlugin {
         if (corePluginLoadManager != null) {
             try {
                 corePluginLoadManager.load(); // Experimental
-            }catch (Exception e){
+            } catch (Exception e) {
                 getLogger().log(Level.SEVERE, "An issue was recorded while trying to load experimental CorePlugins: " + e.getMessage());
                 e.printStackTrace();
                 getLogger().log(Level.SEVERE, "Please be aware that issues regarding this system will have low priority duo to the unclear" +

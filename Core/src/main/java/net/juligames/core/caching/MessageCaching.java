@@ -12,7 +12,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
-import static de.bentzin.tools.logging.Logger.*;
 
 /**
  * @author Ture Bentzin
@@ -23,7 +22,8 @@ public class MessageCaching {
     private static Cache<Pair<String>, DBMessage> messageCache;
     private static Logger logger;
 
-    private MessageCaching() {}
+    private MessageCaching() {
+    }
 
     public static void init() {
         logger = Core.getInstance().getCoreLogger().adopt("MessageCaching");

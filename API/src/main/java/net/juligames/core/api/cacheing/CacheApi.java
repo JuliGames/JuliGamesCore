@@ -34,6 +34,7 @@ public interface CacheApi {
      * - MessageKey
      * - Locale (as String)
      * The Value is the MiniMessage without replacements applied
+     *
      * @return the messageCache
      */
     Cache<Pair<String>, DBMessage> messageCache();

@@ -1,7 +1,6 @@
 package net.juligames.core.paper.plugin;
 
 import com.google.common.io.ByteStreams;
-import net.juligames.core.api.TODO;
 import org.apache.commons.lang.Validate;
 import org.bukkit.plugin.InvalidPluginException;
 import org.bukkit.plugin.PluginDescriptionFile;

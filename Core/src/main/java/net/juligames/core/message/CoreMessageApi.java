@@ -95,7 +95,7 @@ public class CoreMessageApi implements MessageApi {
 
     @Override
     public CoreMessage getMessage(String messageKey, String locale, String... replacements) {
-        CoreMessage message = getMessage(messageKey,locale);
+        CoreMessage message = getMessage(messageKey, locale);
         message.doWithMiniMessage(insertReplacements(replacements));
         return message;
     }

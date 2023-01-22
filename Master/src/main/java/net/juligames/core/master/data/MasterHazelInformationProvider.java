@@ -6,11 +6,8 @@ import net.juligames.core.api.API;
 import net.juligames.core.api.jdbi.DBLocale;
 import net.juligames.core.jdbi.CoreSQLManager;
 import net.juligames.core.master.CoreMaster;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
-import javax.xml.crypto.Data;
-import java.lang.module.Configuration;
 import java.util.Map;
 
 /**
