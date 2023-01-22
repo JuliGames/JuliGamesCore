@@ -20,6 +20,7 @@ import java.util.function.*;
  * @apiNote Only for testing! Not connected to hazelcast!
  * @implNote RESERVED KEYS: "configuration_header", "configuration_name"
  */
+@SuppressWarnings("DuplicatedCode")
 @TestOnly
 public class OfflineConfiguration implements Configuration {
 
@@ -99,7 +100,7 @@ public class OfflineConfiguration implements Configuration {
             return Optional.empty();
         }
         try {
-            return Optional.of(Integer.valueOf(key));
+            return Optional.of(Integer.valueOf(extract));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -117,7 +118,7 @@ public class OfflineConfiguration implements Configuration {
             return null;
         }
         try {
-            return Integer.valueOf(key);
+            return Integer.valueOf(extract);
         } catch (Exception e) {
             return null;
         }
@@ -135,7 +136,7 @@ public class OfflineConfiguration implements Configuration {
             return Optional.empty();
         }
         try {
-            return Optional.of(Double.valueOf(key));
+            return Optional.of(Double.valueOf(extract));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -153,7 +154,7 @@ public class OfflineConfiguration implements Configuration {
             return null;
         }
         try {
-            return Double.parseDouble(key);
+            return Double.parseDouble(extract);
         } catch (Exception e) {
             return null;
         }
@@ -171,7 +172,7 @@ public class OfflineConfiguration implements Configuration {
             return Optional.empty();
         }
         try {
-            return Optional.of(Long.parseLong(key));
+            return Optional.of(Long.parseLong(extract));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -189,7 +190,7 @@ public class OfflineConfiguration implements Configuration {
             return null;
         }
         try {
-            return Long.parseLong(key);
+            return Long.parseLong(extract);
         } catch (Exception e) {
             return null;
         }
@@ -207,7 +208,7 @@ public class OfflineConfiguration implements Configuration {
             return Optional.empty();
         }
         try {
-            return Optional.of(Short.parseShort(key));
+            return Optional.of(Short.parseShort(extract));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -225,7 +226,7 @@ public class OfflineConfiguration implements Configuration {
             return null;
         }
         try {
-            return Short.parseShort(key);
+            return Short.parseShort(extract);
         } catch (Exception e) {
             return null;
         }
@@ -243,7 +244,7 @@ public class OfflineConfiguration implements Configuration {
             return Optional.empty();
         }
         try {
-            return Optional.of(Byte.parseByte(key));
+            return Optional.of(Byte.parseByte(extract));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -261,7 +262,7 @@ public class OfflineConfiguration implements Configuration {
             return null;
         }
         try {
-            return Byte.parseByte(key);
+            return Byte.parseByte(extract);
         } catch (Exception e) {
             return null;
         }
@@ -279,7 +280,7 @@ public class OfflineConfiguration implements Configuration {
             return Optional.empty();
         }
         try {
-            return Optional.of(Boolean.parseBoolean(key));
+            return Optional.of(Boolean.parseBoolean(extract));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -297,7 +298,7 @@ public class OfflineConfiguration implements Configuration {
             return null;
         }
         try {
-            return Boolean.parseBoolean(key);
+            return Boolean.parseBoolean(extract);
         } catch (Exception e) {
             return null;
         }
@@ -315,7 +316,7 @@ public class OfflineConfiguration implements Configuration {
             return Optional.empty();
         }
         try {
-            return Optional.of(Float.parseFloat(key));
+            return Optional.of(Float.parseFloat(extract));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -333,7 +334,7 @@ public class OfflineConfiguration implements Configuration {
             return null;
         }
         try {
-            return Float.parseFloat(key);
+            return Float.parseFloat(extract);
         } catch (Exception e) {
             return null;
         }
