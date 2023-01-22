@@ -17,10 +17,12 @@ public final class MasterLogger extends JavaLogger {
 
     public MasterLogger(String name, @NotNull Logger parent, java.util.logging.@NotNull Logger logger) {
         super(name, parent, logger);
+        logger.addHandler(LogFileHandlerManager.generateFileHandler());
     }
 
     public MasterLogger(String name, java.util.logging.@NotNull Logger logger) {
         super(name, logger);
+        logger.addHandler(LogFileHandlerManager.generateFileHandler());
     }
 
     @Override

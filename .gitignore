@@ -35,3 +35,4 @@ config/database.properties
 Test.java
 config/messageCaching.properties
 config/test.properties
+latest.log.lck
