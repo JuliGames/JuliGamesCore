@@ -2,7 +2,9 @@ package net.juligames.core.caching;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import de.bentzin.tools.logging.Logger;
 import de.bentzin.tools.pair.Pair;
+import net.juligames.core.Core;
 import net.juligames.core.api.API;
 import net.juligames.core.api.config.Configuration;
 import net.juligames.core.api.jdbi.DBMessage;
@@ -10,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
+import static de.bentzin.tools.logging.Logger.*;
 
 /**
  * @author Ture Bentzin
@@ -18,17 +21,20 @@ import java.util.concurrent.TimeUnit;
 public class MessageCaching {
     public static boolean enabled = false;
     private static Cache<Pair<String>, DBMessage> messageCache;
+    private static Logger logger;
 
     private MessageCaching() {}
 
     public static void init() {
+        logger = Core.getInstance().getCoreLogger().adopt("MessageCaching");
+        logger.info("Initializing MessageCaching...");
         loadFromConfiguration(produceMessageCachingConfiguration());
     }
 
     public static void loadFromConfiguration(@NotNull Configuration configuration) {
         enabled = configuration.getBoolean("enabled").orElse(false);
         if (!enabled) return;
-
+        Core.getInstance().getCoreLogger().info("Preparing MessageCaching...");
         MessageCacheLoader cacheLoader = new MessageCacheLoader();
         Long refreshAfterWriteMillis = configuration.getLongOrNull("refresh_after_write_millis");
         Long invalidateAfterReadMillis = configuration.getLongOrNull("invalidate_after_read_millis");
@@ -45,6 +51,7 @@ public class MessageCaching {
         }
 
         messageCache = builder.build(cacheLoader);
+        Core.getInstance().getCoreLogger().info("MessageCaching is now ready!");
     }
 
     public static Configuration produceMessageCachingConfiguration() {
