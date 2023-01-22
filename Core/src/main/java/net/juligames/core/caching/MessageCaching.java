@@ -34,7 +34,6 @@ public class MessageCaching {
     }
 
     public static void loadFromConfiguration(@NotNull Configuration configuration) {
-        logger.debug(configuration.cloneToProperties().toString());
         enabled = configuration.getBoolean("enabled").orElse(false);
         if (!enabled) return;
         logger.info("Preparing MessageCaching...");
@@ -56,9 +55,6 @@ public class MessageCaching {
         if(logger.isDebugEnabled()) {
             builder.removalListener((key, value, cause) -> {
                 logger.debug("removal: " + value + "@" + key + " because of: " + cause);
-            });
-            builder.evictionListener((key, value, cause) -> {
-                logger.debug("eviction: " + value + "@" + key + " because of: " + cause);
             });
         }
 

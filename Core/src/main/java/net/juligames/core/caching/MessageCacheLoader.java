@@ -16,14 +16,8 @@ public class MessageCacheLoader implements CacheLoader<Pair<String>, DBMessage> 
 
     @Override
     public @Nullable DBMessage load(@NotNull Pair<String> key) {
-        Core.getInstance().getCoreLogger().debug("loading: " + key);
         final String messageKey = key.getFirst(), locale = key.getSecond();
         return API.get().getMessageApi().callMessageExtension(extension -> extension.select(messageKey, locale));
     }
 
-    @Override
-    public @Nullable DBMessage reload(Pair<String> key, @NotNull DBMessage oldValue) throws Exception {
-        Core.getInstance().getCoreLogger().debug("reloading: " + key + " | old: " + oldValue.getMiniMessage());
-        return load(key);
-    }
 }
