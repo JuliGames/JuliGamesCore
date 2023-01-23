@@ -2,6 +2,8 @@ package net.juligames.core.api.jdbi.mapper.bean;
 
 import net.juligames.core.api.NoJavaDoc;
 import net.juligames.core.api.jdbi.DBData;
+import org.jdbi.v3.core.mapper.reflect.ColumnName;
+import org.jdbi.v3.sqlobject.customizer.Bind;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,6 +17,7 @@ import java.util.function.Function;
 @NoJavaDoc
 public class DataBean implements DBData {
 
+    @ColumnName("data_key")
     private final String key;
     private String data;
 
