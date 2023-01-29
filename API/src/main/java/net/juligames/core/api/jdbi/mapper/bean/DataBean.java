@@ -3,7 +3,6 @@ package net.juligames.core.api.jdbi.mapper.bean;
 import net.juligames.core.api.NoJavaDoc;
 import net.juligames.core.api.jdbi.DBData;
 import org.jdbi.v3.core.mapper.reflect.ColumnName;
-import org.jdbi.v3.sqlobject.customizer.Bind;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -70,7 +69,7 @@ public class DataBean implements DBData {
      * @see DataBean#getDataLong()
      */
     @ApiStatus.Experimental
-    public <T> T deal(@NotNull Function<String,T> dealer) {
+    public <T> T deal(@NotNull Function<String, T> dealer) {
         return dealer.apply(data);
     }
 }
