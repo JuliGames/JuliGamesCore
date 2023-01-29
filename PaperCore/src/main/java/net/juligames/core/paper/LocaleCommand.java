@@ -1,5 +1,6 @@
 package net.juligames.core.paper;
 
+import net.juligames.core.paper.perms.PermissionConditions;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -25,10 +26,11 @@ public class LocaleCommand implements CommandExecutor {
      */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (sender instanceof Player player) {
-            sender.sendMessage(player.locale().toString());
-            return true;
-        }
+        if (PermissionConditions.hasPermission(sender, "paper.debug").checkAndContinue())
+            if (sender instanceof Player player) {
+                sender.sendMessage(player.locale().toString());
+                return true;
+            }
         return false;
     }
 }

@@ -1,6 +1,7 @@
 package net.juligames.core.paper;
 
 import net.juligames.core.api.API;
+import net.juligames.core.paper.perms.PermissionConditions;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -34,9 +35,9 @@ public class ReplaceTestCommand implements CommandExecutor {
      */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-
-        API.get().getMessageApi().sendMessage(messageKey,
-                new PaperMessageRecipient(sender), args);
+        if (PermissionConditions.hasPermission(sender, "paper.debug").checkAndContinue())
+            API.get().getMessageApi().sendMessage(messageKey,
+                    new PaperMessageRecipient(sender), args);
 
         return true;
     }

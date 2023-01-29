@@ -1,6 +1,7 @@
 package net.juligames.core.paper;
 
 import net.juligames.core.Core;
+import net.juligames.core.paper.perms.PermissionConditions;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -26,7 +27,8 @@ public class MessageCommand implements CommandExecutor {
      * @return true if a valid command, otherwise false
      */
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args){
+    if(PermissionConditions.hasPermission(sender,"paper.debug").checkAndContinue()) {
         StringJoiner joiner = new StringJoiner(" ");
         for (String arg : args) {
             joiner.add(arg);
@@ -35,6 +37,7 @@ public class MessageCommand implements CommandExecutor {
 
         Core.getInstance().getMessageApi().sendMessage(arg, new PaperMessageRecipient(sender));
 
+    }
         return true;
     }
 }

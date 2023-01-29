@@ -22,12 +22,12 @@ public final class PermissionConditions {
     }
 
     @Contract("_, _ -> new")
-    public @NotNull PermissionCheckReturn hasPermission(PermissionSubject permissible, String permission) {
+    public static @NotNull PermissionCheckReturn hasPermission(PermissionSubject permissible, String permission) {
         return PermissionConditionReturn.check(permissible, permission);
     }
 
     @Contract("_, _ -> new")
-    public @NotNull DividedPair<Boolean, Collection<PermissionCheckReturn>> hasPermissions(PermissionSubject permissible,
+    public static @NotNull DividedPair<Boolean, Collection<PermissionCheckReturn>> hasPermissions(PermissionSubject permissible,
                                                                                            @NotNull Collection<String> permissions) {
 
         ArrayList<PermissionCheckReturn> permissionCheckReturns = new ArrayList<>();
