@@ -17,7 +17,7 @@ import java.util.Collection;
 public record InventoryConfigWriter(Inventory inventory) implements ConfigWriter {
 
     @SuppressWarnings("ProtectedMemberInFinalClass")
-    protected static Interpreter<ItemStack> itemStackInterpreter = new ItemStackInterpreter();
+    protected static final Interpreter<ItemStack> itemStackInterpreter = new ItemStackInterpreter();
 
     public static void populateInventory(@NotNull Configuration configuration, String keyspace, @NotNull Inventory inventory) {
         Collection<ItemStack> collection = configuration.getCollection(keyspace, itemStackInterpreter);

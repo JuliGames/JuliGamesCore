@@ -423,7 +423,7 @@ public class OfflineConfiguration implements Configuration {
 
     @Override
     public void setString(String key, @NotNull String value) {
-        data.put(key, value.toString());
+        data.put(key, value);
     }
 
     @Override

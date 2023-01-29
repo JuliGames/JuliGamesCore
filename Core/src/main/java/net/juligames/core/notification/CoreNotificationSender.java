@@ -19,13 +19,6 @@ import java.util.*;
  */
 public class CoreNotificationSender implements NotificationSender {
 
-    @Deprecated
-    private final CoreNotificationApi notificationApi;
-
-    public CoreNotificationSender(CoreNotificationApi notificationApi) {
-        this.notificationApi = notificationApi;
-    }
-
     @Override
     public void sendNotification(SimpleNotification notification, UUID @NotNull ... addresses) {
 

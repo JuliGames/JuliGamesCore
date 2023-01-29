@@ -10,6 +10,7 @@ import java.util.*;
  * @author DSeeLP
  * @deprecated use {@link ConfigurationAPI#splitToWriter(Collection, Interpreter)} and similar instead
  */
+@SuppressWarnings("DefaultAnnotationParam")
 @Deprecated(forRemoval = false)
 public class SlimCollectionInterpreter<T> implements IterableInterpreter<T, Collection<T>> {
 

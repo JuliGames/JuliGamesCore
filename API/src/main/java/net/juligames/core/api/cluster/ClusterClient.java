@@ -12,6 +12,7 @@ import java.util.UUID;
  * 27.12.2022
  * @apiNote Never try to modify data here
  */
+@SuppressWarnings("JavadocReference")
 public interface ClusterClient {
 
 

@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class CoreNotificationEvent extends Event {
 
-    public static HandlerList handlerList = new HandlerList();
+    public static final HandlerList handlerList = new HandlerList();
 
     private final Notification notification;
 

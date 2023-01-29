@@ -16,7 +16,7 @@ import java.io.InputStreamReader;
 public class MasterCommandRunner extends Registerator<MasterCommand> {
 
     private final InputStream stream;
-    public Logger cmd;
+    public final Logger cmd;
 
     public MasterCommandRunner(@NotNull Logger parentLogger, InputStream inputStream) {
         cmd = parentLogger.adopt("cmd");

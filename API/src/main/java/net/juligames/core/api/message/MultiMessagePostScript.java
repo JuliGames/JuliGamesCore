@@ -21,7 +21,7 @@ public interface MultiMessagePostScript {
     Date timeSent();
 
     /**
-     * @return A Collection of the recipients that got all of the messages
+     * @return A Collection of the recipients that got all the messages
      */
     Collection<? extends MessageRecipient> recipients();
 

@@ -18,7 +18,7 @@ https://www.toptip.ca/2019/04/java-convert-byte-array-to-string-then.html
 /**
  * @author Ture Bentzin
  * 23.01.2023
- * @apiNote NOTE: This format is <bold>not</bold> human-readable!!! Not even a bit!!! Its saved as fucking bytes and encodes them in fucking base64!!
+ * @apiNote NOTE: This format is <bold>not</bold> human-readable!!! Not even a bit!!! It's saved as fucking bytes and encodes them in fucking base64!!
  */
 public class ItemStackInterpreter implements Interpreter<ItemStack> {
 

@@ -67,6 +67,7 @@ public class CorePluginLoadManager {
         return plugins;
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public List<Plugin> load() throws RuntimeException {
         final ArrayList<Plugin> plugins = new ArrayList<>();
         final File[] files = directory.listFiles();

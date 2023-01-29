@@ -20,7 +20,7 @@ import static net.juligames.core.minigame.api.MiniGameState.fromServer;
  * @author Ture Bentzin
  * 18.12.2022
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "SameReturnValue"})
 public abstract class MiniGame extends LoggingClass implements BasicMiniGame {
 
     private final String plainName;

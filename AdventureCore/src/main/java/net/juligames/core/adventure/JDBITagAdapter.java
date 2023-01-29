@@ -23,40 +23,37 @@ import org.jetbrains.annotations.NotNull;
 public class JDBITagAdapter {
 
 
-    public static Logger logger = API.get().getAPILogger().adopt("adapter");
+    public static final Logger logger = API.get().getAPILogger().adopt("adapter");
 
     public static Tag fromJDBI(@NotNull DBReplacement replacement) {
         String s = replacement.getReplacementType();
         ReplacementType replacementType = ReplacementType.valueOf(s);
         switch (replacementType) {
-
-            case TEXT_CLOSING: {
+            case TEXT_CLOSING -> {
                 return Tag.selfClosingInserting(resolveValue(replacement));
             }
-            case TEXT: {
+            case TEXT -> {
                 return Tag.inserting(resolveValue(replacement));
             }
-            case COLOR_HEX: {
+            case COLOR_HEX -> {
                 return Tag.styling(style -> style.color(TextColor.fromHexString(replacement.getValue())));
             }
-            case COLOR_HEX_CSS: {
+            case COLOR_HEX_CSS -> {
                 return Tag.styling(style -> style.color(TextColor.fromCSSHexString(replacement.getValue())));
             }
-            case NAMED_COLOR: {
+            case NAMED_COLOR -> {
                 return Tag.styling(style -> style.color(NamedTextColor.NAMES.value(replacement.getValue())));
             }
-            case FONT: {
+            case FONT -> {
                 return Tag.styling(style -> style.font(Key.key(replacement.getValue())));
             }
-            case INSERT: {
+            case INSERT -> {
                 return Tag.styling(style -> style.insertion(replacement.getValue()));
             }
-            case PROCESS: {
+            case PROCESS -> {
                 return Tag.preProcessParsed(replacement.getValue());
             }
-
-
-            default: {
+            default -> {
                 logger.warning("unknown replacement : " + s);
                 return Tag.preProcessParsed(s);
             }
@@ -70,6 +67,7 @@ public class JDBITagAdapter {
         return AdventureAPI.get().getAdventureTagManager().fallbackResolve(replacement.getValue()); //TODO currently this is hardcode and i intend to leave it that way to insure that fallback resolving never fails
     }
 
+    @SuppressWarnings("JavadocReference")
     public enum ReplacementType {
         TEXT_CLOSING,
         TEXT,

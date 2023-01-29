@@ -17,6 +17,7 @@ import java.util.function.BiConsumer;
  * @author Ture Bentzin
  * 29.01.2023
  */
+@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 public interface PermissionCheckReturn {
 
     String LACKING_KEY = "velocity.permission.lacking";

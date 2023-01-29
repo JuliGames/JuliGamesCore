@@ -49,11 +49,7 @@ public class PaperCorePlugin extends JavaPlugin {
                 return paperMessageRecipients;
             });
 
-            core.getCommandApi().setCommandHandler(s -> {
-                Bukkit.getScheduler().runTask(this, () -> {
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), s);
-                });
-            });
+            core.getCommandApi().setCommandHandler(s -> Bukkit.getScheduler().runTask(this, () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), s)));
 
             PermissionCheckReturn.registerMessages(API.get().getMessageApi());
 

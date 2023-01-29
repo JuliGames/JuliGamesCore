@@ -53,9 +53,7 @@ public class MessageCaching {
         }
 
         if (logger.isDebugEnabled()) {
-            builder.removalListener((key, value, cause) -> {
-                logger.debug("removal: " + value + "@" + key + " because of: " + cause);
-            });
+            builder.removalListener((key, value, cause) -> logger.debug("removal: " + value + "@" + key + " because of: " + cause));
         }
 
         messageCache = builder.build(cacheLoader);

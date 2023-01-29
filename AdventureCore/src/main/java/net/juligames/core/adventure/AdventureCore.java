@@ -14,7 +14,7 @@ import org.jetbrains.annotations.ApiStatus;
  * support it. Because of this the AdventureAPI will only function as intended when bundled with the API you are using!
  */
 public class AdventureCore implements AdventureAPI {
-    String CORE_VERSION = "1.2";
+    final String CORE_VERSION = "1.2";
 
     private CoreAdventureTagManager adventureTagManager;
     private Logger logger;

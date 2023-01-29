@@ -22,9 +22,9 @@ import java.util.Set;
  */
 public final class CoreNotificationApi implements NotificationApi, MessageListener<SerializedNotification> {
 
-    private Registerator<NotificationListener> listenerRegisterator;
+    private final Registerator<NotificationListener> listenerRegisterator;
 
-    private Set<Address> blacklist = new HashSet<>();
+    private final Set<Address> blacklist = new HashSet<>();
 
     public CoreNotificationApi() {
         listenerRegisterator = new Registerator<>();

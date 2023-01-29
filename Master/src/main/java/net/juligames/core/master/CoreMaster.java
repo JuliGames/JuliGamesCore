@@ -44,7 +44,7 @@ public class CoreMaster {
         masterConfigManager = new MasterConfigManager();
 
         logger.info("welcome to " + Core.getFullCoreName() + " Master by Ture Bentzin <bentzin@tdrstudios.de>");
-        //logger.warning("This is still an development build!");
+        //logger.warning("This is still a development build!");
 
 
         // masterConfigManager.load();
@@ -60,7 +60,6 @@ public class CoreMaster {
         bootMillis.complete(System.currentTimeMillis()); // set boot date - published via master_information
 
         //start Core
-        //noinspection UnstableApiUsage
         core.start("Master", logger, true);
 
         try {
