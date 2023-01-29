@@ -11,10 +11,10 @@ import java.util.*;
 import java.util.function.*;
 
 /**
- * @apiNote all "orNull" methods will not throw a {@link RuntimeException} on failed parsing, but the normal methods
- * will do so
  * @author Ture Bentzin
  * 26.11.2022
+ * @apiNote all "orNull" methods will not throw a {@link RuntimeException} on failed parsing, but the normal methods
+ * will do so
  * @see BuildInInterpreters
  */
 public interface Configuration extends Comparable<Configuration> {

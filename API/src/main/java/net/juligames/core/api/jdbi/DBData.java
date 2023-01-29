@@ -1,11 +1,11 @@
 package net.juligames.core.api.jdbi;
 
 /**
+ * @author Ture Bentzin
+ * 23.01.2023
  * @apiNote This is an experimental Idea to allow users of the Core to store data only for meant to be dealt with into
  * MariaDB. You should use a unique keyspace for your data stored in here. If this Feature will not be used, it may be removed
  * with 2.0 - TANDANA
- * @author Ture Bentzin
- * 23.01.2023
  */
 public interface DBData {
 

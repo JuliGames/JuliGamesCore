@@ -28,7 +28,7 @@ public interface PermissionCheckReturn {
     }
 
     static @NotNull Optional<MessageRecipient> recipientFromPermissible(Permissible permissible) {
-        if(permissible instanceof CommandSender sender)
+        if (permissible instanceof CommandSender sender)
             return Optional.of(new PaperMessageRecipient(sender));
         return Optional.empty();
     }
@@ -40,6 +40,7 @@ public interface PermissionCheckReturn {
 
     /**
      * Indicates if the check was completed (BUT DOES NOT INDICATE WHAT THE RESULT WAS!!!)
+     *
      * @return if the check was executed without exceptions
      */
     boolean wasSuccessful();
@@ -52,24 +53,25 @@ public interface PermissionCheckReturn {
     /**
      * This will send the permissible the lacking permission message "paper.permission.lacking"
      */
-     default void sendLackingPermissionMessageIfPossible(){
-         if(!wasSuccessful()) {
-             recipientFromPermissible(permissible()).ifPresent(messageRecipient ->
-                     API.get().getMessageApi().sendMessage(ERROR_KEY,messageRecipient));
-             API.get().getAPILogger().error("failed to check permission \"" + permissionName() + "\" for " + permissible() + " : " + exceptions());
-             for (Exception exception : exceptions()) {
-                 ThrowableDebug.debug(exception);
-             }
-         }
+    default void sendLackingPermissionMessageIfPossible() {
+        if (!wasSuccessful()) {
+            recipientFromPermissible(permissible()).ifPresent(messageRecipient ->
+                    API.get().getMessageApi().sendMessage(ERROR_KEY, messageRecipient));
+            API.get().getAPILogger().error("failed to check permission \"" + permissionName() + "\" for " + permissible() + " : " + exceptions());
+            for (Exception exception : exceptions()) {
+                ThrowableDebug.debug(exception);
+            }
+        }
 
-         if(!getResult()) {
-             recipientFromPermissible(permissible()).ifPresent(messageRecipient ->
-                     API.get().getMessageApi().sendMessage(LACKING_KEY,messageRecipient,new String[]{permissionName()}));
-         }
-     }
+        if (!getResult()) {
+            recipientFromPermissible(permissible()).ifPresent(messageRecipient ->
+                    API.get().getMessageApi().sendMessage(LACKING_KEY, messageRecipient, new String[]{permissionName()}));
+        }
+    }
 
     /**
      * This will return getResult and call sendLackingPermissionMessageIfPossible
+     *
      * @return getResult
      */
     boolean checkAndContinue();
@@ -77,12 +79,14 @@ public interface PermissionCheckReturn {
     /**
      * This will return getResult and call sendLackingPermissionMessageIfPossible and allow you to execute stuff in
      * the resultConsumer
+     *
      * @return getResult
      */
-    boolean checkAndContinue(BiConsumer<Permissible,Boolean> resultConsumer);
+    boolean checkAndContinue(BiConsumer<Permissible, Boolean> resultConsumer);
 
     /**
      * If wasSuccessful returns false, the exceptions that caused this are stored here!
+     *
      * @return unmodifiable List
      */
     List<Exception> exceptions();

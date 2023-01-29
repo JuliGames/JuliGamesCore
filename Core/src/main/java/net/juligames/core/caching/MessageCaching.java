@@ -52,7 +52,7 @@ public class MessageCaching {
             builder.maximumSize(maximumSize);
         }
 
-        if(logger.isDebugEnabled()) {
+        if (logger.isDebugEnabled()) {
             builder.removalListener((key, value, cause) -> {
                 logger.debug("removal: " + value + "@" + key + " because of: " + cause);
             });

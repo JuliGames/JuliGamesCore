@@ -121,7 +121,7 @@ public class CoreSQLManager implements SQLManager {
     @Override
     @ApiStatus.Experimental
     public String getData(String key) {
-        return getJdbi().withExtension(DataDAO.class,extension -> extension.selectBean(key)).getData();
+        return getJdbi().withExtension(DataDAO.class, extension -> extension.selectBean(key)).getData();
     }
 
     @Override

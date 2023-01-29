@@ -582,7 +582,7 @@ public class CoreMessageApi implements MessageApi {
 
     @Contract("_ -> param1")
     private @NotNull DBMessage cache(DBMessage dbMessage) {
-        getMessageCache().put(new Pair<>(dbMessage.getMessageKey(),dbMessage.getLocale()),dbMessage);
+        getMessageCache().put(new Pair<>(dbMessage.getMessageKey(), dbMessage.getLocale()), dbMessage);
         return dbMessage;
     }
 

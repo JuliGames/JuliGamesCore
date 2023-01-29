@@ -105,7 +105,7 @@ public final class Core implements API {
     public void start(String core_name, @NotNull Logger logger, boolean member) {
         {
             final boolean core_debug_property = Boolean.getBoolean("coreDebug");
-            if(core_debug_property){
+            if (core_debug_property) {
                 logger.info("Detected SystemProperty \"coreDebug=true\" -> Debug was enabled");
                 logger.setDebug(true);
                 logger.debug("Debug is now enabled!");

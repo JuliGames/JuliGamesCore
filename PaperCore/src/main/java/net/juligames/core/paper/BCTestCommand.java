@@ -28,7 +28,7 @@ public class BCTestCommand implements CommandExecutor {
      */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if(PermissionConditions.hasPermission(sender,"paper.debug").checkAndContinue()) {
+        if (PermissionConditions.hasPermission(sender, "paper.debug").checkAndContinue()) {
             StringJoiner joiner = new StringJoiner(" ");
             for (String arg : args) {
                 joiner.add(arg);

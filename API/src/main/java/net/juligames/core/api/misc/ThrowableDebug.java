@@ -13,7 +13,8 @@ import java.io.StringWriter;
  */
 public final class ThrowableDebug {
 
-    private ThrowableDebug(){}
+    private ThrowableDebug() {
+    }
 
     @ApiStatus.Experimental
     public static void debug(@NotNull Throwable throwable) {

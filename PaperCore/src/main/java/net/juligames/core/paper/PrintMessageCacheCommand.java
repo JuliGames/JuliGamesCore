@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 public class PrintMessageCacheCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if(PermissionConditions.hasPermission(sender,"paper.debug").checkAndContinue()) {
+        if (PermissionConditions.hasPermission(sender, "paper.debug").checkAndContinue()) {
             String s = MessageCaching.messageCache().asMap().toString();
             sender.sendMessage("NATIVE: " + s);
         }

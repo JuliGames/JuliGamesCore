@@ -28,7 +28,7 @@ public final class PermissionConditions {
 
     @Contract("_, _ -> new")
     public static @NotNull DividedPair<Boolean, Collection<PermissionCheckReturn>> hasPermissions(PermissionSubject permissible,
-                                                                                           @NotNull Collection<String> permissions) {
+                                                                                                  @NotNull Collection<String> permissions) {
 
         ArrayList<PermissionCheckReturn> permissionCheckReturns = new ArrayList<>();
         boolean failed = false;
@@ -48,6 +48,7 @@ public final class PermissionConditions {
         private final boolean result;
         private final String permission;
         private final List<Exception> exceptions;
+
         public PermissionConditionReturn(PermissionSubject permissible, boolean success, boolean result, String permission, List<Exception> exceptions) {
             this.permissible = permissible;
             this.success = success;

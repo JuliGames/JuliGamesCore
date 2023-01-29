@@ -27,17 +27,17 @@ public class MessageCommand implements CommandExecutor {
      * @return true if a valid command, otherwise false
      */
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args){
-    if(PermissionConditions.hasPermission(sender,"paper.debug").checkAndContinue()) {
-        StringJoiner joiner = new StringJoiner(" ");
-        for (String arg : args) {
-            joiner.add(arg);
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
+        if (PermissionConditions.hasPermission(sender, "paper.debug").checkAndContinue()) {
+            StringJoiner joiner = new StringJoiner(" ");
+            for (String arg : args) {
+                joiner.add(arg);
+            }
+            String arg = joiner.toString();
+
+            Core.getInstance().getMessageApi().sendMessage(arg, new PaperMessageRecipient(sender));
+
         }
-        String arg = joiner.toString();
-
-        Core.getInstance().getMessageApi().sendMessage(arg, new PaperMessageRecipient(sender));
-
-    }
         return true;
     }
 }
