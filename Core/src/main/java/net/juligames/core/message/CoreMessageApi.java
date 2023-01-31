@@ -87,10 +87,27 @@ public class CoreMessageApi implements MessageApi {
         return getMessage(messageKey, locale.toString(), replacements);
     }
 
+    /**
+     *
+     * @param messageKey
+     * @param locale
+     * @return
+     */
     @Override
-    public CoreMessage getMessage(String messageKey, String locale) {
-        return CoreMessage.fromData(getMessageFromCache(messageKey, locale).orElseGet(() ->
+    public CoreMessage getMessage(String messageKey, String locale) { //REWRITE
+        Optional<DBMessage> messageFromCache = getMessageFromCache(messageKey, locale);
+        if(messageFromCache.isPresent()){
+            return CoreMessage.fromData(messageFromCache.get(),messageKey);
+        }else {
+            //non cached
+            DBMessage dbMessage = callMessageExtension(extension -> extension.select(messageKey, locale));
+            return CoreMessage.fromData(cache(dbMessage),messageKey);
+        }
+
+        /*return CoreMessage.fromData(getMessageFromCache(messageKey, locale).orElseGet(() ->
                 cache(callMessageExtension(extension -> extension.select(messageKey, locale)))), locale);
+
+         */
     }
 
     @Override
@@ -524,6 +541,9 @@ public class CoreMessageApi implements MessageApi {
         return findBest(messageKey, messageRecipient.supplyLocaleOrDefault());
     }
 
+    /**
+     * returns the "best" locale that is available for that messageKey
+     */
     public String findBest(String messageKey, String locale) {
         Message message = API.get().getMessageApi().getMessage(messageKey, locale);
         if (message instanceof FallBackMessage) {
@@ -575,13 +595,16 @@ public class CoreMessageApi implements MessageApi {
     }
 
     private Optional<DBMessage> getMessageFromCache(String messageKey, String locale) {
-        if (MessageCaching.enabled)
+        if (MessageCaching.enabled && getMessageCache() != null)
             return Optional.ofNullable(getMessageCache().getIfPresent(new Pair<>(messageKey, locale)));
         return Optional.empty();
     }
 
     @Contract("_ -> param1")
-    private @NotNull DBMessage cache(DBMessage dbMessage) {
+    private @Nullable DBMessage cache(DBMessage dbMessage) {
+        if(dbMessage == null) {
+            return null;
+        }
         getMessageCache().put(new Pair<>(dbMessage.getMessageKey(), dbMessage.getLocale()), dbMessage);
         return dbMessage;
     }
