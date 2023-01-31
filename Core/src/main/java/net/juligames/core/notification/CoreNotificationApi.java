@@ -53,7 +53,7 @@ public final class CoreNotificationApi implements NotificationApi, MessageListen
     @Contract(value = " -> new", pure = true)
     @Override
     public @NotNull NotificationSender getNotificationSender() {
-        return new CoreNotificationSender(this);
+        return new CoreNotificationSender();
     }
 
     public Collection<NotificationListener> getListeners() {

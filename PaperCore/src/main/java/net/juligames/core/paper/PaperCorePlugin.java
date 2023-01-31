@@ -83,6 +83,11 @@ public class PaperCorePlugin extends JavaPlugin {
 
     }
 
+    /**
+     * This disconnects this Server from Hazelcast and drops the API Service.
+     * After execution of this Method, the Core is disabled!
+     * @param core the core
+     */
     protected void killClient(@NotNull Core core) {
         adventureCore.dropApiService();
         //Try to abort miniGame (if present)

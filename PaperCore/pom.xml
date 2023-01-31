@@ -77,7 +77,7 @@
                 <version>3.4.1</version>
                 <configuration>
                     <!-- put your configurations here -->
-                    <createSourcesJar>true</createSourcesJar>
+                    <createSourcesJar>false</createSourcesJar>
                 </configuration>
                 <executions>
                     <execution>
