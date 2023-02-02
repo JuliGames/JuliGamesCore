@@ -17,10 +17,13 @@ import net.juligames.core.jdbi.CoreMultiMessagePostScript;
 import org.jdbi.v3.core.extension.ExtensionCallback;
 import org.jetbrains.annotations.*;
 
+import java.security.InvalidParameterException;
 import java.time.Instant;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Stream;
+
+import net.juligames.core.message.MessageConfigManager.*; //config access
 
 /**
  * @author Ture Bentzin
@@ -32,6 +35,8 @@ public class CoreMessageApi implements MessageApi {
     //TODO Further testing on automatic fallback (new implementation? Whats current status?)
 
     public CoreMessageApi() {
+        //setup config
+        MessageConfigManager.init();
     }
 
 
@@ -546,6 +551,14 @@ public class CoreMessageApi implements MessageApi {
      */
     public String findBest(String messageKey, String locale) {
         Message message = API.get().getMessageApi().getMessage(messageKey, locale);
+        final int maxLocaleLength = MessageConfigManager.getMaxLocaleLength();
+        if(locale.chars().mapToObj(i -> (char) i).count() > maxLocaleLength) {
+            if(MessageConfigManager.getWarnOnInvalidLocale())
+                Core.getInstance().getCoreLogger().warning("malformed locale that exceeds maximum length of " + maxLocaleLength + " : "+ locale);
+            if(MessageConfigManager.getThrowOnInvalidLocale())
+                throw new InvalidParameterException("malformed locale that exceeds maximum length of " + maxLocaleLength + " : "+ locale);
+
+        }
         if (message instanceof FallBackMessage) {
             //fallback = not present
             if (!Objects.equals(locale, defaultLocale())) {
@@ -563,6 +576,11 @@ public class CoreMessageApi implements MessageApi {
         }
     }
 
+    /**
+     * Can be used to parse input safe to locale
+     * @param input
+     * @return
+     */
     public Locale parseFromString(@NotNull String input) {
         String[] s = input.split("_");
         Locale parse = null;
