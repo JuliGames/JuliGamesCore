@@ -360,7 +360,7 @@ public class CoreMessageApi implements MessageApi {
     @Override
     public CoreMessagePostScript sendMessage(String messageKey, @NotNull MessageRecipient messageRecipient, String... replacement) {
         //send it baby
-        Message message = getMessage(messageKey, findBestForRecipient(messageKey, messageRecipient), replacement);
+        Message message = findBestMessageForRecipient(messageKey,messageRecipient,replacement);
         messageRecipient.deliver(message);
         return new CoreMessagePostScript(message, messageRecipient, now());
     }
@@ -410,7 +410,7 @@ public class CoreMessageApi implements MessageApi {
         Collection<? extends MessageRecipient> messageRecipients = Core.getInstance().getOnlineRecipientProvider().get();
         Collection<CoreMessagePostScript> postScripts = new ArrayList<>();
         for (MessageRecipient messageRecipient : messageRecipients) {
-            CoreMessage message = getMessage(messageKey, findBestForRecipient(messageKey, messageRecipient));
+            Message message = findBestMessageForRecipient(messageKey,messageRecipient);
             message.doWithMiniMessage(insertReplacements(replacement));
             messageRecipient.deliver(message);
             postScripts.add(new CoreMessagePostScript(message, messageRecipient, now()));
@@ -542,23 +542,34 @@ public class CoreMessageApi implements MessageApi {
     }
 
 
+    /**
+     *
+     * @param messageKey the messageKey
+     * @param messageRecipient the recipient
+     * @return the best locale
+     * @deprecated use {@link CoreMessageApi#findBestMessageForRecipient(String, MessageRecipient)} instead
+     */
+    @Deprecated
     public String findBestForRecipient(String messageKey, @NotNull MessageRecipient messageRecipient) {
         return findBest(messageKey, messageRecipient.supplyLocaleOrDefault());
     }
 
+    public Message findBestMessageForRecipient(String messageKey, @NotNull MessageRecipient messageRecipient) {
+        return findBestMessage(messageKey, messageRecipient.supplyLocaleOrDefault());
+    }
+
+    public Message findBestMessageForRecipient(String messageKey, @NotNull MessageRecipient messageRecipient, String... replacements) {
+        return findBestMessage(messageKey, messageRecipient.supplyLocaleOrDefault(), replacements);
+    }
+
     /**
      * returns the "best" locale that is available for that messageKey
+     * @deprecated use {@link CoreMessageApi#findBestMessage(String, String)} instead
      */
+    @Deprecated
     public String findBest(String messageKey, String locale) {
         Message message = API.get().getMessageApi().getMessage(messageKey, locale);
-        final int maxLocaleLength = MessageConfigManager.getMaxLocaleLength();
-        if(locale.chars().mapToObj(i -> (char) i).count() > maxLocaleLength) {
-            if(MessageConfigManager.getWarnOnInvalidLocale())
-                Core.getInstance().getCoreLogger().warning("malformed locale that exceeds maximum length of " + maxLocaleLength + " : "+ locale);
-            if(MessageConfigManager.getThrowOnInvalidLocale())
-                throw new InvalidParameterException("malformed locale that exceeds maximum length of " + maxLocaleLength + " : "+ locale);
-
-        }
+        checkLocale(locale);
         if (message instanceof FallBackMessage) {
             //fallback = not present
             if (!Objects.equals(locale, defaultLocale())) {
@@ -573,6 +584,53 @@ public class CoreMessageApi implements MessageApi {
         } else {
             //Message is present...
             return locale;
+        }
+    }
+
+    /**
+     * returns the "best" locale that is available for that messageKey
+     */
+    public Message findBestMessage(String messageKey, String locale) {
+        return findBestMessage(messageKey,locale,(String[]) null); //cast is very important!!
+    }
+
+    /**
+     * returns the "best" locale that is available for that messageKey
+     */
+    public Message findBestMessage(String messageKey, String locale,@Nullable String... replacements) {
+        Message message;
+        if(replacements == null) {
+            message = API.get().getMessageApi().getMessage(messageKey, locale);
+        }else
+            message = API.get().getMessageApi().getMessage(messageKey, locale, replacements);
+
+        checkLocale(locale);
+        if (message instanceof FallBackMessage) {
+            //fallback = not present
+            if (!Objects.equals(locale, defaultLocale())) {
+                if (locale.contains("_")) {
+                    //can go "deeper"
+                    return findBestMessage(messageKey, reduce(locale));
+                }
+            }
+            //use defaultLocale or fallback...
+            return getMessage(messageKey,defaultLocale());
+
+        } else {
+            //Message is present...
+            return message;
+        }
+    }
+
+    @ApiStatus.Internal
+    private void checkLocale(@NotNull String locale) {
+        final int maxLocaleLength = MessageConfigManager.getMaxLocaleLength();
+        if(locale.chars().mapToObj(i -> (char) i).count() > maxLocaleLength) {
+            if(MessageConfigManager.getWarnOnInvalidLocale())
+                Core.getInstance().getCoreLogger().warning("malformed locale that exceeds maximum length of " + maxLocaleLength + " : "+ locale);
+            if(MessageConfigManager.getThrowOnInvalidLocale())
+                throw new InvalidParameterException("malformed locale that exceeds maximum length of " + maxLocaleLength + " : "+ locale);
+
         }
     }
 
