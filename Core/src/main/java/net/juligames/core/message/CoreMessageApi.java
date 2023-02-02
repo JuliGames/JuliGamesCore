@@ -681,7 +681,8 @@ public class CoreMessageApi implements MessageApi {
         if(dbMessage == null) {
             return null;
         }
-        getMessageCache().put(new Pair<>(dbMessage.getMessageKey(), dbMessage.getLocale()), dbMessage);
+        if(getMessageCache() != null)
+         getMessageCache().put(new Pair<>(dbMessage.getMessageKey(), dbMessage.getLocale()), dbMessage);
         return dbMessage;
     }
 
