@@ -9,12 +9,15 @@ import net.juligames.core.api.jdbi.mapper.bean.LocaleBean;
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.core.config.ConfigRegistry;
+import org.jdbi.v3.core.result.ResultIterable;
 import org.jdbi.v3.sqlobject.SqlObjectPlugin;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 
 /**
  * @author Ture Bentzin
@@ -127,6 +130,23 @@ public class CoreSQLManager implements SQLManager {
     @Override
     public Handle openHandle() {
         return getJdbi().open();
+    }
+
+    @Override
+    public <R> R useHandle(@NotNull Function<Handle, R> handleFunction) {
+        try(Handle handle = openHandle()) {
+            return handleFunction.apply(handle);
+        }
+    }
+
+    @Override
+    public ResultIterable<Map<String, Object>> mapQuery(String sql) {
+        return useHandle(handle -> handle.createQuery(sql).mapToMap());
+    }
+
+    @Override
+    public <T> ResultIterable<Map<String, T>> mapDefinedQuery(String sql, Class<T> valueClass) {
+        return useHandle(handle -> handle.createQuery(sql).mapToMap(valueClass));
     }
 
     @Override
