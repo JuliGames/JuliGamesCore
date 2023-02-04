@@ -8,9 +8,7 @@ import net.juligames.core.api.API;
 import net.juligames.core.api.jdbi.*;
 import net.juligames.core.api.jdbi.mapper.bean.MessageBean;
 import net.juligames.core.api.jdbi.mapper.bean.ReplacementBean;
-import net.juligames.core.api.message.Message;
-import net.juligames.core.api.message.MessageApi;
-import net.juligames.core.api.message.MessageRecipient;
+import net.juligames.core.api.message.*;
 import net.juligames.core.caching.MessageCaching;
 import net.juligames.core.jdbi.CoreMessagePostScript;
 import net.juligames.core.jdbi.CoreMultiMessagePostScript;
@@ -337,6 +335,49 @@ public class CoreMessageApi implements MessageApi {
     }
 
     @Override
+    public Collection<MessagePostScript> sendMessage(String messageKey, Collection<? extends MessageRecipient> messageRecipients) {
+        Collection<MessagePostScript> postScripts = new ArrayList<>();
+        for (MessageRecipient messageRecipient : messageRecipients) {
+            postScripts.add(sendMessage(messageKey,messageRecipient));
+        }
+        return postScripts;
+    }
+
+    @Override
+    public CoreMultiMessagePostScript sendMessage(String messageKey, Collection<? extends MessageRecipient> messageRecipients, Locale overrideLocale) {
+        return sendMessage(List.of(messageKey),messageRecipients,overrideLocale);
+    }
+
+    @Override
+    public CoreMultiMessagePostScript sendMessage(String messageKey, Collection<? extends MessageRecipient> messageRecipients, @NotNull DBLocale overrideLocale) {
+        return sendMessage(messageKey,messageRecipients, overrideLocale.toUtil());
+    }
+
+    @Override
+    public Collection<MessagePostScript> sendMessage(String messageKey, @NotNull Collection<? extends MessageRecipient> messageRecipients, String... replacements) {
+        Collection<MessagePostScript> postScripts = new ArrayList<>();
+        for (MessageRecipient messageRecipient : messageRecipients) {
+            postScripts.add(sendMessage(messageKey,messageRecipient,replacements));
+        }
+        return postScripts;
+    }
+
+    @Override
+    public CoreMultiMessagePostScript sendMessage(String messageKey, Collection<? extends MessageRecipient> messageRecipients, String overrideLocale, String... replacements) {
+        return sendMessage(List.of(messageKey),messageRecipients,overrideLocale,replacements);
+    }
+
+    @Override
+    public CoreMultiMessagePostScript sendMessage(String messageKey, Collection<? extends MessageRecipient> messageRecipients, @NotNull Locale overrideLocale, String... replacements) {
+        return sendMessage(messageKey,messageRecipients,overrideLocale.toString(),replacements);
+    }
+
+    @Override
+    public CoreMultiMessagePostScript sendMessage(String messageKey, Collection<? extends MessageRecipient> messageRecipients, @NotNull DBLocale overrideLocale, String... replacements) {
+        return sendMessage(messageKey,messageRecipients,overrideLocale.toUtil(),replacements);
+    }
+
+    @Override
     public CoreMultiMessagePostScript broadcastMessage(Collection<String> messageKeys, @NotNull Locale defaultLocale) {
         return broadcastMessage(messageKeys, defaultLocale.toString());
     }
@@ -423,13 +464,17 @@ public class CoreMessageApi implements MessageApi {
         return sendMessage(messageKeys, List.of(messageRecipient), replacement);
     }
 
+    /**
+     * @deprecated use {@link CoreMessageApi#sendMessageSmart(Collection, Collection, String...)} instead
+     */
     @Override
+    @Deprecated
     public CoreMultiMessagePostScript sendMessage(@NotNull Collection<String> messageKeys, Collection<? extends MessageRecipient> messageRecipients, String... replacement) {
         //because of performance reasons I will reimplement sendMessage here - it is not "good" code, but I think its worth it!
         Collection<Message> messages = new ArrayList<>();
         for (String messageKey : messageKeys) {
             for (MessageRecipient messageRecipient : messageRecipients) {
-                Message message = getMessage(messageKey, messageRecipient.supplyLocaleOrDefault());
+                Message message = getMessage(messageKey, messageRecipient.supplyLocaleOrDefault()); //no fallback?! oh fuck this could get interesting
                 message.doWithMiniMessage(insertReplacements(replacement));
                 if (messages.stream().noneMatch(message1 -> message1.getMessageData().getMessageKey().equals(message.getMessageData().getMessageKey()))) {
                     messages.add(message);
@@ -468,6 +513,26 @@ public class CoreMessageApi implements MessageApi {
             messages.add(message);
         }
         return new CoreMultiMessagePostScript(messages, messageRecipients, now());
+    }
+
+    @Override
+    public Collection<MultiMessagePostScript> sendMessageSmart(@NotNull Collection<String> messageKeys, @NotNull Collection<? extends MessageRecipient> messageRecipients, String... replacement) {
+        //because of performance reasons I will reimplement sendMessage here - it is not "good" code, but I think its worth it!
+
+        Collection<MultiMessagePostScript> messages = new ArrayList<>();
+
+            for (MessageRecipient messageRecipient : messageRecipients) {
+                Collection<Message> localeMessage = new ArrayList<>();
+                for (String messageKey : messageKeys) {
+                    Message message = findBestMessageForRecipient(messageKey, messageRecipient);
+                    message.doWithMiniMessage(insertReplacements(replacement));
+                    messageRecipient.deliver(message);
+                    localeMessage.add(message);
+                }
+                messages.add(new CoreMultiMessagePostScript(localeMessage,List.of(messageRecipient)));
+            }
+
+        return messages;
     }
 
     @Override
