@@ -116,7 +116,9 @@ public class CoreMessageApi implements MessageApi {
     @Override
     public CoreMessage getMessage(String messageKey, String locale, String... replacements) {
         CoreMessage message = getMessage(messageKey, locale);
+        Core.getInstance().getCoreLogger().debug("inserting replacements: " + Arrays.toString(replacements) + " to " + message.getMiniMessage()  + "@" + message.getMessageData().getMessageKey());
         message.doWithMiniMessage(insertReplacements(replacements));
+        Core.getInstance().getCoreLogger().debug("new Data: " + message.getMiniMessage());
         return message;
     }
 
@@ -670,21 +672,21 @@ public class CoreMessageApi implements MessageApi {
     public Message findBestMessage(String messageKey, String locale,@Nullable String... replacements) {
         Message message;
         if(replacements == null) {
-            message = API.get().getMessageApi().getMessage(messageKey, locale);
+            message = getMessage(messageKey, locale);
         }else
-            message = API.get().getMessageApi().getMessage(messageKey, locale, replacements);
+            message = getMessage(messageKey, locale, replacements);
 
-        checkLocale(locale);
+        checkLocale(locale); //May kill here in the future
         if (message instanceof FallBackMessage) {
             //fallback = not present
-            if (!Objects.equals(locale, defaultLocale())) {
+            if (!locale.equalsIgnoreCase(defaultLocale())) {
                 if (locale.contains("_")) {
                     //can go "deeper"
-                    return findBestMessage(messageKey, reduce(locale));
+                    return findBestMessage(messageKey, reduce(locale),replacements);
                 }
             }
             //use defaultLocale or fallback...
-            return getMessage(messageKey,defaultLocale());
+            return getMessage(messageKey,defaultLocale(),replacements);
 
         } else {
             //Message is present...
