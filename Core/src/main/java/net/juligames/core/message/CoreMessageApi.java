@@ -344,8 +344,13 @@ public class CoreMessageApi implements MessageApi {
     }
 
     @Override
-    public CoreMultiMessagePostScript sendMessage(String messageKey, Collection<? extends MessageRecipient> messageRecipients, Locale overrideLocale) {
+    public CoreMultiMessagePostScript sendMessage(String messageKey, Collection<? extends MessageRecipient> messageRecipients, String overrideLocale) {
         return sendMessage(List.of(messageKey),messageRecipients,overrideLocale);
+    }
+
+    @Override
+    public CoreMultiMessagePostScript sendMessage(String messageKey, Collection<? extends MessageRecipient> messageRecipients, Locale overrideLocale) {
+        return sendMessage(messageKey,messageRecipients,overrideLocale.toString());
     }
 
     @Override
