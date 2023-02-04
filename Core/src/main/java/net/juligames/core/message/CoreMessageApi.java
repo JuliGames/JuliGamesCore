@@ -695,7 +695,7 @@ public class CoreMessageApi implements MessageApi {
     @ApiStatus.Internal
     private void checkLocale(@NotNull String locale) {
         final int maxLocaleLength = MessageConfigManager.getMaxLocaleLength();
-        if(locale.chars().mapToObj(i -> (char) i).count() > maxLocaleLength) {
+        if(locale.chars().mapToObj(i -> (char) i).filter(c -> c.equals('_')).count() > maxLocaleLength) {
             if(MessageConfigManager.getWarnOnInvalidLocale())
                 Core.getInstance().getCoreLogger().warning("malformed locale that exceeds maximum length of " + maxLocaleLength + " : "+ locale);
             if(MessageConfigManager.getThrowOnInvalidLocale())
