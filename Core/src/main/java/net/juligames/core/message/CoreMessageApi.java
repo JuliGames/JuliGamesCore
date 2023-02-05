@@ -583,7 +583,7 @@ public class CoreMessageApi implements MessageApi {
     }
 
     @Contract(pure = true)
-    private @NotNull Function<String, String> insertReplacements(@Nullable String @NotNull ... replacements) {
+    private @NotNull Function<String, String> insertReplacements(@Nullable String ... replacements) {
         //noinspection ConstantConditions for 100% security
         if (replacements == null) {
             return miniMessage -> miniMessage;
@@ -591,7 +591,13 @@ public class CoreMessageApi implements MessageApi {
         return miniMessage -> {
             Core.getInstance().getCoreLogger().debug("insert start: " + miniMessage);
             for (int i = 0; i < replacements.length; i++) {
-                assert replacements[i] != null;
+                if(replacements[i] == null) replacements[i] = "null";
+                /* if(replacements[i].contains("</blank>")) {
+                    Core.getInstance().getCoreLogger().warning("detected illegal </blank> in replacer! " + replacements[i] +
+                            " at [" + i +"]"  + " for message \"" + miniMessage + "\" ");
+                }
+                 */
+               //TODO replacements[i] = replacements[i].replace("</blank>","blank");
                 miniMessage = miniMessage.replace(buildPattern(i), replacements[i]);
                 Core.getInstance().getCoreLogger().debug("insert step: " + i + " :" + miniMessage);
             }
