@@ -134,7 +134,7 @@ public class CoreSQLManager implements SQLManager {
 
     @Override
     public <R> R useHandle(@NotNull Function<Handle, R> handleFunction) {
-        try(Handle handle = openHandle()) {
+        try (Handle handle = openHandle()) {
             return handleFunction.apply(handle);
         }
     }

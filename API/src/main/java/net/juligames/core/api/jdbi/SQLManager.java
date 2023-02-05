@@ -45,10 +45,11 @@ public interface SQLManager {
 
     /**
      * You can use this to execute stuff on JDBI fast and secure
+     *
      * @return a new Handle
      * @see SQLManager#openHandle()
      */
-    <R> R useHandle(Function<Handle,R> handleFunction);
+    <R> R useHandle(Function<Handle, R> handleFunction);
 
     @ApiStatus.Experimental
     ResultIterable<Map<String, Object>> mapQuery(String sql);

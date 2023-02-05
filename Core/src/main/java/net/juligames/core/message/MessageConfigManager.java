@@ -11,9 +11,10 @@ import java.util.Properties;
  */
 public final class MessageConfigManager {
 
-    private MessageConfigManager(){}
-
     private static final String name = "messageSystem";
+
+    private MessageConfigManager() {
+    }
 
     public static void init() {
         Properties properties = new Properties();
@@ -36,11 +37,11 @@ public final class MessageConfigManager {
         return configuration().getInteger("max_locale_length").orElse(3);
     }
 
-    public static boolean getThrowOnInvalidLocale(){
+    public static boolean getThrowOnInvalidLocale() {
         return configuration().getBoolean("throw_on_invalid_locale").orElse(false);
     }
 
-    public static boolean getWarnOnInvalidLocale(){
+    public static boolean getWarnOnInvalidLocale() {
         return configuration().getBoolean("warn_on_invalid_locale").orElse(true);
     }
 }

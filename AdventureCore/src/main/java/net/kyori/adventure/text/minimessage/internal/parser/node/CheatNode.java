@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
  * @author Ture Bentzin
  * 04.02.2023
  */
-public class CheatNode extends ValueNode{
+public class CheatNode extends ValueNode {
     /**
      * Creates a new element node.
      *

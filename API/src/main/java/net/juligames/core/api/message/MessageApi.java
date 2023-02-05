@@ -138,13 +138,17 @@ public interface MessageApi {
     Collection<MessagePostScript> sendMessage(String messageKey, Collection<? extends MessageRecipient> messageRecipients);
 
     MultiMessagePostScript sendMessage(String messageKey, Collection<? extends MessageRecipient> messageRecipients, String overrideLocale);
+
     MultiMessagePostScript sendMessage(String messageKey, Collection<? extends MessageRecipient> messageRecipients, Locale overrideLocale);
+
     MultiMessagePostScript sendMessage(String messageKey, Collection<? extends MessageRecipient> messageRecipients, DBLocale overrideLocale);
 
     Collection<MessagePostScript> sendMessage(String messageKey, Collection<? extends MessageRecipient> messageRecipients, String... replacements);
 
     MultiMessagePostScript sendMessage(String messageKey, Collection<? extends MessageRecipient> messageRecipients, String overrideLocale, String... replacements);
+
     MultiMessagePostScript sendMessage(String messageKey, Collection<? extends MessageRecipient> messageRecipients, Locale overrideLocale, String... replacements);
+
     MultiMessagePostScript sendMessage(String messageKey, Collection<? extends MessageRecipient> messageRecipients, DBLocale overrideLocale, String... replacements);
 
 
