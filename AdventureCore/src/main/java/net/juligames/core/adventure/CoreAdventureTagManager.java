@@ -9,6 +9,7 @@ import net.juligames.core.api.message.TagManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.Tag;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -75,7 +76,7 @@ public final class CoreAdventureTagManager implements TagManager, AdventureTagMa
 
     @Override
     public @NotNull Component resolve(@NotNull Message message) {
-        return getMiniMessage().deserialize(message.getMiniMessage(), getResolver());
+        return getMiniMessage().deserialize(message.getMiniMessage(), getResolver()); // https://docs.adventure.kyori.net/minimessage/dynamic-replacements.html#insert-some-unparsed-text
     }
 
     @Override

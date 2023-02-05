@@ -152,7 +152,7 @@ public final class Core implements API {
         coreNotificationApi = new CoreNotificationApi();
         coreCommandApi = new CoreCommandApi();
         clusterApi = new CoreClusterApi();
-        messageApi = new CoreMessageApi();
+        messageApi = new CoreMessageApi(); //needs to be called AFTER configurationAPI
         coreCacheApi = new CoreCacheApi();
         basicMiniGame = new SubscribableType<>();
 
