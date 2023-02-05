@@ -12,6 +12,7 @@ import net.juligames.core.api.jdbi.DBMessage;
  */
 public class CoreCacheApi implements CacheApi {
 
+    //This will be extended to read from configuration later, if good defaults are collected
 
     @Override
     public <K, V> Cache<K, V> newCache() {

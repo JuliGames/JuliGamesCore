@@ -21,7 +21,7 @@
           </execution>
         </executions>
         <configuration>
-          <createSourcesJar>true</createSourcesJar>
+          <createSourcesJar>false</createSourcesJar>
         </configuration>
       </plugin>
     </plugins>
