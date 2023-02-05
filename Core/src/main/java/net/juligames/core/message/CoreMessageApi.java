@@ -9,6 +9,7 @@ import net.juligames.core.api.jdbi.*;
 import net.juligames.core.api.jdbi.mapper.bean.MessageBean;
 import net.juligames.core.api.jdbi.mapper.bean.ReplacementBean;
 import net.juligames.core.api.message.*;
+import net.juligames.core.api.misc.ThrowableDebug;
 import net.juligames.core.caching.MessageCaching;
 import net.juligames.core.jdbi.CoreMessagePostScript;
 import net.juligames.core.jdbi.CoreMultiMessagePostScript;
@@ -647,7 +648,7 @@ public class CoreMessageApi implements MessageApi {
     @Deprecated
     public String findBest(String messageKey, String locale) {
         Message message = API.get().getMessageApi().getMessage(messageKey, locale);
-        checkLocale(locale);
+        locale = checkLocale(locale);
         if (message instanceof FallBackMessage) {
             //fallback = not present
             if (!Objects.equals(locale, defaultLocale())) {
@@ -682,7 +683,7 @@ public class CoreMessageApi implements MessageApi {
         }else
             message = getMessage(messageKey, locale, replacements);
 
-        checkLocale(locale); //May kill here in the future
+        locale = checkLocale(locale); //May kill here in the future
         if (message instanceof FallBackMessage) {
             //fallback = not present
             if (!locale.equalsIgnoreCase(defaultLocale())) {
@@ -700,16 +701,34 @@ public class CoreMessageApi implements MessageApi {
         }
     }
 
+    /**
+     *
+     * @param locale the locale to check
+     * @return the locale or a trimmed version of it
+     */
     @ApiStatus.Internal
-    private void checkLocale(@NotNull String locale) {
+    private String checkLocale(@NotNull String locale) {
         final int maxLocaleLength = MessageConfigManager.getMaxLocaleLength();
         if(locale.chars().mapToObj(i -> (char) i).filter(c -> c.equals('_')).count() > maxLocaleLength) {
             if(MessageConfigManager.getWarnOnInvalidLocale())
                 Core.getInstance().getCoreLogger().warning("malformed locale that exceeds maximum length of " + maxLocaleLength + " : "+ locale);
             if(MessageConfigManager.getThrowOnInvalidLocale())
                 throw new InvalidParameterException("malformed locale that exceeds maximum length of " + maxLocaleLength + " : "+ locale);
-
+            String[] split = locale.split("_", maxLocaleLength + 1);
+            StringJoiner trimmer = new StringJoiner("_");
+            try {
+                trimmer.add(split[0]);
+                trimmer.add(split[1]);
+                trimmer.add(split[2]);
+            }catch (ArrayIndexOutOfBoundsException e) {
+                Core.getInstance().getCoreLogger().error("A critical error occurred while trying to trim locale " + locale + " the messageSystem" +
+                        " will continue with the default locale!");
+                ThrowableDebug.debug(e);
+                return defaultLocale();
+            }
+            return trimmer.toString();
         }
+        return locale;
     }
 
     /**
