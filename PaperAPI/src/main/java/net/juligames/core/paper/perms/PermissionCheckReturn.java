@@ -46,7 +46,7 @@ public interface PermissionCheckReturn {
     boolean wasSuccessful();
 
     /**
-     * Indicates if the Check was positive or negative. If wasSuccessful returns true, this will always return false
+     * Indicates if the Check was positive or negative. If wasSuccessful returns false, this will always return false
      */
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     boolean getResult();
