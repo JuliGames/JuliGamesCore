@@ -97,9 +97,6 @@ public class CoreMaster {
         core.getCommandApi().setCommandHandler(new CommandHandler());
         logger.info("master is now ready to receive commands from hazelcast");
 
-        UUID master = API.get().getClusterApi().getMembers()[0];
-        API.get().getCommandApi().sendCommand("svconfig", master);
-
         //HOOK
 
         Core.getInstance().getJavaRuntime().addShutdownHook(new Thread(() -> {
