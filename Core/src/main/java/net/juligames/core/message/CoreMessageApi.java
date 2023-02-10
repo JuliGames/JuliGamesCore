@@ -194,7 +194,8 @@ public class CoreMessageApi implements MessageApi {
         List<MessageBean> messageBeans = callMessageExtension(MessageDAO::listAllBeans);
         messageBeans.forEach(this::cache);
         List<CoreMessage> coreMessages = messageBeans.stream().map(CoreMessage::new).toList();
-        coreMessages.forEach(coreMessage -> coreMessage.doWithMiniMessage(insertReplacements(replacements)));
+        //coreMessages.forEach(coreMessage -> coreMessage.doWithMiniMessage(insertReplacements(replacements)));
+        //TODO messages replacements store to Map (currently set)
         return coreMessages;
     }
 

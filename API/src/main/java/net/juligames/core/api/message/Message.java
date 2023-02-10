@@ -3,6 +3,7 @@ package net.juligames.core.api.message;
 import net.juligames.core.api.jdbi.DBMessage;
 import org.jetbrains.annotations.ApiStatus;
 
+import java.util.Set;
 import java.util.function.Function;
 
 /**
@@ -19,8 +20,15 @@ public interface Message extends Cloneable {
 
     /**
      * @return the miniMessage (unresolved obviously)
+     * This String does contain patterns
      */
     String getMiniMessage();
+
+    /**
+     * This String will not contain patterns, use of this may be unsaved, because untrusted data may get resolved!
+     * @return the miniMessage (unresolved obviously)
+     */
+    String getPreparedMiniMessage();
 
     /**
      * This Method should only be used for logging to systems that do not support MiniMessage or Components
@@ -44,4 +52,7 @@ public interface Message extends Cloneable {
      * @param actionToPerform the operation
      */
     void doWithMiniMessage(Function<String, String> actionToPerform);
+
+     Set<? extends Replacement> getReplacements();
+
 }
