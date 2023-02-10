@@ -7,7 +7,7 @@
     <groupId>net.juligames.core</groupId>
     <artifactId>JuliGamesCore</artifactId>
     <packaging>pom</packaging>
-    <version>1.2</version>
+    <version>1.§-SNAPSHOT</version>>
     <modules>
         <module>PaperCore</module>
         <module>Core</module>
