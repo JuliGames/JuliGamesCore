@@ -8,11 +8,14 @@ import de.bentzin.tools.register.Registerator;
 import net.juligames.core.api.API;
 import net.juligames.core.api.ApiCore;
 import net.juligames.core.api.TODO;
+import net.juligames.core.api.cacheing.CacheApi;
 import net.juligames.core.api.command.CommandApi;
 import net.juligames.core.api.config.ConfigurationAPI;
 import net.juligames.core.api.err.dev.TODOException;
 import net.juligames.core.api.message.MessageRecipient;
 import net.juligames.core.api.minigame.BasicMiniGame;
+import net.juligames.core.caching.CoreCacheApi;
+import net.juligames.core.caching.MessageCaching;
 import net.juligames.core.cluster.CoreClusterApi;
 import net.juligames.core.command.CoreCommandApi;
 import net.juligames.core.config.CoreConfigurationApi;
@@ -26,6 +29,7 @@ import net.juligames.core.serialization.SerializedNotification;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -44,10 +48,12 @@ public final class Core implements API {
      * This can be set depending on the build of the Core
      */
     public static final String CORE_BRAND = "Core";
-    public static final String CORE_VERSION_NUMBER = "1.1";
-    public static final String CORE_SPECIFICATION = "Gustav";//Development Specification: Michael(.n)
-    private static final String BUILD_VERSION = "1.1"; //POM VERSION
+    public static final String CORE_VERSION_NUMBER = "1.2";
+    public static final String CORE_SPECIFICATION = "Gustav";
+    private static final String BUILD_VERSION = "1.2"; //POM VERSION
+    
     private static Core core;
+    private final Registerator<Consumer<HazelcastInstance>> hazelcastPostPreparationWorkers = new Registerator<>("hazelcastPostPreparationWorkers");
     private HazelConnector hazelConnector;
     private TopicNotificationCore topicNotificationCore;
     private CoreNotificationApi coreNotificationApi;
@@ -58,9 +64,9 @@ public final class Core implements API {
     private CoreMessageApi messageApi;
     private CoreConfigurationApi configurationAPI;
     private CoreCommandApi coreCommandApi;
+    private CoreCacheApi coreCacheApi;
     private SubscribableType<BasicMiniGame> basicMiniGame;
     private String core_name;
-    private Registerator<Consumer<HazelcastInstance>> hazelcastPostPreparationWorkers = new Registerator<>("hazelcastPostPreparationWorkers");
     @NotNull
     private Supplier<Collection<? extends MessageRecipient>> onlineRecipientProvider = () -> List.of(new DummyMessageRecipient());
 
@@ -97,7 +103,16 @@ public final class Core implements API {
     }
 
     @ApiStatus.Internal
-    public void start(String core_name, Logger logger, boolean member) {
+    public void start(String core_name, @NotNull Logger logger, boolean member) {
+        {
+            final boolean core_debug_property = Boolean.getBoolean("coreDebug");
+            if (core_debug_property) {
+                logger.info("Detected SystemProperty \"coreDebug=true\" -> Debug was enabled");
+                logger.setDebug(true);
+                logger.debug("Debug is now enabled!");
+            }
+
+        }
         this.core_name = core_name;
         if (core != null) throw new IllegalStateException("seems like a core is already running!");
         core = this;
@@ -108,7 +123,6 @@ public final class Core implements API {
             hazelConnector = HazelConnector.getInstanceAndConnectAsMember(core_name);
 
         coreLogger = logger;
-        coreLogger.setDebug(true);
         apiLogger = coreLogger.adopt("api");
         coreLogger.info("------> " + getFullCoreName());
         coreLogger.info(core_name + " was started! - waiting for HazelCast to connect!");
@@ -121,7 +135,7 @@ public final class Core implements API {
             coreLogger.error(e.getClass().getName() + " : " + e.getMessage());
             e.printStackTrace();
         }
-        //postPreperation
+        //postPreparation
         getHazelcastPostPreparationWorkers().forEach(hazelcastInstanceConsumer -> hazelcastInstanceConsumer.accept(getOrThrow()));
 
         configurationAPI = new CoreConfigurationApi();
@@ -139,9 +153,11 @@ public final class Core implements API {
         coreNotificationApi = new CoreNotificationApi();
         coreCommandApi = new CoreCommandApi();
         clusterApi = new CoreClusterApi();
-        messageApi = new CoreMessageApi();
+        messageApi = new CoreMessageApi(); //needs to be called AFTER configurationAPI
+        coreCacheApi = new CoreCacheApi();
         basicMiniGame = new SubscribableType<>();
 
+        MessageCaching.init();
 
         Core.getInstance().getOrThrow().<SerializedNotification>getTopic("notify:" + Core.getInstance().getClusterApi().getLocalUUID().toString())
                 .addMessageListener(coreNotificationApi);
@@ -252,10 +268,24 @@ public final class Core implements API {
         throw new NoSuchElementException("HazelcastInstance is not present!");
     }
 
+    /**
+     * This will return the {@link HazelcastInstance} or null if not possible
+     *
+     * @return the hazelcastInstance or null
+     */
+    @Nullable
     private HazelcastInstance getForce() {
         return getHazelConnector().getForce();
     }
 
+    /**
+     * This will return the {@link HazelcastInstance} or wait until its possible to provide it.
+     * It is recommended to use this if you execute code asynchronously and don´t know if the Core is already connected
+     *
+     * @return the {@link HazelcastInstance}
+     * @throws ExecutionException   - hazelcast will not be possible to be provided
+     * @throws InterruptedException - waiting got interrupted
+     */
     public HazelcastInstance getOrWait() throws ExecutionException, InterruptedException {
         CompletableFuture<HazelcastInstance> instance = getHazelConnector().getInstance();
         return instance.get();
@@ -296,6 +326,11 @@ public final class Core implements API {
     @Override
     public SubscribableType<BasicMiniGame> getLocalMiniGame() {
         return basicMiniGame;
+    }
+
+    @Override
+    public CacheApi getCacheAPI() {
+        return coreCacheApi;
     }
 
     public void introduceMiniGame(BasicMiniGame basicMiniGame) {
@@ -344,7 +379,7 @@ public final class Core implements API {
         throw new TODOException();
     }
 
-    public Supplier<Collection<? extends MessageRecipient>> getOnlineRecipientProvider() {
+    public @NotNull Supplier<Collection<? extends MessageRecipient>> getOnlineRecipientProvider() {
         return onlineRecipientProvider;
     }
 
@@ -363,7 +398,7 @@ public final class Core implements API {
 
     @Override
     protected void finalize() { //Currently only for testing around with GarbageCollector!! Should be removed before 2.0
-        if(getCoreLogger() != null) {
+        if (getCoreLogger() != null) {
             getCoreLogger().debug("This API implementation is no longer available!");
         }
     }

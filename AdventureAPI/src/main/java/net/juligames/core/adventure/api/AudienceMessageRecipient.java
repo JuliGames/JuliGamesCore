@@ -1,13 +1,17 @@
 package net.juligames.core.adventure.api;
 
+import net.juligames.core.api.API;
 import net.juligames.core.api.message.Message;
 import net.juligames.core.api.message.MessageRecipient;
 import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Locale;
 import java.util.function.Supplier;
 
 /**
@@ -25,6 +29,19 @@ public class AudienceMessageRecipient implements MessageRecipient {
         this.name = name;
         this.locale = locale;
         this.audience = audience;
+    }
+
+    @Contract("_ -> new")
+    @ApiStatus.Experimental
+    public static @NotNull AudienceMessageRecipient getByPointer(@NotNull Audience audience) {
+        String ls = API.get().getHazelDataApi().getMasterInformation().get("default_locale");
+        Locale locale = (audience.pointers().get(Identity.LOCALE).orElse(null));
+        if (locale != null) {
+            ls = locale.toString();
+        }
+        String finalLs = ls; //for integrity
+        return new AudienceMessageRecipient(audience.pointers().get(Identity.NAME).orElse("unknownAudience"),
+                () -> finalLs, audience);
     }
 
     @Contract(pure = true)

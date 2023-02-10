@@ -1,6 +1,5 @@
 package net.juligames.core.paper.plugin;
 
-import net.juligames.core.api.TODO;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Server;
 import org.bukkit.Warning;
@@ -228,7 +227,6 @@ public class CorePluginLoader implements PluginLoader {
                     classLoadLock.remove(name);
                     classLoadLockCount.remove(name);
                 } else {
-                    //noinspection ConstantConditions
                     classLoadLockCount.compute(name, (x, prev) -> prev - 1); //may cause null
                 }
             }
@@ -258,12 +256,12 @@ public class CorePluginLoader implements PluginLoader {
         Validate.notNull(listener, "Listener can not be null");
 
         boolean useTimings = server.getPluginManager().useTimings();
-        Map<Class<? extends Event>, Set<RegisteredListener>> ret = new HashMap<Class<? extends Event>, Set<RegisteredListener>>();
+        Map<Class<? extends Event>, Set<RegisteredListener>> ret = new HashMap<>();
         Set<Method> methods;
         try {
             Method[] publicMethods = listener.getClass().getMethods();
             Method[] privateMethods = listener.getClass().getDeclaredMethods();
-            methods = new HashSet<Method>(publicMethods.length + privateMethods.length, 1.0f);
+            methods = new HashSet<>(publicMethods.length + privateMethods.length, 1.0f);
             Collections.addAll(methods, publicMethods);
             Collections.addAll(methods, privateMethods);
         } catch (NoClassDefFoundError e) {

@@ -80,6 +80,7 @@ public class CoreCommandApi implements CommandApi {
      * @return the old value
      * @apiNote This should be set as soon as the core is ready to receive commands
      */
+    @SuppressWarnings("UnusedReturnValue")
     public Optional<Consumer<String>> setCommandHandler(@Nullable Consumer<String> commandHandler) {
         Optional<Consumer<String>> buffer = getCommandHandler();
         this.commandHandler = commandHandler;

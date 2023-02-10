@@ -6,6 +6,7 @@ import net.juligames.core.api.config.ConfigurationAPI;
 import net.juligames.core.api.config.Interpreter;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -118,5 +119,13 @@ public class CoreConfigurationApi implements ConfigurationAPI {
             } catch (Exception ignored) {
             }
         return ts;
+    }
+
+    @Override
+    public Properties initializeProperties(@NotNull String name, @Nullable String header) {
+        final Properties defaults = new Properties();
+        defaults.setProperty("configuration_name", name);
+        defaults.setProperty("configuration_header", header);
+        return defaults;
     }
 }

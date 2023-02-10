@@ -33,6 +33,9 @@ public interface MessageRecipient {
     @Nullable
     String supplyLocale();
 
+    /**
+     * This will return the default locale that is distributed by the master
+     */
     default String supplyLocaleOrDefault() {
         if (supplyLocale() != null) return supplyLocale();
         return API.get().getHazelDataApi().getMasterInformation().get("default_locale");

@@ -6,11 +6,18 @@ import de.bentzin.tools.logging.Logger;
 import net.juligames.core.Core;
 import net.juligames.core.api.jdbi.*;
 import net.juligames.core.api.jdbi.mapper.bean.LocaleBean;
+import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
+import org.jdbi.v3.core.config.ConfigRegistry;
+import org.jdbi.v3.core.result.ResultIterable;
 import org.jdbi.v3.sqlobject.SqlObjectPlugin;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
+import java.sql.Connection;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 
 /**
  * @author Ture Bentzin
@@ -23,15 +30,6 @@ public class CoreSQLManager implements SQLManager {
 
     public CoreSQLManager(String connection, @NotNull Logger parentLogger) {
         logger = parentLogger.adopt("jdbi");
-        /*
-        Connection connection1 = null;
-        try {
-              connection1 = DriverManager.getConnection(connection);
-        } catch (SQLException e) {
-            Core.getInstance().getCoreLogger().error("connection failed.. debug");
-        }
-        //jdbi = Jdbi.create(connection);
-         */
         jdbi = Jdbi.create(connection);
         jdbi.installPlugin(new SqlObjectPlugin());
     }
@@ -77,6 +75,7 @@ public class CoreSQLManager implements SQLManager {
         logger.info("created: message");
 
 
+        //Currently not automatically used
         //player_locale_preference
         logger.info("creating: player_locale_preference");
         jdbi.withExtension(PlayerLocalPreferenceDAO.class, extension -> {
@@ -84,6 +83,7 @@ public class CoreSQLManager implements SQLManager {
             return null;
         });
         logger.info("created: player_locale_preference");
+
 
         //replacementType
         logger.info("creating: replacementType");
@@ -101,6 +101,14 @@ public class CoreSQLManager implements SQLManager {
         });
         logger.info("created: replacement");
 
+        //EXPERIMENTAL: data
+        logger.info("creating: data");
+        jdbi.withExtension(DataDAO.class, extension -> {
+            extension.createTable();
+            return null;
+        });
+        logger.info("created: data");
+
 
     }
 
@@ -114,8 +122,45 @@ public class CoreSQLManager implements SQLManager {
     }
 
     @Override
+    @ApiStatus.Experimental
+    public String getData(String key) {
+        return getJdbi().withExtension(DataDAO.class, extension -> extension.selectBean(key)).getData();
+    }
+
+    @Override
+    public Handle openHandle() {
+        return getJdbi().open();
+    }
+
+    @Override
+    public <R> R useHandle(@NotNull Function<Handle, R> handleFunction) {
+        try (Handle handle = openHandle()) {
+            return handleFunction.apply(handle);
+        }
+    }
+
+    @Override
+    public ResultIterable<Map<String, Object>> mapQuery(String sql) {
+        return useHandle(handle -> handle.createQuery(sql).mapToMap());
+    }
+
+    @Override
+    public <T> ResultIterable<Map<String, T>> mapDefinedQuery(String sql, Class<T> valueClass) {
+        return useHandle(handle -> handle.createQuery(sql).mapToMap(valueClass));
+    }
+
+    @Override
+    public Jdbi getCustomJDBI(Connection connection) {
+        return Jdbi.create(connection);
+    }
+
+    @Override
+    public ConfigRegistry getConfig() {
+        return getJdbi().getConfig().createCopy();
+    }
+
+    @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        return builder.append("JDBI is currently: ").append(jdbi).toString();
+        return "JDBI is currently: " + jdbi;
     }
 }

@@ -12,6 +12,7 @@ public interface NotificationApi {
      * @param listener the listener
      * @return if the registration was successful
      */
+    @SuppressWarnings("UnusedReturnValue")
     boolean registerListener(NotificationListener listener);
 
     /**

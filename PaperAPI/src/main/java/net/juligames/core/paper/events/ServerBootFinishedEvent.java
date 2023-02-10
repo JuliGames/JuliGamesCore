@@ -19,7 +19,7 @@ public final class ServerBootFinishedEvent extends ServerEvent {
     private static final HandlerList handlerList = new HandlerList();
     private final @NotNull API api;
 
-    public ServerBootFinishedEvent(API api) {
+    public ServerBootFinishedEvent(@NotNull API api) {
         this.api = api;
     }
 

@@ -20,12 +20,13 @@ import java.util.function.*;
  * @apiNote Only for testing! Not connected to hazelcast!
  * @implNote RESERVED KEYS: "configuration_header", "configuration_name"
  */
+@SuppressWarnings("DuplicatedCode")
 @TestOnly
 public class OfflineConfiguration implements Configuration {
 
     private final String name;
+    private final Map<String, String> data;
     private String header_comment = Core.getFullCoreName() + " :: a default configuration file";
-    private Map<String, String> data;
 
 
     public OfflineConfiguration(String name) {
@@ -99,7 +100,7 @@ public class OfflineConfiguration implements Configuration {
             return Optional.empty();
         }
         try {
-            return Optional.of(Integer.valueOf(key));
+            return Optional.of(Integer.valueOf(extract));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -117,7 +118,7 @@ public class OfflineConfiguration implements Configuration {
             return null;
         }
         try {
-            return Integer.valueOf(key);
+            return Integer.valueOf(extract);
         } catch (Exception e) {
             return null;
         }
@@ -135,7 +136,7 @@ public class OfflineConfiguration implements Configuration {
             return Optional.empty();
         }
         try {
-            return Optional.of(Double.valueOf(key));
+            return Optional.of(Double.valueOf(extract));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -153,7 +154,7 @@ public class OfflineConfiguration implements Configuration {
             return null;
         }
         try {
-            return Double.parseDouble(key);
+            return Double.parseDouble(extract);
         } catch (Exception e) {
             return null;
         }
@@ -171,7 +172,7 @@ public class OfflineConfiguration implements Configuration {
             return Optional.empty();
         }
         try {
-            return Optional.of(Long.parseLong(key));
+            return Optional.of(Long.parseLong(extract));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -189,7 +190,7 @@ public class OfflineConfiguration implements Configuration {
             return null;
         }
         try {
-            return Long.parseLong(key);
+            return Long.parseLong(extract);
         } catch (Exception e) {
             return null;
         }
@@ -207,7 +208,7 @@ public class OfflineConfiguration implements Configuration {
             return Optional.empty();
         }
         try {
-            return Optional.of(Short.parseShort(key));
+            return Optional.of(Short.parseShort(extract));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -225,7 +226,7 @@ public class OfflineConfiguration implements Configuration {
             return null;
         }
         try {
-            return Short.parseShort(key);
+            return Short.parseShort(extract);
         } catch (Exception e) {
             return null;
         }
@@ -243,7 +244,7 @@ public class OfflineConfiguration implements Configuration {
             return Optional.empty();
         }
         try {
-            return Optional.of(Byte.parseByte(key));
+            return Optional.of(Byte.parseByte(extract));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -261,7 +262,7 @@ public class OfflineConfiguration implements Configuration {
             return null;
         }
         try {
-            return Byte.parseByte(key);
+            return Byte.parseByte(extract);
         } catch (Exception e) {
             return null;
         }
@@ -279,7 +280,7 @@ public class OfflineConfiguration implements Configuration {
             return Optional.empty();
         }
         try {
-            return Optional.of(Boolean.parseBoolean(key));
+            return Optional.of(Boolean.parseBoolean(extract));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -297,7 +298,7 @@ public class OfflineConfiguration implements Configuration {
             return null;
         }
         try {
-            return Boolean.parseBoolean(key);
+            return Boolean.parseBoolean(extract);
         } catch (Exception e) {
             return null;
         }
@@ -315,7 +316,7 @@ public class OfflineConfiguration implements Configuration {
             return Optional.empty();
         }
         try {
-            return Optional.of(Float.parseFloat(key));
+            return Optional.of(Float.parseFloat(extract));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -333,7 +334,7 @@ public class OfflineConfiguration implements Configuration {
             return null;
         }
         try {
-            return Float.parseFloat(key);
+            return Float.parseFloat(extract);
         } catch (Exception e) {
             return null;
         }
@@ -422,7 +423,7 @@ public class OfflineConfiguration implements Configuration {
 
     @Override
     public void setString(String key, @NotNull String value) {
-        data.put(key, value.toString());
+        data.put(key, value);
     }
 
     @Override
@@ -547,6 +548,32 @@ public class OfflineConfiguration implements Configuration {
         }
     }
 
+    @Override
+    public void delRecursive(String key) {
+        for (Map.Entry<String, String> stringStringEntry : data.entrySet()) {
+            if (stringStringEntry.getKey().startsWith(key)) {
+                data.remove(stringStringEntry.getKey());
+            }
+        }
+    }
+
+    @Override
+    public void delRecursive(@NotNull Supplier<String> key) {
+        delRecursive(key.get());
+    }
+
+    @Override
+    public void delRecursive(String... keys) {
+        delAllRecursive(() -> List.of(keys));
+    }
+
+    @Override
+    public void delAllRecursive(@NotNull Supplier<Collection<String>> keys) {
+        for (String s : keys.get()) {
+            delRecursive(s);
+        }
+    }
+
 
     //query's
 
@@ -619,34 +646,34 @@ public class OfflineConfiguration implements Configuration {
 
     @Override
     public <T> void setIterable(String keySpace, Iterable<T> iterable, Interpreter<T> interpreter) {
-        IterableSplitter.splitAndWrite(iterable,interpreter,this,keySpace);
+        IterableSplitter.splitAndWrite(iterable, interpreter, this, keySpace);
     }
 
     @Override
     public <T> void setIterable(@NotNull Supplier<String> keySpace, Iterable<T> iterable, Interpreter<T> interpreter) {
-        setIterable(keySpace.get(),iterable,interpreter);
+        setIterable(keySpace.get(), iterable, interpreter);
     }
 
     @Override
     public <T> void setIterable(String keySpace, @NotNull Supplier<Iterable<T>> iterable, Interpreter<T> interpreter) {
-        setIterable(keySpace,iterable.get(),interpreter);
+        setIterable(keySpace, iterable.get(), interpreter);
     }
 
     @Override
     public <T> void setIterable(Supplier<String> keySpace, @NotNull Supplier<Iterable<T>> iterable, Interpreter<T> interpreter) {
-        setIterable(keySpace,iterable.get(),interpreter);
+        setIterable(keySpace, iterable.get(), interpreter);
     }
 
     //collection get
 
     @Override
     public <T> Collection<T> getCollection(String keyspace, Interpreter<T> interpreter) {
-        return IterableSplitter.tryReadSplitCollection(this,keyspace,interpreter);
+        return IterableSplitter.tryReadSplitCollection(this, keyspace, interpreter);
     }
 
     @Override
     public <T> Collection<T> getCollection(@NotNull Supplier<String> keyspace, Interpreter<T> interpreter) {
-        return getCollection(keyspace.get(),interpreter);
+        return getCollection(keyspace.get(), interpreter);
     }
 }
 

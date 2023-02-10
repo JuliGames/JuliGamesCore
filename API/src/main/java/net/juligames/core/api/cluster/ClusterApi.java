@@ -58,7 +58,7 @@ public interface ClusterApi {
     UUID getLocalUUID();
 
     /**
-     * This will return an {@link Optional} containing the name of the local Hazelcast Instance if present. Otherwise
+     * This will return an {@link Optional} containing the name of the local Hazelcast Instance if present. Otherwise,
      * the Optional will be empty
      */
     Optional<String> getLocalName();

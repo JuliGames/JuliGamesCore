@@ -1,7 +1,6 @@
 package net.juligames.core.paper.plugin;
 
 import com.google.common.io.ByteStreams;
-import net.juligames.core.api.TODO;
 import org.apache.commons.lang.Validate;
 import org.bukkit.plugin.InvalidPluginException;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -36,7 +35,7 @@ public final class CorePluginClassLoader extends URLClassLoader { // Spigot
 
     final CorePlugin plugin;
     private final CorePluginLoader loader;
-    private final Map<String, Class<?>> classes = new ConcurrentHashMap<String, Class<?>>();
+    private final Map<String, Class<?>> classes = new ConcurrentHashMap<>();
     private final PluginDescriptionFile description;
     private final File dataFolder;
     private final File file;
@@ -116,7 +115,7 @@ public final class CorePluginClassLoader extends URLClassLoader { // Spigot
             if (checkGlobal || result.getClassLoader() == this) {
                 return result;
             }
-        } catch (ClassNotFoundException ex) {
+        } catch (ClassNotFoundException ignored) {
         }
 
         /*

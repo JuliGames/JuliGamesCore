@@ -30,7 +30,7 @@ public class ApiCore {
     public static void drop() {
         //1. drop CURRENT_API
         CURRENT_API = null;
-        //2. uncomplete completableFuture...
+        //2. uncompleted completableFuture...
         completableFuture = new CompletableFuture<>();
     }
 

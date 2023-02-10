@@ -47,7 +47,9 @@ public interface BuildInInterpreters {
     }
 
     @Contract(pure = true)
-    static @NotNull SimpleInterpreter<String> interpreter() {return s -> s;}
+    static @NotNull SimpleInterpreter<String> interpreter() {
+        return s -> s;
+    }
 
 
 }

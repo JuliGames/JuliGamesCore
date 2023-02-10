@@ -19,11 +19,11 @@ import java.time.format.DateTimeFormatter;
  */
 public class DebugNotificationPrinter implements MessageListener<SerializedNotification> {
 
-    public static DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+    public static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 
     /**
      * Invoked when a message is received for the topic. Note that the topic guarantees message ordering.
-     * Therefore there is only one thread invoking onMessage. The user should not keep the thread busy, but preferably
+     * Therefore, there is only one thread invoking onMessage. The user should not keep the thread busy, but preferably
      * should dispatch it via an Executor. This will increase the performance of the topic.
      *
      * @param message the message that is received for the topic

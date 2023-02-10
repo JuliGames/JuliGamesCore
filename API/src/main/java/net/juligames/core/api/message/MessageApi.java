@@ -3,6 +3,7 @@ package net.juligames.core.api.message;
 import net.juligames.core.api.jdbi.*;
 import org.jdbi.v3.core.extension.ExtensionCallback;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Locale;
@@ -132,6 +133,25 @@ public interface MessageApi {
 
     MultiMessagePostScript sendMessage(Collection<String> messageKeys, Collection<? extends MessageRecipient> messageRecipients, DBLocale overrideLocale);
 
+    Collection<MultiMessagePostScript> sendMessageSmart(@NotNull Collection<String> messageKeys, Collection<? extends MessageRecipient> messageRecipients, String... replacement);
+
+    Collection<MessagePostScript> sendMessage(String messageKey, Collection<? extends MessageRecipient> messageRecipients);
+
+    MultiMessagePostScript sendMessage(String messageKey, Collection<? extends MessageRecipient> messageRecipients, String overrideLocale);
+
+    MultiMessagePostScript sendMessage(String messageKey, Collection<? extends MessageRecipient> messageRecipients, Locale overrideLocale);
+
+    MultiMessagePostScript sendMessage(String messageKey, Collection<? extends MessageRecipient> messageRecipients, DBLocale overrideLocale);
+
+    Collection<MessagePostScript> sendMessage(String messageKey, Collection<? extends MessageRecipient> messageRecipients, String... replacements);
+
+    MultiMessagePostScript sendMessage(String messageKey, Collection<? extends MessageRecipient> messageRecipients, String overrideLocale, String... replacements);
+
+    MultiMessagePostScript sendMessage(String messageKey, Collection<? extends MessageRecipient> messageRecipients, Locale overrideLocale, String... replacements);
+
+    MultiMessagePostScript sendMessage(String messageKey, Collection<? extends MessageRecipient> messageRecipients, DBLocale overrideLocale, String... replacements);
+
+
     MultiMessagePostScript broadcastMessage(Collection<String> messageKeys, Locale defaultLocale);
 
     MultiMessagePostScript broadcastMessage(Collection<String> messageKeys, String defaultLocale);
@@ -159,6 +179,10 @@ public interface MessageApi {
 
     MultiMessagePostScript sendMessage(Collection<String> messageKeys, MessageRecipient messageRecipient, String... replacement);
 
+    /**
+     * @deprecated use {@link MessageApi#sendMessageSmart(Collection, Collection, String...)} instead
+     */
+    @Deprecated
     MultiMessagePostScript sendMessage(Collection<String> messageKeys, Collection<? extends MessageRecipient> messageRecipients, String... replacement);
 
     MultiMessagePostScript sendMessage(Collection<String> messageKeys, MessageRecipient messageRecipient, String overrideLocale, String... replacement);

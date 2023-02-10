@@ -1,19 +1,22 @@
 package net.juligames.core.message;
 
+import com.github.benmanes.caffeine.cache.Cache;
 import de.bentzin.tools.Hardcode;
+import de.bentzin.tools.pair.Pair;
 import net.juligames.core.Core;
 import net.juligames.core.api.API;
 import net.juligames.core.api.jdbi.*;
 import net.juligames.core.api.jdbi.mapper.bean.MessageBean;
 import net.juligames.core.api.jdbi.mapper.bean.ReplacementBean;
-import net.juligames.core.api.message.Message;
-import net.juligames.core.api.message.MessageApi;
-import net.juligames.core.api.message.MessageRecipient;
+import net.juligames.core.api.message.*;
+import net.juligames.core.api.misc.ThrowableDebug;
+import net.juligames.core.caching.MessageCaching;
 import net.juligames.core.jdbi.CoreMessagePostScript;
 import net.juligames.core.jdbi.CoreMultiMessagePostScript;
 import org.jdbi.v3.core.extension.ExtensionCallback;
 import org.jetbrains.annotations.*;
 
+import java.security.InvalidParameterException;
 import java.time.Instant;
 import java.util.*;
 import java.util.function.Function;
@@ -29,6 +32,8 @@ public class CoreMessageApi implements MessageApi {
     //TODO Further testing on automatic fallback (new implementation? Whats current status?)
 
     public CoreMessageApi() {
+        //setup config
+        MessageConfigManager.init();
     }
 
 
@@ -84,17 +89,34 @@ public class CoreMessageApi implements MessageApi {
         return getMessage(messageKey, locale.toString(), replacements);
     }
 
+    /**
+     * @param messageKey
+     * @param locale
+     * @return
+     */
     @Override
-    public CoreMessage getMessage(String messageKey, String locale) {
-        DBMessage dbMessage = callMessageExtension(extension -> extension.select(messageKey, locale));
-        return CoreMessage.fromData(dbMessage, locale);
+    public CoreMessage getMessage(String messageKey, String locale) { //REWRITE
+        Optional<DBMessage> messageFromCache = getMessageFromCache(messageKey, locale);
+        if (messageFromCache.isPresent()) {
+            return CoreMessage.fromData(messageFromCache.get(), messageKey);
+        } else {
+            //non cached
+            DBMessage dbMessage = callMessageExtension(extension -> extension.select(messageKey, locale));
+            return CoreMessage.fromData(cache(dbMessage), messageKey);
+        }
+
+        /*return CoreMessage.fromData(getMessageFromCache(messageKey, locale).orElseGet(() ->
+                cache(callMessageExtension(extension -> extension.select(messageKey, locale)))), locale);
+
+         */
     }
 
     @Override
     public CoreMessage getMessage(String messageKey, String locale, String... replacements) {
-        DBMessage dbMessage = callMessageExtension(extension -> extension.select(messageKey, locale));
-        CoreMessage message = CoreMessage.fromData(dbMessage, messageKey);
+        CoreMessage message = getMessage(messageKey, locale);
+        Core.getInstance().getCoreLogger().debug("inserting replacements: " + Arrays.toString(replacements) + " to " + message.getMiniMessage() + "@" + message.getMessageData().getMessageKey());
         message.doWithMiniMessage(insertReplacements(replacements));
+        Core.getInstance().getCoreLogger().debug("new Data: " + message.getMiniMessage());
         return message;
     }
 
@@ -111,7 +133,7 @@ public class CoreMessageApi implements MessageApi {
     @Override
     public Collection<CoreMessage> getMessage(String messageKey) {
         List<MessageBean> messageBeans = callMessageExtension(extension -> extension.selectFromKey(messageKey));
-        return messageBeans.stream().map(messageBean -> CoreMessage.fromData(messageBean, messageKey)).toList();
+        return messageBeans.stream().map(messageBean -> CoreMessage.fromData(cache(messageBean), messageKey)).toList();
     }
 
     @Override
@@ -137,6 +159,7 @@ public class CoreMessageApi implements MessageApi {
     public Collection<CoreMessage> getAllFromLocale(String locale) {
         //EMPTY COLLECTION
         List<MessageBean> messageBeans = callMessageExtension(extension -> extension.selectFromLocale(locale));
+        messageBeans.forEach(this::cache);
         return messageBeans.stream().map(CoreMessage::fromData).toList();
     }
 
@@ -162,12 +185,14 @@ public class CoreMessageApi implements MessageApi {
     @Override
     public Collection<CoreMessage> getAll() {
         List<MessageBean> messageBeans = callMessageExtension(MessageDAO::listAllBeans);
+        messageBeans.forEach(this::cache);
         return messageBeans.stream().map(CoreMessage::new).toList();
     }
 
     @Override
     public Collection<CoreMessage> getAll(String... replacements) {
         List<MessageBean> messageBeans = callMessageExtension(MessageDAO::listAllBeans);
+        messageBeans.forEach(this::cache);
         List<CoreMessage> coreMessages = messageBeans.stream().map(CoreMessage::new).toList();
         coreMessages.forEach(coreMessage -> coreMessage.doWithMiniMessage(insertReplacements(replacements)));
         return coreMessages;
@@ -176,6 +201,7 @@ public class CoreMessageApi implements MessageApi {
     @Override
     public Stream<DBMessage> streamData() {
         List<MessageBean> messageBeans = callMessageExtension(MessageDAO::listAllBeans);
+        messageBeans.forEach(this::cache);
         return messageBeans.stream().map(messageBean -> (DBMessage) messageBeans);
     }
 
@@ -309,6 +335,54 @@ public class CoreMessageApi implements MessageApi {
     }
 
     @Override
+    public Collection<MessagePostScript> sendMessage(String messageKey, Collection<? extends MessageRecipient> messageRecipients) {
+        Collection<MessagePostScript> postScripts = new ArrayList<>();
+        for (MessageRecipient messageRecipient : messageRecipients) {
+            postScripts.add(sendMessage(messageKey, messageRecipient));
+        }
+        return postScripts;
+    }
+
+    @Override
+    public CoreMultiMessagePostScript sendMessage(String messageKey, Collection<? extends MessageRecipient> messageRecipients, String overrideLocale) {
+        return sendMessage(List.of(messageKey), messageRecipients, overrideLocale);
+    }
+
+    @Override
+    public CoreMultiMessagePostScript sendMessage(String messageKey, Collection<? extends MessageRecipient> messageRecipients, Locale overrideLocale) {
+        return sendMessage(messageKey, messageRecipients, overrideLocale.toString());
+    }
+
+    @Override
+    public CoreMultiMessagePostScript sendMessage(String messageKey, Collection<? extends MessageRecipient> messageRecipients, @NotNull DBLocale overrideLocale) {
+        return sendMessage(messageKey, messageRecipients, overrideLocale.toUtil());
+    }
+
+    @Override
+    public Collection<MessagePostScript> sendMessage(String messageKey, @NotNull Collection<? extends MessageRecipient> messageRecipients, String... replacements) {
+        Collection<MessagePostScript> postScripts = new ArrayList<>();
+        for (MessageRecipient messageRecipient : messageRecipients) {
+            postScripts.add(sendMessage(messageKey, messageRecipient, replacements));
+        }
+        return postScripts;
+    }
+
+    @Override
+    public CoreMultiMessagePostScript sendMessage(String messageKey, Collection<? extends MessageRecipient> messageRecipients, String overrideLocale, String... replacements) {
+        return sendMessage(List.of(messageKey), messageRecipients, overrideLocale, replacements);
+    }
+
+    @Override
+    public CoreMultiMessagePostScript sendMessage(String messageKey, Collection<? extends MessageRecipient> messageRecipients, @NotNull Locale overrideLocale, String... replacements) {
+        return sendMessage(messageKey, messageRecipients, overrideLocale.toString(), replacements);
+    }
+
+    @Override
+    public CoreMultiMessagePostScript sendMessage(String messageKey, Collection<? extends MessageRecipient> messageRecipients, @NotNull DBLocale overrideLocale, String... replacements) {
+        return sendMessage(messageKey, messageRecipients, overrideLocale.toUtil(), replacements);
+    }
+
+    @Override
     public CoreMultiMessagePostScript broadcastMessage(Collection<String> messageKeys, @NotNull Locale defaultLocale) {
         return broadcastMessage(messageKeys, defaultLocale.toString());
     }
@@ -332,7 +406,7 @@ public class CoreMessageApi implements MessageApi {
     @Override
     public CoreMessagePostScript sendMessage(String messageKey, @NotNull MessageRecipient messageRecipient, String... replacement) {
         //send it baby
-        Message message = getMessage(messageKey, findBestForRecipient(messageKey, messageRecipient), replacement);
+        Message message = findBestMessageForRecipient(messageKey, messageRecipient, replacement);
         messageRecipient.deliver(message);
         return new CoreMessagePostScript(message, messageRecipient, now());
     }
@@ -382,7 +456,7 @@ public class CoreMessageApi implements MessageApi {
         Collection<? extends MessageRecipient> messageRecipients = Core.getInstance().getOnlineRecipientProvider().get();
         Collection<CoreMessagePostScript> postScripts = new ArrayList<>();
         for (MessageRecipient messageRecipient : messageRecipients) {
-            CoreMessage message = getMessage(messageKey, findBestForRecipient(messageKey, messageRecipient));
+            Message message = findBestMessageForRecipient(messageKey, messageRecipient);
             message.doWithMiniMessage(insertReplacements(replacement));
             messageRecipient.deliver(message);
             postScripts.add(new CoreMessagePostScript(message, messageRecipient, now()));
@@ -395,13 +469,17 @@ public class CoreMessageApi implements MessageApi {
         return sendMessage(messageKeys, List.of(messageRecipient), replacement);
     }
 
+    /**
+     * @deprecated use {@link CoreMessageApi#sendMessageSmart(Collection, Collection, String...)} instead
+     */
     @Override
+    @Deprecated
     public CoreMultiMessagePostScript sendMessage(@NotNull Collection<String> messageKeys, Collection<? extends MessageRecipient> messageRecipients, String... replacement) {
         //because of performance reasons I will reimplement sendMessage here - it is not "good" code, but I think its worth it!
         Collection<Message> messages = new ArrayList<>();
         for (String messageKey : messageKeys) {
             for (MessageRecipient messageRecipient : messageRecipients) {
-                Message message = getMessage(messageKey, messageRecipient.supplyLocaleOrDefault());
+                Message message = getMessage(messageKey, messageRecipient.supplyLocaleOrDefault()); //no fallback?! oh fuck this could get interesting
                 message.doWithMiniMessage(insertReplacements(replacement));
                 if (messages.stream().noneMatch(message1 -> message1.getMessageData().getMessageKey().equals(message.getMessageData().getMessageKey()))) {
                     messages.add(message);
@@ -440,6 +518,26 @@ public class CoreMessageApi implements MessageApi {
             messages.add(message);
         }
         return new CoreMultiMessagePostScript(messages, messageRecipients, now());
+    }
+
+    @Override
+    public Collection<MultiMessagePostScript> sendMessageSmart(@NotNull Collection<String> messageKeys, @NotNull Collection<? extends MessageRecipient> messageRecipients, String... replacement) {
+        //because of performance reasons I will reimplement sendMessage here - it is not "good" code, but I think its worth it!
+
+        Collection<MultiMessagePostScript> messages = new ArrayList<>();
+
+        for (MessageRecipient messageRecipient : messageRecipients) {
+            Collection<Message> localeMessage = new ArrayList<>();
+            for (String messageKey : messageKeys) {
+                Message message = findBestMessageForRecipient(messageKey, messageRecipient);
+                message.doWithMiniMessage(insertReplacements(replacement));
+                messageRecipient.deliver(message);
+                localeMessage.add(message);
+            }
+            messages.add(new CoreMultiMessagePostScript(localeMessage, List.of(messageRecipient)));
+        }
+
+        return messages;
     }
 
     @Override
@@ -483,7 +581,7 @@ public class CoreMessageApi implements MessageApi {
     }
 
     @Contract(pure = true)
-    private @NotNull Function<String, String> insertReplacements(@Nullable String @NotNull ... replacements) {
+    private @NotNull Function<String, String> insertReplacements(@Nullable String... replacements) {
         //noinspection ConstantConditions for 100% security
         if (replacements == null) {
             return miniMessage -> miniMessage;
@@ -491,7 +589,13 @@ public class CoreMessageApi implements MessageApi {
         return miniMessage -> {
             Core.getInstance().getCoreLogger().debug("insert start: " + miniMessage);
             for (int i = 0; i < replacements.length; i++) {
-                assert replacements[i] != null;
+                if (replacements[i] == null) replacements[i] = "null";
+                /* if(replacements[i].contains("</blank>")) {
+                    Core.getInstance().getCoreLogger().warning("detected illegal </blank> in replacer! " + replacements[i] +
+                            " at [" + i +"]"  + " for message \"" + miniMessage + "\" ");
+                }
+                 */
+                //TODO replacements[i] = replacements[i].replace("</blank>","blank");
                 miniMessage = miniMessage.replace(buildPattern(i), replacements[i]);
                 Core.getInstance().getCoreLogger().debug("insert step: " + i + " :" + miniMessage);
             }
@@ -514,12 +618,34 @@ public class CoreMessageApi implements MessageApi {
     }
 
 
+    /**
+     * @param messageKey       the messageKey
+     * @param messageRecipient the recipient
+     * @return the best locale
+     * @deprecated use {@link CoreMessageApi#findBestMessageForRecipient(String, MessageRecipient)} instead
+     */
+    @Deprecated
     public String findBestForRecipient(String messageKey, @NotNull MessageRecipient messageRecipient) {
         return findBest(messageKey, messageRecipient.supplyLocaleOrDefault());
     }
 
+    public Message findBestMessageForRecipient(String messageKey, @NotNull MessageRecipient messageRecipient) {
+        return findBestMessage(messageKey, messageRecipient.supplyLocaleOrDefault());
+    }
+
+    public Message findBestMessageForRecipient(String messageKey, @NotNull MessageRecipient messageRecipient, String... replacements) {
+        return findBestMessage(messageKey, messageRecipient.supplyLocaleOrDefault(), replacements);
+    }
+
+    /**
+     * returns the "best" locale that is available for that messageKey
+     *
+     * @deprecated use {@link CoreMessageApi#findBestMessage(String, String)} instead
+     */
+    @Deprecated
     public String findBest(String messageKey, String locale) {
         Message message = API.get().getMessageApi().getMessage(messageKey, locale);
+        locale = checkLocale(locale);
         if (message instanceof FallBackMessage) {
             //fallback = not present
             if (!Objects.equals(locale, defaultLocale())) {
@@ -537,6 +663,76 @@ public class CoreMessageApi implements MessageApi {
         }
     }
 
+    /**
+     * returns the "best" locale that is available for that messageKey
+     */
+    public Message findBestMessage(String messageKey, String locale) {
+        return findBestMessage(messageKey, locale, (String[]) null); //cast is very important!!
+    }
+
+    /**
+     * returns the "best" locale that is available for that messageKey
+     */
+    public Message findBestMessage(String messageKey, String locale, @Nullable String... replacements) {
+        Message message;
+        if (replacements == null) {
+            message = getMessage(messageKey, locale);
+        } else
+            message = getMessage(messageKey, locale, replacements);
+
+        locale = checkLocale(locale); //May kill here in the future
+        if (message instanceof FallBackMessage) {
+            //fallback = not present
+            if (!locale.equalsIgnoreCase(defaultLocale())) {
+                if (locale.contains("_")) {
+                    //can go "deeper"
+                    return findBestMessage(messageKey, reduce(locale), replacements);
+                }
+            }
+            //use defaultLocale or fallback...
+            return getMessage(messageKey, defaultLocale(), replacements);
+
+        } else {
+            //Message is present...
+            return message;
+        }
+    }
+
+    /**
+     * @param locale the locale to check
+     * @return the locale or a trimmed version of it
+     */
+    @ApiStatus.Internal
+    private String checkLocale(@NotNull String locale) {
+        final int maxLocaleLength = MessageConfigManager.getMaxLocaleLength();
+        if (locale.chars().mapToObj(i -> (char) i).filter(c -> c.equals('_')).count() > maxLocaleLength) {
+            if (MessageConfigManager.getWarnOnInvalidLocale())
+                Core.getInstance().getCoreLogger().warning("malformed locale that exceeds maximum length of " + maxLocaleLength + " : " + locale);
+            if (MessageConfigManager.getThrowOnInvalidLocale())
+                throw new InvalidParameterException("malformed locale that exceeds maximum length of " + maxLocaleLength + " : " + locale);
+            String[] split = locale.split("_", maxLocaleLength + 1);
+            StringJoiner trimmer = new StringJoiner("_");
+            try {
+                trimmer.add(split[0]);
+                trimmer.add(split[1]);
+                trimmer.add(split[2]);
+            } catch (ArrayIndexOutOfBoundsException e) {
+                Core.getInstance().getCoreLogger().error("A critical error occurred while trying to trim locale " + locale + " the messageSystem" +
+                        " will continue with the default locale!");
+                ThrowableDebug.debug(e);
+                return defaultLocale();
+            }
+            return trimmer.toString();
+        }
+        return locale;
+    }
+
+    /**
+     * Can be used to parse input safe to locale
+     *
+     * @param input
+     * @return
+     */
     public Locale parseFromString(@NotNull String input) {
         String[] s = input.split("_");
         Locale parse = null;
@@ -564,5 +760,24 @@ public class CoreMessageApi implements MessageApi {
         return parse;
     }
 
+    private Cache<Pair<String>, DBMessage> getMessageCache() {
+        return MessageCaching.messageCache();
+    }
+
+    private Optional<DBMessage> getMessageFromCache(String messageKey, String locale) {
+        if (MessageCaching.enabled && getMessageCache() != null)
+            return Optional.ofNullable(getMessageCache().getIfPresent(new Pair<>(messageKey, locale)));
+        return Optional.empty();
+    }
+
+    @Contract("_ -> param1")
+    private @Nullable DBMessage cache(DBMessage dbMessage) {
+        if (dbMessage == null) {
+            return null;
+        }
+        if (getMessageCache() != null)
+            getMessageCache().put(new Pair<>(dbMessage.getMessageKey(), dbMessage.getLocale()), dbMessage);
+        return dbMessage;
+    }
 
 }

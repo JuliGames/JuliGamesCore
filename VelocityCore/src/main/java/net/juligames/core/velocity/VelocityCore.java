@@ -24,7 +24,7 @@ import java.util.logging.Level;
  * 03.12.2022
  */
 
-@Plugin(id = "velocitycore", name = "JuliGames Velocity Core", version = "1.1",
+@Plugin(id = "velocitycore", name = "JuliGames Velocity Core", version = "1.2",
         url = "https://github.com/JuliGames/JuliGamesCore", description = "Velocity Client for the core - necessary to provide the API here",
         authors = {"Ture Bentzin"})
 public final class VelocityCore {
@@ -78,9 +78,7 @@ public final class VelocityCore {
             return recipients;
         });
 
-        core.getCommandApi().setCommandHandler(s -> {
-            server.getCommandManager().executeAsync(server.getConsoleCommandSource(), s);
-        });
+        core.getCommandApi().setCommandHandler(s -> server.getCommandManager().executeAsync(server.getConsoleCommandSource(), s));
 
         API.get().getMessageApi().registerMessage("internal.core.velocity.boot", "<gold>DEBUG: Velocity is up! :: {0}");
         API.get().getMessageApi().broadcastMessage("internal.core.velocity.boot", new String[]{server.getBoundAddress().getHostString()});

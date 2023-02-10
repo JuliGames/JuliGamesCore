@@ -149,7 +149,7 @@ public class MasterConfigManager {
      *                           java.lang.SecurityManager#checkDelete} method denies
      *                           delete access to the file
      */
-    @SuppressWarnings({"UnstableApiUsage", "UnusedReturnValue"})
+    @SuppressWarnings({"UnusedReturnValue"})
     @ApiStatus.Internal
     public boolean deleteConfigFromSystem(String hazel) {
         CoreConfiguration configuration = new CoreConfiguration(hazel);

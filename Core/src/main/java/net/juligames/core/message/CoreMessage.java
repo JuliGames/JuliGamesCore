@@ -17,8 +17,8 @@ public class CoreMessage implements Message {
 
     private final DBMessage messageData;
 
-    public CoreMessage(@Nullable DBMessage messageData) {
-        this.messageData = messageData;
+    public CoreMessage(@NotNull DBMessage messageData) {
+        this.messageData = messageData.clone(); //clone to avoid conflicts
     }
 
     @Contract("_, _ -> new")

@@ -12,6 +12,7 @@ import java.util.UUID;
  * @author Ture Bentzin
  * 16.11.2022
  */
+@SuppressWarnings("unchecked")
 public class CoreNotification implements net.juligames.core.api.notification.Notification {
 
     private final String message;
@@ -86,11 +87,10 @@ public class CoreNotification implements net.juligames.core.api.notification.Not
 
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("CoreNotification{");
-        sb.append(", header='").append(header).append('\'');
-        sb.append("message='").append(message).append('\'');
-        sb.append('}');
-        return sb.toString();
+        String sb = "CoreNotification{" + ", header='" + header + '\'' +
+                "message='" + message + '\'' +
+                '}';
+        return sb;
     }
 
     public SerializedNotification serialize() {

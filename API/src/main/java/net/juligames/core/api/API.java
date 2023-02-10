@@ -2,6 +2,7 @@ package net.juligames.core.api;
 
 import de.bentzin.tools.logging.Logger;
 import de.bentzin.tools.misc.SubscribableType;
+import net.juligames.core.api.cacheing.CacheApi;
 import net.juligames.core.api.cluster.ClusterApi;
 import net.juligames.core.api.command.CommandApi;
 import net.juligames.core.api.config.ConfigurationAPI;
@@ -102,6 +103,11 @@ public interface API {
      * @return a possible local running {@link BasicMiniGame}
      */
     SubscribableType<BasicMiniGame> getLocalMiniGame();
+
+    /**
+     * @return CacheAPI for use with Caffeine
+     */
+    CacheApi getCacheAPI();
 
     /**
      * @return The Name this core is assigned to

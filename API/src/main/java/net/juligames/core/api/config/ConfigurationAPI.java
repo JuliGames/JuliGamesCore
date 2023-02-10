@@ -1,6 +1,8 @@
 package net.juligames.core.api.config;
 
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Comparator;
@@ -93,4 +95,11 @@ public interface ConfigurationAPI {
     @ApiStatus.Experimental
     <T> Collection<T> tryReadSplitCollection(Iterable<String> strings, Interpreter<T> interpreter);
 
+
+    /**
+     * @param name   stored as configuration_name
+     * @param header stored as configuration_header
+     * @return initialized Properties to be used with the {@link ConfigurationAPI}
+     */
+    Properties initializeProperties(@NotNull String name, @Nullable String header);
 }

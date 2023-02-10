@@ -41,13 +41,13 @@
     <network>
         <!--
             The preferred port number where the Hazelcast instance will listen. The convention is
-            to use 5701 and it is the default both here and in various tools connecting to
+            to use 5701, and it is the default both here and in various tools connecting to
             Hazelcast. This configuration has the following attributes:
             - port-count:
                 The default value is 100, meaning that Hazelcast will try to bind 100 ports.
                 If you set the value of port as 5701, as members join the cluster, Hazelcast tries
                 to find ports between 5701 and 5801. You can change the port count in cases like
-                having large instances on a single machine or you are willing to have only a few
+                having large instances on a single machine, or you are willing to have only a few
                 ports assigned.
             - auto-increment:
                 Default value is true. If port is set to 5701, Hazelcast will try to find free

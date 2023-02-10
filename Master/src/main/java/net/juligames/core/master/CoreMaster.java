@@ -4,6 +4,7 @@ import com.hazelcast.core.HazelcastInstance;
 import de.bentzin.tools.logging.Logger;
 import de.bentzin.tools.register.Registerator;
 import net.juligames.core.Core;
+import net.juligames.core.api.API;
 import net.juligames.core.api.jdbi.LocaleDAO;
 import net.juligames.core.api.jdbi.SQLManager;
 import net.juligames.core.jdbi.CoreSQLManager;
@@ -12,6 +13,9 @@ import net.juligames.core.master.config.MasterConfigManager;
 import net.juligames.core.master.data.MasterHazelInformationProvider;
 import net.juligames.core.master.logging.MasterLogger;
 
+import java.util.Optional;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -20,6 +24,7 @@ import java.util.concurrent.ExecutionException;
  */
 public class CoreMaster {
 
+    private static final CompletableFuture<Long> bootMillis = new CompletableFuture<>();
     private static MasterHazelInformationProvider masterHazelInformationProvider;
     private static HazelcastInstance hazelcast;
     private static Logger logger;
@@ -39,7 +44,7 @@ public class CoreMaster {
         masterConfigManager = new MasterConfigManager();
 
         logger.info("welcome to " + Core.getFullCoreName() + " Master by Ture Bentzin <bentzin@tdrstudios.de>");
-        //logger.warning("This is still an development build!");
+        //logger.warning("This is still a development build!");
 
 
         // masterConfigManager.load();
@@ -52,9 +57,9 @@ public class CoreMaster {
             });
         } catch (Registerator.DuplicateEntryException ignored) {
         }
+        bootMillis.complete(System.currentTimeMillis()); // set boot date - published via master_information
 
         //start Core
-        //noinspection UnstableApiUsage
         core.start("Master", logger, true);
 
         try {
@@ -112,6 +117,10 @@ public class CoreMaster {
         return SQLManager;
     }
 
+    public static Optional<Long> getBootMillis() {
+        return Optional.ofNullable(bootMillis.getNow(null));
+    }
+
     public static void registerCommands() throws Registerator.DuplicateEntryException {
         masterCommandRunner.register(new MasterCommand("bc-all") {
             @Override
@@ -128,6 +137,7 @@ public class CoreMaster {
         masterCommandRunner.register(new ExecuteCommand());
         masterCommandRunner.register(new ListCommand());
         masterCommandRunner.register(new PrintMapCommand());
+        masterCommandRunner.register(new UpdateMasterInformationCommand());
     }
 
     public static MasterConfigManager masterConfigManager() {

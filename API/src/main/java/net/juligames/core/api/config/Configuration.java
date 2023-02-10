@@ -13,6 +13,8 @@ import java.util.function.*;
 /**
  * @author Ture Bentzin
  * 26.11.2022
+ * @apiNote all "orNull" methods will not throw a {@link RuntimeException} on failed parsing, but the normal methods
+ * will do so
  * @see BuildInInterpreters
  */
 public interface Configuration extends Comparable<Configuration> {
@@ -181,6 +183,14 @@ public interface Configuration extends Comparable<Configuration> {
     void del(String... key);
 
     void delAll(Supplier<Collection<String>> keys);
+
+    void delRecursive(String key);
+
+    void delRecursive(Supplier<String> key);
+
+    void delRecursive(String... keys);
+
+    void delAllRecursive(Supplier<Collection<String>> keys);
 
     <T> T query(Function<Supplier<String>, T> query, String input);
 

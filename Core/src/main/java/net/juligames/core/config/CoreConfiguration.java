@@ -47,16 +47,17 @@ public class CoreConfiguration implements Configuration {
      */
     public static @NotNull CoreConfiguration fromProperties(@NotNull Properties properties, boolean override) {
         String name = properties.getProperty("configuration_name");
+        if (name == null) throw new IllegalArgumentException("properties does not specify a valid configuration_name!");
         CoreConfiguration configuration = new CoreConfiguration(name);
         Set<Map.Entry<Object, Object>> entries = properties.entrySet();
         IMap<String, String> map = configuration.accessHazel().get();
         for (Map.Entry<Object, Object> entry : entries) {
             if (override) {
                 String old = map.put(entry.getKey().toString(), entry.getValue().toString()); //oh man... oh man
-                Core.getInstance().getCoreLogger().info("OVERRIDE: set " + entry.getKey() + "from " + old + " to " + entry.getValue());
+                Core.getInstance().getCoreLogger().debug("OVERRIDE: set " + entry.getKey() + "from " + old + " to " + entry.getValue());
             } else if (!map.containsKey(entry.getKey().toString())) {
                 String old = map.put(entry.getKey().toString(), entry.getValue().toString()); //oh man... oh man
-                Core.getInstance().getCoreLogger().info("set " + entry.getKey() + "from " + old + " to " + entry.getValue());
+                Core.getInstance().getCoreLogger().debug("set " + entry.getKey() + "from " + old + " to " + entry.getValue());
             }
         }
         configuration.updateHazel();
@@ -150,7 +151,7 @@ public class CoreConfiguration implements Configuration {
             return Optional.empty();
         }
         try {
-            return Optional.of(Integer.valueOf(key));
+            return Optional.of(Integer.valueOf(extract));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -168,7 +169,7 @@ public class CoreConfiguration implements Configuration {
             return null;
         }
         try {
-            return Integer.valueOf(key);
+            return Integer.valueOf(extract);
         } catch (Exception e) {
             return null;
         }
@@ -186,7 +187,7 @@ public class CoreConfiguration implements Configuration {
             return Optional.empty();
         }
         try {
-            return Optional.of(Double.valueOf(key));
+            return Optional.of(Double.valueOf(extract));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -204,7 +205,7 @@ public class CoreConfiguration implements Configuration {
             return null;
         }
         try {
-            return Double.parseDouble(key);
+            return Double.parseDouble(extract);
         } catch (Exception e) {
             return null;
         }
@@ -222,7 +223,7 @@ public class CoreConfiguration implements Configuration {
             return Optional.empty();
         }
         try {
-            return Optional.of(Long.parseLong(key));
+            return Optional.of(Long.parseLong(extract));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -240,7 +241,7 @@ public class CoreConfiguration implements Configuration {
             return null;
         }
         try {
-            return Long.parseLong(key);
+            return Long.parseLong(extract);
         } catch (Exception e) {
             return null;
         }
@@ -258,7 +259,7 @@ public class CoreConfiguration implements Configuration {
             return Optional.empty();
         }
         try {
-            return Optional.of(Short.parseShort(key));
+            return Optional.of(Short.parseShort(extract));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -276,7 +277,7 @@ public class CoreConfiguration implements Configuration {
             return null;
         }
         try {
-            return Short.parseShort(key);
+            return Short.parseShort(extract);
         } catch (Exception e) {
             return null;
         }
@@ -294,7 +295,7 @@ public class CoreConfiguration implements Configuration {
             return Optional.empty();
         }
         try {
-            return Optional.of(Byte.parseByte(key));
+            return Optional.of(Byte.parseByte(extract));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -312,7 +313,7 @@ public class CoreConfiguration implements Configuration {
             return null;
         }
         try {
-            return Byte.parseByte(key);
+            return Byte.parseByte(extract);
         } catch (Exception e) {
             return null;
         }
@@ -330,7 +331,7 @@ public class CoreConfiguration implements Configuration {
             return Optional.empty();
         }
         try {
-            return Optional.of(Boolean.parseBoolean(key));
+            return Optional.of(Boolean.parseBoolean(extract));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -348,7 +349,7 @@ public class CoreConfiguration implements Configuration {
             return null;
         }
         try {
-            return Boolean.parseBoolean(key);
+            return Boolean.parseBoolean(extract);
         } catch (Exception e) {
             return null;
         }
@@ -366,7 +367,7 @@ public class CoreConfiguration implements Configuration {
             return Optional.empty();
         }
         try {
-            return Optional.of(Float.parseFloat(key));
+            return Optional.of(Float.parseFloat(extract));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -384,7 +385,7 @@ public class CoreConfiguration implements Configuration {
             return null;
         }
         try {
-            return Float.parseFloat(key);
+            return Float.parseFloat(extract);
         } catch (Exception e) {
             return null;
         }
@@ -397,12 +398,12 @@ public class CoreConfiguration implements Configuration {
 
     @Override
     public <T> Collection<T> getCollection(String keyspace, Interpreter<T> interpreter) {
-        return IterableSplitter.tryReadSplitCollection(this,keyspace,interpreter);
+        return IterableSplitter.tryReadSplitCollection(this, keyspace, interpreter);
     }
 
     @Override
     public <T> Collection<T> getCollection(@NotNull Supplier<String> keyspace, Interpreter<T> interpreter) {
-        return getCollection(keyspace.get(),interpreter);
+        return getCollection(keyspace.get(), interpreter);
     }
 
     //legacy interpreter
@@ -483,7 +484,7 @@ public class CoreConfiguration implements Configuration {
 
     @Override
     public void setString(String key, @NotNull String value) {
-        data.put(key, value.toString());
+        data.put(key, value);
     }
 
     @Override
@@ -583,22 +584,22 @@ public class CoreConfiguration implements Configuration {
 
     @Override
     public <T> void setIterable(String keySpace, Iterable<T> iterable, Interpreter<T> interpreter) {
-        IterableSplitter.splitAndWrite(iterable,interpreter,this,keySpace);
+        IterableSplitter.splitAndWrite(iterable, interpreter, this, keySpace);
     }
 
     @Override
     public <T> void setIterable(@NotNull Supplier<String> keySpace, Iterable<T> iterable, Interpreter<T> interpreter) {
-        setIterable(keySpace.get(),iterable,interpreter);
+        setIterable(keySpace.get(), iterable, interpreter);
     }
 
     @Override
     public <T> void setIterable(String keySpace, @NotNull Supplier<Iterable<T>> iterable, Interpreter<T> interpreter) {
-        setIterable(keySpace,iterable.get(),interpreter);
+        setIterable(keySpace, iterable.get(), interpreter);
     }
 
     @Override
     public <T> void setIterable(Supplier<String> keySpace, @NotNull Supplier<Iterable<T>> iterable, Interpreter<T> interpreter) {
-        setIterable(keySpace,iterable.get(),interpreter);
+        setIterable(keySpace, iterable.get(), interpreter);
     }
 
     @Override
@@ -620,6 +621,28 @@ public class CoreConfiguration implements Configuration {
     public void delAll(@NotNull Supplier<Collection<String>> keys) {
         Collection<String> collection = keys.get();
         dellAllFromCollection(collection);
+    }
+
+    @Override
+    public void delRecursive(String key) {
+        data.removeAll(mapEntry -> mapEntry.getKey().startsWith(key));
+    }
+
+    @Override
+    public void delRecursive(@NotNull Supplier<String> key) {
+        delRecursive(key.get());
+    }
+
+    @Override
+    public void delRecursive(String... keys) {
+        delAllRecursive(() -> List.of(keys));
+    }
+
+    @Override
+    public void delAllRecursive(@NotNull Supplier<Collection<String>> keys) {
+        for (String s : keys.get()) {
+            delRecursive(s);
+        }
     }
 
     public void dellAllFromCollection(Collection<String> keys) {

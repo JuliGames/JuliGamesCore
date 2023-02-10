@@ -11,6 +11,7 @@ import java.util.concurrent.ExecutionException;
  * @author Ture Bentzin
  * 16.11.2022
  */
+@SuppressWarnings("RedundantThrows")
 public class HazelDebug {
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {

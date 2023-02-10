@@ -11,7 +11,8 @@ import java.util.concurrent.Callable;
  * @author Ture Bentzin
  * 26.11.2022
  */
-@TODO(doNotcall = true)
+@SuppressWarnings("RedundantThrows")
+@TODO(doNotcall = true) //Planned for 1.4 at least
 public abstract class DataRequest<T, R> implements Callable<R>, Serializable, HazelcastInstanceAware {
 
     final T data;

@@ -159,7 +159,7 @@ public abstract class CorePlugin extends PluginBase {
     }
 
     /**
-     * Returns a value indicating whether or not this plugin is currently
+     * Returns a value indicating whether this plugin is currently
      * enabled
      *
      * @return true if this plugin is enabled, otherwise false

@@ -13,14 +13,16 @@ import java.time.format.DateTimeFormatter;
  */
 public final class MasterLogger extends JavaLogger {
 
-    public static DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("<yyyy/MM/dd> HH:mm:ss");
+    public static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("<yyyy/MM/dd> HH:mm:ss");
 
     public MasterLogger(String name, @NotNull Logger parent, java.util.logging.@NotNull Logger logger) {
         super(name, parent, logger);
+        logger.addHandler(LogFileHandlerManager.generateFileHandler());
     }
 
     public MasterLogger(String name, java.util.logging.@NotNull Logger logger) {
         super(name, logger);
+        logger.addHandler(LogFileHandlerManager.generateFileHandler());
     }
 
     @Override
