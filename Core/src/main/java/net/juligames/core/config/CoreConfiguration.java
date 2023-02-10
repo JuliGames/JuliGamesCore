@@ -2,9 +2,11 @@ package net.juligames.core.config;
 
 import com.hazelcast.map.IMap;
 import net.juligames.core.Core;
+import net.juligames.core.api.API;
 import net.juligames.core.api.config.Configuration;
 import net.juligames.core.api.config.Interpreter;
 import net.juligames.core.api.misc.TriConsumer;
+import org.checkerframework.checker.index.qual.IndexFor;
 import org.checkerframework.checker.optional.qual.MaybePresent;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -699,6 +701,48 @@ public class CoreConfiguration implements Configuration {
         return data.size();
     }
 
+    @Override
+    public void copyAndAppendContentTo(@NotNull Configuration configuration) {
+        IMap<String, String> hazel = hazel();
+        Set<String> keySet = configuration.keySet();
+        for (Map.Entry<String, String> stringStringEntry : hazel) {
+            if(!keySet.contains(stringStringEntry.getKey()))
+                configuration.setString(stringStringEntry.getKey(),stringStringEntry.getValue());
+        }
+    }
+
+    @Override
+    public void copyAndOverrideContentTo(@NotNull Configuration configuration) {
+        hazel().forEach(configuration::setString);
+    }
+
+    @Override
+    public Configuration copyToOffline() {
+        return copyToOffline(getName());
+    }
+
+    @Override
+    public Configuration copy(String name) {
+        CoreConfiguration configuration = Core.getInstance().getConfigurationApi().getOrCreate(name);
+        configuration.clear();
+        copyAndOverrideContentTo(configuration);
+        return configuration;
+    }
+
+    @Override
+    public Configuration copyToOffline(String name) {
+        OfflineConfiguration offlineConfiguration = new OfflineConfiguration(name);
+        copyAndOverrideContentTo(offlineConfiguration);
+        return offlineConfiguration;
+    }
+
+    @Override
+    public void appendAll(@NotNull Collection<Configuration> configurations) {
+        for (Configuration configuration : configurations) {
+            configuration.copyAndAppendContentTo(this);
+        }
+    }
+
     public final @NotNull String getConjoinedDescription() {
         return getName() + "\n" + header_comment;
     }
@@ -722,5 +766,10 @@ public class CoreConfiguration implements Configuration {
     @Override
     public String toString() {
         return name;
+    }
+
+    @ApiStatus.Internal
+    private void clear() {
+        hazel().clear();
     }
 }

@@ -22,7 +22,7 @@ public class CoreConfigurationApi implements ConfigurationAPI {
     public static final String DATABASE_CONFIG_NAME = "database";
 
     @Override
-    public Configuration getOrCreate(String name) {
+    public CoreConfiguration getOrCreate(String name) {
         return new CoreConfiguration(name);
     }
 
@@ -34,12 +34,12 @@ public class CoreConfigurationApi implements ConfigurationAPI {
      * @apiNote configuration_name is the reserved key for the name!!
      */
     @Override
-    public Configuration getOrCreate(Properties defaults) {
+    public CoreConfiguration getOrCreate(Properties defaults) {
         return CoreConfiguration.fromProperties(defaults);
     }
 
     @Override
-    public Configuration master() {
+    public CoreConfiguration master() {
         return getOrCreate(MASTER_CONFIG_NAME);
     }
 
@@ -127,5 +127,11 @@ public class CoreConfigurationApi implements ConfigurationAPI {
         defaults.setProperty("configuration_name", name);
         defaults.setProperty("configuration_header", header);
         return defaults;
+    }
+
+    @Override
+    public Configuration merge(@NotNull Configuration c1, Configuration c2) {
+        c1.copyAndAppendContentTo(c2);
+        return c1;
     }
 }

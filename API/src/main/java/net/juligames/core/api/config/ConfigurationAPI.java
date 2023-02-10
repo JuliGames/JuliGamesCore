@@ -102,4 +102,7 @@ public interface ConfigurationAPI {
      * @return initialized Properties to be used with the {@link ConfigurationAPI}
      */
     Properties initializeProperties(@NotNull String name, @Nullable String header);
+
+    @ApiStatus.Experimental
+    Configuration merge(Configuration c1, Configuration c2);
 }
