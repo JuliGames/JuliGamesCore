@@ -1,5 +1,6 @@
 package net.juligames.core.adventure.api;
 
+import de.bentzin.tools.Hardcode;
 import net.juligames.core.api.API;
 import net.juligames.core.api.message.Message;
 import net.juligames.core.api.message.MessageRecipient;
@@ -45,6 +46,7 @@ public class AudienceMessageRecipient implements MessageRecipient {
     }
 
     @Contract(pure = true)
+    @Hardcode
     public static @NotNull Supplier<String> english() {
         return () -> "EN";
     }

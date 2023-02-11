@@ -4,6 +4,7 @@ import net.juligames.core.api.jdbi.*;
 import org.jdbi.v3.core.extension.ExtensionCallback;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Locale;
@@ -63,9 +64,9 @@ public interface MessageApi {
 
     Collection<? extends Message> getMessage(String messageKey, String... replacements);
 
-    Message getMessageSmart(String messageKey, Locale locale);
+    Message getMessageSmart(String messageKey, @Nullable Locale locale);
 
-    Message getMessageSmart(String messageKey, Locale locale, String... replacements);
+    Message getMessageSmart(String messageKey, @Nullable Locale locale, String... replacements);
 
     Message getMessageSmart(String messageKey, String locale);
 
