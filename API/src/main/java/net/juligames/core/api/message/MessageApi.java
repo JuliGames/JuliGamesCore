@@ -219,6 +219,7 @@ public interface MessageApi {
     MultiMessagePostScript broadcastMessage(Collection<String> messageKeys, String... replacement);
 
     String defaultLocale();
+
     Locale defaultUtilLocale();
 
     //TagManager getTagManager(); removed in favor of AdventureCore / AdventureAPI

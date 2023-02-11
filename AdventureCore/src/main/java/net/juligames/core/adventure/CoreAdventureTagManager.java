@@ -98,12 +98,12 @@ public final class CoreAdventureTagManager implements TagManager, AdventureTagMa
             for (PatternType patternType : PatternType.values()) {
                 if (patternType.shouldParse()) {
                     resolvers.add(Placeholder.parsed(patternType.buildTagID(entry.getKey()), entry.getValue()));
-                }else {
+                } else {
                     resolvers.add(Placeholder.unparsed(patternType.buildTagID(entry.getKey()), entry.getValue()));
                 }
             }
         }
-        return resolve(message.getMiniMessageReadyForResolving(),resolvers);
+        return resolve(message.getMiniMessageReadyForResolving(), resolvers);
     }
 
 

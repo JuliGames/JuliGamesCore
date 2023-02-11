@@ -48,8 +48,8 @@ public class AudienceMessageRecipient implements MessageRecipient {
     }
 
     /**
-     * @deprecated use {@link #defaultLocale()} instead
      * @return "EN"
+     * @deprecated use {@link #defaultLocale()} instead
      */
     @Contract(pure = true)
     @Hardcode

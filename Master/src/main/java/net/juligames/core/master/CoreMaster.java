@@ -4,7 +4,6 @@ import com.hazelcast.core.HazelcastInstance;
 import de.bentzin.tools.logging.Logger;
 import de.bentzin.tools.register.Registerator;
 import net.juligames.core.Core;
-import net.juligames.core.api.API;
 import net.juligames.core.api.jdbi.LocaleDAO;
 import net.juligames.core.api.jdbi.SQLManager;
 import net.juligames.core.jdbi.CoreSQLManager;
@@ -14,7 +13,6 @@ import net.juligames.core.master.data.MasterHazelInformationProvider;
 import net.juligames.core.master.logging.MasterLogger;
 
 import java.util.Optional;
-import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 

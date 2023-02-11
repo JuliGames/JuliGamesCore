@@ -205,8 +205,11 @@ public interface Configuration extends Comparable<Configuration> {
     int size();
 
     void copyAndAppendContentTo(Configuration configuration);
+
     void copyAndOverrideContentTo(Configuration configuration);
+
     Configuration copy(String name);
+
     Configuration copyToOffline(String name);
 
     Configuration copyToOffline();

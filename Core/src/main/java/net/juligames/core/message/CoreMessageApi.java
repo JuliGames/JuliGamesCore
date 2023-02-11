@@ -653,7 +653,7 @@ public class CoreMessageApi implements MessageApi {
 
     private void insertReplacements(CoreMessage coreMessage, String @NotNull ... replacements) {
         Map<Integer, String> map = new HashMap<>();
-        if(replacements == null)
+        if (replacements == null)
             return;
         for (int i = 0; i < replacements.length; i++) {
             String replacement = replacements[i];

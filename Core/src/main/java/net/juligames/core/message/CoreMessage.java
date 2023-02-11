@@ -6,7 +6,6 @@ import net.juligames.core.api.message.MiniMessageSerializer;
 import net.juligames.core.api.message.PatternType;
 import org.jetbrains.annotations.*;
 
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
@@ -92,7 +91,7 @@ public class CoreMessage implements Message {
         String mini = getMiniMessage();
         for (int i = 0; i < replacementSize; i++)
             for (PatternType patternType : PatternType.values())
-                mini = patternType.convertPatternToTag(mini,i);
+                mini = patternType.convertPatternToTag(mini, i);
         return mini;
     }
 

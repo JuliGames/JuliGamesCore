@@ -4,8 +4,6 @@ import net.juligames.core.api.API;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.function.Supplier;
-
 /**
  * @author Ture Bentzin
  * 18.11.2022

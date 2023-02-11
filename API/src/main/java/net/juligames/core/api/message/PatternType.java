@@ -37,7 +37,7 @@ public enum PatternType {
 
     @Contract(pure = true)
     public @NotNull String buildTagID(int i) {
-        return  "param_" + tagIdentifier + "_" + i;
+        return "param_" + tagIdentifier + "_" + i;
     }
 
     public @NotNull String convertPatternToTag(@NotNull String target, int index) {

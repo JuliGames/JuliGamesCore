@@ -2,11 +2,9 @@ package net.juligames.core.config;
 
 import com.hazelcast.map.IMap;
 import net.juligames.core.Core;
-import net.juligames.core.api.API;
 import net.juligames.core.api.config.Configuration;
 import net.juligames.core.api.config.Interpreter;
 import net.juligames.core.api.misc.TriConsumer;
-import org.checkerframework.checker.index.qual.IndexFor;
 import org.checkerframework.checker.optional.qual.MaybePresent;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -706,8 +704,8 @@ public class CoreConfiguration implements Configuration {
         IMap<String, String> hazel = hazel();
         Set<String> keySet = configuration.keySet();
         for (Map.Entry<String, String> stringStringEntry : hazel) {
-            if(!keySet.contains(stringStringEntry.getKey()))
-                configuration.setString(stringStringEntry.getKey(),stringStringEntry.getValue());
+            if (!keySet.contains(stringStringEntry.getKey()))
+                configuration.setString(stringStringEntry.getKey(), stringStringEntry.getValue());
         }
     }
 

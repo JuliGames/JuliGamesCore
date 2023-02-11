@@ -4,8 +4,11 @@
 
 ## Intoduction
 
-The JuliGamesCore is the software used for communication, standardization, and coordination on the [Juligames Network](https://juligames.net).
-The Core offers access to a [hazelcast cluster](https://hazelcast.com/), MySQL, and centralized configuration files. The System is very easy to set up and does not require a massive load of companion software to run. The only thing to set up prior to this is a [MariaDB Server](https://mariadb.org/documentation/#getting-started).
+The JuliGamesCore is the software used for communication, standardization, and coordination on
+the [Juligames Network](https://juligames.net).
+The Core offers access to a [hazelcast cluster](https://hazelcast.com/), MySQL, and centralized configuration files. The
+System is very easy to set up and does not require a massive load of companion software to run. The only thing to set up
+prior to this is a [MariaDB Server](https://mariadb.org/documentation/#getting-started).
 
 ## What does the current version of the Core offer to you?
 
@@ -22,4 +25,5 @@ The Core offers access to a [hazelcast cluster](https://hazelcast.com/), MySQL, 
 * Sending data and commands between cores
 * Storing and loading from central configurations
 * Access a database via [JDBI](https://jdbi.org/)
-* + Easy way to add your own features to the network
+*
+    + Easy way to add your own features to the network

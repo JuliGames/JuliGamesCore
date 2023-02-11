@@ -37,6 +37,7 @@ public interface Message extends Cloneable {
 
     /**
      * This String will not contain patterns, use of this may be unsafe, because untrusted data may get resolved!
+     *
      * @return the miniMessage (unresolved obviously)
      */
     String getPreparedMiniMessage();
@@ -64,9 +65,9 @@ public interface Message extends Cloneable {
      */
     void doWithMiniMessage(Function<String, String> actionToPerform);
 
-    Map<Integer,String> getReplacements();
+    Map<Integer, String> getReplacements();
 
-    Set<Map.Entry<Integer,String>> getReplacementSet();
+    Set<Map.Entry<Integer, String>> getReplacementSet();
 
     default int replacementSize() {
         return getReplacementSet().size();
