@@ -3,6 +3,7 @@ package net.juligames.core.api.message;
 import net.juligames.core.api.jdbi.DBMessage;
 import org.jetbrains.annotations.ApiStatus;
 
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -53,6 +54,8 @@ public interface Message extends Cloneable {
      */
     void doWithMiniMessage(Function<String, String> actionToPerform);
 
-     Set<? extends Replacement> getReplacements();
+    Map<Integer,String> getReplacements();
+
+    Set<Map.Entry<Integer,String>> getReplacementSet();
 
 }

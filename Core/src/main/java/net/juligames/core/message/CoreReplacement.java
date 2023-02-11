@@ -1,6 +1,5 @@
 package net.juligames.core.message;
 
-import net.juligames.core.api.message.Replacement;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;

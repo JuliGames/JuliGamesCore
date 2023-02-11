@@ -3,16 +3,12 @@ package net.juligames.core.message;
 import net.juligames.core.api.jdbi.DBMessage;
 import net.juligames.core.api.message.Message;
 import net.juligames.core.api.message.MiniMessageSerializer;
-import net.juligames.core.api.message.Replacement;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 
 /**
@@ -22,20 +18,20 @@ import java.util.function.Function;
 public class CoreMessage implements Message {
 
     private final DBMessage messageData;
-    private Set<CoreReplacement> replacements;
+    private Map<Integer, String> replacements;
 
-    public CoreMessage(@NotNull DBMessage messageData, Set<CoreReplacement> replacements) {
+    public CoreMessage(@NotNull DBMessage messageData, Map<Integer, String> replacements) {
         this.messageData = messageData.clone(); //clone to avoid conflicts
-        this.replacements = replacements;
+        this.replacements = Map.copyOf(replacements);
     }
 
     public CoreMessage(@NotNull DBMessage messageData) {
         this.messageData = messageData.clone(); //clone to avoid conflicts
-        this.replacements = Collections.unmodifiableSet(new HashSet<>());
+        this.replacements = Map.of();
     }
 
     @Contract("_,_,_ -> new")
-    public static @NotNull CoreMessage fromData(@Nullable DBMessage messageData, String messageKey, Set<CoreReplacement> replacements) {
+    public static @NotNull CoreMessage fromData(@Nullable DBMessage messageData, String messageKey, Map<Integer, String> replacements) {
         if (messageData == null) {
             return new FallBackMessage(messageKey);
         } else {
@@ -45,7 +41,7 @@ public class CoreMessage implements Message {
 
     @Deprecated
     @Contract("_,_ -> new")
-    public static @NotNull CoreMessage fromData(@Nullable DBMessage messageData, Set<CoreReplacement> replacements) {
+    public static @NotNull CoreMessage fromData(@Nullable DBMessage messageData, Map<Integer, String> replacements) {
         if (messageData == null) {
             return new FallBackMessage();
         } else {
@@ -105,13 +101,18 @@ public class CoreMessage implements Message {
     }
 
     @Override
-    public Set<CoreReplacement> getReplacements() {
+    public Map<Integer, String> getReplacements() {
         return replacements;
     }
 
+    @Override
+    public Set<Map.Entry<Integer, String>> getReplacementSet() {
+        return Set.copyOf(replacements.entrySet());
+    }
+
     @ApiStatus.Internal
-    public void setReplacements(Collection<CoreReplacement> coreReplacements) {
-        replacements = Set.copyOf(coreReplacements);
+    public void setReplacements(Map<Integer,String> replacements) {
+        this.replacements = Map.copyOf(replacements);
     }
 
     @Override
