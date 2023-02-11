@@ -63,6 +63,18 @@ public interface MessageApi {
 
     Collection<? extends Message> getMessage(String messageKey, String... replacements);
 
+    Message getMessageSmart(String messageKey, Locale locale);
+
+    Message getMessageSmart(String messageKey, Locale locale, String... replacements);
+
+    Message getMessageSmart(String messageKey, String locale);
+
+    Message getMessageSmart(String messageKey, String locale, String... replacements);
+
+    Message getMessageSmart(String messageKey, DBLocale dbLocale);
+
+    Message getMessageSmart(String messageKey, DBLocale dbLocale, String... replacements);
+
     Collection<? extends Message> getAllFromLocale(Locale locale);
 
     Collection<? extends Message> getAllFromLocale(Locale locale, String... replacements);
@@ -204,6 +216,9 @@ public interface MessageApi {
     MultiMessagePostScript broadcastMessage(Collection<String> messageKeys, DBLocale defaultLocale, String... replacement);
 
     MultiMessagePostScript broadcastMessage(Collection<String> messageKeys, String... replacement);
+
+    String defaultLocale();
+    Locale defaultUtilLocale();
 
     //TagManager getTagManager(); removed in favor of AdventureCore / AdventureAPI
 }

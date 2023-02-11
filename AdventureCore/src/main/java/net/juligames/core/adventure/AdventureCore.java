@@ -4,6 +4,8 @@ import de.bentzin.tools.logging.Logger;
 import net.juligames.core.adventure.api.AdventureAPI;
 import net.juligames.core.adventure.api.AdventureAPICore;
 import net.juligames.core.api.API;
+import net.juligames.core.api.message.Message;
+import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.ApiStatus;
 
 /**
@@ -18,6 +20,8 @@ public class AdventureCore implements AdventureAPI {
 
     private CoreAdventureTagManager adventureTagManager;
     private Logger logger;
+
+
 
     public void start() {
         logger = API.get().getAPILogger().adopt("adventure");

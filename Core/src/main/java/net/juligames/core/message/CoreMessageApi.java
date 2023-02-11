@@ -144,6 +144,38 @@ public class CoreMessageApi implements MessageApi {
     }
 
     @Override
+    public Message getMessageSmart(String messageKey,Locale locale) {
+        if(locale == null) return getMessage(messageKey,defaultLocale());
+        return getMessageSmart(messageKey,locale.toString());
+    }
+
+    @Override
+    public Message getMessageSmart(String messageKey, Locale locale, String... replacements) {
+        if(locale == null) return getMessage(messageKey,defaultLocale(),replacements);
+        return getMessageSmart(messageKey,locale.toString(),replacements);
+    }
+
+    @Override
+    public Message getMessageSmart(String messageKey, String locale) {
+        return findBestMessage(messageKey,locale);
+    }
+
+    @Override
+    public Message getMessageSmart(String messageKey, String locale, String... replacements) {
+        return findBestMessage(messageKey,locale,replacements);
+    }
+
+    @Override
+    public Message getMessageSmart(String messageKey, @NotNull DBLocale dbLocale) {
+        return getMessageSmart(messageKey,dbLocale.toUtil());
+    }
+
+    @Override
+    public Message getMessageSmart(String messageKey, @NotNull DBLocale dbLocale, String... replacements) {
+        return getMessageSmart(messageKey,dbLocale.toUtil(),replacements);
+    }
+
+    @Override
     public Collection<CoreMessage> getAllFromLocale(@NotNull Locale locale) {
         return getAllFromLocale(locale.toString());
     }
@@ -571,9 +603,15 @@ public class CoreMessageApi implements MessageApi {
         return sendMessage(messageKeys, Core.getInstance().getOnlineRecipientProvider().get(), replacement);
     }
 
+    @Override
     public String defaultLocale() {
         //"master_information"
         return Core.getInstance().getHazelDataApi().getMasterInformation().get("default_locale");
+    }
+
+    @Override
+    public Locale defaultUtilLocale() {
+        return parseFromString(defaultLocale());
     }
 
     @Contract(" -> new")
