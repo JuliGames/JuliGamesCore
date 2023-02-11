@@ -3,12 +3,12 @@ package net.juligames.core.message;
 import net.juligames.core.api.jdbi.DBMessage;
 import net.juligames.core.api.message.Message;
 import net.juligames.core.api.message.MiniMessageSerializer;
-import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import net.juligames.core.api.message.PatternType;
+import org.jetbrains.annotations.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 
 /**
@@ -80,7 +80,25 @@ public class CoreMessage implements Message {
 
     @Override
     public String getPreparedMiniMessage() {
-        return null; //TODO
+        String mini = getMiniMessage();
+        for (Map.Entry<Integer, String> entry : getReplacementSet())
+            for (PatternType value : PatternType.values())
+                mini = mini.replace(value.buildPattern(entry.getKey()), entry.getValue());
+        return mini;
+    }
+
+    @Override
+    public String getMiniMessageReadyForResolving(@Range(from = 0, to = Integer.MAX_VALUE) int replacementSize) {
+        String mini = getMiniMessage();
+        for (int i = 0; i < replacementSize; i++)
+            for (PatternType patternType : PatternType.values())
+                mini = patternType.convertPatternToTag(mini,i);
+        return mini;
+    }
+
+    @Override
+    public String getMiniMessageReadyForResolving() {
+        return getMiniMessageReadyForResolving(replacementSize());
     }
 
     @Override
@@ -105,14 +123,14 @@ public class CoreMessage implements Message {
         return replacements;
     }
 
+    @ApiStatus.Internal
+    public void setReplacements(Map<Integer, String> replacements) {
+        this.replacements = Map.copyOf(replacements);
+    }
+
     @Override
     public Set<Map.Entry<Integer, String>> getReplacementSet() {
         return Set.copyOf(replacements.entrySet());
-    }
-
-    @ApiStatus.Internal
-    public void setReplacements(Map<Integer,String> replacements) {
-        this.replacements = Map.copyOf(replacements);
     }
 
     @Override

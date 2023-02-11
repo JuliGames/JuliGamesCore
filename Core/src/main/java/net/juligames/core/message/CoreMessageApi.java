@@ -665,6 +665,7 @@ public class CoreMessageApi implements MessageApi {
         insertReplacements(coreMessage, replacements.toArray(new String[0]));
     }
 
+    @Deprecated(forRemoval = true)
     protected String buildPattern(@Range(from = 0, to = Integer.MAX_VALUE) int i) {
         return "{" + i + "}";
     }
