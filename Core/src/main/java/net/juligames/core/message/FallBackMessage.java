@@ -14,7 +14,7 @@ public class FallBackMessage extends CoreMessage {
     }
 
     public FallBackMessage(final String messageKey) {
-        super(new CreativeMessageBean(messageKey, Core.getInstance().getMessageApi().defaultLocale(), messageKey), replacements);
+        super(new CreativeMessageBean(messageKey, Core.getInstance().getMessageApi().defaultLocale(), messageKey));
 
     }
 
