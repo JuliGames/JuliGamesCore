@@ -27,19 +27,4 @@ public class ProxyMessageRecipient extends AudienceMessageRecipient {
     public ProxyMessageRecipient(String name, Supplier<String> localeSupplier, ConsoleCommandSource consoleCommandSource) {
         super(name, localeSupplier, consoleCommandSource);
     }
-
-    public static void test() {
-        //DO NOT PUSH TO VERSION CONTROL
-        Player player = null;
-
-        @Nullable Locale locale = player.getEffectiveLocale();
-        String l = "";
-        if (locale == null) {
-            l = API.get().getHazelDataApi().getMasterInformation().get("default_locale");
-        } else {
-            l = locale.toString();
-        }
-        Message message = API.get().getMessageApi().getMessage("key", l, new String[]{"replacement0,replacement1"});
-        Component component = AdventureAPI.get().getAdventureTagManager().resolve(message);
-    }
 }
