@@ -22,6 +22,8 @@ import java.util.function.Supplier;
  */
 public class AudienceMessageRecipient implements MessageRecipient {
 
+    public static Supplier<String> defaultLocaleSupplier = () -> API.get().getHazelDataApi().getMasterInformation().get("default_locale");
+
     private final String name;
     private final Supplier<String> locale;
     private final Audience audience;
@@ -45,10 +47,19 @@ public class AudienceMessageRecipient implements MessageRecipient {
                 () -> finalLs, audience);
     }
 
+    /**
+     * @deprecated use {@link #defaultLocale()} instead
+     * @return "EN"
+     */
     @Contract(pure = true)
     @Hardcode
+    @Deprecated(forRemoval = true)
     public static @NotNull Supplier<String> english() {
         return () -> "EN";
+    }
+
+    public static @NotNull Supplier<String> defaultLocale() {
+        return defaultLocaleSupplier;
     }
 
     /**

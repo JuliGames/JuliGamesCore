@@ -1,15 +1,8 @@
 package net.juligames.core.velocity;
 
 import com.velocitypowered.api.proxy.ConsoleCommandSource;
-import com.velocitypowered.api.proxy.Player;
-import net.juligames.core.adventure.api.AdventureAPI;
 import net.juligames.core.adventure.api.AudienceMessageRecipient;
-import net.juligames.core.api.API;
-import net.juligames.core.api.message.Message;
-import net.kyori.adventure.text.Component;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.Locale;
 import java.util.function.Supplier;
 
 /**
@@ -21,7 +14,7 @@ import java.util.function.Supplier;
 @Deprecated
 public class ProxyMessageRecipient extends AudienceMessageRecipient {
     public ProxyMessageRecipient(ConsoleCommandSource consoleCommandSource) {
-        super("console", english(), consoleCommandSource);
+        super("console", defaultLocale(), consoleCommandSource);
     }
 
     public ProxyMessageRecipient(String name, Supplier<String> localeSupplier, ConsoleCommandSource consoleCommandSource) {

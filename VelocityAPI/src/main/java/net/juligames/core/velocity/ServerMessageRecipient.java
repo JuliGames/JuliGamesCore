@@ -11,7 +11,7 @@ import java.util.function.Supplier;
  */
 public class ServerMessageRecipient extends AudienceMessageRecipient {
     public ServerMessageRecipient(RegisteredServer server) {
-        super(server.getServerInfo().getName(), english(), server);
+        super(server.getServerInfo().getName(), defaultLocale(), server);
     }
 
     public ServerMessageRecipient(String name, Supplier<String> locale, RegisteredServer server) {
