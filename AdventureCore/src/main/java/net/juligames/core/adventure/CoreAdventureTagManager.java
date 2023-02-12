@@ -30,7 +30,6 @@ import java.util.Map;
  */
 public final class CoreAdventureTagManager implements TagManager, AdventureTagManager {
 
-
     private TagResolver internalResolver = TagResolver.standard();
 
     protected String buildPattern(@Range(from = 0, to = Integer.MAX_VALUE) int i) {
