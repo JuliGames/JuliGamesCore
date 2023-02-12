@@ -5,6 +5,7 @@ import net.juligames.core.api.API;
 import net.juligames.core.api.jdbi.DBReplacement;
 import net.juligames.core.api.jdbi.ReplacementDAO;
 import net.juligames.core.api.message.Message;
+import net.juligames.core.api.message.PatternType;
 import net.juligames.core.api.message.TagManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -16,8 +17,12 @@ import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Range;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Ture Bentzin
@@ -26,6 +31,10 @@ import java.util.List;
 public final class CoreAdventureTagManager implements TagManager, AdventureTagManager {
 
     private TagResolver internalResolver = TagResolver.standard();
+
+    protected String buildPattern(@Range(from = 0, to = Integer.MAX_VALUE) int i) {
+        return "{" + i + "}";
+    }
 
     @Contract(pure = true)
     public @NotNull MiniMessage getMiniMessage() {
@@ -75,9 +84,27 @@ public final class CoreAdventureTagManager implements TagManager, AdventureTagMa
     }
 
     @Override
-    public @NotNull Component resolve(@NotNull Message message) {
-        return getMiniMessage().deserialize(message.getMiniMessage(), getResolver()); // https://docs.adventure.kyori.net/minimessage/dynamic-replacements.html#insert-some-unparsed-text
+    public @NotNull Component resolve(String miniMessage, @NotNull Collection<TagResolver> additions) {
+        additions.add(getResolver());
+        return getMiniMessage().deserialize(miniMessage, TagResolver.resolver(additions));
     }
+
+    @Override
+    public @NotNull Component resolve(@NotNull Message message) {
+        // https://docs.adventure.kyori.net/minimessage/dynamic-replacements.html#insert-some-unparsed-text
+        ArrayList<TagResolver> resolvers = new ArrayList<>();
+        for (Map.Entry<Integer, String> entry : message.getReplacementSet()) {
+            for (PatternType patternType : PatternType.values()) {
+                if (patternType.shouldParse()) {
+                    resolvers.add(Placeholder.parsed(patternType.buildTagID(entry.getKey()), entry.getValue()));
+                } else {
+                    resolvers.add(Placeholder.unparsed(patternType.buildTagID(entry.getKey()), entry.getValue()));
+                }
+            }
+        }
+        return resolve(message.getMiniMessageReadyForResolving(), resolvers);
+    }
+
 
     @Override
     public @NotNull String resolvePlain(@NotNull Message message) {

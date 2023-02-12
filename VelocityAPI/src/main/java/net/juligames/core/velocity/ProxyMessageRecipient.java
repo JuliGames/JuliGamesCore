@@ -14,7 +14,7 @@ import java.util.function.Supplier;
 @Deprecated
 public class ProxyMessageRecipient extends AudienceMessageRecipient {
     public ProxyMessageRecipient(ConsoleCommandSource consoleCommandSource) {
-        super("console", english(), consoleCommandSource);
+        super("console", defaultLocale(), consoleCommandSource);
     }
 
     public ProxyMessageRecipient(String name, Supplier<String> localeSupplier, ConsoleCommandSource consoleCommandSource) {

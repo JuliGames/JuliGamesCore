@@ -1,5 +1,6 @@
 package net.juligames.core.adventure.api;
 
+import de.bentzin.tools.Hardcode;
 import net.juligames.core.api.API;
 import net.juligames.core.api.message.Message;
 import net.juligames.core.api.message.MessageRecipient;
@@ -20,6 +21,8 @@ import java.util.function.Supplier;
  * @apiNote This may be used as a foundation to other audience based message recipients!
  */
 public class AudienceMessageRecipient implements MessageRecipient {
+
+    public static Supplier<String> defaultLocaleSupplier = () -> API.get().getHazelDataApi().getMasterInformation().get("default_locale");
 
     private final String name;
     private final Supplier<String> locale;
@@ -44,9 +47,19 @@ public class AudienceMessageRecipient implements MessageRecipient {
                 () -> finalLs, audience);
     }
 
+    /**
+     * @return "EN"
+     * @deprecated use {@link #defaultLocale()} instead
+     */
     @Contract(pure = true)
+    @Hardcode
+    @Deprecated(forRemoval = true)
     public static @NotNull Supplier<String> english() {
         return () -> "EN";
+    }
+
+    public static @NotNull Supplier<String> defaultLocale() {
+        return defaultLocaleSupplier;
     }
 
     /**

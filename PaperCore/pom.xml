@@ -5,7 +5,7 @@
     <parent>
         <artifactId>JuliGamesCore</artifactId>
         <groupId>net.juligames.core</groupId>
-        <version>1.2</version>
+        <version>1.3</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -15,19 +15,19 @@
         <dependency>
             <groupId>net.juligames.core</groupId>
             <artifactId>PaperAPI</artifactId>
-            <version>1.2</version>
+            <version>1.3</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>net.juligames.core</groupId>
             <artifactId>Core</artifactId>
-            <version>1.2</version>
+            <version>1.3</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>net.juligames.core</groupId>
             <artifactId>AdventureCore</artifactId>
-            <version>1.2</version>
+            <version>1.3</version>
             <scope>compile</scope>
         </dependency>
         <dependency>

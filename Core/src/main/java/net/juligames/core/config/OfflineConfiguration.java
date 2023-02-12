@@ -675,5 +675,46 @@ public class OfflineConfiguration implements Configuration {
     public <T> Collection<T> getCollection(@NotNull Supplier<String> keyspace, Interpreter<T> interpreter) {
         return getCollection(keyspace.get(), interpreter);
     }
+
+
+    @Override
+    public void copyAndAppendContentTo(@NotNull Configuration configuration) {
+        Set<String> keySet = configuration.keySet();
+        data.forEach((key, value) -> {
+            if (!keySet.contains(key))
+                configuration.setString(key, value);
+        });
+    }
+
+    @Override
+    public void copyAndOverrideContentTo(@NotNull Configuration configuration) {
+        data.forEach(configuration::setString);
+    }
+
+    @Override
+    public Configuration copyToOffline() {
+        return copyToOffline(getName());
+    }
+
+    @Override
+    public Configuration copy(String name) {
+        Core.getInstance().getCoreLogger().warning("OfflineConfiguration#copy(String) is not supported -" +
+                " OfflineConfiguration#copyToOffline(String) will be used instead");
+        return copyToOffline(name);
+    }
+
+    @Override
+    public Configuration copyToOffline(String name) {
+        OfflineConfiguration offlineConfiguration = new OfflineConfiguration(name);
+        copyAndOverrideContentTo(offlineConfiguration);
+        return offlineConfiguration;
+    }
+
+    @Override
+    public void appendAll(@NotNull Collection<Configuration> configurations) {
+        for (Configuration configuration : configurations) {
+            configuration.copyAndAppendContentTo(this);
+        }
+    }
 }
 

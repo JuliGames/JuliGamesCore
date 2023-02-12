@@ -40,4 +40,5 @@ public interface MessageRecipient {
         if (supplyLocale() != null) return supplyLocale();
         return API.get().getHazelDataApi().getMasterInformation().get("default_locale");
     }
+
 }

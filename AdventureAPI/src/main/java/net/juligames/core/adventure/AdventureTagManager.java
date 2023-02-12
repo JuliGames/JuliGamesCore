@@ -12,6 +12,8 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
+
 /**
  * @author Ture Bentzin
  * 21.11.2022
@@ -38,6 +40,8 @@ public interface AdventureTagManager extends MiniMessageSerializer {
     @NotNull TagResolver getResolver();
 
     @NotNull Component resolve(String miniMessage);
+
+    @NotNull Component resolve(String miniMessage, Collection<TagResolver> additions);
 
     @NotNull Component resolve(@NotNull Message message);
 

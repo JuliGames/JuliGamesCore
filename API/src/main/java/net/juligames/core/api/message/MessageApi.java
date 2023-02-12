@@ -4,6 +4,7 @@ import net.juligames.core.api.jdbi.*;
 import org.jdbi.v3.core.extension.ExtensionCallback;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Locale;
@@ -62,6 +63,18 @@ public interface MessageApi {
     Collection<? extends Message> getMessage(String messageKey);
 
     Collection<? extends Message> getMessage(String messageKey, String... replacements);
+
+    Message getMessageSmart(String messageKey, @Nullable Locale locale);
+
+    Message getMessageSmart(String messageKey, @Nullable Locale locale, String... replacements);
+
+    Message getMessageSmart(String messageKey, String locale);
+
+    Message getMessageSmart(String messageKey, String locale, String... replacements);
+
+    Message getMessageSmart(String messageKey, DBLocale dbLocale);
+
+    Message getMessageSmart(String messageKey, DBLocale dbLocale, String... replacements);
 
     Collection<? extends Message> getAllFromLocale(Locale locale);
 
@@ -204,6 +217,10 @@ public interface MessageApi {
     MultiMessagePostScript broadcastMessage(Collection<String> messageKeys, DBLocale defaultLocale, String... replacement);
 
     MultiMessagePostScript broadcastMessage(Collection<String> messageKeys, String... replacement);
+
+    String defaultLocale();
+
+    Locale defaultUtilLocale();
 
     //TagManager getTagManager(); removed in favor of AdventureCore / AdventureAPI
 }

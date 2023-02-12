@@ -11,7 +11,7 @@ import java.util.function.Supplier;
  */
 public class ProxyServerMessageRecipient extends AudienceMessageRecipient {
     public ProxyServerMessageRecipient(ProxyServer proxyServer) {
-        super(proxyServer.getVersion().getName(), english(), proxyServer);
+        super(proxyServer.getVersion().getName(), defaultLocale(), proxyServer);
     }
 
     public ProxyServerMessageRecipient(String name, Supplier<String> localeSupplier,
