@@ -34,13 +34,13 @@ public interface API {
      * This is the primary way for getting your API Instance. With this Instance you have access to all build in features in the core
      * that are explicitly exposed to the API. If the API should not be provided by a core then this will throw a {@link APIException}
      * to indicate that a Core is necessary to get this Instance. For further Information on how to use the {@link API} please check out
-     * the GitHub Wiki. For further information on this method check out {@link ApiCore}
+     * the GitHub Wiki. For further information on this method check out {@link ApiProvider}
      *
      * @return your API Instance
      * @throws APIException if no API is present
      */
     static @NotNull API get() throws APIException {
-        @MaybePresent Optional<API> api = ApiCore.optionalApi();
+        @MaybePresent Optional<API> api = ApiProvider.optionalApi();
         if (api.isEmpty()) {
             throw new APIException();
         }

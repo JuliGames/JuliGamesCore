@@ -6,7 +6,7 @@ import de.bentzin.tools.logging.Logger;
 import de.bentzin.tools.misc.SubscribableType;
 import de.bentzin.tools.register.Registerator;
 import net.juligames.core.api.API;
-import net.juligames.core.api.ApiCore;
+import net.juligames.core.api.ApiProvider;
 import net.juligames.core.api.TODO;
 import net.juligames.core.api.cacheing.CacheApi;
 import net.juligames.core.api.command.CommandApi;
@@ -48,9 +48,9 @@ public final class Core implements API {
      * This can be set depending on the build of the Core
      */
     public static final String CORE_BRAND = "Core";
-    public static final String CORE_VERSION_NUMBER = "1.3";
+    public static final String CORE_VERSION_NUMBER = "1.4-SNAPSHOT";
     public static final String CORE_SPECIFICATION = "Gustav";
-    private static final String BUILD_VERSION = "1.3"; //POM VERSION
+    private static final String BUILD_VERSION = "1.4-SNAPSHOT"; //POM VERSION
 
     private static Core core;
     private final Registerator<Consumer<HazelcastInstance>> hazelcastPostPreparationWorkers = new Registerator<>("hazelcastPostPreparationWorkers");
@@ -116,7 +116,7 @@ public final class Core implements API {
         this.core_name = core_name;
         if (core != null) throw new IllegalStateException("seems like a core is already running!");
         core = this;
-        ApiCore.CURRENT_API = this;
+        ApiProvider.CURRENT_API = this;
         if (!member)
             hazelConnector = HazelConnector.getInstanceAndConnect(core_name);
         else
@@ -211,7 +211,7 @@ public final class Core implements API {
 
     @ApiStatus.Internal
     private void dropApiService() {
-        ApiCore.CURRENT_API = null;
+        ApiProvider.CURRENT_API = null;
     }
 
     /**
