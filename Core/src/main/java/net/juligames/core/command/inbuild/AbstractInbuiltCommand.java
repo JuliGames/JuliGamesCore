@@ -1,11 +1,13 @@
 package net.juligames.core.command.inbuild;
 
 import net.juligames.core.Core;
+import org.jetbrains.annotations.ApiStatus;
 
 /**
  * @author Ture Bentzin
  * 17.02.2023
  */
+@ApiStatus.Experimental
 public abstract class AbstractInbuiltCommand extends InbuiltCommand {
 
     /**

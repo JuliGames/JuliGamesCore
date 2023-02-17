@@ -3,6 +3,7 @@ package net.juligames.core.command.inbuild;
 
 import de.bentzin.tools.logging.Logger;
 import net.juligames.core.api.misc.TriConsumer;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.CompletableFuture;
@@ -11,6 +12,7 @@ import java.util.concurrent.CompletableFuture;
  * @author Ture Bentzin
  * 17.02.2023
  */
+@ApiStatus.Experimental
 @SuppressWarnings("unused")
 public interface CommandExecutor {
 

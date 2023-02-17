@@ -2,6 +2,7 @@ package net.juligames.core.command.inbuild;
 
 import de.bentzin.tools.DoNotOverride;
 import net.juligames.core.Core;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,6 +14,7 @@ import java.util.Objects;
  * @author Ture Bentzin
  * 17.02.2023
  */
+@ApiStatus.Experimental
 public class InbuiltCommand implements CommandExecutor {
     private final String name;
     private final String description;

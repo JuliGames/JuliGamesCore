@@ -4,6 +4,7 @@ import de.bentzin.tools.logging.Logger;
 import de.bentzin.tools.register.Registerator;
 import net.juligames.core.Core;
 import net.juligames.core.command.inbuild.commands.ShutdownCommand;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.regex.Matcher;
@@ -14,6 +15,7 @@ import java.util.regex.Pattern;
  * @author Ture Bentzin
  * 17.02.2023
  */
+@ApiStatus.Experimental
 public class InbuiltCommandManager extends Registerator<InbuiltCommand> {
 
     static Logger staticLogger;
