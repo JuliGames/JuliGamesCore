@@ -11,7 +11,7 @@ import net.juligames.core.command.inbuild.InbuiltCommand;
 
 public class ShutdownCommand extends AbstractInbuiltCommand {
     public ShutdownCommand() {
-        super("shutdown", "Shut the current Java VM down!");
+        super("shutdown", "Shut the current JavaVM down!");
     }
 
     @Override
