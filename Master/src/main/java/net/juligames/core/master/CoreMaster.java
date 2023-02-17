@@ -46,6 +46,10 @@ public class CoreMaster {
 
 
         // masterConfigManager.load();
+
+        logger.info("preparing directory...");
+        masterConfigManager.createDatabaseConfiguration();
+
         logger.info("booting hazelcast (MEMBER CORE):");
         Core core = new Core();
         try {

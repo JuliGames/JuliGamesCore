@@ -1,0 +1,4 @@
+#configuration_header written at: 2023-02-17 | 09:00:57
+#Fri Feb 17 21:00:57 CET 2023
+jdbc=jdbc\:mysql\://admin@localhost\:3306/minecraft
+configuration_name=database
