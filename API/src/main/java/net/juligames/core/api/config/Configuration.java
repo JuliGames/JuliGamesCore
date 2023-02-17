@@ -2,6 +2,7 @@ package net.juligames.core.api.config;
 
 import net.juligames.core.api.misc.TriConsumer;
 import org.checkerframework.checker.optional.qual.MaybePresent;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -214,9 +215,21 @@ public interface Configuration extends Comparable<Configuration> {
 
     Configuration copyToOffline();
 
+    /**
+     * This Method will add every entry out of default if it is not set here!
+     * @param defaults the defaults
+     */
+    void applyDefaults(@NotNull Properties defaults);
 
-    void appendAll(Collection<Configuration> configurations);
+    void appendAll(@NotNull Collection<Configuration> configurations);
 
+    @ApiStatus.Experimental
+    @ApiStatus.AvailableSince("1.4")
+    <R> R doWithData(@NotNull Function<Map<String,String>, R> function);
+
+    @ApiStatus.Experimental
+    @ApiStatus.AvailableSince("1.4")
+    void doWithData(@NotNull Consumer<Map<String,String>> action);
 
     @Override
     default int compareTo(@NotNull Configuration o) {

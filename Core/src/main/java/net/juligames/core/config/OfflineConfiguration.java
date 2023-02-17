@@ -697,6 +697,11 @@ public class OfflineConfiguration implements Configuration {
     }
 
     @Override
+    public void applyDefaults(@NotNull Properties defaults) {
+        defaults.forEach((o, o2) -> data.putIfAbsent(o.toString(), o2.toString()));
+    }
+
+    @Override
     public Configuration copy(String name) {
         Core.getInstance().getCoreLogger().warning("OfflineConfiguration#copy(String) is not supported -" +
                 " OfflineConfiguration#copyToOffline(String) will be used instead");
@@ -715,6 +720,16 @@ public class OfflineConfiguration implements Configuration {
         for (Configuration configuration : configurations) {
             configuration.copyAndAppendContentTo(this);
         }
+    }
+
+    @Override
+    public <R> R doWithData(@NotNull Function<Map<String, String>, R> function) {
+        return function.apply(data);
+    }
+
+    @Override
+    public void doWithData(@NotNull Consumer<Map<String, String>> action) {
+        action.accept(data);
     }
 }
 

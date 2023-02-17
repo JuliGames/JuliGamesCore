@@ -741,6 +741,16 @@ public class CoreConfiguration implements Configuration {
         }
     }
 
+    @Override
+    public <R> R doWithData(@NotNull Function<Map<String, String>, R> function) {
+        return function.apply(hazel());
+    }
+
+    @Override
+    public void doWithData(@NotNull Consumer<Map<String, String>> action) {
+        action.accept(hazel());
+    }
+
     public final @NotNull String getConjoinedDescription() {
         return getName() + "\n" + header_comment;
     }
@@ -759,6 +769,14 @@ public class CoreConfiguration implements Configuration {
         List<T> result = new ArrayList<>();
         iterable.forEach(result::add);
         return result;
+    }
+
+    @Override
+    public void applyDefaults(@NotNull Properties defaults) {
+        for (Map.Entry<Object, Object> objectObjectEntry : defaults.entrySet()) {
+            final String key = objectObjectEntry.getKey().toString(), value = objectObjectEntry.getValue().toString();
+            hazel().putIfAbsent(key,value);
+        }
     }
 
     @Override
