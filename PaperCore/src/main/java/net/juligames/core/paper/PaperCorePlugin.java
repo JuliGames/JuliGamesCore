@@ -107,18 +107,19 @@ public class PaperCorePlugin extends JavaPlugin {
     }
 
     private void loadCorePlugins() {
-        if (corePluginLoadManager != null) {
-            try {
-                corePluginLoadManager.load(); // Experimental
-            } catch (Exception e) {
-                getLogger().log(Level.SEVERE, "An issue was recorded while trying to load experimental CorePlugins: " + e.getMessage());
-                e.printStackTrace();
-                getLogger().log(Level.SEVERE, "Please be aware that issues regarding this system will have low priority duo to the unclear" +
-                        " situation about the future of this system!");
-            }
+        if (Boolean.getBoolean("corePlugins"))
+            if (corePluginLoadManager != null) {
+                try {
+                    corePluginLoadManager.load(); // Experimental
+                } catch (Exception e) {
+                    getLogger().log(Level.SEVERE, "An issue was recorded while trying to load experimental CorePlugins: " + e.getMessage());
+                    e.printStackTrace();
+                    getLogger().log(Level.SEVERE, "Please be aware that issues regarding this system will have low priority duo to the unclear" +
+                            " situation about the future of this system!");
+                }
 
-        } else {
-            getLogger().log(Level.SEVERE, "cant load Plugins!");
-        }
+            } else {
+                getLogger().log(Level.SEVERE, "cant load Plugins!");
+            }
     }
 }
