@@ -1,5 +1,6 @@
 package net.juligames.core.config;
 
+import de.bentzin.tools.pair.BasicPair;
 import net.juligames.core.Core;
 import net.juligames.core.api.config.Configuration;
 import net.juligames.core.api.config.Interpreter;
@@ -713,6 +714,11 @@ public class OfflineConfiguration implements Configuration {
         OfflineConfiguration offlineConfiguration = new OfflineConfiguration(name);
         copyAndOverrideContentTo(offlineConfiguration);
         return offlineConfiguration;
+    }
+
+    @Override
+    public void set(@NotNull BasicPair<String, String> basicPair) {
+        setString(basicPair.getFirst(),basicPair.getSecond());
     }
 
     @Override

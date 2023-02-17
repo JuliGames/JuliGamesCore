@@ -1,5 +1,6 @@
 package net.juligames.core.api.config;
 
+import de.bentzin.tools.pair.BasicPair;
 import net.juligames.core.api.misc.TriConsumer;
 import org.checkerframework.checker.optional.qual.MaybePresent;
 import org.jetbrains.annotations.ApiStatus;
@@ -176,6 +177,8 @@ public interface Configuration extends Comparable<Configuration> {
     <T> void setIterable(String keySpace, Supplier<Iterable<T>> iterable, Interpreter<T> interpreter);
 
     <T> void setIterable(Supplier<String> keySpace, Supplier<Iterable<T>> iterable, Interpreter<T> interpreter);
+
+    void set(@NotNull BasicPair<String,String> basicPair);
 
     void del(String key);
 

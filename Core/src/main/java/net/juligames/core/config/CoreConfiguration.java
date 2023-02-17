@@ -1,6 +1,7 @@
 package net.juligames.core.config;
 
 import com.hazelcast.map.IMap;
+import de.bentzin.tools.pair.BasicPair;
 import net.juligames.core.Core;
 import net.juligames.core.api.config.Configuration;
 import net.juligames.core.api.config.Interpreter;
@@ -20,6 +21,7 @@ import java.util.function.*;
  * 26.11.2022
  * @implNote RESERVED KEYS: "configuration_header", "configuration_name"
  */
+@SuppressWarnings("unused")
 public class CoreConfiguration implements Configuration {
 
     private final String name;
@@ -744,6 +746,11 @@ public class CoreConfiguration implements Configuration {
     @Override
     public <R> R doWithData(@NotNull Function<Map<String, String>, R> function) {
         return function.apply(hazel());
+    }
+
+    @Override
+    public void set(@NotNull BasicPair<String, String> basicPair) {
+        setString(basicPair.getFirst(),basicPair.getSecond());
     }
 
     @Override
