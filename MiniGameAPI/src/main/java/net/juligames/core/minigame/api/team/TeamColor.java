@@ -38,6 +38,11 @@ public interface TeamColor {
         return new RTeamColor("", Tag.styling(b -> b.color(NamedTextColor.WHITE)), "");
     }
 
+    @Contract(" -> new")
+    static @NotNull TeamColor getDefaultGray() {
+        return new RTeamColor("", Tag.styling(b -> b.color(NamedTextColor.GRAY)), "");
+    }
+
     static @NotNull Set<TeamColor> getAllDefaultNamed() {
         Set<TeamColor> teamColors = new HashSet<>();
         for (NamedTextColor value : NamedTextColor.NAMES.values()) {
