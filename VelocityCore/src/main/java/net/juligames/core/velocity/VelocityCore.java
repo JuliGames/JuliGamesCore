@@ -24,7 +24,7 @@ import java.util.logging.Level;
  * 03.12.2022
  */
 
-@Plugin(id = "velocitycore", name = "JuliGames Velocity Core", version = "1.3",
+@Plugin(id = "velocitycore", name = "JuliGames Velocity Core", version = "1.4-SNAPSHOT",
         url = "https://github.com/JuliGames/JuliGamesCore", description = "Velocity Client for the core - necessary to provide the API here",
         authors = {"Ture Bentzin"})
 public final class VelocityCore {
