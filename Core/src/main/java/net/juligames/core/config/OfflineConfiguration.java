@@ -110,7 +110,7 @@ public class OfflineConfiguration implements Configuration {
     @Override
     public @Nullable String getStringOrNull(@NotNull String key) {
         @Nullable String extract = data.get(key);
-        return key;
+        return extract;
     }
 
     @Override
