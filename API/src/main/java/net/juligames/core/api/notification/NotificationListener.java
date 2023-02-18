@@ -1,5 +1,7 @@
 package net.juligames.core.api.notification;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * @author Ture Bentzin
  * 16.11.2022
@@ -11,6 +13,6 @@ public interface NotificationListener {
      *
      * @param notification the notification
      */
-    void onNotification(Notification notification);
+    void onNotification(@NotNull Notification notification);
 
 }
