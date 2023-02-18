@@ -1,5 +1,7 @@
 package net.juligames.core.api.message;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collection;
 import java.util.Date;
 
@@ -13,20 +15,20 @@ public interface MultiMessagePostScript {
     /**
      * @return A Collection of the messages sent to every recipient (the messages might not be exact)
      */
-    Collection<Message> messages();
+    @NotNull Collection<Message> messages();
 
     /**
      * @return A Collection of the messages sent to every recipient
      */
-    Date timeSent();
+    @NotNull Date timeSent();
 
     /**
      * @return A Collection of the recipients that got all the messages
      */
-    Collection<? extends MessageRecipient> recipients();
+    @NotNull Collection<? extends MessageRecipient> recipients();
 
     /**
      * convert this {@link MultiMessagePostScript} to a {@link Collection} of {@link MessagePostScript}s
      */
-    Collection<MessagePostScript> toSingles();
+    @NotNull Collection<MessagePostScript> toSingles();
 }

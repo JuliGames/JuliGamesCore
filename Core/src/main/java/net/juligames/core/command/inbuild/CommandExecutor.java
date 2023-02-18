@@ -16,21 +16,21 @@ import java.util.concurrent.CompletableFuture;
 @SuppressWarnings("unused")
 public interface CommandExecutor {
 
-    default Logger getLogger() {
+    default @NotNull Logger getLogger() {
         return InbuiltCommandManager.staticLogger;
     }
 
-    boolean execute(InbuiltCommand command, String input);
+    boolean execute(@NotNull InbuiltCommand command, @NotNull String input);
 
-    default void executeAndForget(InbuiltCommand command, String input) {
+    default void executeAndForget(@NotNull InbuiltCommand command, @NotNull String input) {
         execute(command,input);
     }
 
-    default void executeAndThen(InbuiltCommand command, String input, @NotNull TriConsumer<InbuiltCommand,String,Boolean> triConsumer) {
+    default void executeAndThen(@NotNull InbuiltCommand command, @NotNull String input, @NotNull TriConsumer<InbuiltCommand,String,Boolean> triConsumer) {
         triConsumer.consume(command,input, execute(command,input));
     }
 
-    default void executeAndComplete(InbuiltCommand command, String input, @NotNull CompletableFuture<Boolean> completableFuture) {
+    default void executeAndComplete(@NotNull InbuiltCommand command, @NotNull String input, @NotNull CompletableFuture<Boolean> completableFuture) {
        completableFuture.complete(execute(command,input));
     }
 }

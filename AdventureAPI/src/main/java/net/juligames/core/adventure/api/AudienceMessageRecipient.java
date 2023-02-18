@@ -66,12 +66,12 @@ public class AudienceMessageRecipient implements MessageRecipient {
      * @return A human-readable name that defines this recipient
      */
     @Override
-    public String getName() {
+    public @NotNull String getName() {
         return name;
     }
 
     @Override
-    public void deliver(Message message) {
+    public void deliver(@NotNull Message message) {
         Component component = AdventureAPI.get().getAdventureTagManager().resolve(message);
         audience.sendMessage(component);
     }
@@ -82,7 +82,7 @@ public class AudienceMessageRecipient implements MessageRecipient {
      * @param miniMessage
      */
     @Override
-    public void deliver(String miniMessage) {
+    public void deliver(@NotNull String miniMessage) {
         Component component = AdventureAPI.get().getAdventureTagManager().resolve(miniMessage);
         audience.sendMessage(component);
     }

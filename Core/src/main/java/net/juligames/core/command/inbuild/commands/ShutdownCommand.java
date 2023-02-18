@@ -4,6 +4,7 @@ import net.juligames.core.api.API;
 import net.juligames.core.command.inbuild.AbstractInbuiltCommand;
 import net.juligames.core.command.inbuild.InbuiltCommand;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Ture Bentzin
@@ -17,7 +18,7 @@ public class ShutdownCommand extends AbstractInbuiltCommand {
     }
 
     @Override
-    public boolean execute(InbuiltCommand command, String input) {
+    public boolean execute(@NotNull InbuiltCommand command, @NotNull String input) {
         getLogger().warning("Core was commanded to terminate this JavaVM!");
         API.get().getJavaRuntime().exit(0); //0 to fire hooks
         return true; // executes never...

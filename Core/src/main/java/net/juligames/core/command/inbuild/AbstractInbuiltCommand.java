@@ -2,6 +2,7 @@ package net.juligames.core.command.inbuild;
 
 import net.juligames.core.Core;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Ture Bentzin
@@ -34,5 +35,5 @@ public abstract class AbstractInbuiltCommand extends InbuiltCommand {
     }
 
     @Override
-    public abstract boolean execute(InbuiltCommand command, String input);
+    public abstract boolean execute(@NotNull InbuiltCommand command, @NotNull String input);
 }

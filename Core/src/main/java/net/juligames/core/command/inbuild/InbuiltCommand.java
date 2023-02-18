@@ -30,7 +30,7 @@ public class InbuiltCommand implements CommandExecutor {
     }
 
     @Override
-    public boolean execute(InbuiltCommand command, String input) {
+    public boolean execute(@NotNull InbuiltCommand command, @NotNull String input) {
         if (executor() != this) {
             return executor().execute(command, input);
         } else if (executor != null) {

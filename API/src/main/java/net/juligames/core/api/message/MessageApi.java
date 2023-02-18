@@ -25,202 +25,206 @@ public interface MessageApi {
     @ApiStatus.Internal
     @ApiStatus.Experimental
     <R>
-    R callMessageExtension(ExtensionCallback<R, MessageDAO, RuntimeException> extensionCallback);
+    @NotNull R callMessageExtension(@NotNull ExtensionCallback<R, MessageDAO, RuntimeException> extensionCallback);
 
     @ApiStatus.Internal
     @ApiStatus.Experimental
     <R>
-    R callLocaleExtension(ExtensionCallback<R, LocaleDAO, RuntimeException> extensionCallback);
+    @NotNull R callLocaleExtension(@NotNull ExtensionCallback<R, LocaleDAO, RuntimeException> extensionCallback);
 
     @ApiStatus.Internal
     @ApiStatus.Experimental
     <R>
-    R callPreferenceExtension(ExtensionCallback<R, PlayerLocalPreferenceDAO, RuntimeException> extensionCallback);
+    @NotNull R callPreferenceExtension(@NotNull ExtensionCallback<R, PlayerLocalPreferenceDAO, RuntimeException> extensionCallback);
 
     @ApiStatus.Internal
     @ApiStatus.Experimental
     <R>
-    R callReplacementExtension(ExtensionCallback<R, ReplacementDAO, RuntimeException> extensionCallback);
+    @NotNull R callReplacementExtension(@NotNull ExtensionCallback<R, ReplacementDAO, RuntimeException> extensionCallback);
 
     @ApiStatus.Internal
     @ApiStatus.Experimental
     <R>
-    R callReplacementTypeExtension(ExtensionCallback<R, ReplacementTypeDAO, RuntimeException> extensionCallback);
+    @NotNull R callReplacementTypeExtension(@NotNull ExtensionCallback<R, ReplacementTypeDAO, RuntimeException> extensionCallback);
 
     //get
-    Message getMessage(String messageKey, Locale locale);
+    @NotNull Message getMessage(@NotNull String messageKey, @NotNull Locale locale);
 
-    Message getMessage(String messageKey, Locale locale, String... replacements);
+    @NotNull Message getMessage(@NotNull String messageKey, @NotNull Locale locale, String... replacements);
 
-    Message getMessage(String messageKey, String locale);
+    @NotNull Message getMessage(@NotNull String messageKey, @NotNull String locale);
 
-    Message getMessage(String messageKey, String locale, String... replacements);
+    @NotNull Message getMessage(@NotNull String messageKey, @NotNull String locale, String... replacements);
 
-    Message getMessage(String messageKey, DBLocale dbLocale);
+    @NotNull Message getMessage(@NotNull String messageKey, @NotNull DBLocale dbLocale);
 
-    Message getMessage(String messageKey, DBLocale dbLocale, String... replacements);
+    @NotNull Message getMessage(@NotNull String messageKey, @NotNull DBLocale dbLocale, String... replacements);
 
-    Collection<? extends Message> getMessage(String messageKey);
+    @NotNull Collection<? extends Message> getMessage(@NotNull String messageKey);
 
-    Collection<? extends Message> getMessage(String messageKey, String... replacements);
+    @NotNull Collection<? extends Message> getMessage(@NotNull String messageKey, String... replacements);
 
-    Message getMessageSmart(String messageKey, @Nullable Locale locale);
+    @NotNull Message getMessageSmart(@NotNull String messageKey, @Nullable Locale locale);
 
-    Message getMessageSmart(String messageKey, @Nullable Locale locale, String... replacements);
+    @NotNull Message getMessageSmart(@NotNull String messageKey, @Nullable Locale locale, String... replacements);
 
-    Message getMessageSmart(String messageKey, String locale);
+    @NotNull Message getMessageSmart(@NotNull String messageKey, @NotNull String locale);
 
-    Message getMessageSmart(String messageKey, String locale, String... replacements);
+    @NotNull Message getMessageSmart(@NotNull String messageKey, @NotNull String locale, String... replacements);
 
-    Message getMessageSmart(String messageKey, DBLocale dbLocale);
+    @NotNull Message getMessageSmart(@NotNull String messageKey, @NotNull DBLocale dbLocale);
 
-    Message getMessageSmart(String messageKey, DBLocale dbLocale, String... replacements);
+    @NotNull Message getMessageSmart(@NotNull String messageKey, @NotNull DBLocale dbLocale, String... replacements);
 
-    Collection<? extends Message> getAllFromLocale(Locale locale);
+    @NotNull Collection<? extends Message> getAllFromLocale(@NotNull Locale locale);
 
-    Collection<? extends Message> getAllFromLocale(Locale locale, String... replacements);
+    @NotNull Collection<? extends Message> getAllFromLocale(@NotNull Locale locale, String... replacements);
 
-    Collection<? extends Message> getAllFromLocale(String locale);
+    @NotNull Collection<? extends Message> getAllFromLocale(@NotNull String locale);
 
-    Collection<? extends Message> getAllFromLocale(String locale, String... replacements);
+    @NotNull Collection<? extends Message> getAllFromLocale(@NotNull String locale, String... replacements);
 
-    Collection<? extends Message> getAllFromLocale(DBLocale dbLocale);
+    @NotNull Collection<? extends Message> getAllFromLocale(@NotNull DBLocale dbLocale);
 
-    Collection<? extends Message> getAllFromLocale(DBLocale dbLocale, String... replacements);
+    @NotNull Collection<? extends Message> getAllFromLocale(@NotNull DBLocale dbLocale, String... replacements);
 
     @ApiStatus.Experimental
+    @NotNull
     Collection<? extends Message> getAll();
 
     @ApiStatus.Experimental
+    @NotNull
     Collection<? extends Message> getAll(String... replacements);
 
     @ApiStatus.Internal
+    @NotNull
     Stream<? extends DBMessage> streamData();
 
-    Collection<? extends DBReplacement> getReplacers();
+    @NotNull Collection<? extends DBReplacement> getReplacers();
 
     //register
 
     @Deprecated
-    void registerMessage(String messageKey);
+    void registerMessage(@NotNull String messageKey);
 
-    void registerMessage(String messageKey, String defaultMiniMessage);
+    void registerMessage(@NotNull String messageKey, @NotNull String defaultMiniMessage);
 
-    boolean hasMessage(String messageKey);
+    boolean hasMessage(@NotNull String messageKey);
 
-    boolean hasMessage(String messageKey, String locale);
+    boolean hasMessage(@NotNull String messageKey, @NotNull String locale);
 
-    boolean hasMessage(String messageKey, Locale locale);
+    boolean hasMessage(@NotNull String messageKey, @NotNull Locale locale);
 
-    boolean hasMessage(String messageKey, DBLocale locale);
+    boolean hasMessage(@NotNull String messageKey, @NotNull DBLocale locale);
 
-    MessagePostScript sendMessage(String messageKey, MessageRecipient messageRecipient);
+    @NotNull MessagePostScript sendMessage(@NotNull String messageKey, @NotNull MessageRecipient messageRecipient);
 
-    MessagePostScript sendMessage(String messageKey, MessageRecipient messageRecipient, Locale overrideLocale);
+    @NotNull MessagePostScript sendMessage(@NotNull String messageKey, @NotNull MessageRecipient messageRecipient, @NotNull Locale overrideLocale);
 
-    MessagePostScript sendMessage(String messageKey, MessageRecipient messageRecipient, String overrideLocale);
+    @NotNull MessagePostScript sendMessage(@NotNull String messageKey, @NotNull MessageRecipient messageRecipient, @NotNull String overrideLocale);
 
-    MessagePostScript sendMessage(String messageKey, MessageRecipient messageRecipient, DBLocale overrideLocale);
+    @NotNull MessagePostScript sendMessage(@NotNull String messageKey, @NotNull MessageRecipient messageRecipient, @NotNull DBLocale overrideLocale);
 
-    MultiMessagePostScript broadcastMessage(String messageKey, Locale defaultLocale);
+    @NotNull MultiMessagePostScript broadcastMessage(@NotNull String messageKey, @NotNull Locale defaultLocale);
 
-    MultiMessagePostScript broadcastMessage(String messageKey, String defaultLocale);
+    @NotNull MultiMessagePostScript broadcastMessage(@NotNull String messageKey, @NotNull String defaultLocale);
 
-    MultiMessagePostScript broadcastMessage(String messageKey, DBLocale defaultLocale);
+    @NotNull MultiMessagePostScript broadcastMessage(@NotNull String messageKey, @NotNull DBLocale defaultLocale);
 
-    Collection<? extends MessagePostScript> broadcastMessage(String messageKey);
+    @NotNull Collection<? extends MessagePostScript> broadcastMessage(@NotNull String messageKey);
 
-    MultiMessagePostScript sendMessage(Collection<String> messageKeys, MessageRecipient messageRecipient);
+    @NotNull MultiMessagePostScript sendMessage(@NotNull Collection<String> messageKeys, @NotNull MessageRecipient messageRecipient);
 
-    MultiMessagePostScript sendMessage(Collection<String> messageKeys, Collection<? extends MessageRecipient> messageRecipients);
+    @NotNull MultiMessagePostScript sendMessage(@NotNull Collection<String> messageKeys, @NotNull Collection<? extends MessageRecipient> messageRecipients);
 
-    MultiMessagePostScript sendMessage(Collection<String> messageKeys, MessageRecipient messageRecipient, String overrideLocale);
+    @NotNull MultiMessagePostScript sendMessage(@NotNull Collection<String> messageKeys, @NotNull MessageRecipient messageRecipient, @NotNull String overrideLocale);
 
-    MultiMessagePostScript sendMessage(Collection<String> messageKeys, MessageRecipient messageRecipient, Locale overrideLocale);
+    @NotNull MultiMessagePostScript sendMessage(@NotNull Collection<String> messageKeys, @NotNull MessageRecipient messageRecipient, @NotNull Locale overrideLocale);
 
-    MultiMessagePostScript sendMessage(Collection<String> messageKeys, MessageRecipient messageRecipient, DBLocale overrideLocale);
+    @NotNull MultiMessagePostScript sendMessage(@NotNull Collection<String> messageKeys, @NotNull MessageRecipient messageRecipient, @NotNull DBLocale overrideLocale);
 
-    MultiMessagePostScript sendMessage(Collection<String> messageKeys, Collection<? extends MessageRecipient> messageRecipients, String overrideLocale);
+    @NotNull MultiMessagePostScript sendMessage(@NotNull Collection<String> messageKeys, @NotNull Collection<? extends MessageRecipient> messageRecipients, @NotNull String overrideLocale);
 
-    MultiMessagePostScript sendMessage(Collection<String> messageKeys, Collection<? extends MessageRecipient> messageRecipients, Locale overrideLocale);
+    @NotNull MultiMessagePostScript sendMessage(@NotNull Collection<String> messageKeys, @NotNull Collection<? extends MessageRecipient> messageRecipients, @NotNull Locale overrideLocale);
 
-    MultiMessagePostScript sendMessage(Collection<String> messageKeys, Collection<? extends MessageRecipient> messageRecipients, DBLocale overrideLocale);
+    @NotNull MultiMessagePostScript sendMessage(@NotNull Collection<String> messageKeys, @NotNull Collection<? extends MessageRecipient> messageRecipients, @NotNull DBLocale overrideLocale);
 
-    Collection<MultiMessagePostScript> sendMessageSmart(@NotNull Collection<String> messageKeys, Collection<? extends MessageRecipient> messageRecipients, String... replacement);
+    @NotNull Collection<MultiMessagePostScript> sendMessageSmart(@NotNull Collection<String> messageKeys, @NotNull Collection<? extends MessageRecipient> messageRecipients, String... replacement);
 
-    Collection<MessagePostScript> sendMessage(String messageKey, Collection<? extends MessageRecipient> messageRecipients);
+    @NotNull Collection<MessagePostScript> sendMessage(@NotNull String messageKey, @NotNull Collection<? extends MessageRecipient> messageRecipients);
 
-    MultiMessagePostScript sendMessage(String messageKey, Collection<? extends MessageRecipient> messageRecipients, String overrideLocale);
+    @NotNull MultiMessagePostScript sendMessage(@NotNull String messageKey, @NotNull Collection<? extends MessageRecipient> messageRecipients, @NotNull String overrideLocale);
 
-    MultiMessagePostScript sendMessage(String messageKey, Collection<? extends MessageRecipient> messageRecipients, Locale overrideLocale);
+    @NotNull MultiMessagePostScript sendMessage(@NotNull String messageKey, @NotNull Collection<? extends MessageRecipient> messageRecipients, @NotNull Locale overrideLocale);
 
-    MultiMessagePostScript sendMessage(String messageKey, Collection<? extends MessageRecipient> messageRecipients, DBLocale overrideLocale);
+    @NotNull MultiMessagePostScript sendMessage(@NotNull String messageKey, @NotNull Collection<? extends MessageRecipient> messageRecipients, @NotNull DBLocale overrideLocale);
 
-    Collection<MessagePostScript> sendMessage(String messageKey, Collection<? extends MessageRecipient> messageRecipients, String... replacements);
+    @NotNull Collection<MessagePostScript> sendMessage(@NotNull String messageKey, @NotNull Collection<? extends MessageRecipient> messageRecipients, String... replacements);
 
-    MultiMessagePostScript sendMessage(String messageKey, Collection<? extends MessageRecipient> messageRecipients, String overrideLocale, String... replacements);
+    @NotNull MultiMessagePostScript sendMessage(@NotNull String messageKey, @NotNull Collection<? extends MessageRecipient> messageRecipients, @NotNull String overrideLocale, String... replacements);
 
-    MultiMessagePostScript sendMessage(String messageKey, Collection<? extends MessageRecipient> messageRecipients, Locale overrideLocale, String... replacements);
+    @NotNull MultiMessagePostScript sendMessage(@NotNull String messageKey, @NotNull Collection<? extends MessageRecipient> messageRecipients, @NotNull Locale overrideLocale, String... replacements);
 
-    MultiMessagePostScript sendMessage(String messageKey, Collection<? extends MessageRecipient> messageRecipients, DBLocale overrideLocale, String... replacements);
+    @NotNull MultiMessagePostScript sendMessage(@NotNull String messageKey, @NotNull Collection<? extends MessageRecipient> messageRecipients, @NotNull DBLocale overrideLocale, String... replacements);
 
 
-    MultiMessagePostScript broadcastMessage(Collection<String> messageKeys, Locale defaultLocale);
+    @NotNull MultiMessagePostScript broadcastMessage(@NotNull Collection<String> messageKeys, @NotNull Locale defaultLocale);
 
-    MultiMessagePostScript broadcastMessage(Collection<String> messageKeys, String defaultLocale);
+    @NotNull MultiMessagePostScript broadcastMessage(@NotNull Collection<String> messageKeys, @NotNull String defaultLocale);
 
-    MultiMessagePostScript broadcastMessage(Collection<String> messageKeys, DBLocale defaultLocale);
+    @NotNull MultiMessagePostScript broadcastMessage(@NotNull Collection<String> messageKeys, @NotNull DBLocale defaultLocale);
 
-    MultiMessagePostScript broadcastMessage(Collection<String> messageKeys);
+    @NotNull MultiMessagePostScript broadcastMessage(@NotNull Collection<String> messageKeys);
 
     //sending with replacements
-    MessagePostScript sendMessage(String messageKey, MessageRecipient messageRecipient, String... replacement);
+    @NotNull MessagePostScript sendMessage(@NotNull String messageKey, @NotNull MessageRecipient messageRecipient, String... replacement);
 
-    MessagePostScript sendMessage(String messageKey, MessageRecipient messageRecipient, Locale overrideLocale, String... replacement);
+    @NotNull MessagePostScript sendMessage(@NotNull String messageKey, @NotNull MessageRecipient messageRecipient, @NotNull Locale overrideLocale, String... replacement);
 
-    MessagePostScript sendMessage(String messageKey, MessageRecipient messageRecipient, String overrideLocale, String... replacement);
+    @NotNull MessagePostScript sendMessage(@NotNull String messageKey, @NotNull MessageRecipient messageRecipient, @NotNull String overrideLocale, String... replacement);
 
-    MessagePostScript sendMessage(String messageKey, MessageRecipient messageRecipient, DBLocale overrideLocale, String... replacement);
+    @NotNull MessagePostScript sendMessage(@NotNull String messageKey, @NotNull MessageRecipient messageRecipient, @NotNull DBLocale overrideLocale, String... replacement);
 
-    MultiMessagePostScript broadcastMessage(String messageKey, Locale defaultLocale, String... replacement);
+    @NotNull MultiMessagePostScript broadcastMessage(@NotNull String messageKey, @NotNull Locale defaultLocale, String... replacement);
 
-    MultiMessagePostScript broadcastMessage(String messageKey, String defaultLocale, String... replacement);
+    @NotNull MultiMessagePostScript broadcastMessage(@NotNull String messageKey, @NotNull String defaultLocale, String... replacement);
 
-    MultiMessagePostScript broadcastMessage(String messageKey, DBLocale defaultLocale, String... replacement);
+    @NotNull MultiMessagePostScript broadcastMessage(@NotNull String messageKey, @NotNull DBLocale defaultLocale, String... replacement);
 
-    Collection<? extends MessagePostScript> broadcastMessage(String messageKey, String... replacement);
+    @NotNull Collection<? extends MessagePostScript> broadcastMessage(@NotNull String messageKey, String... replacement);
 
-    MultiMessagePostScript sendMessage(Collection<String> messageKeys, MessageRecipient messageRecipient, String... replacement);
+    @NotNull MultiMessagePostScript sendMessage(@NotNull Collection<String> messageKeys, @NotNull MessageRecipient messageRecipient, String... replacement);
 
     /**
      * @deprecated use {@link MessageApi#sendMessageSmart(Collection, Collection, String...)} instead
      */
     @Deprecated
-    MultiMessagePostScript sendMessage(Collection<String> messageKeys, Collection<? extends MessageRecipient> messageRecipients, String... replacement);
+    @NotNull
+    MultiMessagePostScript sendMessage(@NotNull Collection<String> messageKeys, @NotNull Collection<? extends MessageRecipient> messageRecipients, String... replacement);
 
-    MultiMessagePostScript sendMessage(Collection<String> messageKeys, MessageRecipient messageRecipient, String overrideLocale, String... replacement);
+    @NotNull MultiMessagePostScript sendMessage(@NotNull Collection<String> messageKeys, @NotNull MessageRecipient messageRecipient, @NotNull String overrideLocale, String... replacement);
 
-    MultiMessagePostScript sendMessage(Collection<String> messageKeys, MessageRecipient messageRecipient, Locale overrideLocale, String... replacement);
+    @NotNull MultiMessagePostScript sendMessage(@NotNull Collection<String> messageKeys, @NotNull MessageRecipient messageRecipient, @NotNull Locale overrideLocale, String... replacement);
 
-    MultiMessagePostScript sendMessage(Collection<String> messageKeys, MessageRecipient messageRecipient, DBLocale overrideLocale, String... replacement);
+    @NotNull MultiMessagePostScript sendMessage(@NotNull Collection<String> messageKeys, @NotNull MessageRecipient messageRecipient, @NotNull DBLocale overrideLocale, String... replacement);
 
-    MultiMessagePostScript sendMessage(Collection<String> messageKeys, Collection<? extends MessageRecipient> messageRecipients, String overrideLocale, String... replacement);
+    @NotNull MultiMessagePostScript sendMessage(@NotNull Collection<String> messageKeys, @NotNull Collection<? extends MessageRecipient> messageRecipients, @NotNull String overrideLocale, String... replacement);
 
-    MultiMessagePostScript sendMessage(Collection<String> messageKeys, Collection<? extends MessageRecipient> messageRecipients, Locale overrideLocale, String... replacement);
+    @NotNull MultiMessagePostScript sendMessage(@NotNull Collection<String> messageKeys, @NotNull Collection<? extends MessageRecipient> messageRecipients, @NotNull Locale overrideLocale, String... replacement);
 
-    MultiMessagePostScript sendMessage(Collection<String> messageKeys, Collection<? extends MessageRecipient> messageRecipients, DBLocale overrideLocale, String... replacement);
+    @NotNull MultiMessagePostScript sendMessage(@NotNull Collection<String> messageKeys, @NotNull Collection<? extends MessageRecipient> messageRecipients, @NotNull DBLocale overrideLocale, String... replacement);
 
-    MultiMessagePostScript broadcastMessage(Collection<String> messageKeys, Locale defaultLocale, String... replacement);
+    @NotNull MultiMessagePostScript broadcastMessage(@NotNull Collection<String> messageKeys, @NotNull Locale defaultLocale, String... replacement);
 
-    MultiMessagePostScript broadcastMessage(Collection<String> messageKeys, String defaultLocale, String... replacement);
+    @NotNull MultiMessagePostScript broadcastMessage(@NotNull Collection<String> messageKeys, @NotNull String defaultLocale, String... replacement);
 
-    MultiMessagePostScript broadcastMessage(Collection<String> messageKeys, DBLocale defaultLocale, String... replacement);
+    @NotNull MultiMessagePostScript broadcastMessage(@NotNull Collection<String> messageKeys, @NotNull DBLocale defaultLocale, String... replacement);
 
-    MultiMessagePostScript broadcastMessage(Collection<String> messageKeys, String... replacement);
+    @NotNull MultiMessagePostScript broadcastMessage(@NotNull Collection<String> messageKeys, String... replacement);
 
-    String defaultLocale();
+    @NotNull String defaultLocale();
 
-    Locale defaultUtilLocale();
+    @NotNull Locale defaultUtilLocale();
 
     //TagManager getTagManager(); removed in favor of AdventureCore / AdventureAPI
 }

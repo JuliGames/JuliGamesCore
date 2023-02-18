@@ -30,7 +30,7 @@ public class DummyMessageRecipient implements MessageRecipient {
      * @return A human-readable name that defines this recipient
      */
     @Override
-    public String getName() {
+    public @NotNull String getName() {
         throw provideException();
     }
 
@@ -40,7 +40,7 @@ public class DummyMessageRecipient implements MessageRecipient {
     }
 
     @Override
-    public void deliver(String miniMessage) {
+    public void deliver(@NotNull String miniMessage) {
         throw provideException(miniMessage);
     }
 
