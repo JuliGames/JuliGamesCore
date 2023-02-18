@@ -32,7 +32,7 @@ public record InventoryConfigWriter(Inventory inventory) implements ConfigWriter
     }
 
     @Override
-    public void write(@NotNull Configuration configuration, String keyspace) {
+    public void write(@NotNull Configuration configuration, @NotNull String keyspace) {
         configuration.setIterable(keyspace, inventory, itemStackInterpreter);
     }
 }

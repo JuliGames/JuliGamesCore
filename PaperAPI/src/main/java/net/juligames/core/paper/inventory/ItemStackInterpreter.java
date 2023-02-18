@@ -24,12 +24,12 @@ public class ItemStackInterpreter implements Interpreter<ItemStack> {
 
 
     @Override
-    public ItemStack interpret(String input) throws IllegalArgumentException {
+    public @NotNull ItemStack interpret(String input) throws IllegalArgumentException {
         return ItemStack.deserializeBytes(fromBase64String(input));
     }
 
     @Override
-    public String reverse(@NotNull ItemStack itemStack) {
+    public @NotNull String reverse(@NotNull ItemStack itemStack) {
         return toBase64String(itemStack.serializeAsBytes());
     }
 

@@ -21,11 +21,11 @@ public class SlimCollectionInterpreter<T> implements IterableInterpreter<T, Coll
     }
 
     @Override
-    public List<T> interpret(final @NotNull String input) throws Exception {
+    public @NotNull List<T> interpret(final @NotNull String input) throws Exception {
         if (input.isEmpty()) {
             return Collections.emptyList();
         }
-        int cLength = -1;
+        @SuppressWarnings("UnusedAssignment") int cLength = -1;
         String inp = input;
         {
             TextLength textLength = readLength(inp);
@@ -89,7 +89,7 @@ public class SlimCollectionInterpreter<T> implements IterableInterpreter<T, Coll
     }
 
     @Override
-    public String reverse(@NotNull Collection<T> ts) {
+    public @NotNull String reverse(@NotNull Collection<T> ts) {
         StringBuilder builder = new StringBuilder();
         String collectionLength = encodeLength(ts.size());
         StringJoiner innerJoiner = new StringJoiner("");

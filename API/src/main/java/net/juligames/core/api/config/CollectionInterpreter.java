@@ -26,7 +26,7 @@ public class CollectionInterpreter<T> implements IterableInterpreter<T, Collecti
     }
 
     @Override
-    public Collection<T> interpret(final @NotNull String input) throws Exception {
+    public @NotNull Collection<T> interpret(final @NotNull String input) throws Exception {
         if (!input.startsWith("{") || !input.endsWith("}")) {
             throw new IllegalArgumentException("Input has to start with { and end with }");
         }
@@ -75,7 +75,7 @@ public class CollectionInterpreter<T> implements IterableInterpreter<T, Collecti
 
 
     @Override
-    public String reverse(@NotNull Collection<T> ts) {
+    public @NotNull String reverse(@NotNull Collection<T> ts) {
         StringBuilder builder = new StringBuilder();
 
         for (T value : ts) {

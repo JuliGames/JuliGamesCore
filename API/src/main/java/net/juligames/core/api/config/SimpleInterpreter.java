@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 public interface SimpleInterpreter<T> extends Interpreter<T> {
 
     @Override
+    @NotNull
     default String reverse(@NotNull T t) {
         if (t instanceof CustomInterpretable customInterpretable) {
             return customInterpretable.toInterpretableString();
