@@ -11,15 +11,15 @@ import org.jetbrains.annotations.NotNull;
  */
 public class CoreNotificationEvent extends Event {
 
-    public static final HandlerList handlerList = new HandlerList();
+    public static final @NotNull HandlerList handlerList = new HandlerList();
 
-    private final Notification notification;
+    private final @NotNull Notification notification;
 
-    public CoreNotificationEvent(Notification notification) {
+    public CoreNotificationEvent(@NotNull Notification notification) {
         this.notification = notification;
     }
 
-    public Notification getNotification() {
+    public @NotNull Notification getNotification() {
         return notification;
     }
 
