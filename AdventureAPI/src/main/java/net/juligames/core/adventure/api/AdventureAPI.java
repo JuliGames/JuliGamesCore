@@ -22,6 +22,6 @@ public interface AdventureAPI {
         else throw new APIException();
     }
 
-    AdventureTagManager getAdventureTagManager();
+    @NotNull AdventureTagManager getAdventureTagManager();
 
 }

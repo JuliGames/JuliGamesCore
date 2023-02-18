@@ -5,6 +5,7 @@ import net.juligames.core.adventure.api.AdventureAPI;
 import net.juligames.core.adventure.api.AdventureAPICore;
 import net.juligames.core.api.API;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Ture Bentzin
@@ -55,7 +56,7 @@ public class AdventureCore implements AdventureAPI {
     }
 
     @Override
-    public CoreAdventureTagManager getAdventureTagManager() {
+    public @NotNull CoreAdventureTagManager getAdventureTagManager() {
         return adventureTagManager;
     }
 

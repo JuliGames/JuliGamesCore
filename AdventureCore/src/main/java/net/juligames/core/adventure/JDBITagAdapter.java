@@ -12,6 +12,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.tag.Tag;
+import org.intellij.lang.annotations.Subst;
 import org.jdbi.v3.core.Jdbi;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -45,6 +46,7 @@ public class JDBITagAdapter {
                 return Tag.styling(style -> style.color(NamedTextColor.NAMES.value(replacement.getValue())));
             }
             case FONT -> {
+
                 return Tag.styling(style -> style.font(Key.key(replacement.getValue())));
             }
             case INSERT -> {

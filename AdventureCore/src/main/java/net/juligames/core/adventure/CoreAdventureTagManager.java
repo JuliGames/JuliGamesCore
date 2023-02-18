@@ -28,6 +28,7 @@ import java.util.Map;
  * @author Ture Bentzin
  * 19.11.2022
  */
+@SuppressWarnings("ProtectedMemberInFinalClass")
 public final class CoreAdventureTagManager implements TagManager, AdventureTagManager {
 
     private TagResolver internalResolver = TagResolver.standard();
@@ -47,7 +48,7 @@ public final class CoreAdventureTagManager implements TagManager, AdventureTagMa
     }
 
     @Contract(pure = true)
-    public @NotNull Component fallbackResolve(String miniMessage) {
+    public @NotNull Component fallbackResolve(@NotNull String miniMessage) {
         return getMiniMessage().deserialize(miniMessage, getFallbackResolver());
     }
 
@@ -63,7 +64,7 @@ public final class CoreAdventureTagManager implements TagManager, AdventureTagMa
     }
 
     @Override
-    public void register(String name, Tag tag) {
+    public void register(@NotNull String name, @NotNull Tag tag) {
         internalResolver = TagResolver.builder().resolver(internalResolver).tag(name, tag).build();
     }
 
@@ -79,12 +80,12 @@ public final class CoreAdventureTagManager implements TagManager, AdventureTagMa
     }
 
     @Override
-    public @NotNull Component resolve(String miniMessage) {
+    public @NotNull Component resolve(@NotNull String miniMessage) {
         return getMiniMessage().deserialize(miniMessage, getResolver());
     }
 
     @Override
-    public @NotNull Component resolve(String miniMessage, @NotNull Collection<TagResolver> additions) {
+    public @NotNull Component resolve(@NotNull String miniMessage, @NotNull Collection<TagResolver> additions) {
         additions.add(getResolver());
         return getMiniMessage().deserialize(miniMessage, TagResolver.resolver(additions));
     }

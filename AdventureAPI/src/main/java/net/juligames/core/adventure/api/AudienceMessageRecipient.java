@@ -22,13 +22,13 @@ import java.util.function.Supplier;
  */
 public class AudienceMessageRecipient implements MessageRecipient {
 
-    public static Supplier<String> defaultLocaleSupplier = () -> API.get().getHazelDataApi().getMasterInformation().get("default_locale");
+    public static @NotNull Supplier<String> defaultLocaleSupplier = () -> API.get().getHazelDataApi().getMasterInformation().get("default_locale");
 
-    private final String name;
-    private final Supplier<String> locale;
-    private final Audience audience;
+    private final @NotNull String name;
+    private final @NotNull Supplier<String> locale;
+    private final @NotNull Audience audience;
 
-    public AudienceMessageRecipient(String name, Supplier<String> locale, Audience audience) {
+    public AudienceMessageRecipient(@NotNull String name, @NotNull Supplier<String> locale, @NotNull Audience audience) {
         this.name = name;
         this.locale = locale;
         this.audience = audience;
