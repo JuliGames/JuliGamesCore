@@ -68,17 +68,17 @@ public class CoreMessage implements Message {
     }
 
     @Override
-    public DBMessage getMessageData() {
+    public @NotNull DBMessage getMessageData() {
         return messageData;
     }
 
     @Override
-    public String getMiniMessage() {
+    public @NotNull String getMiniMessage() {
         return messageData.getMiniMessage();
     }
 
     @Override
-    public String getPreparedMiniMessage() {
+    public @NotNull String getPreparedMiniMessage() {
         String mini = getMiniMessage();
         for (Map.Entry<Integer, String> entry : getReplacementSet())
             for (PatternType value : PatternType.values())
@@ -87,7 +87,7 @@ public class CoreMessage implements Message {
     }
 
     @Override
-    public String getMiniMessageReadyForResolving(@Range(from = 0, to = Integer.MAX_VALUE) int replacementSize) {
+    public @NotNull String getMiniMessageReadyForResolving(@Range(from = 0, to = Integer.MAX_VALUE) int replacementSize) {
         String mini = getMiniMessage();
         for (int i = 0; i < replacementSize; i++)
             for (PatternType patternType : PatternType.values())
@@ -96,18 +96,18 @@ public class CoreMessage implements Message {
     }
 
     @Override
-    public String getMiniMessageReadyForResolving() {
+    public @NotNull String getMiniMessageReadyForResolving() {
         return getMiniMessageReadyForResolving(replacementSize());
     }
 
     @Override
-    public String getPlainMessage(@NotNull MiniMessageSerializer serializer) {
+    public @NotNull String getPlainMessage(@NotNull MiniMessageSerializer serializer) {
         return serializer.resolvePlain(this);
     }
 
     @Override
     @Deprecated
-    public String getLegacyMessage(@NotNull MiniMessageSerializer serializer) {
+    public @NotNull String getLegacyMessage(@NotNull MiniMessageSerializer serializer) {
         return serializer.resolveLegacy(this);
     }
 
@@ -118,7 +118,7 @@ public class CoreMessage implements Message {
     }
 
     @Override
-    public Map<Integer, String> getReplacements() {
+    public @NotNull Map<Integer, String> getReplacements() {
         return replacements;
     }
 
@@ -128,7 +128,7 @@ public class CoreMessage implements Message {
     }
 
     @Override
-    public Set<Map.Entry<Integer, String>> getReplacementSet() {
+    public @NotNull Set<Map.Entry<Integer, String>> getReplacementSet() {
         return Set.copyOf(replacements.entrySet());
     }
 

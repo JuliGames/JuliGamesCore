@@ -123,12 +123,12 @@ public class CoreSQLManager implements SQLManager {
 
     @Override
     @ApiStatus.Experimental
-    public String getData(String key) {
+    public String getData(@NotNull String key) {
         return getJdbi().withExtension(DataDAO.class, extension -> extension.selectBean(key)).getData();
     }
 
     @Override
-    public Handle openHandle() {
+    public @NotNull Handle openHandle() {
         return getJdbi().open();
     }
 
@@ -140,22 +140,22 @@ public class CoreSQLManager implements SQLManager {
     }
 
     @Override
-    public ResultIterable<Map<String, Object>> mapQuery(String sql) {
+    public ResultIterable<Map<String, Object>> mapQuery(@NotNull String sql) {
         return useHandle(handle -> handle.createQuery(sql).mapToMap());
     }
 
     @Override
-    public <T> ResultIterable<Map<String, T>> mapDefinedQuery(String sql, Class<T> valueClass) {
+    public <T> ResultIterable<Map<String, T>> mapDefinedQuery(@NotNull String sql, @NotNull Class<T> valueClass) {
         return useHandle(handle -> handle.createQuery(sql).mapToMap(valueClass));
     }
 
     @Override
-    public Jdbi getCustomJDBI(Connection connection) {
+    public Jdbi getCustomJDBI(@NotNull Connection connection) {
         return Jdbi.create(connection);
     }
 
     @Override
-    public ConfigRegistry getConfig() {
+    public @NotNull ConfigRegistry getConfig() {
         return getJdbi().getConfig().createCopy();
     }
 

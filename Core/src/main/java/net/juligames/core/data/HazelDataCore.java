@@ -25,22 +25,22 @@ public final class HazelDataCore implements HazelDataApi, NativeHazelDataAPI {
      * @return the map from hazelCast
      */
     @Override
-    public <A, B> @NotNull IMap<A, B> getMap(String hazel) {
+    public <A, B> @NotNull IMap<A, B> getMap(@NotNull String hazel) {
         return getHazelcastInstance().getMap(hazel);
     }
 
     @Override
-    public <T> @NotNull IQueue<T> getQueue(String hazel) {
+    public <T> @NotNull IQueue<T> getQueue(@NotNull String hazel) {
         return getHazelcastInstance().getQueue(hazel);
     }
 
     @Override
-    public <T> @NotNull ISet<T> getSet(String hazel) {
+    public <T> @NotNull ISet<T> getSet(@NotNull String hazel) {
         return getHazelcastInstance().getSet(hazel);
     }
 
     @Override
-    public <E> @NotNull IList<E> getList(String hazel) {
+    public <E> @NotNull IList<E> getList(@NotNull String hazel) {
         return getHazelcastInstance().getList(hazel);
     }
 

@@ -17,13 +17,7 @@ import java.util.List;
  */
 @SuppressWarnings("unused")
 @Deprecated
-public class CollectionInterpreter<T> implements IterableInterpreter<T, Collection<T>> {
-
-    private final Interpreter<T> tInterpreter;
-
-    public CollectionInterpreter(Interpreter<T> tInterpreter) {
-        this.tInterpreter = tInterpreter;
-    }
+public record CollectionInterpreter<T>(Interpreter<T> tInterpreter) implements IterableInterpreter<T, Collection<T>> {
 
     @Override
     public @NotNull Collection<T> interpret(final @NotNull String input) throws Exception {
@@ -90,9 +84,5 @@ public class CollectionInterpreter<T> implements IterableInterpreter<T, Collecti
         StringBuilder appender = new StringBuilder();
         appender.append("[").append(tInterpreter.reverse(object)).append("]");
         return appender;
-    }
-
-    public Interpreter<T> tInterpreter() {
-        return tInterpreter;
     }
 }
