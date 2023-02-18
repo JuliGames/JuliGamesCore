@@ -1,19 +1,29 @@
 package net.juligames.core.paper;
 
+import com.hazelcast.core.HazelcastInstance;
+import de.bentzin.tools.misc.SubscribableType;
 import net.juligames.core.Core;
 import net.juligames.core.adventure.AdventureCore;
 import net.juligames.core.api.API;
+import net.juligames.core.api.minigame.BasicMiniGame;
+import net.juligames.core.caching.MessageCaching;
+import net.juligames.core.paper.bstats.Metrics;
 import net.juligames.core.paper.events.ServerBootFinishedEvent;
 import net.juligames.core.paper.minigame.StartCommand;
 import net.juligames.core.paper.notification.EventNotificationListener;
 import net.juligames.core.paper.perms.PermissionCheckReturn;
 import net.juligames.core.paper.plugin.CorePluginLoadManager;
 import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Level;
 
@@ -26,6 +36,12 @@ public class PaperCorePlugin extends JavaPlugin {
     private static PaperCorePlugin plugin;
     private AdventureCore adventureCore;
     private CorePluginLoadManager corePluginLoadManager;
+    private static Metrics metrics;
+
+    @Nullable
+    public static Metrics getBStatsController() {
+        return metrics;
+    }
 
     public static PaperCorePlugin getPlugin() {
         return plugin;
@@ -68,6 +84,11 @@ public class PaperCorePlugin extends JavaPlugin {
             //Try to load miniGame (if present)
             getServer().getScheduler().scheduleSyncDelayedTask(this, () -> Bukkit.getPluginManager().callEvent(new ServerBootFinishedEvent(core))); //experimental use of core
 
+            //BStats
+            {
+                addBStats();
+            }
+
             //CorePlugin
             {
                 final File file = Bukkit.getPluginsFolder();
@@ -105,6 +126,77 @@ public class PaperCorePlugin extends JavaPlugin {
         core.getCoreLogger().info("onDisable() -> Client shutdown!");
         killClient(core);
     }
+
+    private void addBStats() {
+        {
+
+            metrics = new Metrics(this, 17761);
+            metrics.addCustomChart(new Metrics.SimplePie("master", () -> Core.getInstance().getHazelDataApi().getMasterInformation().get("master_version")));
+            metrics.addCustomChart(new Metrics.SimplePie("api", Core.getInstance()::getVersion));
+            metrics.addCustomChart(new Metrics.SimplePie("name", Core::getFullCoreName));
+            metrics.addCustomChart(new Metrics.SimplePie("release", Core::getShortRelease));
+
+
+            metrics.addCustomChart(new Metrics.SimplePie("minigame", () -> {
+                SubscribableType<BasicMiniGame> localMiniGame = Core.getInstance().getLocalMiniGame();
+                boolean present = localMiniGame.isPresent();
+                return present + "";
+            }));
+
+            Metrics.DrilldownPie drilldownPie = new Metrics.DrilldownPie("running_minigame", () -> {
+                SubscribableType<BasicMiniGame> localMiniGame = Core.getInstance().getLocalMiniGame();
+                if (localMiniGame.isPresent()) {
+                    BasicMiniGame miniGame = localMiniGame.get();
+                    Map<String, Map<String, Integer>> top = new HashMap<>();
+
+                    Map<String, Integer> entry = new HashMap<>();
+                    entry.put(miniGame.getVersion(), 1);
+                    top.put(miniGame.getPlainName(), entry);
+
+                    return top;
+                }
+                return null;
+            });
+            metrics.addCustomChart(drilldownPie);
+
+            metrics.addCustomChart(new Metrics.SingleLineChart("backend_objects", () -> {
+                try {
+                    HazelcastInstance hazelcastInstance = Core.getInstance().getOrThrow();
+                    return hazelcastInstance.getDistributedObjects().size();
+                } catch (Exception ignored) {
+                    return null;
+                }
+            }));
+
+            //Caching?
+            Metrics.SimplePie pie = new Metrics.SimplePie("caching", () -> String.valueOf(MessageCaching.enabled));
+            metrics.addCustomChart(pie);
+
+            //Cache Size
+            Metrics.SingleLineChart cacheSize = new Metrics.SingleLineChart("cacheSize", () -> {
+                if(MessageCaching.enabled) {
+                    long l = MessageCaching.messageCache().estimatedSize();
+                    getLogger().info("collecting: cacheSize for BStats");
+                    return Math.toIntExact(l);
+                }
+                return null;
+            });
+            metrics.addCustomChart(cacheSize);
+            metrics.addCustomChart(pie);
+
+
+            metrics.addCustomChart(new Metrics.SimplePie("minigame_developer", () -> {
+                SubscribableType<BasicMiniGame> localMiniGame = Core.getInstance().getLocalMiniGame();
+                if (localMiniGame.isPresent()) {
+                    return localMiniGame.get().getDeveloperName();
+                }
+                return null;
+            }));
+        }
+
+        metrics.shutdown();
+    }
+
 
     private void loadCorePlugins() {
         if (Boolean.getBoolean("corePlugins"))

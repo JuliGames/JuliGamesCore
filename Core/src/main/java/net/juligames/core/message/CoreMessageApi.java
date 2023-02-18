@@ -40,7 +40,7 @@ public class CoreMessageApi implements MessageApi {
     @Override
     @Hardcode
     @ApiStatus.Internal
-    public <R> @NotNull R callMessageExtension(@NotNull ExtensionCallback<R, MessageDAO, RuntimeException> extensionCallback) {
+    public <R> @Nullable R callMessageExtension(@NotNull ExtensionCallback<R, MessageDAO, RuntimeException> extensionCallback) {
         return Core.getInstance().getSQLManager().getJdbi().withExtension(MessageDAO.class, extensionCallback);
     }
 

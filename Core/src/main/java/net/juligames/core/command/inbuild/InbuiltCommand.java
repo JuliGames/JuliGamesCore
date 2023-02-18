@@ -69,7 +69,7 @@ public class InbuiltCommand implements CommandExecutor {
      */
     @SuppressWarnings("SameParameterValue")
     protected boolean accepts(@NotNull String input, String ignored) {
-        return input.startsWith(name + " ");
+        return input.toLowerCase().startsWith(name.toLowerCase() + " ");
     }
 
     @Override

@@ -21,7 +21,7 @@ public class CoreCommandApi implements CommandApi {
 
     public static final String COMMAND_NOTIFICATION_HEADER = "command";
     private static final CoreCommandNotificationListener listener = new CoreCommandNotificationListener();
-    private static final InbuiltCommandManager inbuiltManager = new InbuiltCommandManager();
+    private final InbuiltCommandManager inbuiltManager = new InbuiltCommandManager();
 
     @Nullable
     private Consumer<String> commandHandler;
@@ -90,7 +90,7 @@ public class CoreCommandApi implements CommandApi {
     }
 
     @ApiStatus.Experimental
-    public static InbuiltCommandManager getInbuiltManager() {
+    public InbuiltCommandManager getInbuiltManager() {
         return inbuiltManager;
     }
 
@@ -110,5 +110,11 @@ public class CoreCommandApi implements CommandApi {
             if(!inbuiltManager.handle(command)) stringConsumer.accept(command);
         });
     }
+
+    protected final CoreCommandNotificationListener getListener() {
+        return listener;
+    }
+
+
 
 }

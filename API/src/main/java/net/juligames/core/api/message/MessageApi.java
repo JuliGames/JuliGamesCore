@@ -25,27 +25,27 @@ public interface MessageApi {
     @ApiStatus.Internal
     @ApiStatus.Experimental
     <R>
-    @NotNull R callMessageExtension(@NotNull ExtensionCallback<R, MessageDAO, RuntimeException> extensionCallback);
+    @Nullable R callMessageExtension(@NotNull ExtensionCallback<R, MessageDAO, RuntimeException> extensionCallback);
 
     @ApiStatus.Internal
     @ApiStatus.Experimental
     <R>
-    @NotNull R callLocaleExtension(@NotNull ExtensionCallback<R, LocaleDAO, RuntimeException> extensionCallback);
+    @Nullable R callLocaleExtension(@NotNull ExtensionCallback<R, LocaleDAO, RuntimeException> extensionCallback);
 
     @ApiStatus.Internal
     @ApiStatus.Experimental
     <R>
-    @NotNull R callPreferenceExtension(@NotNull ExtensionCallback<R, PlayerLocalPreferenceDAO, RuntimeException> extensionCallback);
+    @Nullable R callPreferenceExtension(@NotNull ExtensionCallback<R, PlayerLocalPreferenceDAO, RuntimeException> extensionCallback);
 
     @ApiStatus.Internal
     @ApiStatus.Experimental
     <R>
-    @NotNull R callReplacementExtension(@NotNull ExtensionCallback<R, ReplacementDAO, RuntimeException> extensionCallback);
+    @Nullable R callReplacementExtension(@NotNull ExtensionCallback<R, ReplacementDAO, RuntimeException> extensionCallback);
 
     @ApiStatus.Internal
     @ApiStatus.Experimental
     <R>
-    @NotNull R callReplacementTypeExtension(@NotNull ExtensionCallback<R, ReplacementTypeDAO, RuntimeException> extensionCallback);
+    @Nullable R callReplacementTypeExtension(@NotNull ExtensionCallback<R, ReplacementTypeDAO, RuntimeException> extensionCallback);
 
     //get
     @NotNull Message getMessage(@NotNull String messageKey, @NotNull Locale locale);
