@@ -3,9 +3,11 @@ package net.juligames.core.api.jdbi;
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.core.config.ConfigRegistry;
+import org.jdbi.v3.core.extension.ExtensionCallback;
 import org.jdbi.v3.core.result.ResultIterable;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.sql.Connection;
 import java.util.Map;
@@ -52,6 +54,12 @@ public interface SQLManager {
      * @see SQLManager#openHandle()
      */
     <R> R useHandle(@NotNull Function<Handle, R> handleFunction);
+
+    /**
+     * @throws NullPointerException if data is null, or execution failed
+     */
+    @Nullable
+    <T,R> R withExtension(Class<T> dao, ExtensionCallback<R,T,Exception> extensionCallback);
 
     @ApiStatus.Experimental
     ResultIterable<Map<String, Object>> mapQuery(@NotNull String sql);

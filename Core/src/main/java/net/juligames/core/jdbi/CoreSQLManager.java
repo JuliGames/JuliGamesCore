@@ -6,13 +6,16 @@ import de.bentzin.tools.logging.Logger;
 import net.juligames.core.Core;
 import net.juligames.core.api.jdbi.*;
 import net.juligames.core.api.jdbi.mapper.bean.LocaleBean;
+import net.juligames.core.api.misc.ThrowableDebug;
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.core.config.ConfigRegistry;
+import org.jdbi.v3.core.extension.ExtensionCallback;
 import org.jdbi.v3.core.result.ResultIterable;
 import org.jdbi.v3.sqlobject.SqlObjectPlugin;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.sql.Connection;
 import java.util.List;
@@ -136,6 +139,18 @@ public class CoreSQLManager implements SQLManager {
     public <R> R useHandle(@NotNull Function<Handle, R> handleFunction) {
         try (Handle handle = openHandle()) {
             return handleFunction.apply(handle);
+        }
+    }
+
+    @Override
+    @Nullable
+    public <T, R> R withExtension(Class<T> dao, ExtensionCallback<R, T, Exception> extensionCallback) {
+        try {
+            return jdbi.withExtension(dao,extensionCallback);
+        } catch (Exception e) {
+            getLogger().warning("failed to execute extension: " + e.getMessage());
+            ThrowableDebug.debug(e);
+            return null;
         }
     }
 

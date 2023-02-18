@@ -5,6 +5,7 @@ import de.bentzin.tools.misc.SubscribableType;
 import net.juligames.core.Core;
 import net.juligames.core.adventure.AdventureCore;
 import net.juligames.core.api.API;
+import net.juligames.core.api.jdbi.MessageDAO;
 import net.juligames.core.api.minigame.BasicMiniGame;
 import net.juligames.core.caching.MessageCaching;
 import net.juligames.core.paper.bstats.Metrics;
@@ -125,6 +126,7 @@ public class PaperCorePlugin extends JavaPlugin {
         Core core = Core.getInstance();
         core.getCoreLogger().info("onDisable() -> Client shutdown!");
         killClient(core);
+        metrics.shutdown();
     }
 
     private void addBStats() {
@@ -136,6 +138,13 @@ public class PaperCorePlugin extends JavaPlugin {
             metrics.addCustomChart(new Metrics.SimplePie("name", Core::getFullCoreName));
             metrics.addCustomChart(new Metrics.SimplePie("release", Core::getShortRelease));
 
+            metrics.addCustomChart(new Metrics.SingleLineChart("messages", () -> {
+                //number of messages in DB
+                Integer size = Core.getInstance().getSQLManager().withExtension(MessageDAO.class,
+                        extension -> extension.listAllBeans().size());
+                Core.getInstance().getCoreLogger().debug("scanned " + size + " messages for BStats");
+                return size;
+            }));
 
             metrics.addCustomChart(new Metrics.SimplePie("minigame", () -> {
                 SubscribableType<BasicMiniGame> localMiniGame = Core.getInstance().getLocalMiniGame();
@@ -192,9 +201,7 @@ public class PaperCorePlugin extends JavaPlugin {
                 }
                 return null;
             }));
-        }
-
-        metrics.shutdown();
+        };
     }
 
 
