@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
  * @author Ture Bentzin
  * 16.11.2022
  */
+@SuppressWarnings("unused")
 public final class CoreClusterApi implements ClusterApi {
 
     @Override
@@ -145,15 +146,17 @@ public final class CoreClusterApi implements ClusterApi {
      * @see #getLocalUUID()
      * @see #getIdentifications()
      * @see #getLocalIdentification()
-     * @param identification
+     * @param identification the new identification
      */
     public void identify(@Nullable String identification) {
         if(identification == null){
             getIdentifications().remove(getLocalUUID());
+            return;
         }
         getIdentifications().set(getLocalUUID(),identification);
     }
 
+    @SuppressWarnings("ProtectedMemberInFinalClass")
     protected @NotNull IMap<UUID,String> getIdentifications() {
         return Core.getInstance().getHazelDataApi().getMap("server_identification");
     }
