@@ -14,6 +14,7 @@ import java.util.Map;
  * @author Ture Bentzin
  * 16.11.2022
  */
+@SuppressWarnings("ClassCanBeRecord")
 public class MasterHazelInformationProvider {
 
     public static final String INFORMATION_MAP_NAME = "master_information";

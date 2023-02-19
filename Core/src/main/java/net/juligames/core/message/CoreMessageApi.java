@@ -26,6 +26,7 @@ import java.util.stream.Stream;
  * @author Ture Bentzin
  * 19.11.2022
  */
+@SuppressWarnings("DeprecatedIsStillUsed")
 public class CoreMessageApi implements MessageApi {
 
     //TODO switch all Collections / Streams to ? extends X for performance reasons (maybe 1.2?)
@@ -90,8 +91,8 @@ public class CoreMessageApi implements MessageApi {
     }
 
     /**
-     * @param messageKey
-     * @param locale
+     * @param messageKey the key
+     * @param locale the locale
      * @return
      */
     @Override
@@ -225,10 +226,9 @@ public class CoreMessageApi implements MessageApi {
     public @NotNull Collection<CoreMessage> getAll(String... replacements) {
         List<MessageBean> messageBeans = callMessageExtension(MessageDAO::listAllBeans);
         messageBeans.forEach(this::cache);
-        List<CoreMessage> coreMessages = messageBeans.stream().map(CoreMessage::new).toList();
         //coreMessages.forEach(coreMessage -> coreMessage.doWithMiniMessage(insertReplacements(replacements)));
         //TODO messages replacements store to Map (currently set)
-        return coreMessages;
+        return messageBeans.stream().map(CoreMessage::new).toList();
     }
 
     @Override
@@ -511,7 +511,7 @@ public class CoreMessageApi implements MessageApi {
         Collection<Message> messages = new ArrayList<>();
         for (String messageKey : messageKeys) {
             for (MessageRecipient messageRecipient : messageRecipients) {
-                CoreMessage message = getMessage(messageKey, messageRecipient.supplyLocaleOrDefault()); //no fallback?! oh fuck this could get interesting
+                CoreMessage message = getMessage(messageKey, messageRecipient.supplyLocaleOrDefault()); //no fallback?! oh, fuck this could get interesting | This may cause NullPointerException - let us hope it does not...
                 insertReplacements(message, replacements);
                 if (messages.stream().noneMatch(message1 -> message1.getMessageData().getMessageKey().equals(message.getMessageData().getMessageKey()))) {
                     messages.add(message);
@@ -629,7 +629,6 @@ public class CoreMessageApi implements MessageApi {
     @Contract(pure = true)
     @Deprecated
     private @NotNull Function<String, String> insertReplacements(@Nullable String... replacements) {
-        //noinspection ConstantConditions for 100% security
         if (replacements == null) {
             return miniMessage -> miniMessage;
         }
@@ -637,11 +636,6 @@ public class CoreMessageApi implements MessageApi {
             Core.getInstance().getCoreLogger().debug("insert start: " + miniMessage);
             for (int i = 0; i < replacements.length; i++) {
                 if (replacements[i] == null) replacements[i] = "null";
-                /* if(replacements[i].contains("</blank>")) {
-                    Core.getInstance().getCoreLogger().warning("detected illegal </blank> in replacer! " + replacements[i] +
-                            " at [" + i +"]"  + " for message \"" + miniMessage + "\" ");
-                }
-                 */
                 //TODO replacements[i] = replacements[i].replace("</blank>","blank");
                 miniMessage = miniMessage.replace(buildPattern(i), replacements[i]);
                 Core.getInstance().getCoreLogger().debug("insert step: " + i + " :" + miniMessage);
@@ -794,8 +788,8 @@ public class CoreMessageApi implements MessageApi {
     /**
      * Can be used to parse input safe to locale
      *
-     * @param input
-     * @return
+     * @param input the input to parse
+     * @return the locale parsed from the given input
      */
     public Locale parseFromString(@NotNull String input) {
         String[] s = input.split("_");

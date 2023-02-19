@@ -118,18 +118,6 @@ public final class CorePluginClassLoader extends URLClassLoader { // Spigot
         } catch (ClassNotFoundException ignored) {
         }
 
-        /*
-
-
-        if (checkLibraries && libraryLoader != null) {
-            try {
-                return libraryLoader.loadClass(name);
-            } catch (ClassNotFoundException ex) {
-            }
-        }
-
-         */
-
         if (checkGlobal) {
             // This ignores the libraries of other plugins, unless they are transitive dependencies.
             Class<?> result = loader.getClassByName(name, resolve, description, this);  // Paper - prioritize self
@@ -185,7 +173,7 @@ public final class CorePluginClassLoader extends URLClassLoader { // Spigot
                 int dot = name.lastIndexOf('.');
                 if (dot != -1) {
                     String pkgName = name.substring(0, dot);
-                    if (getPackage(pkgName) == null) {
+                    if (getDefinedPackage(pkgName) == null) {
                         try {
                             if (manifest != null) {
                                 definePackage(pkgName, manifest, url);
@@ -193,7 +181,7 @@ public final class CorePluginClassLoader extends URLClassLoader { // Spigot
                                 definePackage(pkgName, null, null, null, null, null, null, null);
                             }
                         } catch (IllegalArgumentException ex) {
-                            if (getPackage(pkgName) == null) {
+                            if (getDefinedPackage(pkgName) == null) {
                                 throw new IllegalStateException("Cannot find package " + pkgName);
                             }
                         }

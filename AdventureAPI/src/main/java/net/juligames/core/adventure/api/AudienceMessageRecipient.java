@@ -22,7 +22,7 @@ import java.util.function.Supplier;
  */
 public class AudienceMessageRecipient implements MessageRecipient {
 
-    public static @NotNull Supplier<String> defaultLocaleSupplier = () -> API.get().getHazelDataApi().getMasterInformation().get("default_locale");
+    public static final @NotNull Supplier<String> defaultLocaleSupplier = () -> API.get().getHazelDataApi().getMasterInformation().get("default_locale");
 
     private final @NotNull String name;
     private final @NotNull Supplier<String> locale;
@@ -79,7 +79,7 @@ public class AudienceMessageRecipient implements MessageRecipient {
     /**
      * delivers a miniMessage string to the recipient
      *
-     * @param miniMessage
+     * @param miniMessage the message
      */
     @Override
     public void deliver(@NotNull String miniMessage) {

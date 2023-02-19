@@ -15,8 +15,6 @@ import net.juligames.core.paper.notification.EventNotificationListener;
 import net.juligames.core.paper.perms.PermissionCheckReturn;
 import net.juligames.core.paper.plugin.CorePluginLoadManager;
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -201,7 +199,7 @@ public class PaperCorePlugin extends JavaPlugin {
                 }
                 return null;
             }));
-        };
+        }
     }
 
 

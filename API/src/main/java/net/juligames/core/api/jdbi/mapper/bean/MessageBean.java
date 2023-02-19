@@ -54,6 +54,7 @@ public class MessageBean implements DBMessage {
         this.messageKey = messageKey;
     }
 
+    @SuppressWarnings("MethodDoesntCallSuperMethod")
     @Override
     public DBMessage clone() {
         return new MessageBean(messageKey, locale, miniMessage);

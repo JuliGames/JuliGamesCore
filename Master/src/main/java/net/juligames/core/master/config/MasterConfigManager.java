@@ -20,6 +20,7 @@ import java.util.Properties;
  * @author Ture Bentzin
  * 27.11.2022
  */
+@SuppressWarnings("removal")
 public class MasterConfigManager {
 
     public static final File CONFIG_FOLDER;
@@ -54,9 +55,6 @@ public class MasterConfigManager {
             }
         }
 
-        // for (String configuration : configurations) {
-        //     store(configuration);
-        // }
     }
 
     public void store(String hazel) {

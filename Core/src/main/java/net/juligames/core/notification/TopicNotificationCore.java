@@ -34,7 +34,7 @@ public class TopicNotificationCore {
     }
 
     public void subscribeOnUUID(@NotNull UUID uuid, MessageListener<SerializedNotification> notificationListener) {
-        hazelcastInstance.<SerializedNotification>getTopic("notify:" + uuid.toString()).
+        hazelcastInstance.<SerializedNotification>getTopic("notify:" + uuid).
                 addMessageListener(notificationListener);
     }
 
