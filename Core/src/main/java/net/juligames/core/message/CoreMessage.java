@@ -132,6 +132,7 @@ public class CoreMessage implements Message {
         return Set.copyOf(replacements.entrySet());
     }
 
+    @SuppressWarnings("MethodDoesntCallSuperMethod")
     @Override
     public Message clone() {
         return new CoreMessage(messageData.clone(), replacements);

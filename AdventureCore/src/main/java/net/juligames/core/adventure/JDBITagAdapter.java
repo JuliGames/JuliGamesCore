@@ -12,7 +12,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.tag.Tag;
-import org.intellij.lang.annotations.Subst;
 import org.jdbi.v3.core.Jdbi;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -26,6 +25,7 @@ public class JDBITagAdapter {
 
     public static final Logger logger = API.get().getAPILogger().adopt("adapter");
 
+    @SuppressWarnings("PatternValidation")
     public static Tag fromJDBI(@NotNull DBReplacement replacement) {
         String s = replacement.getReplacementType();
         ReplacementType replacementType = ReplacementType.valueOf(s);

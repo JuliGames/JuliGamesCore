@@ -21,7 +21,7 @@ import java.util.function.*;
  * 26.11.2022
  * @implNote RESERVED KEYS: "configuration_header", "configuration_name"
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "DuplicatedCode"})
 public class CoreConfiguration implements Configuration {
 
     private final String name;
