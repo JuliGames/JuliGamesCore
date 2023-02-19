@@ -17,7 +17,7 @@ public class InbuiltCommand implements CommandExecutor {
     private final String name;
     private final String description;
     private final String since;
-    private  CommandExecutor executor;
+    private CommandExecutor executor;
 
     public InbuiltCommand(String name, String description, String since, @Nullable CommandExecutor executor) {
         this.name = name;

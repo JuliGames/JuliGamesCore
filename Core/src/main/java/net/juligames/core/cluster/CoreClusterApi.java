@@ -142,21 +142,22 @@ public final class CoreClusterApi implements ClusterApi {
 
     /**
      * Set a new identification for this current UUID
+     *
+     * @param identification the new identification
      * @see #getLocalUUID()
      * @see #getIdentifications()
      * @see #getLocalIdentification()
-     * @param identification the new identification
      */
     public void identify(@Nullable String identification) {
-        if(identification == null){
+        if (identification == null) {
             getIdentifications().remove(getLocalUUID());
             return;
         }
-        getIdentifications().set(getLocalUUID(),identification);
+        getIdentifications().set(getLocalUUID(), identification);
     }
 
     @SuppressWarnings("ProtectedMemberInFinalClass")
-    protected @NotNull IMap<UUID,String> getIdentifications() {
+    protected @NotNull IMap<UUID, String> getIdentifications() {
         return Core.getInstance().getHazelDataApi().getMap("server_identification");
     }
 

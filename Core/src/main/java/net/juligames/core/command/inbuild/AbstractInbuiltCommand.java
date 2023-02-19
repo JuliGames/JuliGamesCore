@@ -30,7 +30,7 @@ public abstract class AbstractInbuiltCommand extends InbuiltCommand {
      * 17.02.2023
      */
     public AbstractInbuiltCommand(String name, String description) {
-        super(name, description, Core.CORE_VERSION_NUMBER , null);
+        super(name, description, Core.CORE_VERSION_NUMBER, null);
         setExecutor(this);
     }
 

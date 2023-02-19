@@ -23,14 +23,14 @@ public interface CommandExecutor {
     boolean execute(@NotNull InbuiltCommand command, @NotNull String input);
 
     default void executeAndForget(@NotNull InbuiltCommand command, @NotNull String input) {
-        execute(command,input);
+        execute(command, input);
     }
 
-    default void executeAndThen(@NotNull InbuiltCommand command, @NotNull String input, @NotNull TriConsumer<InbuiltCommand,String,Boolean> triConsumer) {
-        triConsumer.consume(command,input, execute(command,input));
+    default void executeAndThen(@NotNull InbuiltCommand command, @NotNull String input, @NotNull TriConsumer<InbuiltCommand, String, Boolean> triConsumer) {
+        triConsumer.consume(command, input, execute(command, input));
     }
 
     default void executeAndComplete(@NotNull InbuiltCommand command, @NotNull String input, @NotNull CompletableFuture<Boolean> completableFuture) {
-       completableFuture.complete(execute(command,input));
+        completableFuture.complete(execute(command, input));
     }
 }

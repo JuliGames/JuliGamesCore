@@ -742,7 +742,7 @@ public class OfflineConfiguration implements Configuration {
 
     @Override
     public void set(@NotNull BasicPair<String, String> basicPair) {
-        setString(basicPair.getFirst(),basicPair.getSecond());
+        setString(basicPair.getFirst(), basicPair.getSecond());
     }
 
     @Override

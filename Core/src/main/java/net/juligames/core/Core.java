@@ -165,21 +165,21 @@ public final class Core implements API {
 
 
         {
-            if(!Boolean.getBoolean("acknowledgeUnsafeMasterCheck")){
-            coreLogger.info("checking compatibility with master..");
-            final String masterVersion = getHazelDataApi().getMasterInformation().get("master_version");
+            if (!Boolean.getBoolean("acknowledgeUnsafeMasterCheck")) {
+                coreLogger.info("checking compatibility with master..");
+                final String masterVersion = getHazelDataApi().getMasterInformation().get("master_version");
 
-            if (!getVersion().equals(masterVersion)) {
-                coreLogger.warning("********************************************************");
-                coreLogger.warning("Your local version is not compatible with your Master!!!");
-                coreLogger.warning("Master is at: " + masterVersion);
-                coreLogger.warning("You are at: " + getVersion());
-                coreLogger.warning("You will not receive support for this unsecure combination!");
-                coreLogger.warning("You can disable this check by setting \"acknowledgeUnsafeMasterCheck\" \n" +
-                        "to true!");
-                coreLogger.warning("********************************************************");
+                if (!getVersion().equals(masterVersion)) {
+                    coreLogger.warning("********************************************************");
+                    coreLogger.warning("Your local version is not compatible with your Master!!!");
+                    coreLogger.warning("Master is at: " + masterVersion);
+                    coreLogger.warning("You are at: " + getVersion());
+                    coreLogger.warning("You will not receive support for this unsecure combination!");
+                    coreLogger.warning("You can disable this check by setting \"acknowledgeUnsafeMasterCheck\" \n" +
+                            "to true!");
+                    coreLogger.warning("********************************************************");
+                }
             }
-        }
         }
 
         logger.info("hooking to shutdown...");

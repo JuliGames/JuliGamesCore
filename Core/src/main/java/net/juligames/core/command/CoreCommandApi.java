@@ -107,14 +107,13 @@ public class CoreCommandApi implements CommandApi {
             return;
         }
         getCommandHandler().ifPresent(stringConsumer -> {
-            if(!inbuiltManager.handle(command)) stringConsumer.accept(command);
+            if (!inbuiltManager.handle(command)) stringConsumer.accept(command);
         });
     }
 
     protected final CoreCommandNotificationListener getListener() {
         return listener;
     }
-
 
 
 }

@@ -146,7 +146,7 @@ public class CoreSQLManager implements SQLManager {
     @Nullable
     public <T, R> R withExtension(Class<T> dao, ExtensionCallback<R, T, Exception> extensionCallback) {
         try {
-            return jdbi.withExtension(dao,extensionCallback);
+            return jdbi.withExtension(dao, extensionCallback);
         } catch (Exception e) {
             getLogger().warning("failed to execute extension: " + e.getMessage());
             ThrowableDebug.debug(e);

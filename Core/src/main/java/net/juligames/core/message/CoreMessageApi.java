@@ -92,7 +92,7 @@ public class CoreMessageApi implements MessageApi {
 
     /**
      * @param messageKey the key
-     * @param locale the locale
+     * @param locale     the locale
      * @return
      */
     @Override

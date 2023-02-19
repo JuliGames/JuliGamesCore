@@ -170,8 +170,7 @@ public class MasterConfigManager {
         if (!database.exists()) {
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(database))) {
                 writer.write(str);
-            }
-            catch(IOException e) {
+            } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }

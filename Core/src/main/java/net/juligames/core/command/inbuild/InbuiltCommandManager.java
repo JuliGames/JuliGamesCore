@@ -18,9 +18,9 @@ import java.util.regex.Pattern;
 @ApiStatus.Experimental
 public class InbuiltCommandManager extends Registerator<InbuiltCommand> {
 
-    static Logger staticLogger;
     final static String PREFIX = "inbuild:";
-    private static final String REGEX =  PREFIX + "([A-Za-z])";
+    private static final String REGEX = PREFIX + "([A-Za-z])";
+    static Logger staticLogger;
 
     public InbuiltCommandManager() {
         staticLogger = Core.getInstance().getCoreLogger().adopt("inbuiltCmd");
@@ -31,32 +31,31 @@ public class InbuiltCommandManager extends Registerator<InbuiltCommand> {
         }
     }
 
-    private void registerInternalCommands() throws DuplicateEntryException {
-        register(new ShutdownCommand());
-    }
-
-    public boolean handle(@NotNull String command) {
-        if(check(command)) {
-            return onCommand(command.replaceFirst(PREFIX,""));
-        }
-        return false;
-    }
-
-
-    protected boolean onCommand(String command) {
-        for (InbuiltCommand index : getIndex()) {
-            if(index.acceptsWithCurrent(command)) {
-                return index.execute(index,command);
-            }
-        }
-        return false;
-    }
-
     //https://rb.gy/vuzh4z
     public static boolean check(final String input) {
         final Pattern pattern = Pattern.compile(REGEX, Pattern.CASE_INSENSITIVE);
         final Matcher matcher = pattern.matcher(input);
         return matcher.matches();
+    }
+
+    private void registerInternalCommands() throws DuplicateEntryException {
+        register(new ShutdownCommand());
+    }
+
+    public boolean handle(@NotNull String command) {
+        if (check(command)) {
+            return onCommand(command.replaceFirst(PREFIX, ""));
+        }
+        return false;
+    }
+
+    protected boolean onCommand(String command) {
+        for (InbuiltCommand index : getIndex()) {
+            if (index.acceptsWithCurrent(command)) {
+                return index.execute(index, command);
+            }
+        }
+        return false;
     }
 
 }

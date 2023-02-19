@@ -33,9 +33,9 @@ import java.util.logging.Level;
 public class PaperCorePlugin extends JavaPlugin {
 
     private static PaperCorePlugin plugin;
+    private static Metrics metrics;
     private AdventureCore adventureCore;
     private CorePluginLoadManager corePluginLoadManager;
-    private static Metrics metrics;
 
     @Nullable
     public static Metrics getBStatsController() {
@@ -181,7 +181,7 @@ public class PaperCorePlugin extends JavaPlugin {
 
             //Cache Size
             Metrics.SingleLineChart cacheSize = new Metrics.SingleLineChart("cacheSize", () -> {
-                if(MessageCaching.enabled) {
+                if (MessageCaching.enabled) {
                     long l = MessageCaching.messageCache().estimatedSize();
                     getLogger().info("collecting: cacheSize for BStats");
                     return Math.toIntExact(l);

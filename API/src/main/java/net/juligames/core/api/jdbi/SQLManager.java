@@ -58,8 +58,7 @@ public interface SQLManager {
     /**
      * @throws NullPointerException if data is null, or execution failed
      */
-    @Nullable
-    <T,R> R withExtension(Class<T> dao, ExtensionCallback<R,T,Exception> extensionCallback);
+    @Nullable <T, R> R withExtension(Class<T> dao, ExtensionCallback<R, T, Exception> extensionCallback);
 
     @ApiStatus.Experimental
     ResultIterable<Map<String, Object>> mapQuery(@NotNull String sql);

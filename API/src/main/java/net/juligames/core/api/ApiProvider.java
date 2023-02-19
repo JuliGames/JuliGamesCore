@@ -18,9 +18,9 @@ import java.util.concurrent.Future;
 @ApiStatus.Internal
 public class ApiProvider {
 
+    private static final @NotNull SubscribableType<API> subscribableType = new SubscribableType<>();
     public static @Nullable API CURRENT_API;
     private static @NotNull CompletableFuture<API> completableFuture = new CompletableFuture<>();
-    private static final @NotNull SubscribableType<API> subscribableType = new SubscribableType<>();
 
     @ApiStatus.Internal
     public static void insert(@Nullable API api) {

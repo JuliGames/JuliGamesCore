@@ -54,7 +54,7 @@ public interface ConfigurationAPI {
      * @param <T>         Type
      * @return a {@link ConfigWriter} ready to write the split data
      */
-    @NotNull <T> ConfigWriter splitToWriter(@NotNull Collection<T> collection,@NotNull  Interpreter<T> interpreter);
+    @NotNull <T> ConfigWriter splitToWriter(@NotNull Collection<T> collection, @NotNull Interpreter<T> interpreter);
 
     /**
      * This will split and write the Collection using {@link #splitToWriter(Collection, Interpreter)}
@@ -93,7 +93,7 @@ public interface ConfigurationAPI {
      * @return a {@link java.util.Collection} with all Ts that where read successfully
      */
     @ApiStatus.Experimental
-    @NotNull <T> Collection<T> tryReadSplitCollection(@NotNull Iterable<String> strings,@NotNull Interpreter<T> interpreter);
+    @NotNull <T> Collection<T> tryReadSplitCollection(@NotNull Iterable<String> strings, @NotNull Interpreter<T> interpreter);
 
 
     /**

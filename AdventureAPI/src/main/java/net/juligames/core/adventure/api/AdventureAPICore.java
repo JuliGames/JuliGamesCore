@@ -14,7 +14,7 @@ public class AdventureAPICore {
     public static @Nullable AdventureAPI adventureAPI;
 
     public static @NotNull AdventureAPI getAPI() {
-        if(adventureAPI == null) {
+        if (adventureAPI == null) {
             throw new APIException();
         }
         return adventureAPI;

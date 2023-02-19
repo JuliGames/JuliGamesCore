@@ -15,6 +15,6 @@ public class EventNotificationListener implements NotificationListener {
     @Override
     public void onNotification(@NotNull Notification notification) {
         Bukkit.getScheduler().runTask(PaperCorePlugin.getPlugin(),
-                () ->  Bukkit.getPluginManager().callEvent(new CoreNotificationEvent(notification)));
+                () -> Bukkit.getPluginManager().callEvent(new CoreNotificationEvent(notification)));
     }
 }

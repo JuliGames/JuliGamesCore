@@ -19,7 +19,8 @@ import java.util.*;
 @SuppressWarnings("unused")
 public class ConfigurationYAMLConverter {
 
-    private ConfigurationYAMLConverter() {}
+    private ConfigurationYAMLConverter() {
+    }
 
     //Core -> Bukkit
     public static @NotNull YamlConfiguration readAndInsert(Configuration configuration, File file) {
@@ -51,6 +52,7 @@ public class ConfigurationYAMLConverter {
 
     /**
      * yamlConfiguration needs to contain configuration_name
+     *
      * @return a new or existing configuration
      */
     public static @NotNull Configuration convert(YamlConfiguration yamlConfiguration) {
