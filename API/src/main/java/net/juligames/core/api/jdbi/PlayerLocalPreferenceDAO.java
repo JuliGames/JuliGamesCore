@@ -15,6 +15,7 @@ import java.util.UUID;
  * @author Ture Bentzin
  * 19.11.2022
  */
+@Deprecated(forRemoval = true)
 @RegisterBeanMapper(PlayerLocalPreferenceBean.class)
 public interface PlayerLocalPreferenceDAO {
 

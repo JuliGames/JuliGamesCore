@@ -80,12 +80,14 @@ public class CoreSQLManager implements SQLManager {
 
         //Currently not automatically used
         //player_locale_preference
-        logger.info("creating: player_locale_preference");
-        jdbi.withExtension(PlayerLocalPreferenceDAO.class, extension -> {
-            extension.createTable();
-            return null;
-        });
-        logger.info("created: player_locale_preference");
+        if(Boolean.getBoolean("legacyPlayerLocaleReference")) {
+            logger.info("creating: player_locale_preference");
+            jdbi.withExtension(PlayerLocalPreferenceDAO.class, extension -> {
+                extension.createTable();
+                return null;
+            });
+            logger.info("created: player_locale_preference");
+        }
 
 
         //replacementType
