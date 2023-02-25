@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
  * 25.02.2023
  */
 public interface LegacyMessageType{
-    @NotNull LegacyMessageType AMPERSAND = () -> '$';
+    @NotNull LegacyMessageType AMPERSAND = () -> '&';
     @NotNull LegacyMessageType SECTION = () -> '§';
 
     @Contract(pure = true)
