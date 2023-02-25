@@ -3,7 +3,10 @@ package net.juligames.core.adventure;
 import de.bentzin.tools.logging.Logger;
 import net.juligames.core.adventure.api.AdventureAPI;
 import net.juligames.core.adventure.api.AdventureAPICore;
+import net.juligames.core.adventure.api.LegacyMessageDealer;
 import net.juligames.core.api.API;
+import net.juligames.core.api.message.LegacyMessageType;
+import net.juligames.core.api.message.MessageApi;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -58,6 +61,19 @@ public class AdventureCore implements AdventureAPI {
     @Override
     public @NotNull CoreAdventureTagManager getAdventureTagManager() {
         return adventureTagManager;
+    }
+
+    @Override
+    public void registerLegacyMessage(@NotNull MessageApi messageApi, @NotNull String key, @NotNull String input,
+                                      @NotNull LegacyMessageType legacyMessageType) {
+        LegacyMessageDealer legacyMessageDealer = new LegacyMessageDealer(legacyMessageType);
+        messageApi.registerThirdPartyMessage(key,input,legacyMessageDealer);
+    }
+
+    @Override
+    public void registerLegacyMessage(@NotNull String key, @NotNull String input,
+                                      @NotNull LegacyMessageType legacyMessageType) {
+        registerLegacyMessage(API.get().getMessageApi(), key, input, legacyMessageType);
     }
 
     @ApiStatus.Internal

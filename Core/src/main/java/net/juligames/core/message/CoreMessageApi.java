@@ -55,13 +55,6 @@ public class CoreMessageApi implements MessageApi {
     @Override
     @Hardcode
     @ApiStatus.Internal
-    public <R> @NotNull R callPreferenceExtension(@NotNull ExtensionCallback<R, PlayerLocalPreferenceDAO, RuntimeException> extensionCallback) {
-        return Core.getInstance().getSQLManager().getJdbi().withExtension(PlayerLocalPreferenceDAO.class, extensionCallback);
-    }
-
-    @Override
-    @Hardcode
-    @ApiStatus.Internal
     public <R> @NotNull R callReplacementExtension(@NotNull ExtensionCallback<R, ReplacementDAO, RuntimeException> extensionCallback) {
         return Core.getInstance().getSQLManager().getJdbi().withExtension(ReplacementDAO.class, extensionCallback);
     }
@@ -259,6 +252,16 @@ public class CoreMessageApi implements MessageApi {
             extension.insert(new MessageBean(messageKey, defaultLocale(), defaultMiniMessage));
             return null;
         });
+    }
+
+    @Override
+    public void registerThirdPartyMessage(@NotNull String messageKey, @NotNull String legacyMessage, @NotNull CustomMessageDealer dealer) {
+        try {
+            String miniMessage = dealer.apply(messageKey, legacyMessage);
+            registerMessage(messageKey, miniMessage);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to deal with thirdPartyMessage", e);
+        }
     }
 
     @Override

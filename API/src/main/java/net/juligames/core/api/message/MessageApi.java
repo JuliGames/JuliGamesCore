@@ -1,6 +1,7 @@
 package net.juligames.core.api.message;
 
 import net.juligames.core.api.jdbi.*;
+import org.checkerframework.checker.units.qual.N;
 import org.jdbi.v3.core.extension.ExtensionCallback;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -31,11 +32,6 @@ public interface MessageApi {
     @ApiStatus.Experimental
     <R>
     @Nullable R callLocaleExtension(@NotNull ExtensionCallback<R, LocaleDAO, RuntimeException> extensionCallback);
-
-    @ApiStatus.Internal
-    @ApiStatus.Experimental
-    <R>
-    @Nullable R callPreferenceExtension(@NotNull ExtensionCallback<R, PlayerLocalPreferenceDAO, RuntimeException> extensionCallback);
 
     @ApiStatus.Internal
     @ApiStatus.Experimental
@@ -109,6 +105,14 @@ public interface MessageApi {
 
     void registerMessage(@NotNull String messageKey, @NotNull String defaultMiniMessage);
 
+    /**
+     * If you want to register a legacyMessage please use the provided method in the AdventureAPI
+     * @param messageKey the ley
+     * @param thirdPartyMessage the input
+     * @param dealer the dealer
+     */
+    void registerThirdPartyMessage(@NotNull String messageKey, @NotNull String thirdPartyMessage, @NotNull CustomMessageDealer dealer);
+
     boolean hasMessage(@NotNull String messageKey);
 
     boolean hasMessage(@NotNull String messageKey, @NotNull String locale);
@@ -116,6 +120,8 @@ public interface MessageApi {
     boolean hasMessage(@NotNull String messageKey, @NotNull Locale locale);
 
     boolean hasMessage(@NotNull String messageKey, @NotNull DBLocale locale);
+
+    //send
 
     @NotNull MessagePostScript sendMessage(@NotNull String messageKey, @NotNull MessageRecipient messageRecipient);
 

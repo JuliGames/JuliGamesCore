@@ -46,4 +46,8 @@ public interface MiniMessageSerializer {
     @Deprecated
     @NotNull
     String resolveLegacy(@NotNull String miniMessage);
+
+    @NotNull String translateLegacyToMiniMessage(@NotNull String ampersand);
+
+    @NotNull String translateLegacySectionToMiniMessage(@NotNull String section);
 }

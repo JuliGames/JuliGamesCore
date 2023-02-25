@@ -5,6 +5,7 @@ import net.juligames.core.api.API;
 import net.juligames.core.api.jdbi.DBReplacement;
 import net.juligames.core.api.jdbi.ReplacementDAO;
 import net.juligames.core.api.message.Message;
+import net.juligames.core.api.message.MiniMessageSerializer;
 import net.juligames.core.api.message.PatternType;
 import net.juligames.core.api.message.TagManager;
 import net.kyori.adventure.text.Component;
@@ -130,6 +131,16 @@ public final class CoreAdventureTagManager implements TagManager, AdventureTagMa
         return LegacyComponentSerializer.legacyAmpersand().serialize(deserialize);
     }
 
+    @Override
+    public @NotNull String translateLegacyToMiniMessage(@NotNull String ampersand) {
+        return fromComponent(LegacyComponentSerializer.legacyAmpersand().deserialize(ampersand));
+    }
+
+    @Override
+    public @NotNull String translateLegacySectionToMiniMessage(@NotNull String section) {
+        return fromComponent(LegacyComponentSerializer.legacySection().deserialize(section));
+    }
+
 
     @Override
     @ApiStatus.Internal
@@ -140,5 +151,10 @@ public final class CoreAdventureTagManager implements TagManager, AdventureTagMa
         for (DBReplacement replacement : dbReplacements) {
             register(replacement);
         }
+    }
+
+    @Override
+    public @NotNull String fromComponent(@NotNull Component component) {
+        return getMiniMessage().serialize(component);
     }
 }
