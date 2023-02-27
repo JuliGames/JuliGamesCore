@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
  * 25.02.2023
  */
  @ApiStatus.Experimental
+@ApiStatus.AvailableSince("1.4")
 public record LegacyMessageDealer(@NotNull LegacyMessageType legacyMessageType) implements CustomMessageDealer {
 
     @Override

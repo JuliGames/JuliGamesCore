@@ -27,9 +27,11 @@ public interface AdventureAPI {
     @NotNull AdventureTagManager getAdventureTagManager();
 
     @Deprecated
+    @ApiStatus.AvailableSince("1.4")
     void registerLegacyMessage(MessageApi messageApi, @NotNull String key, @NotNull String input, @NotNull LegacyMessageType legacyMessageType);
 
     @Deprecated
+    @ApiStatus.AvailableSince("1.4")
     void registerLegacyMessage(@NotNull String key, @NotNull String input, @NotNull LegacyMessageType legacyMessageType);
 
 }

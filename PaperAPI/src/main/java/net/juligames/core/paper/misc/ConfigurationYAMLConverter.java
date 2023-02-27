@@ -17,6 +17,7 @@ import java.util.*;
  * 17.02.2023
  */
 @SuppressWarnings("unused")
+@ApiStatus.AvailableSince("1.4")
 public class ConfigurationYAMLConverter {
 
     private ConfigurationYAMLConverter() {

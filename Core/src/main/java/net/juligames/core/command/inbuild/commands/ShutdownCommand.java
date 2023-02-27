@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 @ApiStatus.Experimental
 public class ShutdownCommand extends AbstractInbuiltCommand {
     public ShutdownCommand() {
-        super("shutdown", "Shut the current JavaVM down!");
+        super("shutdown", "Shut the current JavaVM  & Core Instance down!");
     }
 
     @Override

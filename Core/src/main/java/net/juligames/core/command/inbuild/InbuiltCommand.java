@@ -74,7 +74,7 @@ public class InbuiltCommand implements CommandExecutor {
     public boolean equals(Object obj) {
         if (obj == this) return true;
         if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (InbuiltCommand) obj;
+        Object that = (InbuiltCommand) obj;
         return Objects.equals(this.name, that.name) &&
                 Objects.equals(this.description, that.description) &&
                 Objects.equals(this.since, that.since) &&

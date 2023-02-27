@@ -46,7 +46,6 @@ public class JDBITagAdapter {
                 return Tag.styling(style -> style.color(NamedTextColor.NAMES.value(replacement.getValue())));
             }
             case FONT -> {
-
                 return Tag.styling(style -> style.font(Key.key(replacement.getValue())));
             }
             case INSERT -> {
