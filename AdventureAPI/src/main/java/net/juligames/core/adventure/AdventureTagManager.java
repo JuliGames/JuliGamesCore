@@ -55,5 +55,6 @@ public interface AdventureTagManager extends MiniMessageSerializer {
     @DoNotCall
     void load();
 
+    @ApiStatus.AvailableSince("1.4")
     @NotNull String fromComponent(@NotNull Component component);
 }

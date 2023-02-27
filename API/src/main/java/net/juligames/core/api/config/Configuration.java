@@ -252,6 +252,7 @@ public interface Configuration extends Comparable<Configuration> {
      *
      * @param defaults the defaults
      */
+    @ApiStatus.AvailableSince("1.4")
     void applyDefaults(@NotNull Properties defaults);
 
     void appendAll(@NotNull Collection<Configuration> configurations);

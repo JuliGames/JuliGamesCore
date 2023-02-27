@@ -58,6 +58,7 @@ public interface SQLManager {
     /**
      * @throws NullPointerException if data is null, or execution failed
      */
+    @ApiStatus.AvailableSince("1.4")
     @Nullable <T, R> R withExtension(Class<T> dao, ExtensionCallback<R, T, Exception> extensionCallback);
 
     @ApiStatus.Experimental
