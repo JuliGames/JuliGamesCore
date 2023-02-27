@@ -6,6 +6,7 @@ import java.util.function.BiFunction;
  * @author Ture Bentzin
  * 25.02.2023
  */
+@ApiStatus.AvailableSince("1.4")
 public interface CustomMessageDealer extends BiFunction<String,String,String> {
 
     /**
