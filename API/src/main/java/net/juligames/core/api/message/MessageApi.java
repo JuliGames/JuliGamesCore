@@ -111,6 +111,7 @@ public interface MessageApi {
      * @param thirdPartyMessage the input
      * @param dealer the dealer
      */
+    @ApiStatus.AvailableSince("1.4")
     void registerThirdPartyMessage(@NotNull String messageKey, @NotNull String thirdPartyMessage, @NotNull CustomMessageDealer dealer);
 
     boolean hasMessage(@NotNull String messageKey);
