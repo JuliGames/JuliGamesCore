@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Ture Bentzin
  * 25.02.2023
  */
+@ApiStatus.AvailableSince("1.4")
 public interface LegacyMessageType{
     @NotNull LegacyMessageType AMPERSAND = () -> '&';
     @NotNull LegacyMessageType SECTION = () -> '§';
