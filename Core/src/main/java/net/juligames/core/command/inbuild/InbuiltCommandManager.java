@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 @ApiStatus.Experimental
 public class InbuiltCommandManager extends Registerator<InbuiltCommand> {
 
-    final static String PREFIX = "inbuild:";
+    final static String PREFIX = "inbuilt:";
     private static final String REGEX = PREFIX + "([A-Za-z])";
     static Logger staticLogger;
 
