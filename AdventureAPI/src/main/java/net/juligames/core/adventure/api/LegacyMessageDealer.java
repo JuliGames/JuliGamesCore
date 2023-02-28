@@ -10,19 +10,19 @@ import org.jetbrains.annotations.NotNull;
  * @author Ture Bentzin
  * 25.02.2023
  */
- @ApiStatus.Experimental
+@ApiStatus.Experimental
 @ApiStatus.AvailableSince("1.4")
 public record LegacyMessageDealer(@NotNull LegacyMessageType legacyMessageType) implements CustomMessageDealer {
 
     @Override
     public @NotNull String apply(String key, String input) {
-        if(legacyMessageType().equals(LegacyMessageType.AMPERSAND)) {
+        if (legacyMessageType().equals(LegacyMessageType.AMPERSAND)) {
             return AdventureAPI.get().getAdventureTagManager().translateLegacyToMiniMessage(input);
-        }else if (legacyMessageType().equals(LegacyMessageType.SECTION)) {
+        } else if (legacyMessageType().equals(LegacyMessageType.SECTION)) {
             return AdventureAPI.get().getAdventureTagManager().translateLegacySectionToMiniMessage(input);
-        }else if (legacyMessageType() instanceof LegacyMessageType.CustomLegacyMessageType) {
+        } else if (legacyMessageType() instanceof LegacyMessageType.CustomLegacyMessageType) {
             return customToMiniMessage(input, legacyMessageType().getChar());
-        }else {
+        } else {
             throw new IllegalArgumentException("unexpected value: " + legacyMessageType());
         }
     }

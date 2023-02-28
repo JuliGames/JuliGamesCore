@@ -1,5 +1,6 @@
 package net.juligames.core.api.message;
 
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -8,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
  * 25.02.2023
  */
 @ApiStatus.AvailableSince("1.4")
-public interface LegacyMessageType{
+public interface LegacyMessageType {
     @NotNull LegacyMessageType AMPERSAND = () -> '&';
     @NotNull LegacyMessageType SECTION = () -> '§';
 
@@ -19,7 +20,7 @@ public interface LegacyMessageType{
 
     char getChar();
 
-    record CustomLegacyMessageType(char c) implements LegacyMessageType{
+    record CustomLegacyMessageType(char c) implements LegacyMessageType {
         @Override
         public char getChar() {
             return c;

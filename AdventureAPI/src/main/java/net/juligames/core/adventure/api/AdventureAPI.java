@@ -4,6 +4,7 @@ import net.juligames.core.adventure.AdventureTagManager;
 import net.juligames.core.api.err.APIException;
 import net.juligames.core.api.message.LegacyMessageType;
 import net.juligames.core.api.message.MessageApi;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 /**

@@ -1,7 +1,6 @@
 package net.juligames.core.adventure;
 
 import com.google.errorprone.annotations.DoNotCall;
-import com.mysql.cj.util.DnsSrv;
 import net.juligames.core.api.jdbi.DBReplacement;
 import net.juligames.core.api.message.Message;
 import net.juligames.core.api.message.MiniMessageSerializer;

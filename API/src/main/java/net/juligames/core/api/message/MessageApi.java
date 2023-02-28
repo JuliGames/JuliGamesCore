@@ -1,7 +1,6 @@
 package net.juligames.core.api.message;
 
 import net.juligames.core.api.jdbi.*;
-import org.checkerframework.checker.units.qual.N;
 import org.jdbi.v3.core.extension.ExtensionCallback;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -107,9 +106,10 @@ public interface MessageApi {
 
     /**
      * If you want to register a legacyMessage please use the provided method in the AdventureAPI
-     * @param messageKey the ley
+     *
+     * @param messageKey        the ley
      * @param thirdPartyMessage the input
-     * @param dealer the dealer
+     * @param dealer            the dealer
      */
     @ApiStatus.AvailableSince("1.4")
     void registerThirdPartyMessage(@NotNull String messageKey, @NotNull String thirdPartyMessage, @NotNull CustomMessageDealer dealer);

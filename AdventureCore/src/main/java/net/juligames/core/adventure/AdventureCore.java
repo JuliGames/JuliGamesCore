@@ -67,7 +67,7 @@ public class AdventureCore implements AdventureAPI {
     public void registerLegacyMessage(@NotNull MessageApi messageApi, @NotNull String key, @NotNull String input,
                                       @NotNull LegacyMessageType legacyMessageType) {
         LegacyMessageDealer legacyMessageDealer = new LegacyMessageDealer(legacyMessageType);
-        messageApi.registerThirdPartyMessage(key,input,legacyMessageDealer);
+        messageApi.registerThirdPartyMessage(key, input, legacyMessageDealer);
     }
 
     @Override
