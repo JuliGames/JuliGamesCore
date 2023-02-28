@@ -11,15 +11,15 @@ import java.util.function.Function;
  */
 
 public interface Interpreter<T> {
-    T interpret(final String input) throws Exception;
+    @NotNull T interpret(final String input) throws Exception;
 
-    String reverse(T t);
+    @NotNull String reverse(T t);
 
-    default <R> R reverseAndThen(T t, @NotNull Function<String, R> function) {
+    default <R> R reverseAndThen(@NotNull T t, @NotNull Function<String, R> function) {
         return function.apply(reverse(t));
     }
 
-    default <R> R interpretAndThen(String input, @NotNull Function<T, R> function) throws Exception {
+    default <R> R interpretAndThen(@NotNull String input, @NotNull Function<T, R> function) throws Exception {
         return function.apply(interpret(input));
     }
 }

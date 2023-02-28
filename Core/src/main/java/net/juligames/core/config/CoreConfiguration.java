@@ -1,6 +1,7 @@
 package net.juligames.core.config;
 
 import com.hazelcast.map.IMap;
+import de.bentzin.tools.pair.BasicPair;
 import net.juligames.core.Core;
 import net.juligames.core.api.config.Configuration;
 import net.juligames.core.api.config.Interpreter;
@@ -20,6 +21,7 @@ import java.util.function.*;
  * 26.11.2022
  * @implNote RESERVED KEYS: "configuration_header", "configuration_name"
  */
+@SuppressWarnings({"unused", "DuplicatedCode"})
 public class CoreConfiguration implements Configuration {
 
     private final String name;
@@ -88,7 +90,7 @@ public class CoreConfiguration implements Configuration {
         data = hazel();
     }
 
-    public Map<String, String> export() {
+    public @NotNull Map<String, String> export() {
         return new HashMap<>(data);
     }
 
@@ -97,24 +99,24 @@ public class CoreConfiguration implements Configuration {
         return this::hazel;
     }
 
-    public Set<String> keySet() {
+    public @NotNull Set<String> keySet() {
         return hazel().keySet();
     }
 
-    public Set<Map.Entry<String, String>> entrySet() {
+    public @NotNull Set<Map.Entry<String, String>> entrySet() {
         return hazel().entrySet();
     }
 
-    public Collection<String> values() {
+    public @NotNull Collection<String> values() {
         return hazel().values();
     }
 
-    public void writeTo(OutputStream dataStream) throws IOException {
+    public void writeTo(@NotNull OutputStream dataStream) throws IOException {
         cloneToProperties().store(dataStream, header_comment);
     }
 
     @Override
-    public Properties cloneToProperties() {
+    public @NotNull Properties cloneToProperties() {
         final Properties properties = new Properties();
         for (Map.Entry<String, String> config : entrySet()) {
             properties.setProperty(config.getKey(), config.getValue());
@@ -123,20 +125,44 @@ public class CoreConfiguration implements Configuration {
     }
 
     @Override
-    public Optional<String> getString(String key) {
+    public boolean isSet(@NotNull String key) {
+        return hazel().containsKey(key);
+    }
+
+    @Override
+    public boolean isSet(@NotNull Supplier<String> key) {
+        return isSet(key.get());
+    }
+
+    @Override
+    public <T> boolean isSetAndValid(@NotNull String key, @NotNull Interpreter<T> interpreter) {
+        try {
+            return get(key, interpreter).isPresent();
+        } catch (RuntimeException ignored) {
+            return false;
+        }
+    }
+
+    @Override
+    public <T> boolean isSetAndValid(@NotNull Supplier<String> key, @NotNull Interpreter<T> interpreter) {
+        return isSetAndValid(key.get(), interpreter);
+    }
+
+    @Override
+    public @NotNull Optional<String> getString(@NotNull String key) {
         @Nullable String extract = data.get(key);
         return Optional.ofNullable(extract);
     }
 
     @Override
-    public Optional<String> getString(@NotNull Supplier<String> key) {
+    public @NotNull Optional<String> getString(@NotNull Supplier<String> key) {
         return getString(key.get());
     }
 
     @Override
-    public @Nullable String getStringOrNull(String key) {
+    public @Nullable String getStringOrNull(@NotNull String key) {
         @Nullable String extract = data.get(key);
-        return key;
+        return extract;
     }
 
     @Override
@@ -145,7 +171,7 @@ public class CoreConfiguration implements Configuration {
     }
 
     @Override
-    public Optional<Integer> getInteger(String key) {
+    public @NotNull Optional<Integer> getInteger(@NotNull String key) {
         @Nullable String extract = data.get(key);
         if (extract == null) {
             return Optional.empty();
@@ -158,12 +184,12 @@ public class CoreConfiguration implements Configuration {
     }
 
     @Override
-    public Optional<Integer> getInteger(@NotNull Supplier<String> key) {
+    public @NotNull Optional<Integer> getInteger(@NotNull Supplier<String> key) {
         return getInteger(key.get());
     }
 
     @Override
-    public @Nullable Integer getIntegerOrNull(String key) {
+    public @Nullable Integer getIntegerOrNull(@NotNull String key) {
         @Nullable String extract = data.get(key);
         if (extract == null) {
             return null;
@@ -181,7 +207,7 @@ public class CoreConfiguration implements Configuration {
     }
 
     @Override
-    public Optional<Double> getDouble(String key) {
+    public @NotNull Optional<Double> getDouble(@NotNull String key) {
         @Nullable String extract = data.get(key);
         if (extract == null) {
             return Optional.empty();
@@ -194,12 +220,12 @@ public class CoreConfiguration implements Configuration {
     }
 
     @Override
-    public Optional<Double> getDouble(@NotNull Supplier<String> key) {
+    public @NotNull Optional<Double> getDouble(@NotNull Supplier<String> key) {
         return getDouble(key.get());
     }
 
     @Override
-    public @Nullable Double getDoubleOrNull(String key) {
+    public @Nullable Double getDoubleOrNull(@NotNull String key) {
         @Nullable String extract = data.get(key);
         if (extract == null) {
             return null;
@@ -217,7 +243,7 @@ public class CoreConfiguration implements Configuration {
     }
 
     @Override
-    public Optional<Long> getLong(String key) {
+    public @NotNull Optional<Long> getLong(@NotNull String key) {
         @Nullable String extract = data.get(key);
         if (extract == null) {
             return Optional.empty();
@@ -230,12 +256,12 @@ public class CoreConfiguration implements Configuration {
     }
 
     @Override
-    public Optional<Long> getLong(@NotNull Supplier<String> key) {
+    public @NotNull Optional<Long> getLong(@NotNull Supplier<String> key) {
         return getLong(key.get());
     }
 
     @Override
-    public @Nullable Long getLongOrNull(String key) {
+    public @Nullable Long getLongOrNull(@NotNull String key) {
         @Nullable String extract = data.get(key);
         if (extract == null) {
             return null;
@@ -253,7 +279,7 @@ public class CoreConfiguration implements Configuration {
     }
 
     @Override
-    public Optional<Short> getShort(String key) {
+    public @NotNull Optional<Short> getShort(@NotNull String key) {
         @Nullable String extract = data.get(key);
         if (extract == null) {
             return Optional.empty();
@@ -266,12 +292,12 @@ public class CoreConfiguration implements Configuration {
     }
 
     @Override
-    public Optional<Short> getShort(@NotNull Supplier<String> key) {
+    public @NotNull Optional<Short> getShort(@NotNull Supplier<String> key) {
         return getShort(key.get());
     }
 
     @Override
-    public @Nullable Short getShortOrNull(String key) {
+    public @Nullable Short getShortOrNull(@NotNull String key) {
         @Nullable String extract = data.get(key);
         if (extract == null) {
             return null;
@@ -289,7 +315,7 @@ public class CoreConfiguration implements Configuration {
     }
 
     @Override
-    public Optional<Byte> getByte(String key) {
+    public @NotNull Optional<Byte> getByte(@NotNull String key) {
         @Nullable String extract = data.get(key);
         if (extract == null) {
             return Optional.empty();
@@ -302,12 +328,12 @@ public class CoreConfiguration implements Configuration {
     }
 
     @Override
-    public Optional<Byte> getByte(@NotNull Supplier<String> key) {
+    public @NotNull Optional<Byte> getByte(@NotNull Supplier<String> key) {
         return getByte(key.get());
     }
 
     @Override
-    public @Nullable Byte getByteOrNull(String key) {
+    public @Nullable Byte getByteOrNull(@NotNull String key) {
         @Nullable String extract = data.get(key);
         if (extract == null) {
             return null;
@@ -325,7 +351,7 @@ public class CoreConfiguration implements Configuration {
     }
 
     @Override
-    public Optional<Boolean> getBoolean(String key) {
+    public @NotNull Optional<Boolean> getBoolean(@NotNull String key) {
         @Nullable String extract = data.get(key);
         if (extract == null) {
             return Optional.empty();
@@ -338,12 +364,12 @@ public class CoreConfiguration implements Configuration {
     }
 
     @Override
-    public Optional<Boolean> getBoolean(@NotNull Supplier<String> key) {
+    public @NotNull Optional<Boolean> getBoolean(@NotNull Supplier<String> key) {
         return getBoolean(key.get());
     }
 
     @Override
-    public @Nullable Boolean getBooleanOrNull(String key) {
+    public @Nullable Boolean getBooleanOrNull(@NotNull String key) {
         @Nullable String extract = data.get(key);
         if (extract == null) {
             return null;
@@ -361,7 +387,7 @@ public class CoreConfiguration implements Configuration {
     }
 
     @Override
-    public Optional<Float> getFloat(String key) {
+    public @NotNull Optional<Float> getFloat(@NotNull String key) {
         @Nullable String extract = data.get(key);
         if (extract == null) {
             return Optional.empty();
@@ -374,12 +400,12 @@ public class CoreConfiguration implements Configuration {
     }
 
     @Override
-    public Optional<Float> getFloat(@NotNull Supplier<String> key) {
+    public @NotNull Optional<Float> getFloat(@NotNull Supplier<String> key) {
         return getFloat(key.get());
     }
 
     @Override
-    public @Nullable Float getFloatOrNull(String key) {
+    public @Nullable Float getFloatOrNull(@NotNull String key) {
         @Nullable String extract = data.get(key);
         if (extract == null) {
             return null;
@@ -397,18 +423,18 @@ public class CoreConfiguration implements Configuration {
     }
 
     @Override
-    public <T> Collection<T> getCollection(String keyspace, Interpreter<T> interpreter) {
+    public <T> @NotNull Collection<T> getCollection(@NotNull String keyspace, @NotNull Interpreter<T> interpreter) {
         return IterableSplitter.tryReadSplitCollection(this, keyspace, interpreter);
     }
 
     @Override
-    public <T> Collection<T> getCollection(@NotNull Supplier<String> keyspace, Interpreter<T> interpreter) {
+    public <T> @NotNull Collection<T> getCollection(@NotNull Supplier<String> keyspace, @NotNull Interpreter<T> interpreter) {
         return getCollection(keyspace.get(), interpreter);
     }
 
     //legacy interpreter
     @Override
-    public @MaybePresent <T> Optional<T> get(String key, Function<String, T> interpreter) {
+    public @MaybePresent <T> Optional<T> get(@NotNull String key, @NotNull Function<String, T> interpreter) {
         @Nullable String extract = data.get(key);
         if (extract == null) {
             return Optional.empty();
@@ -422,13 +448,13 @@ public class CoreConfiguration implements Configuration {
 
     //legacy interpreter
     @Override
-    public @MaybePresent <T> Optional<T> get(@NotNull Supplier<String> key, Function<String, T> interpreter) {
+    public @MaybePresent <T> Optional<T> get(@NotNull Supplier<String> key, @NotNull Function<String, T> interpreter) {
         return get(key.get(), interpreter);
     }
 
     //legacy interpreter
     @Override
-    public <T> @Nullable T getOrNull(String key, Function<String, T> interpreter) {
+    public <T> @Nullable T getOrNull(@NotNull String key, @NotNull Function<String, T> interpreter) {
         @Nullable String extract = data.get(key);
         if (extract == null) {
             return null;
@@ -442,12 +468,12 @@ public class CoreConfiguration implements Configuration {
 
     //legacy interpreter
     @Override
-    public <T> @Nullable T getOrNull(@NotNull Supplier<String> key, Function<String, T> interpreter) {
+    public <T> @Nullable T getOrNull(@NotNull Supplier<String> key, @NotNull Function<String, T> interpreter) {
         return getOrNull(key.get(), interpreter);
     }
 
     @Override
-    public @MaybePresent <T> Optional<T> get(String key, Interpreter<T> interpreter) {
+    public @MaybePresent <T> Optional<T> get(@NotNull String key, @NotNull Interpreter<T> interpreter) {
         @Nullable String extract = data.get(key);
         if (extract == null) {
             return Optional.empty();
@@ -460,12 +486,12 @@ public class CoreConfiguration implements Configuration {
     }
 
     @Override
-    public @MaybePresent <T> Optional<T> get(@NotNull Supplier<String> key, Interpreter<T> interpreter) {
+    public @MaybePresent <T> Optional<T> get(@NotNull Supplier<String> key, @NotNull Interpreter<T> interpreter) {
         return get(key.get(), interpreter);
     }
 
     @Override
-    public <T> @Nullable T getOrNull(String key, Interpreter<T> interpreter) {
+    public <T> @Nullable T getOrNull(@NotNull String key, @NotNull Interpreter<T> interpreter) {
         @Nullable String extract = data.get(key);
         if (extract == null) {
             return null;
@@ -478,132 +504,132 @@ public class CoreConfiguration implements Configuration {
     }
 
     @Override
-    public <T> @Nullable T getOrNull(@NotNull Supplier<String> key, Interpreter<T> interpreter) {
+    public <T> @Nullable T getOrNull(@NotNull Supplier<String> key, @NotNull Interpreter<T> interpreter) {
         return getOrNull(key.get(), interpreter);
     }
 
     @Override
-    public void setString(String key, @NotNull String value) {
+    public void setString(@NotNull String key, @NotNull String value) {
         data.put(key, value);
     }
 
     @Override
-    public void setString(String key, @NotNull Supplier<String> value) {
+    public void setString(@NotNull String key, @NotNull Supplier<String> value) {
         setString(key, value.get());
     }
 
     @Override
-    public void setInteger(String key, @NotNull Integer value) {
+    public void setInteger(@NotNull String key, @NotNull Integer value) {
         data.put(key, value.toString());
     }
 
     @Override
-    public void setInteger(String key, @NotNull Supplier<Integer> value) {
+    public void setInteger(@NotNull String key, @NotNull Supplier<Integer> value) {
         setInteger(key, value.get());
     }
 
     @Override
-    public void setDouble(String key, @NotNull Double value) {
+    public void setDouble(@NotNull String key, @NotNull Double value) {
         data.put(key, value.toString());
     }
 
     @Override
-    public void setDouble(String key, @NotNull Supplier<Double> value) {
+    public void setDouble(@NotNull String key, @NotNull Supplier<Double> value) {
         setDouble(key, value.get());
     }
 
     @Override
-    public void setLong(String key, @NotNull Long value) {
+    public void setLong(@NotNull String key, @NotNull Long value) {
         data.put(key, value.toString());
     }
 
     @Override
-    public void setLong(String key, @NotNull Supplier<Long> value) {
+    public void setLong(@NotNull String key, @NotNull Supplier<Long> value) {
         setLong(key, value.get());
     }
 
     @Override
-    public void setShort(String key, @NotNull Short value) {
+    public void setShort(@NotNull String key, @NotNull Short value) {
         data.put(key, value.toString());
     }
 
     @Override
-    public void setShort(String key, @NotNull Supplier<Short> value) {
+    public void setShort(@NotNull String key, @NotNull Supplier<Short> value) {
         setShort(key, value.get());
     }
 
     @Override
-    public void setByte(String key, @NotNull Byte value) {
+    public void setByte(@NotNull String key, @NotNull Byte value) {
         data.put(key, value.toString());
     }
 
     @Override
-    public void setByte(String key, @NotNull Supplier<Byte> value) {
+    public void setByte(@NotNull String key, @NotNull Supplier<Byte> value) {
         setByte(key, value.get());
     }
 
     @Override
-    public void setBoolean(String key, @NotNull Boolean value) {
+    public void setBoolean(@NotNull String key, @NotNull Boolean value) {
         data.put(key, value.toString());
     }
 
     @Override
-    public void setBoolean(String key, @NotNull Supplier<Boolean> value) {
+    public void setBoolean(@NotNull String key, @NotNull Supplier<Boolean> value) {
         setBoolean(key, value.get());
     }
 
     @Override
-    public void setFloat(String key, @NotNull Float value) {
+    public void setFloat(@NotNull String key, @NotNull Float value) {
         data.put(key, value.toString());
     }
 
     @Override
-    public void setFloat(String key, @NotNull Supplier<Float> value) {
+    public void setFloat(@NotNull String key, @NotNull Supplier<Float> value) {
         setFloat(key, value.get());
     }
 
     @Override
-    public <T> void set(String key, T value, @NotNull Interpreter<T> interpreter) {
+    public <T> void set(@NotNull String key, @NotNull T value, @NotNull Interpreter<T> interpreter) {
         data.put(key, interpreter.reverse(value));
     }
 
     @Override
-    public <T> void set(String key, @NotNull Supplier<T> value, Interpreter<T> interpreter) {
+    public <T> void set(@NotNull String key, @NotNull Supplier<T> value, @NotNull Interpreter<T> interpreter) {
         set(key, value.get(), interpreter);
     }
 
     @Override
-    public <T> void set(@NotNull Supplier<String> key, T value, Interpreter<T> interpreter) {
+    public <T> void set(@NotNull Supplier<String> key, @NotNull T value, @NotNull Interpreter<T> interpreter) {
         set(key.get(), value, interpreter);
     }
 
     @Override
-    public <T> void set(@NotNull Supplier<String> key, @NotNull Supplier<T> value, Interpreter<T> interpreter) {
+    public <T> void set(@NotNull Supplier<String> key, @NotNull Supplier<T> value, @NotNull Interpreter<T> interpreter) {
         set(key.get(), value.get(), interpreter);
     }
 
     @Override
-    public <T> void setIterable(String keySpace, Iterable<T> iterable, Interpreter<T> interpreter) {
+    public <T> void setIterable(@NotNull String keySpace, @NotNull Iterable<T> iterable, @NotNull Interpreter<T> interpreter) {
         IterableSplitter.splitAndWrite(iterable, interpreter, this, keySpace);
     }
 
     @Override
-    public <T> void setIterable(@NotNull Supplier<String> keySpace, Iterable<T> iterable, Interpreter<T> interpreter) {
+    public <T> void setIterable(@NotNull Supplier<String> keySpace, @NotNull Iterable<T> iterable, @NotNull Interpreter<T> interpreter) {
         setIterable(keySpace.get(), iterable, interpreter);
     }
 
     @Override
-    public <T> void setIterable(String keySpace, @NotNull Supplier<Iterable<T>> iterable, Interpreter<T> interpreter) {
+    public <T> void setIterable(@NotNull String keySpace, @NotNull Supplier<Iterable<T>> iterable, @NotNull Interpreter<T> interpreter) {
         setIterable(keySpace, iterable.get(), interpreter);
     }
 
     @Override
-    public <T> void setIterable(Supplier<String> keySpace, @NotNull Supplier<Iterable<T>> iterable, Interpreter<T> interpreter) {
+    public <T> void setIterable(@NotNull Supplier<String> keySpace, @NotNull Supplier<Iterable<T>> iterable, @NotNull Interpreter<T> interpreter) {
         setIterable(keySpace, iterable.get(), interpreter);
     }
 
     @Override
-    public void del(String key) {
+    public void del(@NotNull String key) {
         data.remove(key);
     }
 
@@ -613,7 +639,7 @@ public class CoreConfiguration implements Configuration {
     }
 
     @Override
-    public void del(String... key) {
+    public void del(String @NotNull ... key) {
         dellAllFromCollection(List.of(key));
     }
 
@@ -624,7 +650,7 @@ public class CoreConfiguration implements Configuration {
     }
 
     @Override
-    public void delRecursive(String key) {
+    public void delRecursive(@NotNull String key) {
         data.removeAll(mapEntry -> mapEntry.getKey().startsWith(key));
     }
 
@@ -634,7 +660,7 @@ public class CoreConfiguration implements Configuration {
     }
 
     @Override
-    public void delRecursive(String... keys) {
+    public void delRecursive(String @NotNull ... keys) {
         delAllRecursive(() -> List.of(keys));
     }
 
@@ -654,31 +680,31 @@ public class CoreConfiguration implements Configuration {
 
 
     @Override
-    public <T> T query(@NotNull Function<Supplier<String>, T> query, String input) {
+    public <T> T query(@NotNull Function<Supplier<String>, T> query, @NotNull String input) {
         updateHazel();
         return query.apply(() -> input);
     }
 
     @Override
-    public <T> T query(@NotNull BiFunction<Supplier<String>, Interpreter<T>, T> query, String input, Interpreter<T> interpreter) {
+    public <T> T query(@NotNull BiFunction<Supplier<String>, Interpreter<T>, T> query, @NotNull String input, @NotNull Interpreter<T> interpreter) {
         updateHazel();
         return query.apply(() -> input, interpreter);
     }
 
     @Override
-    public <T> void query(@NotNull BiConsumer<String, Supplier<T>> query, String input, Supplier<T> t) {
+    public <T> void query(@NotNull BiConsumer<String, Supplier<T>> query, @NotNull String input, @NotNull Supplier<T> t) {
         updateHazel();
         query.accept(input, t);
     }
 
     @Override
-    public <T> void query(@NotNull TriConsumer<String, T, Supplier<Interpreter<T>>> query, String input, Interpreter<T> interpreter, @NotNull Supplier<T> t) {
+    public <T> void query(@NotNull TriConsumer<String, T, Supplier<Interpreter<T>>> query, @NotNull String input, @NotNull Interpreter<T> interpreter, @NotNull Supplier<T> t) {
         updateHazel();
         query.consume(input, t.get(), () -> interpreter);
     }
 
     @Override
-    public void feed(String key, @NotNull Consumer<String> rawConsumer) {
+    public void feed(@NotNull String key, @NotNull Consumer<String> rawConsumer) {
         rawConsumer.accept(getStringOrNull(key));
     }
 
@@ -715,12 +741,12 @@ public class CoreConfiguration implements Configuration {
     }
 
     @Override
-    public Configuration copyToOffline() {
+    public @NotNull Configuration copyToOffline() {
         return copyToOffline(getName());
     }
 
     @Override
-    public Configuration copy(String name) {
+    public @NotNull Configuration copy(@NotNull String name) {
         CoreConfiguration configuration = Core.getInstance().getConfigurationApi().getOrCreate(name);
         configuration.clear();
         copyAndOverrideContentTo(configuration);
@@ -728,7 +754,7 @@ public class CoreConfiguration implements Configuration {
     }
 
     @Override
-    public Configuration copyToOffline(String name) {
+    public @NotNull Configuration copyToOffline(@NotNull String name) {
         OfflineConfiguration offlineConfiguration = new OfflineConfiguration(name);
         copyAndOverrideContentTo(offlineConfiguration);
         return offlineConfiguration;
@@ -739,6 +765,21 @@ public class CoreConfiguration implements Configuration {
         for (Configuration configuration : configurations) {
             configuration.copyAndAppendContentTo(this);
         }
+    }
+
+    @Override
+    public <R> R doWithData(@NotNull Function<Map<String, String>, R> function) {
+        return function.apply(hazel());
+    }
+
+    @Override
+    public void set(@NotNull BasicPair<String, String> basicPair) {
+        setString(basicPair.getFirst(), basicPair.getSecond());
+    }
+
+    @Override
+    public void doWithData(@NotNull Consumer<Map<String, String>> action) {
+        action.accept(hazel());
     }
 
     public final @NotNull String getConjoinedDescription() {
@@ -759,6 +800,14 @@ public class CoreConfiguration implements Configuration {
         List<T> result = new ArrayList<>();
         iterable.forEach(result::add);
         return result;
+    }
+
+    @Override
+    public void applyDefaults(@NotNull Properties defaults) {
+        for (Map.Entry<Object, Object> objectObjectEntry : defaults.entrySet()) {
+            final String key = objectObjectEntry.getKey().toString(), value = objectObjectEntry.getValue().toString();
+            hazel().putIfAbsent(key, value);
+        }
     }
 
     @Override

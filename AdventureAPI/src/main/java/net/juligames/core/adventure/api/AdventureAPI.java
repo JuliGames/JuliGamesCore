@@ -2,6 +2,9 @@ package net.juligames.core.adventure.api;
 
 import net.juligames.core.adventure.AdventureTagManager;
 import net.juligames.core.api.err.APIException;
+import net.juligames.core.api.message.LegacyMessageType;
+import net.juligames.core.api.message.MessageApi;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -13,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
  * Please make sure the modules (AdventureAPI & AdventureCore) are the same version to avoid issues while execution!
  */
 public interface AdventureAPI {
-    String API_VERSION = "1.3";
+    @NotNull String API_VERSION = "1.4";
 
     static @NotNull AdventureAPI get() {
         AdventureAPI api = AdventureAPICore.getAPI();
@@ -22,6 +25,14 @@ public interface AdventureAPI {
         else throw new APIException();
     }
 
-    AdventureTagManager getAdventureTagManager();
+    @NotNull AdventureTagManager getAdventureTagManager();
+
+    @Deprecated
+    @ApiStatus.AvailableSince("1.4")
+    void registerLegacyMessage(MessageApi messageApi, @NotNull String key, @NotNull String input, @NotNull LegacyMessageType legacyMessageType);
+
+    @Deprecated
+    @ApiStatus.AvailableSince("1.4")
+    void registerLegacyMessage(@NotNull String key, @NotNull String input, @NotNull LegacyMessageType legacyMessageType);
 
 }

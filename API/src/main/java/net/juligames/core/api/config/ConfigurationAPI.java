@@ -20,7 +20,7 @@ public interface ConfigurationAPI {
      * @param name the name
      * @return a new Configuration or the old if already one existed
      */
-    Configuration getOrCreate(String name);
+    @NotNull Configuration getOrCreate(@NotNull String name);
 
     /**
      * This will create a new configuration based of the given defaults
@@ -28,11 +28,11 @@ public interface ConfigurationAPI {
      * @param defaults the defaults to set
      * @return a new Configuration or the old if already one existed
      */
-    Configuration getOrCreate(Properties defaults);
+    @NotNull Configuration getOrCreate(@NotNull Properties defaults);
 
-    Configuration master();
+    @NotNull Configuration master();
 
-    Comparator<? extends Configuration> comparator();
+    @NotNull Comparator<? extends Configuration> comparator();
 
     //collections on demand - 1.1
 
@@ -44,7 +44,7 @@ public interface ConfigurationAPI {
      * @param <T>         Type
      * @return a {@link Collection} out of the interpreted Ts
      */
-    <T> Collection<String> split(Collection<T> collection, Interpreter<T> interpreter);
+    @NotNull <T> Collection<String> split(@NotNull Collection<T> collection, @NotNull Interpreter<T> interpreter);
 
     /**
      * This will split the given {@link Collection} and return a writer that will
@@ -54,7 +54,7 @@ public interface ConfigurationAPI {
      * @param <T>         Type
      * @return a {@link ConfigWriter} ready to write the split data
      */
-    <T> ConfigWriter splitToWriter(Collection<T> collection, Interpreter<T> interpreter);
+    @NotNull <T> ConfigWriter splitToWriter(@NotNull Collection<T> collection, @NotNull Interpreter<T> interpreter);
 
     /**
      * This will split and write the Collection using {@link #splitToWriter(Collection, Interpreter)}
@@ -67,7 +67,7 @@ public interface ConfigurationAPI {
      * @deprecated moved to {@link Configuration#setIterable(String, Iterable, Interpreter)}
      */
     @Deprecated
-    default <T> void spiltAndWrite(Collection<T> collection, Interpreter<T> interpreter, Configuration configuration, String keySpace) {
+    default <T> void spiltAndWrite(@NotNull Collection<T> collection, @NotNull Interpreter<T> interpreter, @NotNull Configuration configuration, String keySpace) {
         splitToWriter(collection, interpreter).write(configuration, keySpace);
     }
 
@@ -81,7 +81,7 @@ public interface ConfigurationAPI {
      * @deprecated Moved to {@link Configuration#getCollection(String, Interpreter)}
      */
     @Deprecated
-    <T> Collection<T> tryReadSplitCollection(Configuration configuration, String keySpace, Interpreter<T> interpreter);
+    @NotNull <T> Collection<T> tryReadSplitCollection(@NotNull Configuration configuration, @NotNull String keySpace, @NotNull Interpreter<T> interpreter);
 
 
     /**
@@ -93,7 +93,7 @@ public interface ConfigurationAPI {
      * @return a {@link java.util.Collection} with all Ts that where read successfully
      */
     @ApiStatus.Experimental
-    <T> Collection<T> tryReadSplitCollection(Iterable<String> strings, Interpreter<T> interpreter);
+    @NotNull <T> Collection<T> tryReadSplitCollection(@NotNull Iterable<String> strings, @NotNull Interpreter<T> interpreter);
 
 
     /**
@@ -101,8 +101,8 @@ public interface ConfigurationAPI {
      * @param header stored as configuration_header
      * @return initialized Properties to be used with the {@link ConfigurationAPI}
      */
-    Properties initializeProperties(@NotNull String name, @Nullable String header);
+    @NotNull Properties initializeProperties(@NotNull String name, @Nullable String header);
 
     @ApiStatus.Experimental
-    Configuration merge(Configuration c1, Configuration c2);
+    @NotNull Configuration merge(Configuration c1, Configuration c2);
 }

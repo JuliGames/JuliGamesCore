@@ -46,10 +46,6 @@ public class CorePluginLoadManager {
     @Deprecated
     public List<Plugin> loadManuell(CorePluginLoader corePluginLoader) {
         final ArrayList<Plugin> plugins = new ArrayList<>();
-        /* final File[] files = Objects.requireNonNull(
-                directory.listFiles(
-                        new PatternFilenameFilter(corePluginLoader.getPluginFileFilter())));
-         */
         final File[] files = directory.listFiles();
         final List<File> fileList = Arrays.stream(files).toList();
         logger.info("Attempting to load: " + fileList.stream().map(File::getName).toList());

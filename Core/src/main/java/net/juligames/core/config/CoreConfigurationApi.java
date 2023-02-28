@@ -22,7 +22,7 @@ public class CoreConfigurationApi implements ConfigurationAPI {
     public static final String DATABASE_CONFIG_NAME = "database";
 
     @Override
-    public CoreConfiguration getOrCreate(String name) {
+    public @NotNull CoreConfiguration getOrCreate(@NotNull String name) {
         return new CoreConfiguration(name);
     }
 
@@ -34,12 +34,12 @@ public class CoreConfigurationApi implements ConfigurationAPI {
      * @apiNote configuration_name is the reserved key for the name!!
      */
     @Override
-    public CoreConfiguration getOrCreate(Properties defaults) {
+    public @NotNull CoreConfiguration getOrCreate(@NotNull Properties defaults) {
         return CoreConfiguration.fromProperties(defaults);
     }
 
     @Override
-    public CoreConfiguration master() {
+    public @NotNull CoreConfiguration master() {
         return getOrCreate(MASTER_CONFIG_NAME);
     }
 
@@ -55,7 +55,7 @@ public class CoreConfigurationApi implements ConfigurationAPI {
      * This comparator compares the configurations by size
      */
     @Override
-    public Comparator<? extends Configuration> comparator() {
+    public @NotNull Comparator<? extends Configuration> comparator() {
         return (o1, o2) -> Comparator.<Configuration>naturalOrder().compare(o1, o2);
     }
 
@@ -68,7 +68,7 @@ public class CoreConfigurationApi implements ConfigurationAPI {
      * @return a {@link Collection} out of the interpreted Ts
      */
     @Override
-    public <T> Collection<String> split(Collection<T> collection, Interpreter<T> interpreter) {
+    public <T> @NotNull Collection<String> split(@NotNull Collection<T> collection, @NotNull Interpreter<T> interpreter) {
         return IterableSplitter.simpleSplit(collection, interpreter);
     }
 
@@ -81,7 +81,7 @@ public class CoreConfigurationApi implements ConfigurationAPI {
      * @return a {@link ConfigWriter} ready to write the split data
      */
     @Override
-    public <T> ConfigWriter splitToWriter(Collection<T> collection, Interpreter<T> interpreter) {
+    public <T> @NotNull ConfigWriter splitToWriter(@NotNull Collection<T> collection, @NotNull Interpreter<T> interpreter) {
         return IterableSplitter.splitToWriter(collection, interpreter);
     }
 
@@ -96,7 +96,7 @@ public class CoreConfigurationApi implements ConfigurationAPI {
      */
     @Deprecated
     @Override
-    public <T> Collection<T> tryReadSplitCollection(@NotNull Configuration configuration, String keySpace, Interpreter<T> interpreter) {
+    public <T> @NotNull Collection<T> tryReadSplitCollection(@NotNull Configuration configuration, @NotNull String keySpace, @NotNull Interpreter<T> interpreter) {
         return tryReadSplitCollection(configuration.entrySet().stream().filter(entry ->
                         entry.getKey().startsWith(keySpace)).map(Map.Entry::getValue)
                 .collect(Collectors.toUnmodifiableSet()), interpreter);
@@ -111,7 +111,7 @@ public class CoreConfigurationApi implements ConfigurationAPI {
      * @return a {@link java.util.Collection} with all Ts that where read successfully
      */
     @Override
-    public <T> Collection<T> tryReadSplitCollection(@NotNull Iterable<String> strings, Interpreter<T> interpreter) {
+    public <T> @NotNull Collection<T> tryReadSplitCollection(@NotNull Iterable<String> strings, @NotNull Interpreter<T> interpreter) {
         final Collection<T> ts = new ArrayList<>();
         for (String value : strings)
             try {
@@ -122,7 +122,7 @@ public class CoreConfigurationApi implements ConfigurationAPI {
     }
 
     @Override
-    public Properties initializeProperties(@NotNull String name, @Nullable String header) {
+    public @NotNull Properties initializeProperties(@NotNull String name, @Nullable String header) {
         final Properties defaults = new Properties();
         defaults.setProperty("configuration_name", name);
         defaults.setProperty("configuration_header", header);
@@ -130,7 +130,7 @@ public class CoreConfigurationApi implements ConfigurationAPI {
     }
 
     @Override
-    public Configuration merge(@NotNull Configuration c1, Configuration c2) {
+    public @NotNull Configuration merge(@NotNull Configuration c1, Configuration c2) {
         c1.copyAndAppendContentTo(c2);
         return c1;
     }

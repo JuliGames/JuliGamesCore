@@ -26,22 +26,22 @@ public interface AdventureTagManager extends MiniMessageSerializer {
     @NotNull TagResolver getFallbackResolver();
 
     @Contract(pure = true)
-    @NotNull Component fallbackResolve(String miniMessage);
+    @NotNull Component fallbackResolve(@NotNull String miniMessage);
 
     void register(@NotNull DBReplacement dbReplacement);
 
     void reload();
 
-    void register(String name, Tag tag);
+    void register(@NotNull String name, @NotNull Tag tag);
 
     @ApiStatus.Internal
     void clearResolver();
 
     @NotNull TagResolver getResolver();
 
-    @NotNull Component resolve(String miniMessage);
+    @NotNull Component resolve(@NotNull String miniMessage);
 
-    @NotNull Component resolve(String miniMessage, Collection<TagResolver> additions);
+    @NotNull Component resolve(@NotNull String miniMessage, @NotNull Collection<TagResolver> additions);
 
     @NotNull Component resolve(@NotNull Message message);
 
@@ -53,4 +53,7 @@ public interface AdventureTagManager extends MiniMessageSerializer {
     @ApiStatus.Internal
     @DoNotCall
     void load();
+
+    @ApiStatus.AvailableSince("1.4")
+    @NotNull String fromComponent(@NotNull Component component);
 }

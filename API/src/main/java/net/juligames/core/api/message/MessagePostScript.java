@@ -1,5 +1,7 @@
 package net.juligames.core.api.message;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Date;
 
 /**
@@ -11,20 +13,20 @@ public interface MessagePostScript {
     /**
      * @return the message that was sent (this may be not the exact message)
      */
-    Message message();
+    @NotNull Message message();
 
     /**
      * @return the time (not exact - do not use for encryption) the message sending was complete
      */
-    Date timeSent();
+    @NotNull Date timeSent();
 
     /**
      * @return the recipient of the message
      */
-    MessageRecipient recipient();
+    @NotNull MessageRecipient recipient();
 
     /**
      * @return transfer this {@link MessagePostScript} to a {@link MultiMessagePostScript}
      */
-    MultiMessagePostScript toMulti();
+    @NotNull MultiMessagePostScript toMulti();
 }

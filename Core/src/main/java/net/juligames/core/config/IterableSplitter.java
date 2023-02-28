@@ -63,7 +63,7 @@ public final class IterableSplitter {
         }
 
         @Override
-        public void write(Configuration configuration, String keyspace) {
+        public void write(@NotNull Configuration configuration, @NotNull String keyspace) {
             for (int i = 0; i < data.size(); i++) {
                 final String simple = data.get(i);
                 final String key = keyspace + "_" + i;

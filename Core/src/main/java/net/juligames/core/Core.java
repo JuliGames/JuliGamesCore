@@ -6,7 +6,7 @@ import de.bentzin.tools.logging.Logger;
 import de.bentzin.tools.misc.SubscribableType;
 import de.bentzin.tools.register.Registerator;
 import net.juligames.core.api.API;
-import net.juligames.core.api.ApiCore;
+import net.juligames.core.api.ApiProvider;
 import net.juligames.core.api.TODO;
 import net.juligames.core.api.cacheing.CacheApi;
 import net.juligames.core.api.command.CommandApi;
@@ -48,9 +48,9 @@ public final class Core implements API {
      * This can be set depending on the build of the Core
      */
     public static final String CORE_BRAND = "Core";
-    public static final String CORE_VERSION_NUMBER = "1.3";
+    public static final String CORE_VERSION_NUMBER = "1.4-SNAPSHOT";
     public static final String CORE_SPECIFICATION = "Gustav";
-    private static final String BUILD_VERSION = "1.3"; //POM VERSION
+    private static final String BUILD_VERSION = "1.4-SNAPSHOT"; //POM VERSION
 
     private static Core core;
     private final Registerator<Consumer<HazelcastInstance>> hazelcastPostPreparationWorkers = new Registerator<>("hazelcastPostPreparationWorkers");
@@ -116,7 +116,7 @@ public final class Core implements API {
         this.core_name = core_name;
         if (core != null) throw new IllegalStateException("seems like a core is already running!");
         core = this;
-        ApiCore.CURRENT_API = this;
+        ApiProvider.CURRENT_API = this;
         if (!member)
             hazelConnector = HazelConnector.getInstanceAndConnect(core_name);
         else
@@ -130,6 +130,7 @@ public final class Core implements API {
         try {
             hazelConnector.getInstance().get();
             coreLogger.info("connected to hazelcast!");
+
         } catch (InterruptedException | ExecutionException e) {
             coreLogger.error("connection to hazelcast failed! connection cant be reestablished!");
             coreLogger.error(e.getClass().getName() + " : " + e.getMessage());
@@ -145,7 +146,7 @@ public final class Core implements API {
         if (jdbc.isEmpty()) {
             Core.getInstance().coreLogger.warning("cant read jdbc data in database...");
         }
-        logger.warning("database: " + getConfigurationApi().database().cloneToProperties().toString());
+        logger.warning("database: " + getConfigurationApi().database().cloneToProperties());
         sqlManager = new CoreSQLManager(jdbc.orElse("jdbc:mysql://root@localhost:3306"), logger); //jdbc:mysql://admin@localhost:3306/minecraft
         logger.info("connected to jdbi -> " + sqlManager);
 
@@ -161,6 +162,25 @@ public final class Core implements API {
 
         Core.getInstance().getOrThrow().<SerializedNotification>getTopic("notify:" + Core.getInstance().getClusterApi().getLocalUUID().toString())
                 .addMessageListener(coreNotificationApi);
+
+
+        {
+            if (!Boolean.getBoolean("acknowledgeUnsafeMasterCheck")) {
+                coreLogger.info("checking compatibility with master..");
+                final String masterVersion = getHazelDataApi().getMasterInformation().get("master_version");
+
+                if (!getVersion().equals(masterVersion)) {
+                    coreLogger.warning("********************************************************");
+                    coreLogger.warning("Your local version is not compatible with your Master!!!");
+                    coreLogger.warning("Master is at: " + masterVersion);
+                    coreLogger.warning("You are at: " + getVersion());
+                    coreLogger.warning("You will not receive support for this unsecure combination!");
+                    coreLogger.warning("You can disable this check by setting \"acknowledgeUnsafeMasterCheck\" \n" +
+                            "to true!");
+                    coreLogger.warning("********************************************************");
+                }
+            }
+        }
 
         logger.info("hooking to shutdown...");
         getJavaRuntime().addShutdownHook(new Thread(() -> {
@@ -201,17 +221,17 @@ public final class Core implements API {
         coreLogger.info("goodbye!");
     }
 
-    public @NotNull Optional<? extends MessageRecipient> findRecipient(Predicate<MessageRecipient> searchQuery) {
+    public @NotNull Optional<? extends MessageRecipient> findRecipient(@NotNull Predicate<MessageRecipient> searchQuery) {
         return onlineRecipientProvider.get().stream().filter(searchQuery).findFirst();
     }
 
-    public @NotNull Optional<? extends MessageRecipient> findRecipientByName(String name) {
+    public @NotNull Optional<? extends MessageRecipient> findRecipientByName(@NotNull String name) {
         return findRecipient(messageRecipient -> messageRecipient.getName().equals(name));
     }
 
     @ApiStatus.Internal
     private void dropApiService() {
-        ApiCore.CURRENT_API = null;
+        ApiProvider.CURRENT_API = null;
     }
 
     /**
@@ -245,7 +265,7 @@ public final class Core implements API {
      * @return Logger for use when accessing via API
      */
     @Override
-    public Logger getAPILogger() {
+    public @NotNull Logger getAPILogger() {
         return apiLogger;
     }
 
@@ -295,7 +315,7 @@ public final class Core implements API {
         return topicNotificationCore;
     }
 
-    public CoreSQLManager getSQLManager() {
+    public @NotNull CoreSQLManager getSQLManager() {
         return sqlManager;
     }
 
@@ -303,7 +323,7 @@ public final class Core implements API {
      * @return The MessageAPI used to send Messages via core to players
      */
     @Override
-    public CoreMessageApi getMessageApi() {
+    public @NotNull CoreMessageApi getMessageApi() {
         return messageApi;
     }
 
@@ -311,7 +331,7 @@ public final class Core implements API {
      * @return the {@link ConfigurationAPI}
      */
     @Override
-    public CoreConfigurationApi getConfigurationApi() {
+    public @NotNull CoreConfigurationApi getConfigurationApi() {
         return configurationAPI;
     }
 
@@ -319,17 +339,17 @@ public final class Core implements API {
      * @return the {@link CommandApi}
      */
     @Override
-    public CoreCommandApi getCommandApi() {
+    public @NotNull CoreCommandApi getCommandApi() {
         return coreCommandApi;
     }
 
     @Override
-    public SubscribableType<BasicMiniGame> getLocalMiniGame() {
+    public @NotNull SubscribableType<BasicMiniGame> getLocalMiniGame() {
         return basicMiniGame;
     }
 
     @Override
-    public CacheApi getCacheAPI() {
+    public @NotNull CacheApi getCacheAPI() {
         return coreCacheApi;
     }
 
@@ -341,7 +361,7 @@ public final class Core implements API {
      * @return The Name this core is assigned to
      */
     @Override
-    public String getName() {
+    public @NotNull String getName() {
         return core_name;
     }
 
@@ -352,17 +372,17 @@ public final class Core implements API {
     }
 
     @Override
-    public String getBuildVersion() {
+    public @NotNull String getBuildVersion() {
         return BUILD_VERSION;
     }
 
     @Override
-    public Map<String, String> getJavaEnvironment() {
+    public @NotNull Map<String, String> getJavaEnvironment() {
         return System.getenv();
     }
 
     @Override
-    public Runtime getJavaRuntime() {
+    public @NotNull Runtime getJavaRuntime() {
         return Runtime.getRuntime();
     }
 
@@ -388,7 +408,7 @@ public final class Core implements API {
     }
 
     @Override
-    public Collection<? extends MessageRecipient> supplyOnlineRecipients() {
+    public @NotNull Collection<? extends MessageRecipient> supplyOnlineRecipients() {
         return getOnlineRecipientProvider().get();
     }
 
@@ -396,6 +416,7 @@ public final class Core implements API {
         return hazelcastPostPreparationWorkers;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     protected void finalize() { //Currently only for testing around with GarbageCollector!! Should be removed before 2.0
         if (getCoreLogger() != null) {

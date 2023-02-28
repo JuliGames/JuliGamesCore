@@ -22,13 +22,13 @@ import java.util.function.Supplier;
  */
 public class AudienceMessageRecipient implements MessageRecipient {
 
-    public static Supplier<String> defaultLocaleSupplier = () -> API.get().getHazelDataApi().getMasterInformation().get("default_locale");
+    public static final @NotNull Supplier<String> defaultLocaleSupplier = () -> API.get().getHazelDataApi().getMasterInformation().get("default_locale");
 
-    private final String name;
-    private final Supplier<String> locale;
-    private final Audience audience;
+    private final @NotNull String name;
+    private final @NotNull Supplier<String> locale;
+    private final @NotNull Audience audience;
 
-    public AudienceMessageRecipient(String name, Supplier<String> locale, Audience audience) {
+    public AudienceMessageRecipient(@NotNull String name, @NotNull Supplier<String> locale, @NotNull Audience audience) {
         this.name = name;
         this.locale = locale;
         this.audience = audience;
@@ -66,12 +66,12 @@ public class AudienceMessageRecipient implements MessageRecipient {
      * @return A human-readable name that defines this recipient
      */
     @Override
-    public String getName() {
+    public @NotNull String getName() {
         return name;
     }
 
     @Override
-    public void deliver(Message message) {
+    public void deliver(@NotNull Message message) {
         Component component = AdventureAPI.get().getAdventureTagManager().resolve(message);
         audience.sendMessage(component);
     }
@@ -79,10 +79,10 @@ public class AudienceMessageRecipient implements MessageRecipient {
     /**
      * delivers a miniMessage string to the recipient
      *
-     * @param miniMessage
+     * @param miniMessage the message
      */
     @Override
-    public void deliver(String miniMessage) {
+    public void deliver(@NotNull String miniMessage) {
         Component component = AdventureAPI.get().getAdventureTagManager().resolve(miniMessage);
         audience.sendMessage(component);
     }

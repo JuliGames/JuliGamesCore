@@ -17,16 +17,10 @@ import java.util.List;
  */
 @SuppressWarnings("unused")
 @Deprecated
-public class CollectionInterpreter<T> implements IterableInterpreter<T, Collection<T>> {
-
-    private final Interpreter<T> tInterpreter;
-
-    public CollectionInterpreter(Interpreter<T> tInterpreter) {
-        this.tInterpreter = tInterpreter;
-    }
+public record CollectionInterpreter<T>(Interpreter<T> tInterpreter) implements IterableInterpreter<T, Collection<T>> {
 
     @Override
-    public Collection<T> interpret(final @NotNull String input) throws Exception {
+    public @NotNull Collection<T> interpret(final @NotNull String input) throws Exception {
         if (!input.startsWith("{") || !input.endsWith("}")) {
             throw new IllegalArgumentException("Input has to start with { and end with }");
         }
@@ -75,7 +69,7 @@ public class CollectionInterpreter<T> implements IterableInterpreter<T, Collecti
 
 
     @Override
-    public String reverse(@NotNull Collection<T> ts) {
+    public @NotNull String reverse(@NotNull Collection<T> ts) {
         StringBuilder builder = new StringBuilder();
 
         for (T value : ts) {
@@ -90,9 +84,5 @@ public class CollectionInterpreter<T> implements IterableInterpreter<T, Collecti
         StringBuilder appender = new StringBuilder();
         appender.append("[").append(tInterpreter.reverse(object)).append("]");
         return appender;
-    }
-
-    public Interpreter<T> tInterpreter() {
-        return tInterpreter;
     }
 }

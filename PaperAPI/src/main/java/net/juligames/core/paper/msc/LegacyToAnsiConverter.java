@@ -2,6 +2,7 @@ package net.juligames.core.paper.msc;
 
 import net.juligames.core.api.err.dev.TODOException;
 import org.bukkit.ChatColor;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
 
@@ -11,7 +12,7 @@ import java.util.function.Function;
  */
 public class LegacyToAnsiConverter implements Function<ChatColor, String> {
     @Override
-    public String apply(ChatColor chatColor) {
+    public @NotNull String apply(@NotNull ChatColor chatColor) {
         throw new TODOException();
     }
 }

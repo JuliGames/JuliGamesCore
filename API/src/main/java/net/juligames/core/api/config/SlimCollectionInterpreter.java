@@ -12,20 +12,15 @@ import java.util.*;
  */
 @SuppressWarnings("DefaultAnnotationParam")
 @Deprecated(forRemoval = false)
-public class SlimCollectionInterpreter<T> implements IterableInterpreter<T, Collection<T>> {
-
-    private final Interpreter<T> tInterpreter;
-
-    public SlimCollectionInterpreter(Interpreter<T> tInterpreter) {
-        this.tInterpreter = tInterpreter;
-    }
+public record SlimCollectionInterpreter<T>(
+        Interpreter<T> tInterpreter) implements IterableInterpreter<T, Collection<T>> {
 
     @Override
-    public List<T> interpret(final @NotNull String input) throws Exception {
+    public @NotNull List<T> interpret(final @NotNull String input) throws Exception {
         if (input.isEmpty()) {
             return Collections.emptyList();
         }
-        int cLength = -1;
+        @SuppressWarnings("UnusedAssignment") int cLength = -1;
         String inp = input;
         {
             TextLength textLength = readLength(inp);
@@ -89,7 +84,7 @@ public class SlimCollectionInterpreter<T> implements IterableInterpreter<T, Coll
     }
 
     @Override
-    public String reverse(@NotNull Collection<T> ts) {
+    public @NotNull String reverse(@NotNull Collection<T> ts) {
         StringBuilder builder = new StringBuilder();
         String collectionLength = encodeLength(ts.size());
         StringJoiner innerJoiner = new StringJoiner("");
@@ -104,10 +99,6 @@ public class SlimCollectionInterpreter<T> implements IterableInterpreter<T, Coll
         String text = tInterpreter.reverse(object);
         String length = encodeLength(text.length());
         return length + text;
-    }
-
-    public Interpreter<T> tInterpreter() {
-        return tInterpreter;
     }
 
     private record TextLength(int length, int used) {

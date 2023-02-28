@@ -9,10 +9,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -23,6 +20,7 @@ import java.util.Properties;
  * @author Ture Bentzin
  * 27.11.2022
  */
+@SuppressWarnings("removal")
 public class MasterConfigManager {
 
     public static final File CONFIG_FOLDER;
@@ -57,9 +55,6 @@ public class MasterConfigManager {
             }
         }
 
-        // for (String configuration : configurations) {
-        //     store(configuration);
-        // }
     }
 
     public void store(String hazel) {
@@ -70,8 +65,7 @@ public class MasterConfigManager {
             file.createNewFile();
             Properties properties = configuration.cloneToProperties();
             try (FileWriter writer = new FileWriter(file)) {
-                Core.getInstance().getCoreLogger().info("trying to store: \"" + configuration + "\" to \""
-                        + file.getAbsolutePath() + "\"!");
+                Core.getInstance().getCoreLogger().info("trying to store: \"" + configuration + "\" to \"" + file.getAbsolutePath() + "\"!");
                 properties.store(writer, configuration.header_comment() + " written at: " + currentDateString());
                 Core.getInstance().getCoreLogger().info("file was saved: \"" + file.getName() + "\"");
             }
@@ -136,8 +130,7 @@ public class MasterConfigManager {
 
     @Contract(value = "_,_ -> new")
     private @NotNull File fileFromName(String name, boolean containsFileEnding) {
-        if (containsFileEnding)
-            return new File(CONFIG_FOLDER, name);
+        if (containsFileEnding) return new File(CONFIG_FOLDER, name);
         else return new File(CONFIG_FOLDER, name + FILE_ENDING);
     }
 
@@ -169,6 +162,18 @@ public class MasterConfigManager {
         java.util.Date time = Calendar.getInstance().getTime();
         SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd | hh:mm:ss");
         return dateFormatter.format(time);
+    }
+
+    public void createDatabaseConfiguration() {
+        File database = new File(CONFIG_FOLDER, "database" + FILE_ENDING);
+        String str = "jdbc: jdbc:mysql://root@localhost:3306/minecraft";
+        if (!database.exists()) {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(database))) {
+                writer.write(str);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
 }

@@ -63,6 +63,13 @@ public interface ClusterApi {
      */
     Optional<String> getLocalName();
 
+    /**
+     * This will return an {@link Optional} containing the identification of the local Hazelcast Instance if present. Otherwise,
+     * the Optional will be empty. An Identification could be "Lobby-1" or "MissileWars-2-1"
+     */
+    @ApiStatus.AvailableSince("1.4-SNAPSHOT")
+    Optional<String> getLocalIdentification();
+
     Map<UUID, InstanceType> getAllUUIDS();
 
     enum InstanceType {CLIENT, MEMBER}

@@ -8,6 +8,7 @@ import net.juligames.core.api.jdbi.DBPlayerLocalPreference;
  * 19.11.2022
  */
 @NoJavaDoc
+@Deprecated(forRemoval = true)
 public class PlayerLocalPreferenceBean implements DBPlayerLocalPreference {
 
     private String uuid;

@@ -33,12 +33,13 @@ import java.util.regex.Pattern;
  * @author Ture Bentzin
  * 30.12.2022
  */
+@SuppressWarnings("deprecation")
 @ApiStatus.Experimental
 public class CorePluginLoader implements PluginLoader {
     private static final boolean DISABLE_CLASS_PRIORITIZATION = Boolean.getBoolean("Paper.DisableClassPrioritization");
     final Server server;
     private final Pattern fileFilter = Pattern.compile("\\.core$"); //check that bnick does not try to load 7zip files here
-    private final Map<String, ReentrantReadWriteLock> classLoadLock = new java.util.HashMap<String, java.util.concurrent.locks.ReentrantReadWriteLock>();
+    private final Map<String, ReentrantReadWriteLock> classLoadLock = new java.util.HashMap<>();
     private final Map<String, Integer> classLoadLockCount = new java.util.HashMap<>();
     private final List<CorePluginClassLoader> loaders = new CopyOnWriteArrayList<>();
 

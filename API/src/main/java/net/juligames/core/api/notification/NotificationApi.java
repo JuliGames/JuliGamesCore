@@ -1,5 +1,7 @@
 package net.juligames.core.api.notification;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * @author Ture Bentzin
  * 16.11.2022
@@ -13,7 +15,7 @@ public interface NotificationApi {
      * @return if the registration was successful
      */
     @SuppressWarnings("UnusedReturnValue")
-    boolean registerListener(NotificationListener listener);
+    boolean registerListener(@NotNull NotificationListener listener);
 
     /**
      * unregister a listener
@@ -21,11 +23,11 @@ public interface NotificationApi {
      * @param listener the listener
      * @return if the removal was successful
      */
-    boolean unregisterListener(NotificationListener listener);
+    boolean unregisterListener(@NotNull NotificationListener listener);
 
     /**
      * @return the utility to send {@link Notification}s by yourself
      */
-    NotificationSender getNotificationSender();
+    @NotNull NotificationSender getNotificationSender();
 
 }

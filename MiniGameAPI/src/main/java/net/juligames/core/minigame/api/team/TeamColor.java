@@ -26,16 +26,21 @@ public interface TeamColor {
 
     @Contract("_ -> new")
     static @NotNull TeamColor fromNamedTextColor(@NotNull NamedTextColor namedTextColor) {
-        //TODO: fix prefix... This needs further testing in 1.1 (wait for reports)
+        //TODO: fix prefix... This needs further testing in 1.4 (wait for reports)
         Tag colorTag = Tag.styling(builder -> builder.color(namedTextColor));
-        TextComponent color = Component.text().color(namedTextColor).build();
+        TextComponent color = Component.text(namedTextColor.examinableName()).color(namedTextColor);
         String miniMessage = MiniMessage.miniMessage().serialize(color);
-        return new RTeamColor(namedTextColor.examinableName(), colorTag, "");
+        return new RTeamColor(miniMessage, colorTag, "");
     }
 
     @Contract(" -> new")
     static @NotNull TeamColor getDefaultWhite() {
         return new RTeamColor("", Tag.styling(b -> b.color(NamedTextColor.WHITE)), "");
+    }
+
+    @Contract(" -> new")
+    static @NotNull TeamColor getDefaultGray() {
+        return new RTeamColor("", Tag.styling(b -> b.color(NamedTextColor.GRAY)), "");
     }
 
     static @NotNull Set<TeamColor> getAllDefaultNamed() {

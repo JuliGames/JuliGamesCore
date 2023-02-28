@@ -42,10 +42,11 @@ public class CoreMaster {
         masterConfigManager = new MasterConfigManager();
 
         logger.info("welcome to " + Core.getFullCoreName() + " Master by Ture Bentzin <bentzin@tdrstudios.de>");
-        //logger.warning("This is still a development build!");
 
 
-        // masterConfigManager.load();
+        logger.info("preparing directory...");
+        masterConfigManager.createDatabaseConfiguration();
+
         logger.info("booting hazelcast (MEMBER CORE):");
         Core core = new Core();
         try {

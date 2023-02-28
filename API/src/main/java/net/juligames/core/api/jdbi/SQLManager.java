@@ -3,8 +3,11 @@ package net.juligames.core.api.jdbi;
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.core.config.ConfigRegistry;
+import org.jdbi.v3.core.extension.ExtensionCallback;
 import org.jdbi.v3.core.result.ResultIterable;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.sql.Connection;
 import java.util.Map;
@@ -14,6 +17,7 @@ import java.util.function.Function;
  * @author Ture Bentzin
  * 16.11.2022
  */
+@SuppressWarnings("unused")
 public interface SQLManager {
 
     /**
@@ -35,13 +39,13 @@ public interface SQLManager {
      * @see DBData
      */
     @ApiStatus.Experimental
-    String getData(String key);
+    String getData(@NotNull String key);
 
     /**
      * @return a new Handle
      * @see Jdbi#open()
      */
-    Handle openHandle();
+    @NotNull Handle openHandle();
 
     /**
      * You can use this to execute stuff on JDBI fast and secure
@@ -49,13 +53,19 @@ public interface SQLManager {
      * @return a new Handle
      * @see SQLManager#openHandle()
      */
-    <R> R useHandle(Function<Handle, R> handleFunction);
+    <R> R useHandle(@NotNull Function<Handle, R> handleFunction);
+
+    /**
+     * @throws NullPointerException if data is null, or execution failed
+     */
+    @ApiStatus.AvailableSince("1.4")
+    @Nullable <T, R> R withExtension(Class<T> dao, ExtensionCallback<R, T, Exception> extensionCallback);
 
     @ApiStatus.Experimental
-    ResultIterable<Map<String, Object>> mapQuery(String sql);
+    ResultIterable<Map<String, Object>> mapQuery(@NotNull String sql);
 
     @ApiStatus.Experimental
-    <T> ResultIterable<Map<String, T>> mapDefinedQuery(String sql, Class<T> valueClass);
+    <T> ResultIterable<Map<String, T>> mapDefinedQuery(@NotNull String sql, @NotNull Class<T> valueClass);
 
     /**
      * @param connection connection to use
@@ -63,7 +73,7 @@ public interface SQLManager {
      * @apiNote Only use if you know what you are doing
      * This can be used to connect to a second party Database
      */
-    Jdbi getCustomJDBI(Connection connection);
+    Jdbi getCustomJDBI(@NotNull Connection connection);
 
     /**
      * @return the {@link ConfigRegistry} used with JDBI
@@ -71,5 +81,5 @@ public interface SQLManager {
      * @see Jdbi#getConfig()
      * @see ConfigRegistry#createCopy()
      */
-    ConfigRegistry getConfig();
+    @NotNull ConfigRegistry getConfig();
 }

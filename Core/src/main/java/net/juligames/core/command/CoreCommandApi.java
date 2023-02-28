@@ -2,6 +2,7 @@ package net.juligames.core.command;
 
 import net.juligames.core.Core;
 import net.juligames.core.api.command.CommandApi;
+import net.juligames.core.command.inbuild.InbuiltCommandManager;
 import org.checkerframework.checker.optional.qual.MaybePresent;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -20,6 +21,7 @@ public class CoreCommandApi implements CommandApi {
 
     public static final String COMMAND_NOTIFICATION_HEADER = "command";
     private static final CoreCommandNotificationListener listener = new CoreCommandNotificationListener();
+    private final InbuiltCommandManager inbuiltManager = new InbuiltCommandManager();
 
     @Nullable
     private Consumer<String> commandHandler;
@@ -87,6 +89,11 @@ public class CoreCommandApi implements CommandApi {
         return buffer;
     }
 
+    @ApiStatus.Experimental
+    public InbuiltCommandManager getInbuiltManager() {
+        return inbuiltManager;
+    }
+
     /**
      * This will handle the command with the commandHandler. If the commandHandler is not present then nothing will happen
      *
@@ -99,6 +106,14 @@ public class CoreCommandApi implements CommandApi {
             Core.getInstance().getCoreLogger().info("BIT TEST!"); //DEBUG
             return;
         }
-        getCommandHandler().ifPresent(stringConsumer -> stringConsumer.accept(command));
+        getCommandHandler().ifPresent(stringConsumer -> {
+            if (!inbuiltManager.handle(command)) stringConsumer.accept(command);
+        });
     }
+
+    protected final CoreCommandNotificationListener getListener() {
+        return listener;
+    }
+
+
 }

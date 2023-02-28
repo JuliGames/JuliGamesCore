@@ -6,13 +6,16 @@ import de.bentzin.tools.logging.Logger;
 import net.juligames.core.Core;
 import net.juligames.core.api.jdbi.*;
 import net.juligames.core.api.jdbi.mapper.bean.LocaleBean;
+import net.juligames.core.api.misc.ThrowableDebug;
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.core.config.ConfigRegistry;
+import org.jdbi.v3.core.extension.ExtensionCallback;
 import org.jdbi.v3.core.result.ResultIterable;
 import org.jdbi.v3.sqlobject.SqlObjectPlugin;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.sql.Connection;
 import java.util.List;
@@ -77,12 +80,14 @@ public class CoreSQLManager implements SQLManager {
 
         //Currently not automatically used
         //player_locale_preference
-        logger.info("creating: player_locale_preference");
-        jdbi.withExtension(PlayerLocalPreferenceDAO.class, extension -> {
-            extension.createTable();
-            return null;
-        });
-        logger.info("created: player_locale_preference");
+        if (Boolean.getBoolean("legacyPlayerLocaleReference")) {
+            logger.info("creating: player_locale_preference");
+            jdbi.withExtension(PlayerLocalPreferenceDAO.class, extension -> {
+                extension.createTable();
+                return null;
+            });
+            logger.info("created: player_locale_preference");
+        }
 
 
         //replacementType
@@ -123,12 +128,12 @@ public class CoreSQLManager implements SQLManager {
 
     @Override
     @ApiStatus.Experimental
-    public String getData(String key) {
+    public String getData(@NotNull String key) {
         return getJdbi().withExtension(DataDAO.class, extension -> extension.selectBean(key)).getData();
     }
 
     @Override
-    public Handle openHandle() {
+    public @NotNull Handle openHandle() {
         return getJdbi().open();
     }
 
@@ -140,22 +145,34 @@ public class CoreSQLManager implements SQLManager {
     }
 
     @Override
-    public ResultIterable<Map<String, Object>> mapQuery(String sql) {
+    @Nullable
+    public <T, R> R withExtension(Class<T> dao, ExtensionCallback<R, T, Exception> extensionCallback) {
+        try {
+            return jdbi.withExtension(dao, extensionCallback);
+        } catch (Exception e) {
+            getLogger().warning("failed to execute extension: " + e.getMessage());
+            ThrowableDebug.debug(e);
+            return null;
+        }
+    }
+
+    @Override
+    public ResultIterable<Map<String, Object>> mapQuery(@NotNull String sql) {
         return useHandle(handle -> handle.createQuery(sql).mapToMap());
     }
 
     @Override
-    public <T> ResultIterable<Map<String, T>> mapDefinedQuery(String sql, Class<T> valueClass) {
+    public <T> ResultIterable<Map<String, T>> mapDefinedQuery(@NotNull String sql, @NotNull Class<T> valueClass) {
         return useHandle(handle -> handle.createQuery(sql).mapToMap(valueClass));
     }
 
     @Override
-    public Jdbi getCustomJDBI(Connection connection) {
+    public Jdbi getCustomJDBI(@NotNull Connection connection) {
         return Jdbi.create(connection);
     }
 
     @Override
-    public ConfigRegistry getConfig() {
+    public @NotNull ConfigRegistry getConfig() {
         return getJdbi().getConfig().createCopy();
     }
 

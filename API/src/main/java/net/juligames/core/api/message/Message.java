@@ -2,6 +2,7 @@ package net.juligames.core.api.message;
 
 import net.juligames.core.api.jdbi.DBMessage;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 import java.util.Set;
@@ -11,36 +12,37 @@ import java.util.function.Function;
  * @author Ture Bentzin
  * 18.11.2022
  */
+@SuppressWarnings("unused")
 public interface Message extends Cloneable {
 
     /**
      * @return the data container of this Message
      */
     @ApiStatus.Internal
-    DBMessage getMessageData();
+    @NotNull DBMessage getMessageData();
 
     /**
      * @return the miniMessage (unresolved obviously)
      * This String does contain patterns
      */
-    String getMiniMessage();
+    @NotNull String getMiniMessage();
 
     /**
      * @return the miniMessage, but all patterns are changed to {@code <param_safe_n> & <param_unsafe_n>} (for example)
      */
-    String getMiniMessageReadyForResolving(int replacementSize);
+    @NotNull String getMiniMessageReadyForResolving(int replacementSize);
 
     /**
      * @return the miniMessage, but all patterns are changed to {@code <param_safe_n> & <param_unsafe_n>} (for example)
      */
-    String getMiniMessageReadyForResolving();
+    @NotNull String getMiniMessageReadyForResolving();
 
     /**
      * This String will not contain patterns, use of this may be unsafe, because untrusted data may get resolved!
      *
      * @return the miniMessage (unresolved obviously)
      */
-    String getPreparedMiniMessage();
+    @NotNull String getPreparedMiniMessage();
 
     /**
      * This Method should only be used for logging to systems that do not support MiniMessage or Components
@@ -51,10 +53,10 @@ public interface Message extends Cloneable {
      * @see net.juligames.core.adventure.AdventureTagManager
      */
     @SuppressWarnings("JavadocReference")
-    String getPlainMessage(MiniMessageSerializer serializer);
+    @NotNull String getPlainMessage(@NotNull MiniMessageSerializer serializer);
 
     @Deprecated
-    String getLegacyMessage(MiniMessageSerializer serializer);
+    @NotNull String getLegacyMessage(@NotNull MiniMessageSerializer serializer);
 
     //String getANSIMessage(); //would be cool to have - maybe one day
 
@@ -63,11 +65,11 @@ public interface Message extends Cloneable {
      *
      * @param actionToPerform the operation
      */
-    void doWithMiniMessage(Function<String, String> actionToPerform);
+    void doWithMiniMessage(@NotNull Function<String, String> actionToPerform);
 
-    Map<Integer, String> getReplacements();
+    @NotNull Map<Integer, String> getReplacements();
 
-    Set<Map.Entry<Integer, String>> getReplacementSet();
+    @NotNull Set<Map.Entry<Integer, String>> getReplacementSet();
 
     default int replacementSize() {
         return getReplacementSet().size();

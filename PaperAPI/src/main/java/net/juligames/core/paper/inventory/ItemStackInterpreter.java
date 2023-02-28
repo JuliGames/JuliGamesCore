@@ -24,16 +24,16 @@ public class ItemStackInterpreter implements Interpreter<ItemStack> {
 
 
     @Override
-    public ItemStack interpret(String input) throws IllegalArgumentException {
+    public @NotNull ItemStack interpret(@NotNull String input) throws IllegalArgumentException {
         return ItemStack.deserializeBytes(fromBase64String(input));
     }
 
     @Override
-    public String reverse(@NotNull ItemStack itemStack) {
+    public @NotNull String reverse(@NotNull ItemStack itemStack) {
         return toBase64String(itemStack.serializeAsBytes());
     }
 
-    protected byte[] fromBase64String(@NotNull String base64) throws IllegalArgumentException {
+    protected byte @NotNull [] fromBase64String(@NotNull String base64) throws IllegalArgumentException {
         //noinspection ConstantConditions
         if (base64 != null && !base64.isEmpty() && !base64.isBlank())
             return Base64.getDecoder().decode(base64);

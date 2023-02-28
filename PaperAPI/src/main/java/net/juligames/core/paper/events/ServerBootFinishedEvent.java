@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
  * 23.12.2022
  */
 public final class ServerBootFinishedEvent extends ServerEvent {
-    private static final HandlerList handlerList = new HandlerList();
+    private static final @NotNull HandlerList handlerList = new HandlerList();
     private final @NotNull API api;
 
     public ServerBootFinishedEvent(@NotNull API api) {
@@ -28,7 +28,7 @@ public final class ServerBootFinishedEvent extends ServerEvent {
         this.api = API.get();
     }
 
-    public static HandlerList getHandlerList() {
+    public static @NotNull HandlerList getHandlerList() {
         return handlerList;
     }
 

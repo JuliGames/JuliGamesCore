@@ -6,6 +6,7 @@ import net.juligames.core.api.message.MessageRecipient;
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -24,12 +25,12 @@ public class PaperMessageRecipient implements MessageRecipient {
      * @return A human-readable name that defines this recipient
      */
     @Override
-    public String getName() {
+    public @NotNull String getName() {
         return commandSender.getName();
     }
 
     @Override
-    public void deliver(Message message) {
+    public void deliver(@NotNull Message message) {
         commandSender.sendMessage(AdventureAPI.get().getAdventureTagManager().resolve(message));
     }
 
@@ -39,7 +40,7 @@ public class PaperMessageRecipient implements MessageRecipient {
      * @param miniMessage the miniMessage to deliver to the commandSender
      */
     @Override
-    public void deliver(String miniMessage) {
+    public void deliver(@NotNull String miniMessage) {
         //Component resolve = Core.getInstance().getMessageApi().getTagManager().resolve(miniMessage);
         Component resolve = AdventureAPI.get().getAdventureTagManager().resolve(miniMessage);
         commandSender.sendMessage(resolve);

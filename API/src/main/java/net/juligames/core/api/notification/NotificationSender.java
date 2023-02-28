@@ -1,5 +1,7 @@
 package net.juligames.core.api.notification;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.UUID;
 
 /**
@@ -8,11 +10,11 @@ import java.util.UUID;
  * @apiNote please care about the reserved headers. To look them up please check out the manual and documentation of your core and your other addons!!
  */
 public interface NotificationSender {
-    void sendNotification(SimpleNotification notification, UUID... addresses);
+    void sendNotification(@NotNull SimpleNotification notification, @NotNull UUID @NotNull ... addresses);
 
-    void broadcastNotification(SimpleNotification notification);
+    void broadcastNotification(@NotNull SimpleNotification notification);
 
-    void sendNotification(String header, String message, UUID... addressees);
+    void sendNotification(@NotNull String header, @NotNull String message, @NotNull UUID @NotNull ... addressees);
 
-    void broadcastNotification(String header, String message);
+    void broadcastNotification(@NotNull String header, @NotNull String message);
 }

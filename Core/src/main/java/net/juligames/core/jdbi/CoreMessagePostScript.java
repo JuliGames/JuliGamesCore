@@ -4,6 +4,7 @@ import net.juligames.core.api.message.Message;
 import net.juligames.core.api.message.MessagePostScript;
 import net.juligames.core.api.message.MessageRecipient;
 import net.juligames.core.api.message.MultiMessagePostScript;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.Instant;
 import java.util.Date;
@@ -33,22 +34,22 @@ public class CoreMessagePostScript implements MessagePostScript {
 
 
     @Override
-    public Message message() {
+    public @NotNull Message message() {
         return message;
     }
 
     @Override
-    public Date timeSent() {
+    public @NotNull Date timeSent() {
         return timeSent;
     }
 
     @Override
-    public MessageRecipient recipient() {
+    public @NotNull MessageRecipient recipient() {
         return messageRecipient;
     }
 
     @Override
-    public MultiMessagePostScript toMulti() {
+    public @NotNull MultiMessagePostScript toMulti() {
         return new CoreMultiMessagePostScript(List.of(message), List.of(recipient()), timeSent);
     }
 }

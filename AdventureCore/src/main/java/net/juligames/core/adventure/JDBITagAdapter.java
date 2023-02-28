@@ -25,6 +25,7 @@ public class JDBITagAdapter {
 
     public static final Logger logger = API.get().getAPILogger().adopt("adapter");
 
+    @SuppressWarnings("PatternValidation")
     public static Tag fromJDBI(@NotNull DBReplacement replacement) {
         String s = replacement.getReplacementType();
         ReplacementType replacementType = ReplacementType.valueOf(s);

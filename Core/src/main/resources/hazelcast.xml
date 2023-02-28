@@ -13,7 +13,7 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
-  -->
+  HttpUrlsUsage -->
 
 <!--
   The default Hazelcast configuration.
@@ -25,7 +25,7 @@
   or the Reference Manual at https://docs.hazelcast.com/
 -->
 
-<!--suppress XmlDefaultAttributeValue -->
+<!--suppress XmlDefaultAttributeValue, HttpUrlsUsage -->
 <hazelcast xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xmlns="http://www.hazelcast.com/schema/config"
            xsi:schemaLocation="http://www.hazelcast.com/schema/config
@@ -134,7 +134,7 @@
                 -->
                 <self-registration>true</self-registration>
                 <!--
-                    Defines an eureka namespace to not collide with other service registry clients
+                    Defines a eureka namespace to not collide with other service registry clients
                     in eureka-client.properties file. It is optional. Default value is hazelcast.
                 -->
                 <namespace>hazelcast</namespace>
@@ -152,7 +152,7 @@
         </interfaces>
         <!--
             Lets you configure SSL using the SSL context factory. This feature is available
-            only in Hazelcast Enterprise. To be able to use it, encryption should NOT be enabled
+            only in Hazelcast Enterprise. To be able to use it, encryption should NOT be enabled,
             and you should first implement your SSLContextFactory class. Its configuration contains
             the factory class and SSL properties. By default, it is disabled.
         -->
@@ -306,7 +306,7 @@
         <!--
             Maximum number of seconds for each entry to stay idle in the map. Entries that are
             idle(not touched) for more than <max-idle-seconds> will get
-            automatically evicted from the map. Entry is touched if get, put or containsKey is called.
+            automatically evicted from the map. Entry is touched if you get, put or containsKey is called.
             Any integer between 0 and Integer.MAX_VALUE. 0 means infinite. Default is 0.
         -->
         <max-idle-seconds>0</max-idle-seconds>
@@ -458,7 +458,7 @@
 
     <!--
         The version of the portable serialization. Portable version is used to differentiate two same
-        classes that have changes on it like adding/removing field or changing a type of a field.
+        classes that have changes on it like adding/removing field or changing a type of field.
     -->
     <serialization>
         <portable-version>0</portable-version>
@@ -520,15 +520,15 @@
         <!-- number of backup copies to configure for Hazelcast IMaps used internally in a Jet job -->
         <backup-count>1</backup-count>
         <!-- the delay after which auto-scaled jobs will restart if a new member is added to the
-             cluster. The default is 10 seconds. Has no effect on jobs with auto scaling disabled -->
+             cluster. The default is 10 seconds. Has no effect on jobs with auto-scaling disabled -->
         <scale-up-delay-millis>10000</scale-up-delay-millis>
         <!-- Sets whether Lossless Job Restart is enabled for the node. With
-             Lossless Restart, Jet persists job snapshots to disk automatically
+             Lossless Restart, Jet persists job snapshots to disk automatically,
              and you can restart the whole cluster without losing the jobs and
              their state.
 
              This feature requires Hazelcast Enterprise and is implemented on top of the
-             Persistence feature. Therefore you should enable and configure Persistence,
+             Persistence feature. Therefore, you should enable and configure Persistence,
              especially the base directory where to store the recovery files.
          -->
         <lossless-restart-enabled>false</lossless-restart-enabled>

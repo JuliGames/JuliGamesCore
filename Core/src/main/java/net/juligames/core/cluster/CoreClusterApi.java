@@ -7,6 +7,7 @@ import com.hazelcast.cluster.ClusterState;
 import com.hazelcast.cluster.Endpoint;
 import com.hazelcast.cluster.Member;
 import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.map.IMap;
 import de.bentzin.tools.pair.DividedPair;
 import net.juligames.core.Core;
 import net.juligames.core.api.cluster.ClusterApi;
@@ -15,6 +16,7 @@ import net.juligames.core.api.cluster.ClusterMember;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.net.SocketAddress;
 import java.util.*;
@@ -24,6 +26,7 @@ import java.util.stream.Collectors;
  * @author Ture Bentzin
  * 16.11.2022
  */
+@SuppressWarnings("unused")
 public final class CoreClusterApi implements ClusterApi {
 
     @Override
@@ -130,6 +133,32 @@ public final class CoreClusterApi implements ClusterApi {
     @Override
     public @NotNull Optional<String> getLocalName() {
         return Optional.of(instance().getName());
+    }
+
+    @Override
+    public Optional<String> getLocalIdentification() {
+        return Optional.ofNullable(getIdentifications().get(getLocalUUID()));
+    }
+
+    /**
+     * Set a new identification for this current UUID
+     *
+     * @param identification the new identification
+     * @see #getLocalUUID()
+     * @see #getIdentifications()
+     * @see #getLocalIdentification()
+     */
+    public void identify(@Nullable String identification) {
+        if (identification == null) {
+            getIdentifications().remove(getLocalUUID());
+            return;
+        }
+        getIdentifications().set(getLocalUUID(), identification);
+    }
+
+    @SuppressWarnings("ProtectedMemberInFinalClass")
+    protected @NotNull IMap<UUID, String> getIdentifications() {
+        return Core.getInstance().getHazelDataApi().getMap("server_identification");
     }
 
     /**

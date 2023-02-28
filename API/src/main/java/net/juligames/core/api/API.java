@@ -34,13 +34,13 @@ public interface API {
      * This is the primary way for getting your API Instance. With this Instance you have access to all build in features in the core
      * that are explicitly exposed to the API. If the API should not be provided by a core then this will throw a {@link APIException}
      * to indicate that a Core is necessary to get this Instance. For further Information on how to use the {@link API} please check out
-     * the GitHub Wiki. For further information on this method check out {@link ApiCore}
+     * the GitHub Wiki. For further information on this method check out {@link ApiProvider}
      *
      * @return your API Instance
      * @throws APIException if no API is present
      */
     static @NotNull API get() throws APIException {
-        @MaybePresent Optional<API> api = ApiCore.optionalApi();
+        @MaybePresent Optional<API> api = ApiProvider.optionalApi();
         if (api.isEmpty()) {
             throw new APIException();
         }
@@ -54,80 +54,80 @@ public interface API {
      * @return an NonNull Optional that contains the first result for your query. The Optional might be empty
      */
     @MaybePresent
-    @NotNull Optional<? extends MessageRecipient> findRecipient(Predicate<MessageRecipient> searchQuery);
+    @NotNull Optional<? extends MessageRecipient> findRecipient(@NotNull Predicate<MessageRecipient> searchQuery);
 
     @MaybePresent
-    @NotNull Optional<? extends MessageRecipient> findRecipientByName(String name);
+    @NotNull Optional<? extends MessageRecipient> findRecipientByName(@NotNull String name);
 
     /**
      * @return the {@link HazelDataApi}
      */
-    HazelDataApi getHazelDataApi();
+    @NotNull HazelDataApi getHazelDataApi();
 
     /**
      * @return The {@link NotificationApi} for this core
      */
-    NotificationApi getNotificationApi();
+    @NotNull NotificationApi getNotificationApi();
 
     /**
      * @return The {@link ClusterApi} for this core
      */
-    ClusterApi getClusterApi();
+    @NotNull ClusterApi getClusterApi();
 
     /**
      * @return de.bentzin.tools.logging.Logger for use when accessing via API
      */
-    Logger getAPILogger();
+    @NotNull Logger getAPILogger();
 
     /**
      * @return net.juligames.core.api.jdbi.SQLManager to get {@link org.jdbi.v3.core.Jdbi}
      */
-    SQLManager getSQLManager();
+    @NotNull SQLManager getSQLManager();
 
     /**
      * @return The {@link MessageApi} used to send Messages via core to players
      */
-    MessageApi getMessageApi();
+    @NotNull MessageApi getMessageApi();
 
     /**
      * @return the {@link ConfigurationAPI}
      */
-    ConfigurationAPI getConfigurationApi();
+    @NotNull ConfigurationAPI getConfigurationApi();
 
     /**
      * @return the {@link CommandApi}
      */
-    CommandApi getCommandApi();
+    @NotNull CommandApi getCommandApi();
 
     /**
      * @return a possible local running {@link BasicMiniGame}
      */
-    SubscribableType<BasicMiniGame> getLocalMiniGame();
+    @NotNull SubscribableType<BasicMiniGame> getLocalMiniGame();
 
     /**
      * @return CacheAPI for use with Caffeine
      */
-    CacheApi getCacheAPI();
+    @NotNull CacheApi getCacheAPI();
 
     /**
      * @return The Name this core is assigned to
      */
-    String getName();
+    @NotNull String getName();
 
-    String getVersion();
+    @NotNull String getVersion();
 
-    String getBuildVersion();
+    @NotNull String getBuildVersion();
 
-    Map<String, String> getJavaEnvironment();
+    @NotNull Map<String, String> getJavaEnvironment();
 
-    Runtime getJavaRuntime();
+    @NotNull Runtime getJavaRuntime();
 
     @ApiStatus.Internal
     void collectGarbage();
 
-    Supplier<Collection<? extends MessageRecipient>> getOnlineRecipientProvider();
+    @NotNull Supplier<Collection<? extends MessageRecipient>> getOnlineRecipientProvider();
 
-    Collection<? extends MessageRecipient> supplyOnlineRecipients();
+    @NotNull Collection<? extends MessageRecipient> supplyOnlineRecipients();
 
     /*
      *
