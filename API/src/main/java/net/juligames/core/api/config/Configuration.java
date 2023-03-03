@@ -1,6 +1,8 @@
 package net.juligames.core.api.config;
 
 import de.bentzin.tools.pair.BasicPair;
+import de.bentzin.tools.pair.EntryPairAdapter;
+import de.bentzin.tools.pair.Pair;
 import net.juligames.core.api.misc.TriConsumer;
 import org.checkerframework.checker.optional.qual.MaybePresent;
 import org.jetbrains.annotations.ApiStatus;
@@ -20,7 +22,8 @@ import java.util.function.*;
  * @see BuildInInterpreters
  */
 @SuppressWarnings("unused")
-public interface Configuration extends Comparable<Configuration> {
+public interface Configuration extends Comparable<Configuration>, Iterable<Pair<String>> {
+
 
     /**
      * This keys can be requested but never should be overridden (it is possible to override them, but only consider doing this if you really
@@ -336,4 +339,70 @@ public interface Configuration extends Comparable<Configuration> {
     default int compareTo(@NotNull Configuration o) {
         return o.size() - size();
     }
+
+
+    //from map
+
+    /**
+     * Performs the given action for each entry in this map until all entries
+     * have been processed or the action throws an exception.   Unless
+     * otherwise specified by the implementing class, actions are performed in
+     * the order of entry set iteration (if an iteration order is specified.)
+     * Exceptions thrown by the action are relayed to the caller.
+     *
+     * @param action The action to be performed for each entry
+     * @throws NullPointerException            if the specified action is null
+     * @throws ConcurrentModificationException if an entry is found to be
+     *                                         removed during iteration
+     * @implSpec The default implementation is equivalent to, for this {@code map}:
+     * <pre> {@code
+     * for (Map.Entry<String, String> entry : map.entrySet())
+     *     action.accept(entry.getKey(), entry.getValue());
+     * }</pre>
+     * <p>
+     * The default implementation makes no guarantees about synchronization
+     * or atomicity properties of this method. Any implementation providing
+     * atomicity guarantees must override this method and document its
+     * concurrency properties.
+     */
+    @ApiStatus.AvailableSince("1.5")
+    default void forEach(BiConsumer<String, String> action) {
+        Objects.requireNonNull(action);
+        for (Map.Entry<String, String> entry : entrySet()) {
+            String k;
+            String v;
+            try {
+                k = entry.getKey();
+                v = entry.getValue();
+            } catch (IllegalStateException ise) {
+                // this usually means the entry is no longer in the map.
+                throw new ConcurrentModificationException(ise);
+            }
+            action.accept(k, v);
+        }
+    }
+
+
+    //Iterable
+
+    @NotNull
+    @Override
+    @ApiStatus.AvailableSince("1.5")
+    default Iterator<Pair<String>> iterator() {
+        return entrySet().stream().map(EntryPairAdapter::pairFromEntry).iterator();
+    }
+
+    @Override
+    @ApiStatus.AvailableSince("1.5")
+    default void forEach(Consumer<? super Pair<String>> action) {
+        forEach((s, s2) -> action.accept(new Pair<>(s, s2)));
+    }
+
+    @Override
+    @ApiStatus.AvailableSince("1.5")
+    default Spliterator<Pair<String>> spliterator() {
+        return entrySet().stream().map(EntryPairAdapter::pairFromEntry).spliterator();
+    }
+
+
 }
