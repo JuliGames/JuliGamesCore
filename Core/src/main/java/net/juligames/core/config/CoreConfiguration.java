@@ -777,6 +777,139 @@ public class CoreConfiguration implements Configuration {
         setString(basicPair.getFirst(), basicPair.getSecond());
     }
 
+
+    //ifAbsent
+
+    @Override
+    public void setStringIfAbsent(@NotNull String key, @NotNull String value) {
+        if(isSet(key))
+            setString(key,value);
+    }
+
+    @Override
+    public void setStringIfAbsent(@NotNull String key, @NotNull Supplier<String> value) {
+        if(isSet(key))
+            setString(key,value);
+    }
+
+    @Override
+    public void setIntegerIfAbsent(@NotNull String key, @NotNull Integer value) {
+        if(isSet(key))
+            setInteger(key,value);
+    }
+
+    @Override
+    public void setIntegerIfAbsent(@NotNull String key, @NotNull Supplier<Integer> value) {
+        if(isSet(key))
+            setInteger(key,value);
+    }
+
+    @Override
+    public void setDoubleIfAbsent(@NotNull String key, @NotNull Double value) {
+        if(isSet(key))
+            setDouble(key,value);
+    }
+
+    @Override
+    public void setDoubleIfAbsent(@NotNull String key, @NotNull Supplier<Double> value) {
+        if(isSet(key))
+            setDouble(key,value);
+    }
+
+    @Override
+    public void setLongIfAbsent(@NotNull String key, @NotNull Long value) {
+        if(isSet(key))
+            setLong(key,value);
+    }
+
+    @Override
+    public void setLongIfAbsent(@NotNull String key, @NotNull Supplier<Long> value) {
+        if(isSet(key))
+            setLong(key,value);
+    }
+
+    @Override
+    public void setShortIfAbsent(@NotNull String key, @NotNull Short value) {
+        if(isSet(key))
+            setShort(key,value);
+    }
+
+    @Override
+    public void setShortIfAbsent(@NotNull String key, @NotNull Supplier<Short> value) {
+        if(isSet(key))
+            setShort(key,value);
+    }
+
+    @Override
+    public void setByteIfAbsent(@NotNull String key, @NotNull Byte value) {
+        if(isSet(key))
+            setByte(key,value);
+    }
+
+    @Override
+    public void setByteIfAbsent(@NotNull String key, @NotNull Supplier<Byte> value) {
+        if(isSet(key))
+            setByte(key,value);
+    }
+
+    @Override
+    public void setBooleanIfAbsent(@NotNull String key, @NotNull Boolean value) {
+        if(isSet(key))
+            setBoolean(key,value);
+    }
+
+    @Override
+    public void setBooleanIfAbsent(@NotNull String key, @NotNull Supplier<Boolean> value) {
+        if(isSet(key))
+            setBoolean(key,value);
+    }
+
+    @Override
+    public void setFloatIfAbsent(@NotNull String key, @NotNull Float value) {
+        if(isSet(key))
+            setFloat(key,value);
+    }
+
+    @Override
+    public void setFloatIfAbsent(@NotNull String key, @NotNull Supplier<Float> value) {
+        if(isSet(key))
+            setFloat(key,value);
+    }
+
+    @Override
+    public <T> void setIfAbsent(@NotNull String key, @NotNull T value, @NotNull Interpreter<T> interpreter) {
+        if(isSet(key))
+            set(key,value,interpreter);
+    }
+
+    @Override
+    public <T> void setIfAbsent(@NotNull String key, @NotNull Supplier<T> value, @NotNull Interpreter<T> interpreter) {
+        if(isSet(key))
+            set(key,value,interpreter);
+    }
+
+    @Override
+    public <T> void setIfAbsent(@NotNull Supplier<String> key, @NotNull T value, @NotNull Interpreter<T> interpreter) {
+        if(isSet(key))
+            set(key,value,interpreter);
+    }
+
+    @Override
+    public <T> void setIfAbsent(@NotNull Supplier<String> key, @NotNull Supplier<T> value, @NotNull Interpreter<T> interpreter) {
+        if(isSet(key))
+            set(key,value,interpreter);
+    }
+
+
+    @Override
+    public void setIfAbsent(@NotNull BasicPair<String, String> basicPair) {
+        if(isSet(basicPair.getFirst()))
+            set(basicPair);
+    }
+
+
+    //continue
+
     @Override
     public void doWithData(@NotNull Consumer<Map<String, String>> action) {
         action.accept(hazel());

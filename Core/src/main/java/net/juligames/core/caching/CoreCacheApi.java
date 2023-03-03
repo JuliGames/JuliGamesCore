@@ -3,8 +3,13 @@ package net.juligames.core.caching;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import de.bentzin.tools.pair.Pair;
+import net.juligames.core.api.API;
 import net.juligames.core.api.cacheing.CacheApi;
+import net.juligames.core.api.config.Configuration;
 import net.juligames.core.api.jdbi.DBMessage;
+import org.jetbrains.annotations.ApiStatus;
+
+import java.util.Properties;
 
 /**
  * @author Ture Bentzin
@@ -28,5 +33,11 @@ public class CoreCacheApi implements CacheApi {
     @Override
     public Cache<Pair<String>, DBMessage> messageCache() {
         return MessageCaching.messageCache();
+    }
+
+    @ApiStatus.AvailableSince("1.5")
+    public Configuration cachingConfiguration() {
+        Properties properties = new Properties();
+        API.get().getConfigurationApi().getOrCreate()
     }
 }

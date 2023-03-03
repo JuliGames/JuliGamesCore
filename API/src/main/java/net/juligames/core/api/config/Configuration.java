@@ -209,6 +209,73 @@ public interface Configuration extends Comparable<Configuration> {
 
     void set(@NotNull BasicPair<String, String> basicPair);
 
+    //ifAbsent
+
+    @ApiStatus.AvailableSince("1.5")
+    void setStringIfAbsent(@NotNull String key, @NotNull String value);
+
+    @ApiStatus.AvailableSince("1.5")
+    void setStringIfAbsent(@NotNull String key, @NotNull Supplier<String> value);
+
+    @ApiStatus.AvailableSince("1.5")
+    void setIntegerIfAbsent(@NotNull String key, @NotNull Integer value);
+
+    @ApiStatus.AvailableSince("1.5")
+    void setIntegerIfAbsent(@NotNull String key, @NotNull Supplier<Integer> value);
+
+    @ApiStatus.AvailableSince("1.5")
+    void setDoubleIfAbsent(@NotNull String key, @NotNull Double value);
+
+    @ApiStatus.AvailableSince("1.5")
+    void setDoubleIfAbsent(@NotNull String key, @NotNull Supplier<Double> value);
+
+    @ApiStatus.AvailableSince("1.5")
+    void setLongIfAbsent(@NotNull String key, @NotNull Long value);
+
+    @ApiStatus.AvailableSince("1.5")
+    void setLongIfAbsent(@NotNull String key, @NotNull Supplier<Long> value);
+
+    @ApiStatus.AvailableSince("1.5")
+    void setShortIfAbsent(@NotNull String key, @NotNull Short value);
+
+    @ApiStatus.AvailableSince("1.5")
+    void setShortIfAbsent(@NotNull String key, @NotNull Supplier<Short> value);
+
+    @ApiStatus.AvailableSince("1.5")
+    void setByteIfAbsent(@NotNull String key, @NotNull Byte value);
+
+    @ApiStatus.AvailableSince("1.5")
+    void setByteIfAbsent(@NotNull String key, @NotNull Supplier<Byte> value);
+
+    @ApiStatus.AvailableSince("1.5")
+    void setBooleanIfAbsent(@NotNull String key, @NotNull Boolean value);
+
+    @ApiStatus.AvailableSince("1.5")
+    void setBooleanIfAbsent(@NotNull String key, @NotNull Supplier<Boolean> value);
+
+    @ApiStatus.AvailableSince("1.5")
+    void setFloatIfAbsent(@NotNull String key, @NotNull Float value);
+
+    @ApiStatus.AvailableSince("1.5")
+    void setFloatIfAbsent(@NotNull String key, @NotNull Supplier<Float> value);
+
+    @ApiStatus.AvailableSince("1.5")
+    <T> void setIfAbsent(@NotNull String key, @NotNull T value, @NotNull Interpreter<T> interpreter);
+
+    @ApiStatus.AvailableSince("1.5")
+    <T> void setIfAbsent(@NotNull String key, @NotNull Supplier<T> value, @NotNull Interpreter<T> interpreter);
+
+    @ApiStatus.AvailableSince("1.5")
+    <T> void setIfAbsent(@NotNull Supplier<String> key, @NotNull T value, @NotNull Interpreter<T> interpreter);
+
+    @ApiStatus.AvailableSince("1.5")
+    <T> void setIfAbsent(@NotNull Supplier<String> key, @NotNull Supplier<T> value, @NotNull Interpreter<T> interpreter);
+
+    @ApiStatus.AvailableSince("1.5")
+    void setIfAbsent(@NotNull BasicPair<String, String> basicPair);
+
+    //del
+
     void del(@NotNull String key);
 
     void del(@NotNull Supplier<String> keys);
