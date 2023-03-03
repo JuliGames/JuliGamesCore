@@ -9,13 +9,13 @@ import net.juligames.core.Core;
 public class FallBackMessage extends CoreMessage {
 
 
+    @Deprecated(forRemoval = true)
     public FallBackMessage() {
-        this("message not found!");
+        this("null");
     }
 
     public FallBackMessage(final String messageKey) {
         super(new CreativeMessageBean(messageKey, Core.getInstance().getMessageApi().defaultLocale(), messageKey));
-
     }
 
 }
