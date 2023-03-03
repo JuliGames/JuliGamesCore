@@ -331,8 +331,15 @@ public interface Configuration extends Comparable<Configuration>, Iterable<Pair<
     @ApiStatus.AvailableSince("1.4")
     <R> R doWithData(@NotNull Function<Map<String, String>, R> function);
 
+    /**
+     * @deprecated this method can have serious effects on the integrity of the data managed by the configuration!
+     * Because of this thread the {@link #setStringIfAbsent(String, String)} methods where introduced. Removal of this method
+     * may be accomplished later. It is not unlikely that this method will be stripped of its manipulation capabilities and
+     * will serve only for query operations!
+     */
     @ApiStatus.Experimental
     @ApiStatus.AvailableSince("1.4")
+    @Deprecated
     void doWithData(@NotNull Consumer<Map<String, String>> action);
 
     @Override
