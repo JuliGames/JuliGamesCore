@@ -344,7 +344,7 @@ public interface Configuration extends Comparable<Configuration>, Iterable<Pair<
     //from map
 
     /**
-     * Performs the given action for each entry in this map until all entries
+     * Performs the given action for each entry in this configuration until all entries
      * have been processed or the action throws an exception.   Unless
      * otherwise specified by the implementing class, actions are performed in
      * the order of entry set iteration (if an iteration order is specified.)
@@ -354,9 +354,9 @@ public interface Configuration extends Comparable<Configuration>, Iterable<Pair<
      * @throws NullPointerException            if the specified action is null
      * @throws ConcurrentModificationException if an entry is found to be
      *                                         removed during iteration
-     * @implSpec The default implementation is equivalent to, for this {@code map}:
+     * @implSpec The default implementation is equivalent to, for this {@code configuration}:
      * <pre> {@code
-     * for (Map.Entry<String, String> entry : map.entrySet())
+     * for (Map.Entry<String, String> entry : configuration.entrySet())
      *     action.accept(entry.getKey(), entry.getValue());
      * }</pre>
      * <p>
