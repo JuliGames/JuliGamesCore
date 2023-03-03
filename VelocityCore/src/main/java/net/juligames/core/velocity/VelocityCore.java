@@ -79,9 +79,6 @@ public final class VelocityCore {
         });
 
         core.getCommandApi().setCommandHandler(s -> server.getCommandManager().executeAsync(server.getConsoleCommandSource(), s));
-
-        API.get().getMessageApi().registerMessage("internal.core.velocity.boot", "<gold>DEBUG: Velocity is up! :: {0}");
-        API.get().getMessageApi().broadcastMessage("internal.core.velocity.boot", new String[]{server.getBoundAddress().getHostString()});
     }
 
     @Subscribe
