@@ -16,6 +16,10 @@ public final class APIException extends RuntimeException {
         this.customMessage = customMessage;
     }
 
+    public APIException(Throwable cause) {
+        super(cause);
+    }
+
     @Override
     public String getMessage() {
         return customMessage;

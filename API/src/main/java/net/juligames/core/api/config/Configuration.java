@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.*;
 import java.util.function.*;
+import java.util.stream.Stream;
 
 /**
  * @author Ture Bentzin
@@ -347,6 +348,10 @@ public interface Configuration extends Comparable<Configuration>, Iterable<Pair<
         return o.size() - size();
     }
 
+    @ApiStatus.AvailableSince("1.5")
+    @ApiStatus.Experimental
+    @NotNull
+    Stream<String> searchValue(@NotNull String value);
 
     //from map
 
