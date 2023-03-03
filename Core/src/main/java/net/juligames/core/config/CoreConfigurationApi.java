@@ -59,6 +59,21 @@ public class CoreConfigurationApi implements ConfigurationAPI {
         return (o1, o2) -> Comparator.<Configuration>naturalOrder().compare(o1, o2);
     }
 
+    @Override
+    public @NotNull OfflineConfiguration createNewOfflineConfiguration(String name) {
+        return new OfflineConfiguration(name);
+    }
+
+    @Override
+    public @NotNull OfflineConfiguration createNewOfflineConfiguration(Properties defaults) {
+        return new OfflineConfiguration(defaults);
+    }
+
+    @Override
+    public @NotNull OfflineConfiguration createNewOfflineConfiguration(Map<String, String> defaults) {
+        return new OfflineConfiguration(defaults.get("configuration_name"), defaults);
+    }
+
     /**
      * This will split the given collection using the given interpreter
      *

@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -33,6 +34,18 @@ public interface ConfigurationAPI {
     @NotNull Configuration master();
 
     @NotNull Comparator<? extends Configuration> comparator();
+
+    @NotNull
+    @ApiStatus.AvailableSince("1.5")
+    Configuration createNewOfflineConfiguration(String name);
+
+    @NotNull
+    @ApiStatus.AvailableSince("1.5")
+    Configuration createNewOfflineConfiguration(Properties defaults);
+
+    @NotNull
+    @ApiStatus.AvailableSince("1.5")
+    Configuration createNewOfflineConfiguration(Map<String,String> defaults);
 
     //collections on demand - 1.1
 

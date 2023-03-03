@@ -754,7 +754,7 @@ public class CoreConfiguration implements Configuration {
     }
 
     @Override
-    public @NotNull Configuration copyToOffline(@NotNull String name) {
+    public @NotNull OfflineConfiguration copyToOffline(@NotNull String name) {
         OfflineConfiguration offlineConfiguration = new OfflineConfiguration(name);
         copyAndOverrideContentTo(offlineConfiguration);
         return offlineConfiguration;
