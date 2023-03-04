@@ -46,9 +46,10 @@ public class PaperCoreEventListener implements Listener {
 
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onBootLow(ServerBootFinishedEvent event) {
-        Logger logger = API.get().getAPILogger().adopt("boot-low");
+        Logger logger = API.get().getAPILogger().adopt("boot-high");
+        logger.info("running last post-start utilities...");
         API.get().getLocalMiniGame().ifPresent(basicMiniGame -> {
             logger.info("starting: " + basicMiniGame.getPlainName());
             basicMiniGame.start();

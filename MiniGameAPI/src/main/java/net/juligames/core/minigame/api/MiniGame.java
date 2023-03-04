@@ -102,7 +102,7 @@ public abstract class MiniGame extends LoggingClass implements BasicMiniGame {
     @ApiStatus.Internal
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     private void handleStartingError(Optional<Throwable> throwable) {
-        boolean equals = StackWalker.getInstance().getCallerClass().equals(this.getClass()); //EXPERIMENTAL
+        boolean equals = StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE).getCallerClass().equals(this.getClass()); //EXPERIMENTAL
         if (!equals) {
             throw new SecurityException();
         }
