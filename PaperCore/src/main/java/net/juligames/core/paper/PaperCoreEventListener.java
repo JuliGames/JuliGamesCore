@@ -6,6 +6,7 @@ import net.juligames.core.api.API;
 import net.juligames.core.paper.events.ServerBootFinishedEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 
@@ -41,6 +42,17 @@ public class PaperCoreEventListener implements Listener {
         }
 
         logger.info("Detected plugins depending on core: " + apis);
+
+
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onBootLow(ServerBootFinishedEvent event) {
+        Logger logger = API.get().getAPILogger().adopt("boot-low");
+        API.get().getLocalMiniGame().ifPresent(basicMiniGame -> {
+            logger.info("starting: " + basicMiniGame.getPlainName());
+            basicMiniGame.start();
+        });
     }
 
 }

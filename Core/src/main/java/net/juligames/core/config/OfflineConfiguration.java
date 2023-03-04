@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.*;
 import java.util.function.*;
+import java.util.stream.Stream;
 
 /**
  * @author Ture Bentzin
@@ -904,6 +905,12 @@ public class OfflineConfiguration implements Configuration {
     @Override
     public void doWithData(@NotNull Consumer<Map<String, String>> action) {
         action.accept(data);
+    }
+
+    @Override
+    public @NotNull Stream<String> searchValue(@NotNull String value) {
+        Predicate<Map.Entry<String, String>> filter = stringStringEntry -> stringStringEntry.getValue().equals(value);
+        return entrySet().stream().filter(filter).map(Map.Entry::getKey);
     }
 }
 
