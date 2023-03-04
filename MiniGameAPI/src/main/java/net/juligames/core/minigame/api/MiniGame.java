@@ -122,7 +122,7 @@ public abstract class MiniGame extends LoggingClass implements BasicMiniGame {
     @Override
     public final void abort() {
         //ABORT
-        Class<?> callerClass = StackWalker.getInstance().getCallerClass(); //Deal?
+        Class<?> callerClass = StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE).getCallerClass();
         getLogger().warning("aborting " + getFullDescription() + " caused by: " + callerClass.getName());
         try {
             onAbort();
