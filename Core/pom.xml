@@ -10,11 +10,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+
+
     <artifactId>Core</artifactId>
-    <build>
-        <plugins>
-        </plugins>
-    </build>
+
 
 
     <properties>
@@ -35,6 +34,11 @@
             <version>3.34.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.google.errorprone</groupId>
+            <artifactId>javac</artifactId>
+            <version>9+181-r4173-1</version>
+        </dependency>
 
         <dependency>
             <groupId>org.jetbrains</groupId>
