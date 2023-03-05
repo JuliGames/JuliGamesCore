@@ -116,7 +116,7 @@ public final class Core implements API {
         this.core_name = core_name;
         if (core != null) throw new IllegalStateException("seems like a core is already running!");
         core = this;
-        ApiProvider.CURRENT_API = this;
+        ApiProvider.insert(this);
         if (!member)
             hazelConnector = HazelConnector.getInstanceAndConnect(core_name);
         else
