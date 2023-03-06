@@ -14,7 +14,6 @@ import java.util.Objects;
  * 17.02.2023
  */
 @ApiStatus.Experimental
-
 public class InbuiltCommand implements CommandExecutor {
     private final String name;
     private final String description;

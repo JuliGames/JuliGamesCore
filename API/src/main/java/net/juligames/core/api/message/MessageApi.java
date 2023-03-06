@@ -21,6 +21,23 @@ import java.util.stream.Stream;
 @SuppressWarnings("unused")
 public interface MessageApi {
 
+    @SafeVarargs
+    @ApiStatus.AvailableSince("1.5")
+    static <T> T[] arrFromVargs(T... ts) {
+        return ts;
+    }
+
+
+    /**
+     * This is an alias for {@link #arrFromVargs(Object[])}
+     * @apiNote You should import this method static!
+     */
+    @SafeVarargs
+    @ApiStatus.AvailableSince("1.5")
+    static <T> T[] repl(T... ts) {
+        return arrFromVargs(ts);
+    }
+
     //DAO
     @ApiStatus.Internal
     @ApiStatus.Experimental
