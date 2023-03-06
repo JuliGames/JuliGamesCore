@@ -9,6 +9,7 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.time.Instant;
 import java.util.Date;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -51,5 +52,19 @@ public interface BuildInInterpreters {
         return s -> s;
     }
 
+    @Contract(pure = true)
+    static @NotNull Interpreter<Class<?>> clazzInterpreter() {
+        return new Interpreter<>() {
+            @Override
+            public @NotNull Class<?> interpret(String input) throws Exception {
+                return Class.forName(input);
+            }
+
+            @Override
+            public @NotNull String reverse(Class<?> tClass) {
+                return tClass.getName();
+            }
+        };
+    }
 
 }

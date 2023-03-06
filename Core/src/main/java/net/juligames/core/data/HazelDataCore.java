@@ -3,6 +3,7 @@ package net.juligames.core.data;
 import com.hazelcast.collection.IList;
 import com.hazelcast.collection.IQueue;
 import com.hazelcast.collection.ISet;
+import com.hazelcast.core.DistributedObject;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.map.IMap;
 import com.hazelcast.topic.ITopic;
@@ -11,12 +12,14 @@ import net.juligames.core.api.data.HazelDataApi;
 import net.juligames.core.api.hazel.NativeHazelDataAPI;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
+
 /**
  * @author Ture Bentzin
  * 16.11.2022
  */
 public final class HazelDataCore implements HazelDataApi, NativeHazelDataAPI {
-    private static HazelcastInstance getHazelcastInstance() {
+    private static @NotNull HazelcastInstance getHazelcastInstance() {
         return Core.getInstance().getOrThrow();
     }
 
@@ -45,8 +48,13 @@ public final class HazelDataCore implements HazelDataApi, NativeHazelDataAPI {
     }
 
     @Override
-    public <T> @NotNull ITopic<T> getTopic(String hazel) {
+    public <T> @NotNull ITopic<T> getTopic(@NotNull String hazel) {
         return getHazelcastInstance().getTopic(hazel);
+    }
+
+    @Override
+    public @NotNull Collection<DistributedObject> getAll() {
+        return getHazelcastInstance().getDistributedObjects();
     }
 
 
