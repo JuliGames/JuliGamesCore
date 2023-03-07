@@ -31,6 +31,11 @@ public final class PropertyInterpreter<E> implements Interpreter<E> {
     }
 
     @Contract(value = " -> new", pure = true)
+    public static @NotNull PropertyInterpreter<CharSequence> charSequencePropertyInterpreter() {
+        return new PropertyInterpreter<>(System::getProperty);
+    }
+
+    @Contract(value = " -> new", pure = true)
     public static @NotNull PropertyInterpreter<Boolean> booleanPropertyInterpreter() {
         return new PropertyInterpreter<>(Boolean::getBoolean);
     }

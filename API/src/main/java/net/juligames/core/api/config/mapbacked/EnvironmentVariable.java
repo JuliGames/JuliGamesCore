@@ -1,4 +1,4 @@
-package net.juligames.core.api.config.env;
+package net.juligames.core.api.config.mapbacked;
 
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;

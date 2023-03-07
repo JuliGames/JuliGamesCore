@@ -1,4 +1,4 @@
-package net.juligames.core.api.config.env;
+package net.juligames.core.api.config.mapbacked;
 
 import org.jetbrains.annotations.ApiStatus;
 
@@ -7,7 +7,7 @@ import org.jetbrains.annotations.ApiStatus;
  * 07.03.2023
  */
 @ApiStatus.AvailableSince("1.5")
-public class EnvironmentVariableInterpreter extends MapFeedInterpreter<String> {
+public final class EnvironmentVariableInterpreter extends MapFeedInterpreter<String> {
 
 
     public EnvironmentVariableInterpreter() {

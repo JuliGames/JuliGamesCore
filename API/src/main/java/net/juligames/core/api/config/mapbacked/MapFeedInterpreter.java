@@ -1,4 +1,4 @@
-package net.juligames.core.api.config.env;
+package net.juligames.core.api.config.mapbacked;
 
 import net.juligames.core.api.config.Interpreter;
 import org.jetbrains.annotations.ApiStatus;
@@ -6,10 +6,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
+ * This {@link Interpreter} allows to interpret keys from the config that get resolved using a given {@link Map}.
+ * A known implementation is the {@link EnvironmentVariableInterpreter}
+ *
  * @author Ture Bentzin
  * 07.03.2023
  */
