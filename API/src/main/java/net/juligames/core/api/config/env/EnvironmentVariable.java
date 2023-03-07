@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
  * 07.03.2023
  */
 @ApiStatus.AvailableSince("1.5")
-public record EnvironmentVariable(String key) {
+public record EnvironmentVariable(String key) implements MapPart<String> {
 
     public @NotNull String get() {
         return System.getenv().get(key());
