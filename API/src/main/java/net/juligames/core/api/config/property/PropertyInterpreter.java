@@ -25,6 +25,38 @@ public final class PropertyInterpreter<E> implements Interpreter<E> {
         this.getter = getter;
     }
 
+    /**
+     * @param tInterpreter WARNING: the tInterpreter#reverse method is NOT USED!!! {@link String#valueOf(T)} is used instead!!
+     * @return T
+     * @param <T> the Type
+     */
+    @Contract(value = "_ -> new", pure = true)
+    public static @NotNull <T> PropertyInterpreter<T> customPropertyInterpreter(Interpreter<T> tInterpreter) {
+        return new PropertyInterpreter<>(s -> {
+            try {
+                return tInterpreter.interpret(System.getProperty(s));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    /**
+     * @param tInterpreter is used with the result of {@link System#getProperty(String)} for the given input
+     * @return T
+     * @param <T> the Type
+     */
+    @Contract(value = "_ -> new", pure = true)
+    public static @NotNull <T> PropertyInterpreter<T> customPropertyInterpreter(Function<String,T> tInterpreter) {
+        return new PropertyInterpreter<>(s -> {
+            try {
+                return tInterpreter.apply(System.getProperty(s));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
     @Contract(value = " -> new", pure = true)
     public static @NotNull PropertyInterpreter<String> stringPropertyInterpreter() {
         return new PropertyInterpreter<>(System::getProperty);
