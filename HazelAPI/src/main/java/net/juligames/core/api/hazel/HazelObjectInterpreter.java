@@ -3,6 +3,7 @@ package net.juligames.core.api.hazel;
 import com.hazelcast.core.DistributedObject;
 import com.hazelcast.core.HazelcastInstance;
 import net.juligames.core.api.config.Interpreter;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,6 +14,7 @@ import java.util.function.Supplier;
  * @author Ture Bentzin
  * 06.03.2023
  */
+@ApiStatus.AvailableSince("1.5")
 public class HazelObjectInterpreter implements Interpreter<DistributedObject> {
 
     private final @NotNull Supplier<Collection<DistributedObject>> collectionSupplier;
