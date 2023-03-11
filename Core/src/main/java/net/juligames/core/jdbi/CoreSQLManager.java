@@ -77,19 +77,6 @@ public class CoreSQLManager implements SQLManager {
         });
         logger.info("created: message");
 
-
-        //Currently not automatically used
-        //player_locale_preference
-        if (Boolean.getBoolean("legacyPlayerLocaleReference")) {
-            logger.info("creating: player_locale_preference");
-            jdbi.withExtension(PlayerLocalPreferenceDAO.class, extension -> {
-                extension.createTable();
-                return null;
-            });
-            logger.info("created: player_locale_preference");
-        }
-
-
         //replacementType
         logger.info("creating: replacementType");
         jdbi.withExtension(ReplacementTypeDAO.class, extension -> {
