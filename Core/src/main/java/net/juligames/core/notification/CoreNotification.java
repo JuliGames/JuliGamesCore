@@ -57,7 +57,7 @@ public class CoreNotification implements net.juligames.core.api.notification.Not
      * @return The message of this Notification
      */
     @Override
-    public String message() {
+    public @NotNull String message() {
         return message;
     }
 
@@ -65,7 +65,7 @@ public class CoreNotification implements net.juligames.core.api.notification.Not
      * @return The UUID of the sender (member) of this Notification, and the Name of the sender
      */
     @Override
-    public DividedPair<UUID, String> sender() {
+    public @NotNull DividedPair<UUID, String> sender() {
         return sender;
     }
 
@@ -73,7 +73,7 @@ public class CoreNotification implements net.juligames.core.api.notification.Not
      * @return The UUIDs of all the recipients of this Notification, and the names of them
      */
     @Override
-    public DividedPair<UUID, String>[] addresses() {
+    public DividedPair<UUID, String> @NotNull [] addresses() {
         return addresses;
     }
 
@@ -81,7 +81,7 @@ public class CoreNotification implements net.juligames.core.api.notification.Not
      * @return Something that identifies that Notification
      */
     @Override
-    public String header() {
+    public @NotNull String header() {
         return header;
     }
 

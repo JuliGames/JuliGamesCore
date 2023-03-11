@@ -31,7 +31,7 @@ public final class CoreNotificationApi implements NotificationApi, MessageListen
     }
 
     @Override
-    public boolean registerListener(NotificationListener listener) {
+    public boolean registerListener(@NotNull NotificationListener listener) {
         try {
             listenerRegisterator.register(listener);
             return true;
@@ -41,7 +41,7 @@ public final class CoreNotificationApi implements NotificationApi, MessageListen
     }
 
     @Override
-    public boolean unregisterListener(NotificationListener listener) {
+    public boolean unregisterListener(@NotNull NotificationListener listener) {
         try {
             listenerRegisterator.unregister(listener);
             return true;

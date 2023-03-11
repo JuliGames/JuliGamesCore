@@ -31,7 +31,7 @@ public class DictionaryFeedInterpreter<E> implements Interpreter<MapPart<E>> {
 
 
     @Override
-    public @NotNull MapPart<E> interpret(@NotNull String input) throws Exception {
+    public @NotNull MapPart<E> interpret(@NotNull String input) {
         return new DictionaryPart<>(input, dictionarySupplier);
     }
 

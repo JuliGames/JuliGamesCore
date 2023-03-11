@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author Ture Bentzin
  * 09.03.2023
- * @apiNote please dont temper with this interface. The current roadmap for this is currently unclear...
+ * @apiNote please don't temper with this interface. The current roadmap for this is currently unclear...
  */
 @ApiStatus.AvailableSince("1.5")
 public

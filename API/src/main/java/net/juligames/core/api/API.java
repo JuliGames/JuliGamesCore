@@ -39,6 +39,7 @@ public interface API {
      * @return your API Instance
      * @throws APIException if no API is present
      */
+    @SuppressWarnings("SpellCheckingInspection")
     static @NotNull API get() throws APIException {
         @MaybePresent Optional<API> api = ApiProvider.optionalApi();
         if (api.isEmpty()) {

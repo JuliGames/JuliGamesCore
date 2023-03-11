@@ -60,17 +60,17 @@ public class CoreConfigurationApi implements ConfigurationAPI {
     }
 
     @Override
-    public @NotNull OfflineConfiguration createNewOfflineConfiguration(String name) {
+    public @NotNull OfflineConfiguration createNewOfflineConfiguration(@NotNull String name) {
         return new OfflineConfiguration(name);
     }
 
     @Override
-    public @NotNull OfflineConfiguration createNewOfflineConfiguration(Properties defaults) {
+    public @NotNull OfflineConfiguration createNewOfflineConfiguration(@NotNull Properties defaults) {
         return new OfflineConfiguration(defaults);
     }
 
     @Override
-    public @NotNull OfflineConfiguration createNewOfflineConfiguration(Map<String, String> defaults) {
+    public @NotNull OfflineConfiguration createNewOfflineConfiguration(@NotNull Map<String, String> defaults) {
         return new OfflineConfiguration(defaults.get("configuration_name"), defaults);
     }
 
@@ -145,7 +145,7 @@ public class CoreConfigurationApi implements ConfigurationAPI {
     }
 
     @Override
-    public @NotNull Configuration merge(@NotNull Configuration c1, Configuration c2) {
+    public @NotNull Configuration merge(@NotNull Configuration c1, @NotNull Configuration c2) {
         c1.copyAndAppendContentTo(c2);
         return c1;
     }

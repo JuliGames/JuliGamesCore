@@ -108,7 +108,7 @@ public final class PropertyInterpreter<E> implements Interpreter<E> {
     }
 
     @Override
-    public @NotNull E interpret(@NotNull String input) throws Exception {
+    public @NotNull E interpret(@NotNull String input) {
         return getter.apply(input);
     }
 

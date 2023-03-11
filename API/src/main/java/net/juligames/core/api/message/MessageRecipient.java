@@ -17,7 +17,7 @@ public interface MessageRecipient {
     @NotNull String getName();
 
     /**
-     * Devlivers the specified Message to this MessageRecipient. The message should always be human-readable!
+     * Delivers the specified Message to this MessageRecipient. The message should always be human-readable!
      *
      * @param message the message to deliver
      */
