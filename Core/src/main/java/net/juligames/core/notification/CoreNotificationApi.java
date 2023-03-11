@@ -35,7 +35,7 @@ public final class CoreNotificationApi implements NotificationApi, MessageListen
         try {
             listenerRegisterator.register(listener);
             return true;
-        } catch (Registerator.DuplicateEntryException ignore) {
+        } catch (Registerator.DuplicateEntryException ignored) {
             return false;
         }
     }
