@@ -45,7 +45,7 @@ public interface ConfigurationAPI {
 
     @NotNull
     @ApiStatus.AvailableSince("1.5")
-    Configuration createNewOfflineConfiguration(@NotNull Map<String,String> defaults);
+    Configuration createNewOfflineConfiguration(@NotNull Map<String, String> defaults);
 
     //collections on demand - 1.1
 
@@ -124,7 +124,8 @@ public interface ConfigurationAPI {
      * I'm currently testing this. It might be removed later. You should keep in mind that the Core Configurations are not
      * a section based system! All section operations are "hacked" over a flat structure. The Configurations don't really offer
      * depth...
-     * @param root the root
+     *
+     * @param root    the root
      * @param section the section
      * @return an OfflineConfiguration. Changes to this will not affect root
      */

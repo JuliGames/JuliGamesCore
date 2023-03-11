@@ -27,8 +27,8 @@ public final class PropertyInterpreter<E> implements Interpreter<E> {
 
     /**
      * @param tInterpreter WARNING: the tInterpreter#reverse method is NOT USED!!! {@link String#valueOf(T)} is used instead!!
+     * @param <T>          the Type
      * @return T
-     * @param <T> the Type
      */
     @Contract(value = "_ -> new", pure = true)
     public static @NotNull <T> PropertyInterpreter<T> customPropertyInterpreter(Interpreter<T> tInterpreter) {
@@ -43,11 +43,11 @@ public final class PropertyInterpreter<E> implements Interpreter<E> {
 
     /**
      * @param tInterpreter is used with the result of {@link System#getProperty(String)} for the given input
+     * @param <T>          the Type
      * @return T
-     * @param <T> the Type
      */
     @Contract(value = "_ -> new", pure = true)
-    public static @NotNull <T> PropertyInterpreter<T> customPropertyInterpreter(Function<String,T> tInterpreter) {
+    public static @NotNull <T> PropertyInterpreter<T> customPropertyInterpreter(Function<String, T> tInterpreter) {
         return new PropertyInterpreter<>(s -> {
             try {
                 return tInterpreter.apply(System.getProperty(s));

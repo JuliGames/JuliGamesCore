@@ -38,6 +38,7 @@ public interface BasicMiniGame {
 
     /**
      * load the MiniGame
+     *
      * @return a {@link StartType}: The handling of this is not guaranteed it might start whenever it wants. Its just an indication
      * on when and how you suggest to load it
      */

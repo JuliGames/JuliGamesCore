@@ -7,7 +7,6 @@ import net.juligames.core.api.message.MessageRecipient;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -35,7 +34,6 @@ public class AudienceMessageRecipient implements MessageRecipient {
     }
 
     /**
-     *
      * @param audience needs to be able to provide {@link Identity#LOCALE}
      * @return the {@link AudienceMessageRecipient}
      */

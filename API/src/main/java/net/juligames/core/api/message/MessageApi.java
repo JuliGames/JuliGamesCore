@@ -30,6 +30,7 @@ public interface MessageApi {
 
     /**
      * This is an alias for {@link #arrFromVargs(Object[])}
+     *
      * @apiNote You should import this method static!
      */
     @SafeVarargs

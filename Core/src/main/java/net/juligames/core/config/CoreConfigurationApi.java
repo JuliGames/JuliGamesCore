@@ -155,10 +155,10 @@ public class CoreConfigurationApi implements ConfigurationAPI {
     public @NotNull Configuration createSectionClone(@NotNull Configuration root, @NotNull String section) {
         return new OfflineConfiguration(section + "@" + root,
                 new HashMap<>(root.entrySet().stream()
-                .filter(stringStringEntry -> stringStringEntry.getKey().startsWith(section + "_"))
-                .map(s -> {
-                    String after = s.getKey().replaceFirst(section + "_", "");
-                    return Map.entry(section + "_" + after.substring(0, after.indexOf("_")), s.getValue());
-                }).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))));
+                        .filter(stringStringEntry -> stringStringEntry.getKey().startsWith(section + "_"))
+                        .map(s -> {
+                            String after = s.getKey().replaceFirst(section + "_", "");
+                            return Map.entry(section + "_" + after.substring(0, after.indexOf("_")), s.getValue());
+                        }).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))));
     }
 }

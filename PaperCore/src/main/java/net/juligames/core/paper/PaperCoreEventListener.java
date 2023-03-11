@@ -10,7 +10,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
-import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -57,9 +56,9 @@ public class PaperCoreEventListener implements Listener {
                 .filter(basicMiniGame -> basicMiniGame.getStartType().isSimilar(StartType.DIRECT))
                 .findFirst()
                 .ifPresent(basicMiniGame -> {
-                            logger.info("starting: " + basicMiniGame.getPlainName());
-                            basicMiniGame.start();
-                        });
+                    logger.info("starting: " + basicMiniGame.getPlainName());
+                    basicMiniGame.start();
+                });
     }
 
 }

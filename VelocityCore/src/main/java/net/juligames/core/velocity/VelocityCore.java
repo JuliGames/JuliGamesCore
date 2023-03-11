@@ -11,7 +11,6 @@ import de.bentzin.tools.logging.Logger;
 import net.juligames.core.Core;
 import net.juligames.core.adventure.AdventureCore;
 import net.juligames.core.adventure.api.AudienceMessageRecipient;
-import net.juligames.core.api.API;
 import net.juligames.core.api.TODO;
 import org.jetbrains.annotations.NotNull;
 
