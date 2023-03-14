@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
  * Please make sure the modules (AdventureAPI & AdventureCore) are the same version to avoid issues while execution!
  */
 public interface AdventureAPI {
-    @NotNull String API_VERSION = "1.5-SNAPSHOT";
+    @NotNull String API_VERSION = "1.5";
 
     static @NotNull AdventureAPI get() {
         AdventureAPI api = AdventureAPICore.getAPI();
