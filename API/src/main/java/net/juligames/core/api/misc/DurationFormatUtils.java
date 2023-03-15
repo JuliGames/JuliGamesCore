@@ -22,6 +22,7 @@ import net.juligames.core.api.message.MiniMessageSerializer;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.text.StrBuilder;
 import org.apache.commons.lang.time.DateUtils;
+import org.checkerframework.checker.units.qual.A;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -242,6 +243,40 @@ public class DurationFormatUtils {
             return formatDurationWords(duration.toMillis(), suppressLeadingZeroElements, suppressTrailingZeroElements);
         return formatDurationWords(duration.toMillis(), suppressLeadingZeroElements,
                 suppressTrailingZeroElements, getLocalisationFromMessageSystem(locale, s));
+    }
+
+    static {
+        API.get().getAPILogger().info(DurationFormatUtils.class.getName() + " was loaded! Trying to register default messages:");
+        long s1 = System.currentTimeMillis();
+        try {
+            registerMessages();
+            //BIT
+            final long between = s1 - System.currentTimeMillis();
+            Duration duration = Duration.ofMillis(between);
+            String formatDurationWords = formatDurationWords(duration, false, false, null,
+                    API.get().getMessageApi().defaultUtilLocale());
+            API.get().getAPILogger().info("finished registration of default messages! (took: " + formatDurationWords + ")");
+        }catch (Exception e){
+            API.get().getAPILogger().error("failed to register default messages: " + e);
+            ThrowableDebug.debug(e);
+        }
+
+    }
+
+    public static void registerMessages() {
+        registerDefaultMessage("days");
+        registerDefaultMessage("hours");
+        registerDefaultMessage("minutes");
+        registerDefaultMessage("seconds");
+
+        registerDefaultMessage("day");
+        registerDefaultMessage("hour");
+        registerDefaultMessage("minute");
+        registerDefaultMessage("second");
+    }
+
+    private static void registerDefaultMessage(String key) {
+        API.get().getMessageApi().registerMessage(INTERNAL_MESSAGE_PREFIX + key, key);
     }
 
     public static @Unmodifiable @NotNull Map<String, String> getLocalisationFromMessageSystem(@NotNull Locale locale, @Nullable MiniMessageSerializer s) {
