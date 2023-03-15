@@ -4,6 +4,7 @@ import de.bentzin.tools.logging.Logger;
 import net.juligames.core.api.message.Message;
 import net.juligames.core.api.message.MessageRecipient;
 import net.juligames.core.api.message.MiniMessageSerializer;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
  * @author Ture Bentzin
  * 15.03.2023
  */
+@ApiStatus.AvailableSince("1.5")
 public record LoggerMessageRecipient(Logger logger, @Nullable MiniMessageSerializer miniMessageSerializer) implements MessageRecipient {
     @Override
     public @NotNull String getName() {

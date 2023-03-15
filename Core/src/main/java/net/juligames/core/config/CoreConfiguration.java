@@ -38,7 +38,6 @@ public class CoreConfiguration implements Configuration {
     public CoreConfiguration(String name) {
         this.name = name;
         data = hazel();
-
         assert Objects.equals(getStringOrNull("configuration_name"), name); //just to avoid BNick content in the configurationSystem
 
         String configuration_header = getStringOrNull("configuration_header");
@@ -722,7 +721,8 @@ public class CoreConfiguration implements Configuration {
         this.header_comment = header_comment;
     }
 
-    public String getName() {
+    @Override
+    public @NotNull String getName() {
         return name;
     }
 

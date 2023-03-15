@@ -785,7 +785,8 @@ public class OfflineConfiguration implements Configuration {
         this.header_comment = header_comment;
     }
 
-    public String getName() {
+    @Override
+    public @NotNull String getName() {
         return name;
     }
 
