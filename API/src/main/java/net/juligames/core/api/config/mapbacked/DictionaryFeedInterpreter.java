@@ -1,6 +1,7 @@
 package net.juligames.core.api.config.mapbacked;
 
 import net.juligames.core.api.config.Interpreter;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Dictionary;
@@ -12,6 +13,7 @@ import java.util.function.Supplier;
  * @author Ture Bentzin
  * 11.03.2023
  */
+@ApiStatus.AvailableSince("1.5")
 public class DictionaryFeedInterpreter<E> implements Interpreter<MapPart<E>> {
 
     private final @NotNull Supplier<Dictionary<String, E>> dictionarySupplier;

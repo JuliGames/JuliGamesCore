@@ -14,6 +14,7 @@ import java.util.function.Supplier;
  * @author Ture Bentzin
  * 07.03.2023
  */
+@ApiStatus.AvailableSince("1.5")
 public final class HazelFeedMapInterpreter<E> extends MapFeedInterpreter<E> {
 
     public HazelFeedMapInterpreter(@NotNull String hazel) {

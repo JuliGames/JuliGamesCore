@@ -9,8 +9,7 @@ import org.jetbrains.annotations.NotNull;
  * @apiNote please don't temper with this interface. The current roadmap for this is currently unclear...
  */
 @ApiStatus.AvailableSince("1.5")
-public
-interface StartType {
+public interface StartType {
 
     StartType DIRECT = new SimpleStartType("DIRECT");
     StartType DELAYED = new SimpleStartType("DELAYED");

@@ -97,8 +97,6 @@ public interface BuildInInterpreters {
         };
     }
 
-    ;
-
     @Contract(value = "_ -> new", pure = true)
     @ApiStatus.AvailableSince("1.5")
     static @NotNull Interpreter<Duration> durationInterpreter(TemporalUnit unit) {

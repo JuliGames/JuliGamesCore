@@ -19,10 +19,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Ture Bentzin
@@ -147,7 +144,7 @@ public final class CoreAdventureTagManager implements TagManager, AdventureTagMa
     public void load() {
         List<DBReplacement> dbReplacements =
                 API.get().getMessageApi().callReplacementExtension(ReplacementDAO::listAll);
-        for (DBReplacement replacement : dbReplacements) {
+        for (DBReplacement replacement : Objects.requireNonNull(dbReplacements)) {
             register(replacement);
         }
     }

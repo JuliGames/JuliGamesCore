@@ -36,6 +36,7 @@ public interface ConfigurationAPI {
      * @param name the name
      * @return if an associated {@link Configuration} was found
      */
+    @ApiStatus.AvailableSince("1.5")
     boolean exists(String name);
 
     @NotNull Configuration master();

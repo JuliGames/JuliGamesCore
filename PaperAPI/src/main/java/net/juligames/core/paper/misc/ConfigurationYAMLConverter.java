@@ -43,7 +43,7 @@ public class ConfigurationYAMLConverter {
         Set<String> keys = Objects.requireNonNull(yamlConfiguration).getKeys(true);
         for (String key : keys) {
             final String value = yamlConfiguration.getString(key);
-            configuration.setString(key, value);
+            configuration.setString(key, Objects.requireNonNull(value));
         }
     }
 
@@ -60,7 +60,7 @@ public class ConfigurationYAMLConverter {
     public static @NotNull Configuration convert(YamlConfiguration yamlConfiguration) {
         List<Pair<String>> map = map(yamlConfiguration);
         String configurationName = yamlConfiguration.getString("configuration_name");
-        Configuration configuration = API.get().getConfigurationApi().getOrCreate(configurationName);
+        Configuration configuration = API.get().getConfigurationApi().getOrCreate(Objects.requireNonNull(configurationName));
         for (Pair<String> stringPair : map) {
             configuration.set(stringPair);
         }
