@@ -1,4 +1,4 @@
-package net.juligames.core.paper.msc;
+package net.juligames.core.paper.misc;
 
 import net.juligames.core.api.err.dev.TODOException;
 import org.bukkit.ChatColor;
