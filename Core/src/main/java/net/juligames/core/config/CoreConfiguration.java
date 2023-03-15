@@ -30,6 +30,11 @@ public class CoreConfiguration implements Configuration {
     private IMap<String, String> data;
 
 
+    public static @NotNull String generateHazel(@NotNull String name, boolean containingPrefix) {
+        return containingPrefix ? name : "config:" + name;
+    }
+
+
     public CoreConfiguration(String name) {
         this.name = name;
         data = hazel();
@@ -84,7 +89,7 @@ public class CoreConfiguration implements Configuration {
 
     @ApiStatus.Internal
     private @NotNull IMap<String, String> hazel(@SuppressWarnings("SameParameterValue") boolean containingPrefix) {
-        return Core.getInstance().getOrThrow().getMap(containingPrefix ? name : "config:" + name);
+        return Core.getInstance().getOrThrow().getMap(generateHazel(name,containingPrefix));
     }
 
     public void updateHazel() {

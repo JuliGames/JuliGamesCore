@@ -31,6 +31,13 @@ public interface ConfigurationAPI {
      */
     @NotNull Configuration getOrCreate(@NotNull Properties defaults);
 
+    /**
+     * This will check if a configuration with the given name exists or not
+     * @param name the name
+     * @return if an associated {@link Configuration} was found
+     */
+    boolean exists(String name);
+
     @NotNull Configuration master();
 
     @NotNull Comparator<? extends Configuration> comparator();
