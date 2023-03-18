@@ -88,7 +88,7 @@ public class CoreConfiguration implements Configuration {
 
     @ApiStatus.Internal
     private @NotNull IMap<String, String> hazel(@SuppressWarnings("SameParameterValue") boolean containingPrefix) {
-        return Core.getInstance().getOrThrow().getMap(generateHazel(name,containingPrefix));
+        return Core.getInstance().getOrThrow().getMap(generateHazel(name, containingPrefix));
     }
 
     public void updateHazel() {
