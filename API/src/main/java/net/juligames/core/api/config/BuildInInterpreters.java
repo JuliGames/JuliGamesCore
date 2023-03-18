@@ -60,6 +60,7 @@ public interface BuildInInterpreters {
         return s -> s;
     }
 
+    @ApiStatus.AvailableSince("1.5")
     @Contract(pure = true)
     static @NotNull Interpreter<Class<?>> clazzInterpreter() {
         return new Interpreter<>() {
