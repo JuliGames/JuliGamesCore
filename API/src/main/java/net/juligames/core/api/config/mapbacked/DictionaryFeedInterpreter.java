@@ -13,6 +13,7 @@ import java.util.function.Supplier;
  * @author Ture Bentzin
  * 11.03.2023
  */
+ @ApiStatus.AvailableSince("1.5")
 @ApiStatus.AvailableSince("1.5")
 public class DictionaryFeedInterpreter<E> implements Interpreter<MapPart<E>> {
 
