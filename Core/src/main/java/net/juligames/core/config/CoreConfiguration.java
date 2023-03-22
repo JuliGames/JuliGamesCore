@@ -30,11 +30,6 @@ public class CoreConfiguration implements Configuration {
     private IMap<String, String> data;
 
 
-    public static @NotNull String generateHazel(@NotNull String name, boolean containingPrefix) {
-        return containingPrefix ? name : "config:" + name;
-    }
-
-
     public CoreConfiguration(String name) {
         this.name = name;
         data = hazel();
@@ -44,6 +39,10 @@ public class CoreConfiguration implements Configuration {
         if (configuration_header != null) {
             setHeader_comment(configuration_header);
         }
+    }
+
+    public static @NotNull String generateHazel(@NotNull String name, boolean containingPrefix) {
+        return containingPrefix ? name : "config:" + name;
     }
 
     /**

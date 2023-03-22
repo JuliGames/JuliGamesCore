@@ -6,21 +6,17 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.crypto.spec.OAEPParameterSpec;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Stream;
 
 /**
  * This is now independent of the {@link IterativeInsertionProcedure}! Within the {@link #apply(Set, UUID)} method there are
  * parts of the implementation of {@link ComparatorInsertionProcedure} and {@link IterativeInsertionProcedure}
- * @apiNote Im not sure if i want to keep this behavior..
  *
  * @author Ture Bentzin
  * 23.12.2022
+ * @apiNote Im not sure if i want to keep this behavior..
  */
 @TODO(doNotcall = false)
 public final class SwitchingInsertionProcedure implements InsertionProcedure {

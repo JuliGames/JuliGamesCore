@@ -77,8 +77,6 @@ public interface BuildInInterpreters {
     }
 
 
-
-
     @ApiStatus.AvailableSince("1.5")
     @Contract(value = "_ -> new", pure = true)
     static @NotNull Interpreter<Configuration> onlineConfigurationInterpreter(boolean createIfNotExists) {

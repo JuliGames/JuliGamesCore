@@ -13,7 +13,8 @@ import org.jetbrains.annotations.Nullable;
  * 15.03.2023
  */
 @ApiStatus.AvailableSince("1.5")
-public record LoggerMessageRecipient(Logger logger, @Nullable MiniMessageSerializer miniMessageSerializer) implements MessageRecipient {
+public record LoggerMessageRecipient(Logger logger,
+                                     @Nullable MiniMessageSerializer miniMessageSerializer) implements MessageRecipient {
     @Override
     public @NotNull String getName() {
         return logger.getFullName();
@@ -21,15 +22,15 @@ public record LoggerMessageRecipient(Logger logger, @Nullable MiniMessageSeriali
 
     @Override
     public void deliver(@NotNull Message message) {
-        if(miniMessageSerializer != null)
-         logger.info(message.getPlainMessage(miniMessageSerializer));
+        if (miniMessageSerializer != null)
+            logger.info(message.getPlainMessage(miniMessageSerializer));
         else logger.info("UNPARSED: " + message.getPreparedMiniMessage());
     }
 
     @SuppressWarnings("deprecation")
     @Override
     public void deliver(@NotNull String miniMessage) {
-        if(miniMessageSerializer != null)
+        if (miniMessageSerializer != null)
             logger.info(miniMessageSerializer.resolvePlain(miniMessage));
         else logger.info("UNPARSED: " + miniMessage);
     }

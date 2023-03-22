@@ -33,6 +33,7 @@ public interface ConfigurationAPI {
 
     /**
      * This will check if a configuration with the given name exists or not
+     *
      * @param name the name
      * @return if an associated {@link Configuration} was found
      */

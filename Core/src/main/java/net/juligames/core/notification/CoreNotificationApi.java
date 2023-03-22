@@ -78,7 +78,7 @@ public final class CoreNotificationApi implements NotificationApi, MessageListen
     @Override
     public void onMessage(Message<SerializedNotification> message) {
         //call Debug...
-        if(Boolean.getBoolean("debugNotifications")) {
+        if (Boolean.getBoolean("debugNotifications")) {
             new DebugNotificationPrinter().onMessage(message);
             for (NotificationListener notificationListener : listenerRegisterator) {
                 notificationListener.onNotification(message.getMessageObject().deserialize());

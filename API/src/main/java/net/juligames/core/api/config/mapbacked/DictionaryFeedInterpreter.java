@@ -9,9 +9,9 @@ import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
 /**
- * @apiNote this can be used for {@link java.util.Hashtable}s or {@link java.util.Properties}s
  * @author Ture Bentzin
  * 11.03.2023
+ * @apiNote this can be used for {@link java.util.Hashtable}s or {@link java.util.Properties}s
  */
 @ApiStatus.AvailableSince("1.5")
 public class DictionaryFeedInterpreter<E> implements Interpreter<MapPart<E>> {

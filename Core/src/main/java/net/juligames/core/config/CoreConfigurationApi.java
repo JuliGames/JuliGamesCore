@@ -1,7 +1,6 @@
 package net.juligames.core.config;
 
 import net.juligames.core.Core;
-import net.juligames.core.api.API;
 import net.juligames.core.api.config.ConfigWriter;
 import net.juligames.core.api.config.Configuration;
 import net.juligames.core.api.config.ConfigurationAPI;
