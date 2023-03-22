@@ -50,7 +50,7 @@ import java.util.*;
  * @author <a href="mailto:sbailliez@apache.org">Stephane Bailliez</a>
  * @author <a href="mailto:stefan.bodewig@epost.de">Stefan Bodewig</a>
  * @author <a href="mailto:ggregory@seagullsw.com">Gary Gregory</a>
- * @author Ture Bentin (edit)
+ * @author <a href="mailto:bentzin@tdrstudios.de">Ture Bentzin (edit)</a>
  * @version $Id: DurationFormatUtils.java 1057072 2011-01-10 01:55:57Z niallp $
  * @since 2.1
  */
