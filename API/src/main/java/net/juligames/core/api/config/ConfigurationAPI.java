@@ -31,21 +31,29 @@ public interface ConfigurationAPI {
      */
     @NotNull Configuration getOrCreate(@NotNull Properties defaults);
 
+    /**
+     * This will check if a configuration with the given name exists or not
+     * @param name the name
+     * @return if an associated {@link Configuration} was found
+     */
+    @ApiStatus.AvailableSince("1.5")
+    boolean exists(String name);
+
     @NotNull Configuration master();
 
     @NotNull Comparator<? extends Configuration> comparator();
 
     @NotNull
     @ApiStatus.AvailableSince("1.5")
-    Configuration createNewOfflineConfiguration(String name);
+    Configuration createNewOfflineConfiguration(@NotNull String name);
 
     @NotNull
     @ApiStatus.AvailableSince("1.5")
-    Configuration createNewOfflineConfiguration(Properties defaults);
+    Configuration createNewOfflineConfiguration(@NotNull Properties defaults);
 
     @NotNull
     @ApiStatus.AvailableSince("1.5")
-    Configuration createNewOfflineConfiguration(Map<String,String> defaults);
+    Configuration createNewOfflineConfiguration(@NotNull Map<String, String> defaults);
 
     //collections on demand - 1.1
 
@@ -80,7 +88,7 @@ public interface ConfigurationAPI {
      * @deprecated moved to {@link Configuration#setIterable(String, Iterable, Interpreter)}
      */
     @Deprecated
-    default <T> void spiltAndWrite(@NotNull Collection<T> collection, @NotNull Interpreter<T> interpreter, @NotNull Configuration configuration, String keySpace) {
+    default <T> void spiltAndWrite(@NotNull Collection<T> collection, @NotNull Interpreter<T> interpreter, @NotNull Configuration configuration, @NotNull String keySpace) {
         splitToWriter(collection, interpreter).write(configuration, keySpace);
     }
 
@@ -117,5 +125,18 @@ public interface ConfigurationAPI {
     @NotNull Properties initializeProperties(@NotNull String name, @Nullable String header);
 
     @ApiStatus.Experimental
-    @NotNull Configuration merge(Configuration c1, Configuration c2);
+    @NotNull Configuration merge(@NotNull Configuration c1, @NotNull Configuration c2);
+
+    /**
+     * This method allows better narrowed down handling of individual "objects" that are stored in multiple keys and values.
+     * I'm currently testing this. It might be removed later. You should keep in mind that the Core Configurations are not
+     * a section based system! All section operations are "hacked" over a flat structure. The Configurations don't really offer
+     * depth...
+     *
+     * @param root    the root
+     * @param section the section
+     * @return an OfflineConfiguration. Changes to this will not affect root
+     */
+    @ApiStatus.AvailableSince("1.5")
+    @NotNull Configuration createSectionClone(@NotNull Configuration root, @NotNull String section);
 }

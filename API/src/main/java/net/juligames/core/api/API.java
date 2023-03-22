@@ -39,24 +39,24 @@ public interface API {
      * @return your API Instance
      * @throws APIException if no API is present
      */
+    @SuppressWarnings("SpellCheckingInspection")
     static @NotNull API get() throws APIException {
         @MaybePresent Optional<API> api = ApiProvider.optionalApi();
         if (api.isEmpty()) {
             throw new APIException();
         }
-        if(!Boolean.getBoolean("acknowledgeMissingCoreClass"))
-        {
+        if (!Boolean.getBoolean("acknowledgeMissingCoreClass")) {
             //this block provides security over the used implementation of the API class!
             try {
                 Class.forName("net.juligames.core.Core"); //check that the core is installed
             } catch (ClassNotFoundException e) {
-                try{
+                try {
                     api.ifPresent(api1 -> {
                         api1.getAPILogger().error("Error while providing this instance: " + e.getMessage() + "!");
                         api1.getAPILogger().error("It seems like you are operating an unsupported implementation of the Core! \n" +
                                 "You can acknowledge this dangerous behavior by setting the \"-DacknowledgeMissingCoreClass=true\"!");
                     });
-                }catch (Exception ignored) {
+                } catch (Exception ignored) {
                     //ok its fucked
                     throw new APIException(e);
                 }

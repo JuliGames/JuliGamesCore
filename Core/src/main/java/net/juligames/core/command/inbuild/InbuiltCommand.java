@@ -1,7 +1,6 @@
 package net.juligames.core.command.inbuild;
 
 import net.juligames.core.Core;
-import org.checkerframework.checker.initialization.qual.UnderInitialization;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -14,7 +13,6 @@ import java.util.Objects;
  * 17.02.2023
  */
 @ApiStatus.Experimental
-
 public class InbuiltCommand implements CommandExecutor {
     private final String name;
     private final String description;

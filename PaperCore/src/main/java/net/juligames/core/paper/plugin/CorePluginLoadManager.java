@@ -19,6 +19,7 @@ import java.util.List;
  * @author Ture Bentzin
  * 08.01.2023
  */
+@SuppressWarnings("DuplicatedCode")
 public class CorePluginLoadManager {
 
     private final File directory;

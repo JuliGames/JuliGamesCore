@@ -6,7 +6,7 @@
     <parent>
         <artifactId>JuliGamesCore</artifactId>
         <groupId>net.juligames.core</groupId>
-        <version>1.5-SNAPSHOT</version>
+        <version>1.5</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -58,7 +58,7 @@
         <dependency>
             <groupId>de.bentzin.tools</groupId>
             <artifactId>DevTools</artifactId>
-            <version>2.2</version>
+            <version>2.3</version>
             <scope>compile</scope>
         </dependency>
 

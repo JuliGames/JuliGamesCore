@@ -3,6 +3,7 @@ package net.juligames.core.paper;
 import de.bentzin.tools.logging.Logger;
 import net.juligames.core.Core;
 import net.juligames.core.api.API;
+import net.juligames.core.api.minigame.StartType;
 import net.juligames.core.paper.events.ServerBootFinishedEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -50,10 +51,14 @@ public class PaperCoreEventListener implements Listener {
     public void onBootLow(ServerBootFinishedEvent event) {
         Logger logger = API.get().getAPILogger().adopt("boot-high");
         logger.info("running last post-start utilities...");
-        API.get().getLocalMiniGame().ifPresent(basicMiniGame -> {
-            logger.info("starting: " + basicMiniGame.getPlainName());
-            basicMiniGame.start();
-        });
+        API.get().getLocalMiniGame()
+                .stream()
+                .filter(basicMiniGame -> basicMiniGame.getStartType().isSimilar(StartType.DIRECT))
+                .findFirst()
+                .ifPresent(basicMiniGame -> {
+                    logger.info("starting: " + basicMiniGame.getPlainName());
+                    basicMiniGame.start();
+                });
     }
 
 }

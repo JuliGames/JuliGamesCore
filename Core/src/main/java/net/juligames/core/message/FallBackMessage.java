@@ -1,6 +1,7 @@
 package net.juligames.core.message;
 
 import net.juligames.core.Core;
+import org.jetbrains.annotations.ApiStatus;
 
 /**
  * @author Ture Bentzin
@@ -9,7 +10,7 @@ import net.juligames.core.Core;
 public class FallBackMessage extends CoreMessage {
 
 
-    @Deprecated(forRemoval = true)
+    @ApiStatus.Internal
     public FallBackMessage() {
         this("null");
     }

@@ -353,6 +353,9 @@ public interface Configuration extends Comparable<Configuration>, Iterable<Pair<
     @NotNull
     Stream<String> searchValue(@NotNull String value);
 
+    @ApiStatus.AvailableSince("1.5")
+    @NotNull String getName();
+
     //from map
 
     /**

@@ -30,10 +30,14 @@ public class CoreConfiguration implements Configuration {
     private IMap<String, String> data;
 
 
+    public static @NotNull String generateHazel(@NotNull String name, boolean containingPrefix) {
+        return containingPrefix ? name : "config:" + name;
+    }
+
+
     public CoreConfiguration(String name) {
         this.name = name;
         data = hazel();
-
         assert Objects.equals(getStringOrNull("configuration_name"), name); //just to avoid BNick content in the configurationSystem
 
         String configuration_header = getStringOrNull("configuration_header");
@@ -84,7 +88,7 @@ public class CoreConfiguration implements Configuration {
 
     @ApiStatus.Internal
     private @NotNull IMap<String, String> hazel(@SuppressWarnings("SameParameterValue") boolean containingPrefix) {
-        return Core.getInstance().getOrThrow().getMap(containingPrefix ? name : "config:" + name);
+        return Core.getInstance().getOrThrow().getMap(generateHazel(name, containingPrefix));
     }
 
     public void updateHazel() {
@@ -717,7 +721,8 @@ public class CoreConfiguration implements Configuration {
         this.header_comment = header_comment;
     }
 
-    public String getName() {
+    @Override
+    public @NotNull String getName() {
         return name;
     }
 

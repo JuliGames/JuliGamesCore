@@ -1,6 +1,8 @@
 package net.juligames.core.api.minigame;
 
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
@@ -30,10 +32,18 @@ public interface BasicMiniGame {
         return getPlainName() + " v." + getVersion() + " by " + getDeveloperName();
     }
 
+
+    @ApiStatus.AvailableSince("1.5")
+    StartType getStartType();
+
     /**
      * load the MiniGame
+     *
+     * @return a {@link StartType}: The handling of this is not guaranteed it might start whenever it wants. It's just an indication
+     * on when and how you suggest to start it
      */
-    void load();
+    @Nullable
+    StartType load();
 
     /**
      * start the MiniGame

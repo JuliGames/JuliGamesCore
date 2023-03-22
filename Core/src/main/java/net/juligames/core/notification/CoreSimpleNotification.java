@@ -1,6 +1,7 @@
 package net.juligames.core.notification;
 
 import net.juligames.core.api.notification.SimpleNotification;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Ture Bentzin
@@ -25,7 +26,7 @@ class CoreSimpleNotification implements SimpleNotification {
      * @return Something that identifies that Notification
      */
     @Override
-    public String header() {
+    public @NotNull String header() {
         return header;
     }
 
@@ -33,7 +34,7 @@ class CoreSimpleNotification implements SimpleNotification {
      * @return The message of the Notification
      */
     @Override
-    public String message() {
+    public @NotNull String message() {
         return message;
     }
 }

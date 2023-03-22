@@ -7,19 +7,20 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-public final class PreDefinedInsertionProcedure implements InsertionProcedure{
+public final class PreDefinedInsertionProcedure implements InsertionProcedure {
 
     private final Map<UUID, Team> preDefinedTeaming;
 
-    public PreDefinedInsertionProcedure(Map<UUID,Team> preDefinedTeaming) {
+    public PreDefinedInsertionProcedure(Map<UUID, Team> preDefinedTeaming) {
 
         this.preDefinedTeaming = preDefinedTeaming;
     }
+
     @Override
     public @NotNull Boolean apply(Set<Team> teams, UUID uuid) {
-        if(preDefinedTeaming.containsKey(uuid)) {
+        if (preDefinedTeaming.containsKey(uuid)) {
             Team should = preDefinedTeaming.get(uuid);
-            if(teams.contains(should)) {
+            if (teams.contains(should)) {
                 return should.tryAdd(uuid);
             }
         }

@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
  * Please make sure the modules (AdventureAPI & AdventureCore) are the same version to avoid issues while execution!
  */
 public interface AdventureAPI {
-    @NotNull String API_VERSION = "1.5-SNAPSHOT";
+    @NotNull String API_VERSION = "1.5";
 
     static @NotNull AdventureAPI get() {
         AdventureAPI api = AdventureAPICore.getAPI();
@@ -42,7 +42,7 @@ public interface AdventureAPI {
      * It supplies the best message for the given key and locale (through audience)
      * This is default implementation:
      * {@code         return getAdventureTagManager().resolve(API.get().getMessageApi().
-     *                 getMessageSmart(messageKey,audience.get(Identity.LOCALE).orElseThrow(), replacements));}
+     * getMessageSmart(messageKey,audience.get(Identity.LOCALE).orElseThrow(), replacements));}
      */
     @ApiStatus.AvailableSince("1.5")
     @NotNull Component forAudience(@NotNull String messageKey, @NotNull Audience audience, String... replacements);
@@ -53,7 +53,7 @@ public interface AdventureAPI {
      * It supplies the best message for the given key and locale (through audience)
      * This is default implementation:
      * {@code         return getAdventureTagManager().resolve(API.get().getMessageApi().
-     *                 getMessageSmart(messageKey,audience.get(Identity.LOCALE).orElseThrow()));}
+     * getMessageSmart(messageKey,audience.get(Identity.LOCALE).orElseThrow()));}
      */
     @ApiStatus.AvailableSince("1.5")
     @NotNull Component forAudience(@NotNull String messageKey, @NotNull Audience audience);

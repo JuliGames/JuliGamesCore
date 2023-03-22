@@ -13,9 +13,6 @@ import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Locale;
-import java.util.UUID;
-
 /**
  * @author Ture Bentzin
  * 21.11.2022
@@ -24,7 +21,7 @@ import java.util.UUID;
  * support it. Because of this the AdventureAPI will only function as intended when bundled with the API you are using!
  */
 public class AdventureCore implements AdventureAPI {
-    final String CORE_VERSION = "1.5-SNAPSHOT";
+    final String CORE_VERSION = "1.5";
 
     private CoreAdventureTagManager adventureTagManager;
     private Logger logger;
@@ -86,13 +83,13 @@ public class AdventureCore implements AdventureAPI {
     @Override
     public @NotNull Component forAudience(@NotNull String messageKey, @NotNull Audience audience, String... replacements) {
         return getAdventureTagManager().resolve(API.get().getMessageApi().
-                getMessageSmart(messageKey,audience.get(Identity.LOCALE).orElseThrow(), replacements));
+                getMessageSmart(messageKey, audience.get(Identity.LOCALE).orElseThrow(), replacements));
     }
 
     @Override
     public @NotNull Component forAudience(@NotNull String messageKey, @NotNull Audience audience) {
         return getAdventureTagManager().resolve(API.get().getMessageApi().
-                getMessageSmart(messageKey,audience.get(Identity.LOCALE).orElseThrow()));
+                getMessageSmart(messageKey, audience.get(Identity.LOCALE).orElseThrow()));
     }
 
     @ApiStatus.Internal

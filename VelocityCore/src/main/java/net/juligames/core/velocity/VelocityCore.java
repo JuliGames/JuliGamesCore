@@ -11,7 +11,6 @@ import de.bentzin.tools.logging.Logger;
 import net.juligames.core.Core;
 import net.juligames.core.adventure.AdventureCore;
 import net.juligames.core.adventure.api.AudienceMessageRecipient;
-import net.juligames.core.api.API;
 import net.juligames.core.api.TODO;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,7 +23,7 @@ import java.util.logging.Level;
  * 03.12.2022
  */
 
-@Plugin(id = "velocitycore", name = "JuliGames Velocity Core", version = "1.5-SNAPSHOT",
+@Plugin(id = "velocitycore", name = "JuliGames Velocity Core", version = "1.5",
         url = "https://github.com/JuliGames/JuliGamesCore", description = "Velocity Client for the core - necessary to provide the API here",
         authors = {"Ture Bentzin"})
 public final class VelocityCore {

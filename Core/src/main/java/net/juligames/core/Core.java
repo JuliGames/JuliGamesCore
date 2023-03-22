@@ -48,9 +48,9 @@ public final class Core implements API {
      * This can be set depending on the build of the Core
      */
     public static final String CORE_BRAND = "Core";
-    public static final String CORE_VERSION_NUMBER = "1.5-SNAPSHOT";
+    public static final String CORE_VERSION_NUMBER = "1.5";
     public static final String CORE_SPECIFICATION = "Gustav";
-    private static final String BUILD_VERSION = "1.5-SNAPSHOT"; //POM VERSION
+    private static final String BUILD_VERSION = "1.5"; //POM VERSION
 
     private static Core core;
     private final Registerator<Consumer<HazelcastInstance>> hazelcastPostPreparationWorkers = new Registerator<>("hazelcastPostPreparationWorkers");
@@ -146,7 +146,6 @@ public final class Core implements API {
         if (jdbc.isEmpty()) {
             Core.getInstance().coreLogger.warning("cant read jdbc data in database...");
         }
-        logger.warning("database: " + getConfigurationApi().database().cloneToProperties());
         sqlManager = new CoreSQLManager(jdbc.orElse("jdbc:mysql://root@localhost:3306"), logger); //jdbc:mysql://admin@localhost:3306/minecraft
         logger.info("connected to jdbi -> " + sqlManager);
 
