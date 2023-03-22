@@ -5,6 +5,7 @@ import net.juligames.core.api.API;
 import net.juligames.core.api.jdbi.DBReplacement;
 import net.juligames.core.api.jdbi.ReplacementDAO;
 import net.juligames.core.api.message.Message;
+import net.juligames.core.api.message.MiniMessageSerializer;
 import net.juligames.core.api.message.PatternType;
 import net.juligames.core.api.message.TagManager;
 import net.kyori.adventure.text.Component;
@@ -28,7 +29,7 @@ import java.util.*;
 @SuppressWarnings("ProtectedMemberInFinalClass")
 public final class CoreAdventureTagManager implements TagManager, AdventureTagManager {
 
-    private TagResolver internalResolver = TagResolver.standard();
+    private @NotNull TagResolver internalResolver = TagResolver.standard();
 
     @Contract(pure = true)
     @Deprecated(forRemoval = true)
@@ -105,10 +106,16 @@ public final class CoreAdventureTagManager implements TagManager, AdventureTagMa
         return resolve(message.getMiniMessageReadyForResolving(), resolvers);
     }
 
-
     @Override
     public @NotNull String resolvePlain(@NotNull Message message) {
         return resolvePlain(message.getMiniMessage());
+    }
+
+    @Override
+    public @NotNull TagResolver fork(@NotNull Collection<TagResolver> append) {
+        Collection<TagResolver> local = new ArrayList<>(append);
+        local.add(getResolver());
+        return TagResolver.resolver(local);
     }
 
     @Override
