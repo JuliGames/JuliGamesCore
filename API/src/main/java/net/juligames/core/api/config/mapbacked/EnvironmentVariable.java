@@ -24,4 +24,13 @@ public record EnvironmentVariable(String key) implements MapPart<String> {
             return null;
         }
     }
+
+    @Override
+    public @NotNull String toString() {
+        return "EnvironmentVariable: { \"" + key() + "\" : \"" + get() + "\"}";
+    }
+
+    public @NotNull String toString(@NotNull Interpreter<?> interpreter) {
+        return "EnvironmentVariable: { \"" + key() + "\" : \"" + get(interpreter) + "\"}";
+    }
 }
