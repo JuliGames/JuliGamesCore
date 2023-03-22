@@ -25,10 +25,10 @@ public interface CacheApi {
     <K, V> Cache<K, V> newCache();
 
     @ApiStatus.AvailableSince("1.5")
-    <K,V> Map<String, String> reverseCache(Interpreter<K> kInterpreter, Interpreter<V> vInterpreter, Cache<K,V> cache);
+    <K, V> Map<String, String> reverseCache(Interpreter<K> kInterpreter, Interpreter<V> vInterpreter, Cache<K, V> cache);
 
     @ApiStatus.AvailableSince("1.5")
-    <K,V> Map<K,V> interpretCache(Interpreter<K> kInterpreter, Interpreter<V> vInterpreter, Cache<String,String> cache);
+    <K, V> Map<K, V> interpretCache(Interpreter<K> kInterpreter, Interpreter<V> vInterpreter, Cache<String, String> cache);
 
     /**
      * Creates a builder to create your custom caches by default this will enter the suggested settings

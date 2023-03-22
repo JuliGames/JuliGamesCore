@@ -78,7 +78,6 @@ public final class Core implements API {
      *
      * @param core_name the core name
      */
-    @ApiStatus.Experimental
     public Core(String core_name) {
         start(core_name);
     }

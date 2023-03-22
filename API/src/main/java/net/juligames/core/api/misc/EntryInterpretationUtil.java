@@ -25,15 +25,15 @@ public class EntryInterpretationUtil {
         return Map.entry(kInterpreter.reverse(stringStringEntry.getKey()), vInterpreter.reverse(stringStringEntry.getValue()));
     }
 
-    public static <K, V> @Unmodifiable Collection<Map.Entry<String, String>> reverseEntries(@NotNull Collection<Map.Entry<K,V>> collection, Interpreter<K> kInterpreter, Interpreter<V> vInterpreter) {
-        return collection.stream().map(kvEntry -> reverseEntry(kvEntry,kInterpreter,vInterpreter)).collect(Collectors.toUnmodifiableSet());
+    public static <K, V> @Unmodifiable Collection<Map.Entry<String, String>> reverseEntries(@NotNull Collection<Map.Entry<K, V>> collection, Interpreter<K> kInterpreter, Interpreter<V> vInterpreter) {
+        return collection.stream().map(kvEntry -> reverseEntry(kvEntry, kInterpreter, vInterpreter)).collect(Collectors.toUnmodifiableSet());
     }
 
 
-    public static <K, V> @Unmodifiable Collection<Map.Entry<K,V>> interpretEntries(@NotNull Collection<Map.Entry<String, String>> collection, Interpreter<K> kInterpreter, Interpreter<V> vInterpreter) {
+    public static <K, V> @Unmodifiable Collection<Map.Entry<K, V>> interpretEntries(@NotNull Collection<Map.Entry<String, String>> collection, Interpreter<K> kInterpreter, Interpreter<V> vInterpreter) {
         return collection.stream().map(kvEntry -> {
             try {
-                return interpretEntry(kvEntry,kInterpreter,vInterpreter);
+                return interpretEntry(kvEntry, kInterpreter, vInterpreter);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
