@@ -36,7 +36,7 @@ public class MapFeedInterpreter<E> implements Interpreter<MapPart<E>> {
 
     @Override
     public @NotNull MapPart<E> interpret(@NotNull String input) {
-        return new MapPartImpl<>(input, mapSupplier);
+        return fabricate(input);
     }
 
     @Override
@@ -44,6 +44,17 @@ public class MapFeedInterpreter<E> implements Interpreter<MapPart<E>> {
         return eMapPart.key();
     }
 
+    public @NotNull BiFunction<String, Supplier<Map<String, E>>, ? extends MapPart<E>> getMapPartFactory() {
+        return mapPartFactory;
+    }
+
+    public @NotNull MapPart<E> fabricate(@NotNull String key, @NotNull Supplier<Map<String, E>> mapSupplier) {
+        return new MapPartImpl<>(key , mapSupplier);
+    }
+
+    protected @NotNull MapPart<E> fabricate(@NotNull String key) {
+        return new MapPartImpl<>(key , mapSupplier);
+    }
 
     private record MapPartImpl<E>(String key, Supplier<Map<String, E>> mapSupplier) implements MapPart<E> {
 

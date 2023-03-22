@@ -30,7 +30,9 @@ public final class CoreAdventureTagManager implements TagManager, AdventureTagMa
 
     private TagResolver internalResolver = TagResolver.standard();
 
-    protected String buildPattern(@Range(from = 0, to = Integer.MAX_VALUE) int i) {
+    @Contract(pure = true)
+    @Deprecated(forRemoval = true)
+    protected @NotNull String buildPattern(@Range(from = 0, to = Integer.MAX_VALUE) int i) {
         return "{" + i + "}";
     }
 

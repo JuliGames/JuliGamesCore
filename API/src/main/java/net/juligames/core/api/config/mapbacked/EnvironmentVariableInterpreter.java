@@ -9,10 +9,8 @@ import org.jetbrains.annotations.ApiStatus;
 @ApiStatus.AvailableSince("1.5")
 public final class EnvironmentVariableInterpreter extends MapFeedInterpreter<String> {
 
-
     public EnvironmentVariableInterpreter() {
         super(System::getenv, (s, ignored) -> new EnvironmentVariable(s));
     }
-
 
 }
