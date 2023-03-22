@@ -146,7 +146,6 @@ public final class Core implements API {
         if (jdbc.isEmpty()) {
             Core.getInstance().coreLogger.warning("cant read jdbc data in database...");
         }
-        logger.warning("database: " + getConfigurationApi().database().cloneToProperties());
         sqlManager = new CoreSQLManager(jdbc.orElse("jdbc:mysql://root@localhost:3306"), logger); //jdbc:mysql://admin@localhost:3306/minecraft
         logger.info("connected to jdbi -> " + sqlManager);
 
