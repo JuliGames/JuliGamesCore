@@ -32,9 +32,4 @@ public class CoreCacheApi implements CacheApi {
     public Cache<Pair<String>, DBMessage> messageCache() {
         return MessageCaching.messageCache();
     }
-
-    @ApiStatus.AvailableSince("1.5")
-    public Configuration cachingConfiguration() {
-        throw new TODOException();
-    }
 }
