@@ -7,6 +7,9 @@ import net.juligames.core.adventure.api.LegacyMessageDealer;
 import net.juligames.core.api.API;
 import net.juligames.core.api.message.LegacyMessageType;
 import net.juligames.core.api.message.MessageApi;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.identity.Identity;
+import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
  * support it. Because of this the AdventureAPI will only function as intended when bundled with the API you are using!
  */
 public class AdventureCore implements AdventureAPI {
-    final String CORE_VERSION = "1.4";
+    final String CORE_VERSION = "1.5";
 
     private CoreAdventureTagManager adventureTagManager;
     private Logger logger;
@@ -37,6 +40,7 @@ public class AdventureCore implements AdventureAPI {
             logger.warning("AdventureAPI is at: " + API_VERSION);
             logger.warning("AdventureCore is at: " + CORE_VERSION);
             logger.warning("Core is at: " + buildVersion);
+            logger.warning("You will not receive support for this unsafe combination!");
             logger.warning("---------------------------------------------------------------------------------");
         }
 
@@ -74,6 +78,18 @@ public class AdventureCore implements AdventureAPI {
     public void registerLegacyMessage(@NotNull String key, @NotNull String input,
                                       @NotNull LegacyMessageType legacyMessageType) {
         registerLegacyMessage(API.get().getMessageApi(), key, input, legacyMessageType);
+    }
+
+    @Override
+    public @NotNull Component forAudience(@NotNull String messageKey, @NotNull Audience audience, String... replacements) {
+        return getAdventureTagManager().resolve(API.get().getMessageApi().
+                getMessageSmart(messageKey, audience.get(Identity.LOCALE).orElseThrow(), replacements));
+    }
+
+    @Override
+    public @NotNull Component forAudience(@NotNull String messageKey, @NotNull Audience audience) {
+        return getAdventureTagManager().resolve(API.get().getMessageApi().
+                getMessageSmart(messageKey, audience.get(Identity.LOCALE).orElseThrow()));
     }
 
     @ApiStatus.Internal

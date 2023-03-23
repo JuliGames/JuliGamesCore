@@ -20,5 +20,5 @@ commands:
     description: start the installed miniGame
     usage: /start
   printMessageCache:
-    description: Print the local MessageCache
+    description: print the local MessageCache
     usage: /<command>

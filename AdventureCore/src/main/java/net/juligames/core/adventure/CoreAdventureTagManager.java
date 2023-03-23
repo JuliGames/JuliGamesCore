@@ -5,6 +5,7 @@ import net.juligames.core.api.API;
 import net.juligames.core.api.jdbi.DBReplacement;
 import net.juligames.core.api.jdbi.ReplacementDAO;
 import net.juligames.core.api.message.Message;
+import net.juligames.core.api.message.MiniMessageSerializer;
 import net.juligames.core.api.message.PatternType;
 import net.juligames.core.api.message.TagManager;
 import net.kyori.adventure.text.Component;
@@ -19,10 +20,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Ture Bentzin
@@ -31,9 +29,11 @@ import java.util.Map;
 @SuppressWarnings("ProtectedMemberInFinalClass")
 public final class CoreAdventureTagManager implements TagManager, AdventureTagManager {
 
-    private TagResolver internalResolver = TagResolver.standard();
+    private @NotNull TagResolver internalResolver = TagResolver.standard();
 
-    protected String buildPattern(@Range(from = 0, to = Integer.MAX_VALUE) int i) {
+    @Contract(pure = true)
+    @Deprecated(forRemoval = true)
+    protected @NotNull String buildPattern(@Range(from = 0, to = Integer.MAX_VALUE) int i) {
         return "{" + i + "}";
     }
 
@@ -106,10 +106,16 @@ public final class CoreAdventureTagManager implements TagManager, AdventureTagMa
         return resolve(message.getMiniMessageReadyForResolving(), resolvers);
     }
 
-
     @Override
     public @NotNull String resolvePlain(@NotNull Message message) {
         return resolvePlain(message.getMiniMessage());
+    }
+
+    @Override
+    public @NotNull TagResolver fork(@NotNull Collection<TagResolver> append) {
+        Collection<TagResolver> local = new ArrayList<>(append);
+        local.add(getResolver());
+        return TagResolver.resolver(local);
     }
 
     @Override
@@ -147,7 +153,7 @@ public final class CoreAdventureTagManager implements TagManager, AdventureTagMa
     public void load() {
         List<DBReplacement> dbReplacements =
                 API.get().getMessageApi().callReplacementExtension(ReplacementDAO::listAll);
-        for (DBReplacement replacement : dbReplacements) {
+        for (DBReplacement replacement : Objects.requireNonNull(dbReplacements)) {
             register(replacement);
         }
     }

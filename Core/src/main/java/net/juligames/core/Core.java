@@ -48,9 +48,9 @@ public final class Core implements API {
      * This can be set depending on the build of the Core
      */
     public static final String CORE_BRAND = "Core";
-    public static final String CORE_VERSION_NUMBER = "1.4";
+    public static final String CORE_VERSION_NUMBER = "1.5";
     public static final String CORE_SPECIFICATION = "Gustav";
-    private static final String BUILD_VERSION = "1.4"; //POM VERSION
+    private static final String BUILD_VERSION = "1.5"; //POM VERSION
 
     private static Core core;
     private final Registerator<Consumer<HazelcastInstance>> hazelcastPostPreparationWorkers = new Registerator<>("hazelcastPostPreparationWorkers");
@@ -78,7 +78,6 @@ public final class Core implements API {
      *
      * @param core_name the core name
      */
-    @ApiStatus.Experimental
     public Core(String core_name) {
         start(core_name);
     }
@@ -116,7 +115,7 @@ public final class Core implements API {
         this.core_name = core_name;
         if (core != null) throw new IllegalStateException("seems like a core is already running!");
         core = this;
-        ApiProvider.CURRENT_API = this;
+        ApiProvider.insert(this);
         if (!member)
             hazelConnector = HazelConnector.getInstanceAndConnect(core_name);
         else
@@ -146,7 +145,6 @@ public final class Core implements API {
         if (jdbc.isEmpty()) {
             Core.getInstance().coreLogger.warning("cant read jdbc data in database...");
         }
-        logger.warning("database: " + getConfigurationApi().database().cloneToProperties());
         sqlManager = new CoreSQLManager(jdbc.orElse("jdbc:mysql://root@localhost:3306"), logger); //jdbc:mysql://admin@localhost:3306/minecraft
         logger.info("connected to jdbi -> " + sqlManager);
 

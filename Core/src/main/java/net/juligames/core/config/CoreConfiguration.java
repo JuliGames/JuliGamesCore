@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.*;
 import java.util.function.*;
+import java.util.stream.Stream;
 
 /**
  * @author Ture Bentzin
@@ -26,19 +27,22 @@ public class CoreConfiguration implements Configuration {
 
     private final String name;
     private String header_comment = Core.getFullCoreName() + " :: a default configuration file";
-    private IMap<String, String> data;//May be removed
+    private IMap<String, String> data;
 
 
     public CoreConfiguration(String name) {
         this.name = name;
         data = hazel();
-
         assert Objects.equals(getStringOrNull("configuration_name"), name); //just to avoid BNick content in the configurationSystem
 
         String configuration_header = getStringOrNull("configuration_header");
         if (configuration_header != null) {
             setHeader_comment(configuration_header);
         }
+    }
+
+    public static @NotNull String generateHazel(@NotNull String name, boolean containingPrefix) {
+        return containingPrefix ? name : "config:" + name;
     }
 
     /**
@@ -83,7 +87,7 @@ public class CoreConfiguration implements Configuration {
 
     @ApiStatus.Internal
     private @NotNull IMap<String, String> hazel(@SuppressWarnings("SameParameterValue") boolean containingPrefix) {
-        return Core.getInstance().getOrThrow().getMap(containingPrefix ? name : "config:" + name);
+        return Core.getInstance().getOrThrow().getMap(generateHazel(name, containingPrefix));
     }
 
     public void updateHazel() {
@@ -716,7 +720,8 @@ public class CoreConfiguration implements Configuration {
         this.header_comment = header_comment;
     }
 
-    public String getName() {
+    @Override
+    public @NotNull String getName() {
         return name;
     }
 
@@ -754,7 +759,7 @@ public class CoreConfiguration implements Configuration {
     }
 
     @Override
-    public @NotNull Configuration copyToOffline(@NotNull String name) {
+    public @NotNull OfflineConfiguration copyToOffline(@NotNull String name) {
         OfflineConfiguration offlineConfiguration = new OfflineConfiguration(name);
         copyAndOverrideContentTo(offlineConfiguration);
         return offlineConfiguration;
@@ -776,6 +781,139 @@ public class CoreConfiguration implements Configuration {
     public void set(@NotNull BasicPair<String, String> basicPair) {
         setString(basicPair.getFirst(), basicPair.getSecond());
     }
+
+
+    //ifAbsent
+
+    @Override
+    public void setStringIfAbsent(@NotNull String key, @NotNull String value) {
+        if (isSet(key))
+            setString(key, value);
+    }
+
+    @Override
+    public void setStringIfAbsent(@NotNull String key, @NotNull Supplier<String> value) {
+        if (isSet(key))
+            setString(key, value);
+    }
+
+    @Override
+    public void setIntegerIfAbsent(@NotNull String key, @NotNull Integer value) {
+        if (isSet(key))
+            setInteger(key, value);
+    }
+
+    @Override
+    public void setIntegerIfAbsent(@NotNull String key, @NotNull Supplier<Integer> value) {
+        if (isSet(key))
+            setInteger(key, value);
+    }
+
+    @Override
+    public void setDoubleIfAbsent(@NotNull String key, @NotNull Double value) {
+        if (isSet(key))
+            setDouble(key, value);
+    }
+
+    @Override
+    public void setDoubleIfAbsent(@NotNull String key, @NotNull Supplier<Double> value) {
+        if (isSet(key))
+            setDouble(key, value);
+    }
+
+    @Override
+    public void setLongIfAbsent(@NotNull String key, @NotNull Long value) {
+        if (isSet(key))
+            setLong(key, value);
+    }
+
+    @Override
+    public void setLongIfAbsent(@NotNull String key, @NotNull Supplier<Long> value) {
+        if (isSet(key))
+            setLong(key, value);
+    }
+
+    @Override
+    public void setShortIfAbsent(@NotNull String key, @NotNull Short value) {
+        if (isSet(key))
+            setShort(key, value);
+    }
+
+    @Override
+    public void setShortIfAbsent(@NotNull String key, @NotNull Supplier<Short> value) {
+        if (isSet(key))
+            setShort(key, value);
+    }
+
+    @Override
+    public void setByteIfAbsent(@NotNull String key, @NotNull Byte value) {
+        if (isSet(key))
+            setByte(key, value);
+    }
+
+    @Override
+    public void setByteIfAbsent(@NotNull String key, @NotNull Supplier<Byte> value) {
+        if (isSet(key))
+            setByte(key, value);
+    }
+
+    @Override
+    public void setBooleanIfAbsent(@NotNull String key, @NotNull Boolean value) {
+        if (isSet(key))
+            setBoolean(key, value);
+    }
+
+    @Override
+    public void setBooleanIfAbsent(@NotNull String key, @NotNull Supplier<Boolean> value) {
+        if (isSet(key))
+            setBoolean(key, value);
+    }
+
+    @Override
+    public void setFloatIfAbsent(@NotNull String key, @NotNull Float value) {
+        if (isSet(key))
+            setFloat(key, value);
+    }
+
+    @Override
+    public void setFloatIfAbsent(@NotNull String key, @NotNull Supplier<Float> value) {
+        if (isSet(key))
+            setFloat(key, value);
+    }
+
+    @Override
+    public <T> void setIfAbsent(@NotNull String key, @NotNull T value, @NotNull Interpreter<T> interpreter) {
+        if (isSet(key))
+            set(key, value, interpreter);
+    }
+
+    @Override
+    public <T> void setIfAbsent(@NotNull String key, @NotNull Supplier<T> value, @NotNull Interpreter<T> interpreter) {
+        if (isSet(key))
+            set(key, value, interpreter);
+    }
+
+    @Override
+    public <T> void setIfAbsent(@NotNull Supplier<String> key, @NotNull T value, @NotNull Interpreter<T> interpreter) {
+        if (isSet(key))
+            set(key, value, interpreter);
+    }
+
+    @Override
+    public <T> void setIfAbsent(@NotNull Supplier<String> key, @NotNull Supplier<T> value, @NotNull Interpreter<T> interpreter) {
+        if (isSet(key))
+            set(key, value, interpreter);
+    }
+
+
+    @Override
+    public void setIfAbsent(@NotNull BasicPair<String, String> basicPair) {
+        if (isSet(basicPair.getFirst()))
+            set(basicPair);
+    }
+
+
+    //continue
 
     @Override
     public void doWithData(@NotNull Consumer<Map<String, String>> action) {
@@ -818,5 +956,11 @@ public class CoreConfiguration implements Configuration {
     @ApiStatus.Internal
     private void clear() {
         hazel().clear();
+    }
+
+    @Override
+    public @NotNull Stream<String> searchValue(@NotNull String value) {
+        Predicate<Map.Entry<String, String>> filter = stringStringEntry -> stringStringEntry.getValue().equals(value);
+        return entrySet().stream().filter(filter).map(Map.Entry::getKey);
     }
 }

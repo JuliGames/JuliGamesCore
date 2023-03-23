@@ -1,6 +1,8 @@
 package net.juligames.core.api.config;
 
 import de.bentzin.tools.pair.BasicPair;
+import de.bentzin.tools.pair.EntryPairAdapter;
+import de.bentzin.tools.pair.Pair;
 import net.juligames.core.api.misc.TriConsumer;
 import org.checkerframework.checker.optional.qual.MaybePresent;
 import org.jetbrains.annotations.ApiStatus;
@@ -11,6 +13,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.*;
 import java.util.function.*;
+import java.util.stream.Stream;
 
 /**
  * @author Ture Bentzin
@@ -20,7 +23,8 @@ import java.util.function.*;
  * @see BuildInInterpreters
  */
 @SuppressWarnings("unused")
-public interface Configuration extends Comparable<Configuration> {
+public interface Configuration extends Comparable<Configuration>, Iterable<Pair<String>> {
+
 
     /**
      * This keys can be requested but never should be overridden (it is possible to override them, but only consider doing this if you really
@@ -209,6 +213,73 @@ public interface Configuration extends Comparable<Configuration> {
 
     void set(@NotNull BasicPair<String, String> basicPair);
 
+    //ifAbsent
+
+    @ApiStatus.AvailableSince("1.5")
+    void setStringIfAbsent(@NotNull String key, @NotNull String value);
+
+    @ApiStatus.AvailableSince("1.5")
+    void setStringIfAbsent(@NotNull String key, @NotNull Supplier<String> value);
+
+    @ApiStatus.AvailableSince("1.5")
+    void setIntegerIfAbsent(@NotNull String key, @NotNull Integer value);
+
+    @ApiStatus.AvailableSince("1.5")
+    void setIntegerIfAbsent(@NotNull String key, @NotNull Supplier<Integer> value);
+
+    @ApiStatus.AvailableSince("1.5")
+    void setDoubleIfAbsent(@NotNull String key, @NotNull Double value);
+
+    @ApiStatus.AvailableSince("1.5")
+    void setDoubleIfAbsent(@NotNull String key, @NotNull Supplier<Double> value);
+
+    @ApiStatus.AvailableSince("1.5")
+    void setLongIfAbsent(@NotNull String key, @NotNull Long value);
+
+    @ApiStatus.AvailableSince("1.5")
+    void setLongIfAbsent(@NotNull String key, @NotNull Supplier<Long> value);
+
+    @ApiStatus.AvailableSince("1.5")
+    void setShortIfAbsent(@NotNull String key, @NotNull Short value);
+
+    @ApiStatus.AvailableSince("1.5")
+    void setShortIfAbsent(@NotNull String key, @NotNull Supplier<Short> value);
+
+    @ApiStatus.AvailableSince("1.5")
+    void setByteIfAbsent(@NotNull String key, @NotNull Byte value);
+
+    @ApiStatus.AvailableSince("1.5")
+    void setByteIfAbsent(@NotNull String key, @NotNull Supplier<Byte> value);
+
+    @ApiStatus.AvailableSince("1.5")
+    void setBooleanIfAbsent(@NotNull String key, @NotNull Boolean value);
+
+    @ApiStatus.AvailableSince("1.5")
+    void setBooleanIfAbsent(@NotNull String key, @NotNull Supplier<Boolean> value);
+
+    @ApiStatus.AvailableSince("1.5")
+    void setFloatIfAbsent(@NotNull String key, @NotNull Float value);
+
+    @ApiStatus.AvailableSince("1.5")
+    void setFloatIfAbsent(@NotNull String key, @NotNull Supplier<Float> value);
+
+    @ApiStatus.AvailableSince("1.5")
+    <T> void setIfAbsent(@NotNull String key, @NotNull T value, @NotNull Interpreter<T> interpreter);
+
+    @ApiStatus.AvailableSince("1.5")
+    <T> void setIfAbsent(@NotNull String key, @NotNull Supplier<T> value, @NotNull Interpreter<T> interpreter);
+
+    @ApiStatus.AvailableSince("1.5")
+    <T> void setIfAbsent(@NotNull Supplier<String> key, @NotNull T value, @NotNull Interpreter<T> interpreter);
+
+    @ApiStatus.AvailableSince("1.5")
+    <T> void setIfAbsent(@NotNull Supplier<String> key, @NotNull Supplier<T> value, @NotNull Interpreter<T> interpreter);
+
+    @ApiStatus.AvailableSince("1.5")
+    void setIfAbsent(@NotNull BasicPair<String, String> basicPair);
+
+    //del
+
     void del(@NotNull String key);
 
     void del(@NotNull Supplier<String> keys);
@@ -261,12 +332,92 @@ public interface Configuration extends Comparable<Configuration> {
     @ApiStatus.AvailableSince("1.4")
     <R> R doWithData(@NotNull Function<Map<String, String>, R> function);
 
+    /**
+     * @deprecated this method can have serious effects on the integrity of the data managed by the configuration!
+     * Because of this thread the {@link #setStringIfAbsent(String, String)} methods where introduced. Removal of this method
+     * may be accomplished later. It is not unlikely that this method will be stripped of its manipulation capabilities and
+     * will serve only for query operations!
+     */
     @ApiStatus.Experimental
     @ApiStatus.AvailableSince("1.4")
+    @Deprecated
     void doWithData(@NotNull Consumer<Map<String, String>> action);
 
     @Override
     default int compareTo(@NotNull Configuration o) {
         return o.size() - size();
     }
+
+    @ApiStatus.AvailableSince("1.5")
+    @ApiStatus.Experimental
+    @NotNull
+    Stream<String> searchValue(@NotNull String value);
+
+    @ApiStatus.AvailableSince("1.5")
+    @NotNull String getName();
+
+    //from map
+
+    /**
+     * Performs the given action for each entry in this configuration until all entries
+     * have been processed or the action throws an exception.   Unless
+     * otherwise specified by the implementing class, actions are performed in
+     * the order of entry set iteration (if an iteration order is specified.)
+     * Exceptions thrown by the action are relayed to the caller.
+     *
+     * @param action The action to be performed for each entry
+     * @throws NullPointerException            if the specified action is null
+     * @throws ConcurrentModificationException if an entry is found to be
+     *                                         removed during iteration
+     * @implSpec The default implementation is equivalent to, for this {@code configuration}:
+     * <pre> {@code
+     * for (Map.Entry<String, String> entry : configuration.entrySet())
+     *     action.accept(entry.getKey(), entry.getValue());
+     * }</pre>
+     * <p>
+     * The default implementation makes no guarantees about synchronization
+     * or atomicity properties of this method. Any implementation providing
+     * atomicity guarantees must override this method and document its
+     * concurrency properties.
+     */
+    @ApiStatus.AvailableSince("1.5")
+    default void forEach(BiConsumer<String, String> action) {
+        Objects.requireNonNull(action);
+        for (Map.Entry<String, String> entry : entrySet()) {
+            String k;
+            String v;
+            try {
+                k = entry.getKey();
+                v = entry.getValue();
+            } catch (IllegalStateException ise) {
+                // this usually means the entry is no longer in the map.
+                throw new ConcurrentModificationException(ise);
+            }
+            action.accept(k, v);
+        }
+    }
+
+
+    //Iterable
+
+    @NotNull
+    @Override
+    @ApiStatus.AvailableSince("1.5")
+    default Iterator<Pair<String>> iterator() {
+        return entrySet().stream().map(EntryPairAdapter::pairFromEntry).iterator();
+    }
+
+    @Override
+    @ApiStatus.AvailableSince("1.5")
+    default void forEach(Consumer<? super Pair<String>> action) {
+        forEach((s, s2) -> action.accept(new Pair<>(s, s2)));
+    }
+
+    @Override
+    @ApiStatus.AvailableSince("1.5")
+    default Spliterator<Pair<String>> spliterator() {
+        return entrySet().stream().map(EntryPairAdapter::pairFromEntry).spliterator();
+    }
+
+
 }

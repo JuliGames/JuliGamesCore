@@ -11,5 +11,6 @@ import java.util.function.BiFunction;
  * 18.12.2022
  */
 public sealed interface InsertionProcedure extends BiFunction<Set<Team>, UUID, Boolean>
-        permits ComparatorInsertionProcedure, ConsumerInsertionProcedure, IterativeInsertionProcedure, RandomInsertionProcedure, SwitchingInsertionProcedure, WhiteListInsertionProcedure {
+        permits ComparatorInsertionProcedure, ConsumerInsertionProcedure, IterativeInsertionProcedure,
+        PreDefinedInsertionProcedure, RandomInsertionProcedure, SwitchingInsertionProcedure, WhiteListInsertionProcedure {
 }

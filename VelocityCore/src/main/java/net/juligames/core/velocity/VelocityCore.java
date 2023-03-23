@@ -11,7 +11,6 @@ import de.bentzin.tools.logging.Logger;
 import net.juligames.core.Core;
 import net.juligames.core.adventure.AdventureCore;
 import net.juligames.core.adventure.api.AudienceMessageRecipient;
-import net.juligames.core.api.API;
 import net.juligames.core.api.TODO;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,7 +23,7 @@ import java.util.logging.Level;
  * 03.12.2022
  */
 
-@Plugin(id = "velocitycore", name = "JuliGames Velocity Core", version = "1.4",
+@Plugin(id = "velocitycore", name = "JuliGames Velocity Core", version = "1.5",
         url = "https://github.com/JuliGames/JuliGamesCore", description = "Velocity Client for the core - necessary to provide the API here",
         authors = {"Ture Bentzin"})
 public final class VelocityCore {
@@ -79,9 +78,6 @@ public final class VelocityCore {
         });
 
         core.getCommandApi().setCommandHandler(s -> server.getCommandManager().executeAsync(server.getConsoleCommandSource(), s));
-
-        API.get().getMessageApi().registerMessage("internal.core.velocity.boot", "<gold>DEBUG: Velocity is up! :: {0}");
-        API.get().getMessageApi().broadcastMessage("internal.core.velocity.boot", new String[]{server.getBoundAddress().getHostString()});
     }
 
     @Subscribe

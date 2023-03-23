@@ -6,15 +6,12 @@
     <parent>
         <artifactId>JuliGamesCore</artifactId>
         <groupId>net.juligames.core</groupId>
-        <version>1.4</version>
+        <version>1.5</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+
     <artifactId>Core</artifactId>
-    <build>
-        <plugins>
-        </plugins>
-    </build>
 
 
     <properties>
@@ -27,7 +24,7 @@
         <dependency>
             <groupId>net.juligames.core</groupId>
             <artifactId>HazelAPI</artifactId>
-            <version>1.4</version>
+            <version>1.5</version>
         </dependency>
         <dependency>
             <groupId>org.jdbi</groupId>
@@ -35,6 +32,11 @@
             <version>3.34.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.google.errorprone</groupId>
+            <artifactId>javac</artifactId>
+            <version>9+181-r4173-1</version>
+        </dependency>
 
         <dependency>
             <groupId>org.jetbrains</groupId>

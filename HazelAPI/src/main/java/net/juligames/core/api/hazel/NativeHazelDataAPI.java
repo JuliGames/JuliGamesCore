@@ -3,8 +3,12 @@ package net.juligames.core.api.hazel;
 import com.hazelcast.collection.IList;
 import com.hazelcast.collection.IQueue;
 import com.hazelcast.collection.ISet;
+import com.hazelcast.core.DistributedObject;
 import com.hazelcast.map.IMap;
 import com.hazelcast.topic.ITopic;
+import org.jetbrains.annotations.ApiStatus;
+
+import java.util.Collection;
 
 /**
  * @author Ture Bentzin
@@ -58,4 +62,8 @@ public interface NativeHazelDataAPI {
      * @return the ITopic associated to the hazel
      */
     <T> ITopic<T> getTopic(String hazel);
+
+    @ApiStatus.Experimental
+    @ApiStatus.AvailableSince("1.5")
+    Collection<DistributedObject> getAll();
 }

@@ -8,8 +8,10 @@ import cloud.timo.TimoCloud.api.objects.ServerObject;
 import de.bentzin.tools.logging.Logger;
 import de.bentzin.tools.logging.LoggingClass;
 import net.juligames.core.api.minigame.BasicMiniGame;
+import net.juligames.core.api.minigame.StartType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
@@ -25,6 +27,7 @@ public abstract class MiniGame extends LoggingClass implements BasicMiniGame {
 
     private final String plainName;
     private boolean loaded = false;
+    private StartType startType;
 
     public MiniGame(
             @NotNull final String plainName,
@@ -45,7 +48,7 @@ public abstract class MiniGame extends LoggingClass implements BasicMiniGame {
     /**
      * Will be called as soon as the MiniGame is prepared by the Core
      */
-    protected abstract void onLoad();
+    protected abstract StartType onLoad();
 
     /**
      * This will start the MiniGame
@@ -65,14 +68,23 @@ public abstract class MiniGame extends LoggingClass implements BasicMiniGame {
     protected abstract void onFinish();
 
 
+    /**
+     * load the MiniGame
+     *
+     * @return a {@link StartType}: The handling of this is not guaranteed it might start whenever it wants. Its just an indication
+     * on when and how you suggest to start it
+     */
     @Override
-    public final void load() {
+    @Nullable
+    public final StartType load() {
         //load
         getLogger().info("loading " + getFullDescription() + "!");
+        StartType r = null;
         if (!isLoaded()) {
             try {
-                onLoad();
-                getLogger().info("finished loading of " + getDescription());
+                r = onLoad();
+                getLogger().info("finished loading of " + getFullDescription());
+                getLogger().info(getFullDescription() + " suggest the following StartType: " + r.getName());
                 loaded = true;
             } catch (Exception e) {
                 getLogger().error("Error while loading MiniGame: " + e.getMessage() + "! Is it up to date?");
@@ -81,6 +93,7 @@ public abstract class MiniGame extends LoggingClass implements BasicMiniGame {
                 abort();
             }
         }
+        return r;
 
     }
 
@@ -102,7 +115,7 @@ public abstract class MiniGame extends LoggingClass implements BasicMiniGame {
     @ApiStatus.Internal
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     private void handleStartingError(Optional<Throwable> throwable) {
-        boolean equals = StackWalker.getInstance().getCallerClass().equals(this.getClass()); //EXPERIMENTAL
+        boolean equals = StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE).getCallerClass().equals(this.getClass()); //EXPERIMENTAL
         if (!equals) {
             throw new SecurityException();
         }
@@ -122,7 +135,7 @@ public abstract class MiniGame extends LoggingClass implements BasicMiniGame {
     @Override
     public final void abort() {
         //ABORT
-        Class<?> callerClass = StackWalker.getInstance().getCallerClass(); //Deal?
+        Class<?> callerClass = StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE).getCallerClass();
         getLogger().warning("aborting " + getFullDescription() + " caused by: " + callerClass.getName());
         try {
             onAbort();
@@ -157,6 +170,12 @@ public abstract class MiniGame extends LoggingClass implements BasicMiniGame {
 
     public final void setMiniGameState(@NotNull MiniGameState newState) {
         newState.apply(currentServer());
+    }
+
+    @Override
+    @ApiStatus.AvailableSince("1.5")
+    public StartType getStartType() {
+        return startType;
     }
 
     @Override

@@ -20,7 +20,7 @@ import java.util.*;
 public class CoreNotificationSender implements NotificationSender {
 
     @Override
-    public void sendNotification(SimpleNotification notification, UUID @NotNull ... addresses) {
+    public void sendNotification(@NotNull SimpleNotification notification, UUID @NotNull ... addresses) {
 
         final HazelcastInstance hazelcastInstance = Core.getInstance().getOrThrow();
         final ClientService clientService = hazelcastInstance.getClientService(); //Maybe removed
@@ -67,7 +67,7 @@ public class CoreNotificationSender implements NotificationSender {
 
 
     @Override
-    public void broadcastNotification(SimpleNotification notification) {
+    public void broadcastNotification(@NotNull SimpleNotification notification) {
         //members first
         ArrayList<UUID> uuids = new ArrayList<>();
         Collections.addAll(uuids, Core.getInstance().getClusterApi().getMembers());
@@ -81,12 +81,12 @@ public class CoreNotificationSender implements NotificationSender {
     }
 
     @Override
-    public void sendNotification(String header, String message, UUID... addressees) {
+    public void sendNotification(@NotNull String header, @NotNull String message, UUID @NotNull ... addressees) {
         sendNotification(new CoreSimpleNotification(header, message), addressees);
     }
 
     @Override
-    public void broadcastNotification(String header, String message) {
+    public void broadcastNotification(@NotNull String header, @NotNull String message) {
         broadcastNotification(new CoreSimpleNotification(header, message));
     }
 

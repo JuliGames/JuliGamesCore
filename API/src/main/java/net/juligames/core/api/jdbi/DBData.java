@@ -9,6 +9,7 @@ package net.juligames.core.api.jdbi;
  * You should use a unique keyspace for your data stored in here. If this Feature will not be used, it may be removed
  * with 2.0 - TANDANA
  */
+@SuppressWarnings("SpellCheckingInspection")
 public interface DBData {
 
     String getKey();

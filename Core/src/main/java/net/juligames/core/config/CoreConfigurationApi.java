@@ -1,5 +1,6 @@
 package net.juligames.core.config;
 
+import net.juligames.core.Core;
 import net.juligames.core.api.config.ConfigWriter;
 import net.juligames.core.api.config.Configuration;
 import net.juligames.core.api.config.ConfigurationAPI;
@@ -39,6 +40,11 @@ public class CoreConfigurationApi implements ConfigurationAPI {
     }
 
     @Override
+    public boolean exists(String name) {
+        return Core.getInstance().getHazelDataApi().getAll().stream().anyMatch(distributedObject -> distributedObject.getName().equals(name));
+    }
+
+    @Override
     public @NotNull CoreConfiguration master() {
         return getOrCreate(MASTER_CONFIG_NAME);
     }
@@ -57,6 +63,21 @@ public class CoreConfigurationApi implements ConfigurationAPI {
     @Override
     public @NotNull Comparator<? extends Configuration> comparator() {
         return (o1, o2) -> Comparator.<Configuration>naturalOrder().compare(o1, o2);
+    }
+
+    @Override
+    public @NotNull OfflineConfiguration createNewOfflineConfiguration(@NotNull String name) {
+        return new OfflineConfiguration(name);
+    }
+
+    @Override
+    public @NotNull OfflineConfiguration createNewOfflineConfiguration(@NotNull Properties defaults) {
+        return new OfflineConfiguration(defaults);
+    }
+
+    @Override
+    public @NotNull OfflineConfiguration createNewOfflineConfiguration(@NotNull Map<String, String> defaults) {
+        return new OfflineConfiguration(defaults.get("configuration_name"), defaults);
     }
 
     /**
@@ -130,8 +151,20 @@ public class CoreConfigurationApi implements ConfigurationAPI {
     }
 
     @Override
-    public @NotNull Configuration merge(@NotNull Configuration c1, Configuration c2) {
+    public @NotNull Configuration merge(@NotNull Configuration c1, @NotNull Configuration c2) {
         c1.copyAndAppendContentTo(c2);
         return c1;
+    }
+
+    @Override
+    @ApiStatus.Experimental
+    public @NotNull Configuration createSectionClone(@NotNull Configuration root, @NotNull String section) {
+        return new OfflineConfiguration(section + "@" + root,
+                new HashMap<>(root.entrySet().stream()
+                        .filter(stringStringEntry -> stringStringEntry.getKey().startsWith(section + "_"))
+                        .map(s -> {
+                            String after = s.getKey().replaceFirst(section + "_", "");
+                            return Map.entry(section + "_" + after.substring(0, after.indexOf("_")), s.getValue());
+                        }).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))));
     }
 }

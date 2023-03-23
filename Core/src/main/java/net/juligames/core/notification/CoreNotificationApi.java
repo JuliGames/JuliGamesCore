@@ -31,17 +31,17 @@ public final class CoreNotificationApi implements NotificationApi, MessageListen
     }
 
     @Override
-    public boolean registerListener(NotificationListener listener) {
+    public boolean registerListener(@NotNull NotificationListener listener) {
         try {
             listenerRegisterator.register(listener);
             return true;
-        } catch (Registerator.DuplicateEntryException ignore) {
+        } catch (Registerator.DuplicateEntryException ignored) {
             return false;
         }
     }
 
     @Override
-    public boolean unregisterListener(NotificationListener listener) {
+    public boolean unregisterListener(@NotNull NotificationListener listener) {
         try {
             listenerRegisterator.unregister(listener);
             return true;
@@ -78,9 +78,12 @@ public final class CoreNotificationApi implements NotificationApi, MessageListen
     @Override
     public void onMessage(Message<SerializedNotification> message) {
         //call Debug...
-        new DebugNotificationPrinter().onMessage(message); //TODO This will stay until its finally tested under heavy load
-        for (NotificationListener notificationListener : listenerRegisterator) {
-            notificationListener.onNotification(message.getMessageObject().deserialize());
+        if (Boolean.getBoolean("debugNotifications")) {
+            new DebugNotificationPrinter().onMessage(message);
+            for (NotificationListener notificationListener : listenerRegisterator) {
+                notificationListener.onNotification(message.getMessageObject().deserialize());
+            }
         }
+
     }
 }

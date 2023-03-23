@@ -1,13 +1,11 @@
 package net.juligames.core.api.config;
 
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Ture Bentzin
  * 10.01.2023
  */
-@ApiStatus.Experimental
 public interface ConfigWriter {
     /**
      * Writes the data of this {@link ConfigWriter} to the configuration
