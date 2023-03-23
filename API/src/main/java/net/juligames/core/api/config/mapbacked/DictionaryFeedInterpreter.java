@@ -5,7 +5,6 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Dictionary;
-import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
@@ -42,12 +41,12 @@ public class DictionaryFeedInterpreter<E> implements Interpreter<MapPart<E>> {
         return dictionaryPartFactory;
     }
 
-    public @NotNull MapPart<E> fabricate(@NotNull String key, @NotNull Supplier<Map<String, E>> mapSupplier) {
-        return new DictionaryPart<E>(key, dictionarySupplier);
+    public @NotNull MapPart<E> fabricate(@NotNull String key, @NotNull Supplier<Dictionary<String, E>> dictionarySupplier) {
+        return dictionaryPartFactory.apply(key, dictionarySupplier);
     }
 
     protected @NotNull MapPart<E> fabricate(@NotNull String key) {
-        return new DictionaryPart<E>(key, dictionarySupplier);
+        return dictionaryPartFactory.apply(key, dictionarySupplier);
     }
 
     @Override

@@ -49,11 +49,11 @@ public class MapFeedInterpreter<E> implements Interpreter<MapPart<E>> {
     }
 
     public @NotNull MapPart<E> fabricate(@NotNull String key, @NotNull Supplier<Map<String, E>> mapSupplier) {
-        return new MapPartImpl<>(key, mapSupplier);
+        return mapPartFactory.apply(key,mapSupplier);
     }
 
     protected @NotNull MapPart<E> fabricate(@NotNull String key) {
-        return new MapPartImpl<>(key, mapSupplier);
+        return mapPartFactory.apply(key,mapSupplier);
     }
 
     private record MapPartImpl<E>(String key, Supplier<Map<String, E>> mapSupplier) implements MapPart<E> {
