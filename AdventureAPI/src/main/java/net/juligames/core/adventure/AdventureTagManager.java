@@ -47,6 +47,15 @@ public interface AdventureTagManager extends MiniMessageSerializer {
 
     @NotNull String resolvePlain(@NotNull Message message);
 
+    /**
+     * This method creates a new {@link TagResolver} that combines {@link #getResolver()} and append
+     * @param append additional resolvers
+     * @return a new {@link TagResolver}
+     */
+    @ApiStatus.AvailableSince("1.5")
+    @ApiStatus.Experimental
+    @NotNull TagResolver fork(@NotNull Collection<TagResolver> append);
+
     @Deprecated
     @NotNull String resolveLegacy(@NotNull Message message);
 
