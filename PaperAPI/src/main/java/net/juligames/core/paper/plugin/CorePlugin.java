@@ -56,6 +56,8 @@ public abstract class CorePlugin extends PluginBase {
             throw new IllegalStateException("Cannot use initialization constructor at runtime");
         }
         init(loader, loader.server, description, dataFolder, file, classLoader);
+
+        PaperC
     }
 
     /**

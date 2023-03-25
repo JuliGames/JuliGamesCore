@@ -6,7 +6,7 @@
     <parent>
         <artifactId>JuliGamesCore</artifactId>
         <groupId>net.juligames.core</groupId>
-        <version>1.5</version>
+        <version>1.6-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -24,7 +24,7 @@
         <dependency>
             <groupId>net.juligames.core</groupId>
             <artifactId>API</artifactId>
-            <version>1.5</version>
+            <version>1.6-SNAPSHOT</version>
         </dependency>
 
         <dependency>
@@ -44,6 +44,10 @@
             <artifactId>adventure-text-serializer-legacy</artifactId>
             <version>4.11.0</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.bentzin</groupId>
+            <artifactId>ConversationLib</artifactId>
         </dependency>
     </dependencies>
 

@@ -6,7 +6,7 @@
     <parent>
         <artifactId>JuliGamesCore</artifactId>
         <groupId>net.juligames.core</groupId>
-        <version>1.5</version>
+        <version>1.6-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -24,7 +24,7 @@
         <dependency>
             <groupId>net.juligames.core</groupId>
             <artifactId>HazelAPI</artifactId>
-            <version>1.5</version>
+            <version>1.6-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.jdbi</groupId>

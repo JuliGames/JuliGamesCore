@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
  * support it. Because of this the AdventureAPI will only function as intended when bundled with the API you are using!
  */
 public class AdventureCore implements AdventureAPI {
-    final String CORE_VERSION = "1.5";
+    final String CORE_VERSION = "1.6-SNAPSHOT";
 
     private CoreAdventureTagManager adventureTagManager;
     private Logger logger;

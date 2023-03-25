@@ -22,7 +22,6 @@ import net.juligames.core.api.message.MiniMessageSerializer;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.text.StrBuilder;
 import org.apache.commons.lang.time.DateUtils;
-import org.checkerframework.checker.units.qual.A;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -669,7 +668,7 @@ public class DurationFormatUtils {
             Object value = null;
             switch (ch) {
                 // TODO: Need to handle escaping of '
-                case '\'':
+                case '\'' -> {
                     if (inLiteral) {
                         buffer = null;
                         inLiteral = false;
@@ -678,34 +677,21 @@ public class DurationFormatUtils {
                         list.add(new Token(buffer));
                         inLiteral = true;
                     }
-                    break;
-                case 'y':
-                    value = y;
-                    break;
-                case 'M':
-                    value = M;
-                    break;
-                case 'd':
-                    value = d;
-                    break;
-                case 'H':
-                    value = H;
-                    break;
-                case 'm':
-                    value = m;
-                    break;
-                case 's':
-                    value = s;
-                    break;
-                case 'S':
-                    value = S;
-                    break;
-                default:
+                }
+                case 'y' -> value = y;
+                case 'M' -> value = M;
+                case 'd' -> value = d;
+                case 'H' -> value = H;
+                case 'm' -> value = m;
+                case 's' -> value = s;
+                case 'S' -> value = S;
+                default -> {
                     if (buffer == null) {
                         buffer = new StringBuffer();
                         list.add(new Token(buffer));
                     }
                     buffer.append(ch);
+                }
             }
 
             if (value != null) {
@@ -719,7 +705,7 @@ public class DurationFormatUtils {
                 buffer = null;
             }
         }
-        return (Token[]) list.toArray(new Token[list.size()]);
+        return (Token[]) list.toArray(new Token[0]);
     }
 
 
