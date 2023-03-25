@@ -39,3 +39,4 @@ latest.log.lck
 config/messageSystem.properties=
 Core/src/main/java/net/juligames/core/Test.java
 config/messageSystem.properties
+VelocityCore/src/main/java/test/ConversationTest.java
