@@ -5,6 +5,7 @@ import de.bentzin.conversationlib.prompt.Prompt;
 import de.bentzin.conversationlib.prompt.ValidatingPrompt;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.util.Index;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -15,6 +16,7 @@ import java.util.stream.Stream;
  * @author Ture Bentzin
  * 25.03.2023
  */
+@ApiStatus.AvailableSince("1.6")
 public abstract class IndexBackedPrompt<V> extends ValidatingPrompt {
 
     private final Index<String, V> index;

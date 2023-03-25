@@ -11,6 +11,7 @@ import net.kyori.adventure.pointer.Pointer;
 import net.kyori.adventure.pointer.Pointered;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,6 +21,7 @@ import java.util.Locale;
  * @author Ture Bentzin
  * 25.03.2023
  */
+@ApiStatus.AvailableSince("1.6")
 public class MessageRepresentation implements ComponentLike {
 
     private final @NotNull AdventureTagManager adventureTagManager;

@@ -4,6 +4,7 @@ import com.velocitypowered.api.plugin.PluginManager;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import de.bentzin.conversationlib.prompt.FixedSetPrompt;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -13,6 +14,7 @@ import java.util.Collections;
  * @author Ture Bentzin
  * 25.03.2023
  */
+@ApiStatus.AvailableSince("1.6")
 public abstract class PartiallPlayerPrompt extends FixedSetPrompt<Collection<Player>> implements ProxyServerPrompt, PluginManagerPrompt {
 
     private final ProxyServer proxyServer;

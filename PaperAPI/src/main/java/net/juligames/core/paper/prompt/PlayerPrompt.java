@@ -3,6 +3,7 @@ package net.juligames.core.paper.prompt;
 import de.bentzin.conversationlib.prompt.FixedSetPrompt;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -11,6 +12,7 @@ import java.util.Collections;
  * @author Ture Bentzin
  * 25.03.2023
  */
+@ApiStatus.AvailableSince("1.6")
 public abstract class PlayerPrompt extends FixedSetPrompt<Player> implements ServerPrompt {
     private final Server server;
 

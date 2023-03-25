@@ -1,7 +1,7 @@
-package net.juligames.core.velocity.prompt;
+package net.juligames.core.adventure.prompt;
 
-import com.velocitypowered.api.plugin.PluginManager;
 import de.bentzin.conversationlib.prompt.Prompt;
+import net.juligames.core.api.config.ConfigurationAPI;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
  * 25.03.2023
  */
 @ApiStatus.AvailableSince("1.6")
-public interface PluginManagerPrompt extends Prompt {
+public interface ConfigurationAPIPrompt extends Prompt {
 
-    @NotNull PluginManager getPluginManager();
+    @NotNull ConfigurationAPI getConfigurationApi();
 }
