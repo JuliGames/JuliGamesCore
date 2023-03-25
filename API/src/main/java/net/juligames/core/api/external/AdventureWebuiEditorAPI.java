@@ -23,6 +23,9 @@ package net.juligames.core.api.external;
  * SOFTWARE.
  */
 
+import net.juligames.core.api.API;
+import net.juligames.core.api.message.Message;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.TestOnly;
 
@@ -35,6 +38,8 @@ import java.net.http.HttpResponse;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -51,18 +56,6 @@ public final class AdventureWebuiEditorAPI {
 
     @TestOnly
     public static URI JULIGAMES_API_DEVELOPMENT_LOCAL;
-
-    public static void main(String[] args) {
-        AdventureWebuiEditorAPI api = new AdventureWebuiEditorAPI();
-        CompletableFuture<String> juliGamesCore = api.startSession("<red>hallo VS.json", "/reject", "JuliGamesCore");
-        try {
-            System.out.println(juliGamesCore.get());
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     static {
         try {
@@ -86,7 +79,6 @@ public final class AdventureWebuiEditorAPI {
     public AdventureWebuiEditorAPI(final @NotNull URI root) {
         this(root, HttpClient.newHttpClient());
     }
-
     /**
      * Creates a new instance of the editor API with the default JuliGames api
      */
@@ -113,6 +105,24 @@ public final class AdventureWebuiEditorAPI {
     public AdventureWebuiEditorAPI(final @NotNull HttpClient client) {
         this.root = Objects.requireNonNull(JULIGAMES_API_PRODUCTION, "root");
         this.client = Objects.requireNonNull(client, "client");
+    }
+
+    public static void main(String[] args) {
+        AdventureWebuiEditorAPI api = new AdventureWebuiEditorAPI();
+        String app = api.startSessionAndGenerateLink("<rainbow>hsasdhjasdasldjha", "/rainbow", "app");
+        System.out.println(app);
+    }
+
+    public static void maidn(String[] args) {
+        AdventureWebuiEditorAPI api = new AdventureWebuiEditorAPI();
+        CompletableFuture<String> juliGamesCore = api.retrieveSession("6bd7388acd3a4743867dfbd02debe9ff");
+        try {
+            System.out.println(juliGamesCore.get());
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -171,6 +181,68 @@ public final class AdventureWebuiEditorAPI {
         });
 
         return result;
+    }
+
+    @Contract(pure = true)
+    public @NotNull String generateLink(String token) {
+        return root.toString() + "?token=" + token;
+    }
+
+    /**
+     * @param input   initial miniMessage
+     * @param command command with {token}
+     * @param app     app name
+     * @return the link
+     */
+    @Contract(pure = true)
+    public @NotNull String startSessionAndGenerateLink(String input, String command, String app) {
+        try {
+            return generateLink(startSession(input, command, app).get(10, TimeUnit.SECONDS));
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * @param command command with {token}
+     * @return the link
+     */
+    @Contract(pure = true)
+    public @NotNull String startSessionAndGenerateLink(String command) {
+        try {
+            return generateLink(startSession("", command, API.get().getVersion()).get(10, TimeUnit.SECONDS));
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * @param command command with {token}
+     * @param app app
+     * @return the link
+     */
+    @Contract(pure = true)
+    public @NotNull String startSessionAndGenerateLink(String command, String app) {
+        try {
+            return generateLink(startSession("", command, app).get(10, TimeUnit.SECONDS));
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * @param message the initial message
+     * @param command command with {token}
+     * @param app app
+     * @return the link
+     */
+    @Contract(pure = true)
+    public @NotNull String startSessionAndGenerateLink(@NotNull Message message, String command, String app) {
+        try {
+            return generateLink(startSession(message.getMiniMessage(), command, app).get(10, TimeUnit.SECONDS));
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private @NotNull String constructBody(final @NotNull String input, final @NotNull String command, final @NotNull String application) {
