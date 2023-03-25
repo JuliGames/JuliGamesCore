@@ -34,6 +34,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -42,7 +43,7 @@ import java.util.regex.Pattern;
  */
 public final class AdventureWebuiEditorAPI {
     public static final URI JULIGAMES_API_PRODUCTION;
-    private static final Pattern TOKEN_PATTERN = Pattern.compile("\\{\"token\": \"(.*?)\"}");
+    private static final Pattern TOKEN_PATTERN = Pattern.compile("\\{\"token\":\"(.*?)\"}");
     @TestOnly
     public static URI JULIGAMES_API_DEVELOPMENT_A;
     @TestOnly
@@ -50,6 +51,18 @@ public final class AdventureWebuiEditorAPI {
 
     @TestOnly
     public static URI JULIGAMES_API_DEVELOPMENT_LOCAL;
+
+    public static void main(String[] args) {
+        AdventureWebuiEditorAPI api = new AdventureWebuiEditorAPI();
+        CompletableFuture<String> juliGamesCore = api.startSession("<red>hallo VS.json", "/reject", "JuliGamesCore");
+        try {
+            System.out.println(juliGamesCore.get());
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     static {
         try {
@@ -121,9 +134,10 @@ public final class AdventureWebuiEditorAPI {
                 final String body = stringHttpResponse.body();
                 final Matcher matcher = TOKEN_PATTERN.matcher(body);
 
-                while (matcher.find()) {
+                if (matcher.find()) {
                     final String group = matcher.group(1);
                     result.complete(group);
+                    return result;
                 }
 
                 result.completeExceptionally(new IOException("The result did not contain a token."));
