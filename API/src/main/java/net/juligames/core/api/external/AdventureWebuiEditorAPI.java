@@ -43,7 +43,7 @@ import java.util.regex.Pattern;
  */
 public final class AdventureWebuiEditorAPI {
     public static final URI JULIGAMES_API_PRODUCTION;
-    private static final Pattern TOKEN_PATTERN = Pattern.compile("\\{\"token\" :\"(.*?)\"}");
+    private static final Pattern TOKEN_PATTERN = Pattern.compile("\\{\"token\":\"(.*?)\"}");
     @TestOnly
     public static URI JULIGAMES_API_DEVELOPMENT_A;
     @TestOnly
