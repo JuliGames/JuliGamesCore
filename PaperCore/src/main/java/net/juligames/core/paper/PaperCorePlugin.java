@@ -8,7 +8,9 @@ import net.juligames.core.api.API;
 import net.juligames.core.api.jdbi.MessageDAO;
 import net.juligames.core.api.minigame.BasicMiniGame;
 import net.juligames.core.caching.MessageCaching;
+import net.juligames.core.command.CoreCommandNotificationListener;
 import net.juligames.core.paper.bstats.Metrics;
+import net.juligames.core.paper.conversation.ConversationListener;
 import net.juligames.core.paper.events.ServerBootFinishedEvent;
 import net.juligames.core.paper.minigame.StartCommand;
 import net.juligames.core.paper.notification.EventNotificationListener;
@@ -58,6 +60,7 @@ public class PaperCorePlugin extends JavaPlugin {
             getLogger().info("starting adventureCore v." + AdventureCore.API_VERSION);
             adventureCore = new AdventureCore();
             adventureCore.start();
+            new PaperConversationManager();
             core.setOnlineRecipientProvider(() -> {
                 List<PaperMessageRecipient> paperMessageRecipients = new java.util.ArrayList<>(Bukkit.getOnlinePlayers().stream().map(PaperMessageRecipient::new).toList());
                 paperMessageRecipients.add(new PaperMessageRecipient(Bukkit.getConsoleSender()));
@@ -76,6 +79,7 @@ public class PaperCorePlugin extends JavaPlugin {
             Objects.requireNonNull(getCommand("printMessageCache")).setExecutor(new PrintMessageCacheCommand());
 
             Bukkit.getPluginManager().registerEvents(new PaperCoreEventListener(), this);
+            Bukkit.getPluginManager().registerEvents(new ConversationListener(), this);
 
             //Register NotificationEvent
             core.getNotificationApi().registerListener(new EventNotificationListener());

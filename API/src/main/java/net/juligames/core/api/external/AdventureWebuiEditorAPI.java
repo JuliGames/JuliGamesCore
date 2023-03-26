@@ -107,24 +107,6 @@ public final class AdventureWebuiEditorAPI {
         this.client = Objects.requireNonNull(client, "client");
     }
 
-    public static void main(String[] args) {
-        AdventureWebuiEditorAPI api = new AdventureWebuiEditorAPI();
-        String app = api.startSessionAndGenerateLink("<rainbow>hsasdhjasdasldjha", "/rainbow", "app");
-        System.out.println(app);
-    }
-
-    public static void maidn(String[] args) {
-        AdventureWebuiEditorAPI api = new AdventureWebuiEditorAPI();
-        CompletableFuture<String> juliGamesCore = api.retrieveSession("6bd7388acd3a4743867dfbd02debe9ff");
-        try {
-            System.out.println(juliGamesCore.get());
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     /**
      * Starts a session, returning the token.
      *
@@ -247,5 +229,10 @@ public final class AdventureWebuiEditorAPI {
 
     private @NotNull String constructBody(final @NotNull String input, final @NotNull String command, final @NotNull String application) {
         return String.format("{\"input\":\"%s\",\"command\":\"%s\",\"application\":\"%s\"}", input, command, application);
+    }
+
+    @Contract(pure = true)
+    public @NotNull String getClientInformation() {
+        return client + "@" + root;
     }
 }

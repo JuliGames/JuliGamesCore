@@ -65,6 +65,8 @@ public final class VelocityCore {
         adventureCore = new AdventureCore();
         adventureCore.start();
 
+        new VelocityConversationManager();
+
         core.setOnlineRecipientProvider(() -> {
             Collection<AudienceMessageRecipient> recipients = new ArrayList<>();
             //1. players

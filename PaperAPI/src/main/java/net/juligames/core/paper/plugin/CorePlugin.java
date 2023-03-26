@@ -57,7 +57,6 @@ public abstract class CorePlugin extends PluginBase {
         }
         init(loader, loader.server, description, dataFolder, file, classLoader);
 
-        PaperC
     }
 
     /**

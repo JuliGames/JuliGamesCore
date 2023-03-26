@@ -1,4 +1,4 @@
-package net.juligames.core.adventure.prompt;
+package net.juligames.core.adventure.api.prompt;
 
 import de.bentzin.conversationlib.prompt.Prompt;
 import net.juligames.core.api.config.ConfigurationAPI;

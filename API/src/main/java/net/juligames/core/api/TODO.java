@@ -8,5 +8,5 @@ package net.juligames.core.api;
  */
 @SuppressWarnings("JavadocDeclaration")
 public @interface TODO {
-    boolean doNotcall();
+    boolean doNotcall() default false;
 }

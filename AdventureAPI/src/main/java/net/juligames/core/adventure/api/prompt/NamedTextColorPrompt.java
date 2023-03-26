@@ -1,4 +1,4 @@
-package net.juligames.core.adventure.prompt;
+package net.juligames.core.adventure.api.prompt;
 
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.jetbrains.annotations.ApiStatus;
