@@ -106,7 +106,7 @@ public class CoreMessageApi implements MessageApi {
     }
 
     @Override
-    public @NotNull CoreMessage getMessage(@NotNull String messageKey, @NotNull String locale, String... replacements) {
+    public @NotNull CoreMessage getMessage(@NotNull String messageKey, @NotNull String locale, @Nullable String... replacements) {
         CoreMessage message = getMessage(messageKey, locale);
         Core.getInstance().getCoreLogger().debug("inserting replacements: " + Arrays.toString(replacements) + " to " + message.getMiniMessage() + "@" + message.getMessageData().getMessageKey());
         insertReplacements(message, replacements);
@@ -514,7 +514,7 @@ public class CoreMessageApi implements MessageApi {
         Collection<Message> messages = new ArrayList<>();
         for (String messageKey : messageKeys) {
             for (MessageRecipient messageRecipient : messageRecipients) {
-                CoreMessage message = getMessage(messageKey, messageRecipient.supplyLocaleOrDefault()); //no fallback?! oh, fuck this could get interesting | This may cause NullPointerException - let us hope it does not...
+                CoreMessage message = getMessage(messageKey, Objects.requireNonNull(messageRecipient.supplyLocaleOrDefault())); //no fallback?! oh, fuck this could get interesting | This may cause NullPointerException - let us hope it does not...
                 insertReplacements(message, replacements);
                 if (messages.stream().noneMatch(message1 -> message1.getMessageData().getMessageKey().equals(message.getMessageData().getMessageKey()))) {
                     messages.add(message);
@@ -648,7 +648,7 @@ public class CoreMessageApi implements MessageApi {
         };
     }
 
-    private void insertReplacements(CoreMessage coreMessage, String @NotNull ... replacements) {
+    private void insertReplacements(@NotNull CoreMessage coreMessage, @Nullable String... replacements) {
         Map<Integer, String> map = new HashMap<>();
         if (replacements == null)
             return;

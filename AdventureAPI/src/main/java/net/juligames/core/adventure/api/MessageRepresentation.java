@@ -71,12 +71,12 @@ public class MessageRepresentation implements ComponentLike {
     @Contract("_, _ -> new")
     public static @NotNull MessageRepresentation represent(String messageKey, Pointered pointered) {
         return new MessageRepresentation(API.get().getMessageApi().getMessageSmart(messageKey,
-                pointered.get(Identity.LOCALE).orElseThrow()));
+                pointered.get(Identity.LOCALE).orElse(defaultLocale())));
     }
 
     @Contract("_, _, _ -> new")
     public static @NotNull MessageRepresentation represent(String messageKey, Pointered pointered, String... replacements) {
-        return new MessageRepresentation(API.get().getMessageApi().getMessageSmart(messageKey, pointered.get(Identity.LOCALE).orElseThrow(), replacements));
+        return new MessageRepresentation(API.get().getMessageApi().getMessageSmart(messageKey, pointered.get(Identity.LOCALE).orElse(defaultLocale()), replacements));
     }
 
 
@@ -88,5 +88,9 @@ public class MessageRepresentation implements ComponentLike {
 
     public Message getMessage() {
         return message;
+    }
+
+    private static @NotNull Locale defaultLocale() {
+        return API.get().getMessageApi().defaultUtilLocale();
     }
 }
