@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>net.juligames.core</groupId>
+        <artifactId>JuliGamesCore</artifactId>
+        <version>1.6-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>SuperCore</artifactId>
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+
+    <dependencies>
+        <dependency>
+            <groupId>net.juligames.core</groupId>
+            <artifactId>Master</artifactId>
+            <version>1.6-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>net.juligames.core</groupId>
+            <artifactId>PaperCore</artifactId>
+            <version>1.6-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>net.juligames.core</groupId>
+            <artifactId>VelocityCore</artifactId>
+            <version>1.6-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>net.juligames.core</groupId>
+            <artifactId>MiniGameAPI</artifactId>
+            <version>1.6-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.4.1</version>
+                <configuration>
+                    <!-- put your configurations here -->
+                    <finalName>SuperCore-${project.version}-EXPERIMENTAL</finalName>
+                    <createDependencyReducedPom>false</createDependencyReducedPom>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.3.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <mainClass>net.juligames.core.master.CoreMaster
+                            </mainClass> <!-- Allow SuperCore to start Master -->
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <repositories>
+        <!-- Allow standalone build -->
+        <repository>
+            <id>juligames</id>
+            <name>Juligames Maven</name>
+            <url>https://maven.juligames.net/juligames</url>
+        </repository>
+    </repositories>
+
+</project>
