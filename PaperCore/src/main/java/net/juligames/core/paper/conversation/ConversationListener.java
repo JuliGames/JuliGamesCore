@@ -1,5 +1,7 @@
 package net.juligames.core.paper.conversation;
 
+import net.juligames.core.Core;
+import net.juligames.core.api.API;
 import net.juligames.core.paper.PaperConversationManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -18,6 +20,7 @@ public class ConversationListener implements Listener {
     public void onChat(@NotNull AsyncPlayerChatEvent event) {
         //Player
         if (PaperConversationManager.getInstance().handleInput(event.getPlayer(), event.getMessage())) {
+            Core.getInstance().getCoreLogger().debug("handled input for conversing: " + event.getPlayer().getName() + ": " + event.getMessage());
             event.setCancelled(true);
         }
     }

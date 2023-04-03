@@ -18,6 +18,8 @@ import org.jetbrains.annotations.*;
 
 import java.security.InvalidParameterException;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAmount;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -621,6 +623,16 @@ public class CoreMessageApi implements MessageApi {
         return Date.from(Instant.now());
     }
 
+    @Contract("_ -> new")
+    private @NotNull Date nowPlusThen(long fluxCompensator) {
+        return Date.from(Instant.now().plus(fluxCompensator, ChronoUnit.MILLIS));
+    }
+
+    @Contract("_ -> new")
+    private @NotNull Date nowPlusThen(TemporalAmount fluxCompensator) {
+        return Date.from(Instant.now().plus(fluxCompensator));
+    }
+
     /**
      * Support for the old replacement handling
      *
@@ -639,7 +651,6 @@ public class CoreMessageApi implements MessageApi {
             Core.getInstance().getCoreLogger().debug("insert start: " + miniMessage);
             for (int i = 0; i < replacements.length; i++) {
                 if (replacements[i] == null) replacements[i] = "null";
-                //TODO replacements[i] = replacements[i].replace("</blank>","blank");
                 miniMessage = miniMessage.replace(buildPattern(i), replacements[i]);
                 Core.getInstance().getCoreLogger().debug("insert step: " + i + " :" + miniMessage);
             }
