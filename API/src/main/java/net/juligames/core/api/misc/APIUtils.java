@@ -16,15 +16,32 @@ public class APIUtils {
 
     }
 
-    public static boolean executedWithoutException(@NotNull Runnable runnable, Exception... exceptions) {
+    public static boolean executedWithoutException(@NotNull ThrowingRunnable runnable, Exception... exceptions) {
         return executedWithoutException(runnable, List.of(exceptions));
     }
 
-    public static boolean executedWithoutException(@NotNull Runnable runnable) {
+    public static boolean executedWithoutException(@NotNull ThrowingRunnable runnable) {
         return executedWithoutException(runnable, Collections.emptyList());
     }
 
-    public static boolean executedWithoutException(@NotNull Runnable runnable, Collection<Exception> exceptions) {
+    public static boolean executedWithoutException(@NotNull ThrowingRunnable runnable, Collection<Exception> exceptions) {
+        try {
+            runnable.run();
+            return true;
+        } catch (Exception e) {
+            return !exceptions.contains(e);
+        }
+    }
+
+    public static boolean executedWithoutExceptionL(@NotNull Runnable runnable, Exception... exceptions) {
+        return executedWithoutExceptionL(runnable, List.of(exceptions));
+    }
+
+    public static boolean executedWithoutExceptionL(@NotNull Runnable runnable) {
+        return executedWithoutExceptionL(runnable, Collections.emptyList());
+    }
+
+    public static boolean executedWithoutExceptionL(@NotNull Runnable runnable, Collection<Exception> exceptions) {
         try {
             runnable.run();
             return true;
