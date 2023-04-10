@@ -4,6 +4,8 @@ import de.bentzin.conversationlib.ConversationContext;
 import de.bentzin.conversationlib.prompt.Prompt;
 import de.bentzin.conversationlib.prompt.ValidatingPrompt;
 import de.bentzin.tools.misc.SubscribableType;
+import net.juligames.core.api.config.Interpreter;
+import net.juligames.core.api.misc.APIUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -50,6 +52,24 @@ public abstract class BackedPrompt<V> extends ValidatingPrompt {
                 @Override
                 public @Nullable V provideOrNull(@NotNull String string) {
                     return function.apply(string);
+                }
+            };
+        }
+
+        static <V> @NotNull PromptBacker<V> fromInterpreter(@NotNull Interpreter<V> vInterpreter) {
+            return new SimplePromptBacker<V>() {
+                @Override
+                public boolean canProvide(@NotNull String string) {
+                    return APIUtils.executedWithoutException(() -> vInterpreter.interpret(string));
+                }
+
+                @Override
+                public @NotNull V provideOrNull(@NotNull String string) {
+                    try {
+                        return vInterpreter.interpret(string);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             };
         }
