@@ -13,6 +13,7 @@ import java.util.function.Function;
  * 12.04.2023
  */
 @ApiStatus.Internal
+@ApiStatus.AvailableSince("1.6")
 public sealed interface Reverser<T> permits Interpreter, Reverser.PrivateReverser {
 
     /**

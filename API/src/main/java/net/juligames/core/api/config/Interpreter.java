@@ -1,6 +1,7 @@
 package net.juligames.core.api.config;
 
 import de.bentzin.tools.DoNotOverride;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
@@ -25,11 +26,13 @@ public non-sealed interface Interpreter<T> extends Reverser<T>, PrimitiveInterpr
     }
 
     @DoNotOverride
+    @ApiStatus.AvailableSince("1.6")
     default Reverser<T> asReverser() {
         return this;
     }
 
     @DoNotOverride
+    @ApiStatus.AvailableSince("1.6")
     default PrimitiveInterpreter<T> asIInterpreter() {
         return this;
     }

@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
  * 12.04.2023
  */
 @ApiStatus.Internal
+@ApiStatus.AvailableSince("1.6")
 public sealed interface PrimitiveInterpreter<T> permits Interpreter{
 
     /**

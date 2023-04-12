@@ -5,7 +5,9 @@ import de.bentzin.conversationlib.prompt.Prompt;
 import de.bentzin.conversationlib.prompt.ValidatingPrompt;
 import de.bentzin.tools.misc.SubscribableType;
 import net.juligames.core.api.config.Interpreter;
+import net.juligames.core.api.config.PrimitiveInterpreter;
 import net.juligames.core.api.misc.APIUtils;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,6 +19,7 @@ import java.util.function.Function;
  * @author Ture Bentzin
  * 10.04.2023
  */
+@ApiStatus.AvailableSince("1.6")
 public abstract class BackedPrompt<V> extends ValidatingPrompt {
 
     private final @NotNull PromptBacker<V> promptBacker;
@@ -56,7 +59,7 @@ public abstract class BackedPrompt<V> extends ValidatingPrompt {
             };
         }
 
-        static <V> @NotNull PromptBacker<V> fromInterpreter(@NotNull Interpreter<V> vInterpreter) {
+        static <V> @NotNull PromptBacker<V> fromInterpreter(@NotNull PrimitiveInterpreter<V> vInterpreter) {
             return new SimplePromptBacker<V>() {
                 @Override
                 public boolean canProvide(@NotNull String string) {
