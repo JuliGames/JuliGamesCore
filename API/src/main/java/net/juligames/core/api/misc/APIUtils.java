@@ -1,5 +1,6 @@
 package net.juligames.core.api.misc;
 
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -10,6 +11,7 @@ import java.util.List;
  * @author Ture Bentzin
  * 10.04.2023
  */
+@ApiStatus.AvailableSince("1.6")
 public class APIUtils {
 
     private APIUtils() {
