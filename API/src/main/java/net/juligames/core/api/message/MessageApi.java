@@ -935,6 +935,19 @@ public interface MessageApi {
 
 
     /**
+     * @param messageKey       the messageKey
+     * @param messageRecipient the recipient
+     * @return the best locale
+     * @deprecated use {@link MessageApi#findBestMessageForRecipient(String, MessageRecipient)} instead
+     */
+    @Deprecated
+    String findBestForRecipient(String messageKey, @NotNull MessageRecipient messageRecipient);
+
+    Message findBestMessageForRecipient(String messageKey, @NotNull MessageRecipient messageRecipient);
+
+    Message findBestMessageForRecipient(String messageKey, @NotNull MessageRecipient messageRecipient, String... replacements);
+
+    /**
      * Returns the default locale (EN_US) as a String.
      *
      * @return the default locale as a String
