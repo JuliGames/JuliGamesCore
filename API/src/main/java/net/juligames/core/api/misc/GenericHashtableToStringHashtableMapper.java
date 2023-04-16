@@ -21,6 +21,7 @@ public class GenericHashtableToStringHashtableMapper<K, V> implements Function<H
     public GenericHashtableToStringHashtableMapper(@NotNull Interpreter<K> kInterpreter, @NotNull Interpreter<V> vInterpreter) {
         this.kInterpreter = kInterpreter;
         this.vInterpreter = vInterpreter;
+
     }
 
     @Contract(value = "_ -> new", pure = true)

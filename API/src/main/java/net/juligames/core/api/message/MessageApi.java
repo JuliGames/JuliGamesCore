@@ -941,10 +941,13 @@ public interface MessageApi {
      * @deprecated use {@link MessageApi#findBestMessageForRecipient(String, MessageRecipient)} instead
      */
     @Deprecated
+    @ApiStatus.AvailableSince("1.6")
     String findBestForRecipient(String messageKey, @NotNull MessageRecipient messageRecipient);
 
+    @ApiStatus.AvailableSince("1.6")
     Message findBestMessageForRecipient(String messageKey, @NotNull MessageRecipient messageRecipient);
 
+    @ApiStatus.AvailableSince("1.6")
     Message findBestMessageForRecipient(String messageKey, @NotNull MessageRecipient messageRecipient, String... replacements);
 
     /**

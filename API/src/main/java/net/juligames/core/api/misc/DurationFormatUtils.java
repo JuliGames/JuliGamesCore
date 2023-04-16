@@ -256,7 +256,7 @@ public class DurationFormatUtils {
                     API.get().getMessageApi().defaultUtilLocale());
             API.get().getAPILogger().info("finished registration of default messages! (took: " + formatDurationWords + ")");
         }catch (Exception e){
-            API.get().getAPILogger().error("failed to register default messages: " + e);
+            API.get().getAPILogger().warning("failed to register default messages: " + e);
             ThrowableDebug.debug(e);
         }
 
