@@ -1,5 +1,6 @@
 package net.juligames.core.paper.misc.configmapping;
 
+import net.juligames.core.api.API;
 import net.juligames.core.api.config.representations.Representation;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
@@ -11,13 +12,13 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.Reader;
 import java.lang.reflect.Field;
 import java.net.URI;
-import java.net.URL;
-import java.time.YearMonth;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 /**
  * This class provides a convenient way to map configuration files to Java classes in your plugins.
@@ -56,7 +57,7 @@ import java.util.Optional;
  *
  * }
  * }</pre>
- *
+ * <p>
  * In this example, the {@code MyConfig} class extends {@link ObjectifiedConfiguration} and has two fields marked with the @{@link Autofill}
  * annotation. These fields will be automatically populated with values from the associated configuration file.
  * You can also manually {@link #save()} or {@link #reload()} the config.
@@ -86,7 +87,7 @@ public class ObjectifiedConfiguration {
     public ObjectifiedConfiguration(@NotNull String data, @Nullable String section) throws InvalidConfigurationException {
         YamlConfiguration configuration = new YamlConfiguration();
         configuration.loadFromString(data);
-        this.associatedSection = section == null? configuration : configuration.createSection(section);
+        this.associatedSection = section == null ? configuration : configuration.createSection(section);
     }
 
     public ObjectifiedConfiguration(@NotNull String path) {
@@ -114,10 +115,44 @@ public class ObjectifiedConfiguration {
         Arrays.stream(this.getClass().getFields()).forEachOrdered(this::save);
     }
 
+    /**
+     * @param file file to save to
+     * @throws IOException if saving fails fatally
+     * @apiNote This method is not available with standalone!
+     */
+    @ApiStatus.Experimental
+    public void save(File file) throws IOException {
+        save();
+        Configuration root = associatedSection.getRoot();
+        if (root == null) {
+            API.get().getAPILogger().warning("cant save " + this.getClass().getSimpleName() + " because associatedSection does not" +
+                    " belong to any Configuration");
+            return;
+        }
+        if (root instanceof FileConfiguration fileConfiguration) {
+            fileConfiguration.save(file);
+        } else {
+            API.get().getAPILogger().warning("cant save " + this.getClass().getSimpleName() + " because associatedSection does not" +
+                    " belong to a FileConfiguration! :: " + root.getClass().getSimpleName());
+        }
+    }
+
+    @ApiStatus.Experimental
+    public <C extends Configuration> void save(Consumer<C> saver) {
+        save();
+        Configuration root = associatedSection.getRoot();
+        if (root == null) {
+            API.get().getAPILogger().warning("cant save " + this.getClass().getSimpleName() + " because associatedSection does not" +
+                    " belong to any Configuration");
+            return;
+        }
+        saver.accept((C) root);
+    }
+
     public void save(@NotNull Field field) {
         if (field.getDeclaringClass().equals(this.getClass())) {
             String key = getKeyForField(field);
-                //time to set the value
+            //time to set the value
             try {
                 getAssociatedSection().set(key, field.get(this));
             } catch (IllegalAccessException e) {
