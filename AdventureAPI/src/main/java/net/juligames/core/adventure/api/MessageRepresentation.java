@@ -3,6 +3,7 @@ package net.juligames.core.adventure.api;
 import net.juligames.core.adventure.AdventureTagManager;
 import net.juligames.core.api.API;
 import net.juligames.core.api.config.BuildInInterpreters;
+import net.juligames.core.api.config.representations.Representation;
 import net.juligames.core.api.jdbi.DBLocale;
 import net.juligames.core.api.message.Message;
 import net.juligames.core.api.misc.EntryInterpretationUtil;
@@ -26,7 +27,7 @@ import java.util.stream.Stream;
  * 25.03.2023
  */
 @ApiStatus.AvailableSince("1.6")
-public class MessageRepresentation implements ComponentLike {
+public class MessageRepresentation implements ComponentLike, Representation<Component> {
 
     private final @NotNull AdventureTagManager adventureTagManager;
     private final @NotNull Message message;
@@ -106,5 +107,11 @@ public class MessageRepresentation implements ComponentLike {
 
         Stream<Map.Entry<String, String>> entryStream = fileURLMap.entrySet().stream().map(fileURLEntry -> EntryInterpretationUtil.reverseEntry(fileURLEntry, BuildInInterpreters.fileInterpreter(), BuildInInterpreters.urlInterpreter()));
 
+    }
+
+    @Override
+    @ApiStatus.AvailableSince("1.6")
+    public Component represent() {
+        return asComponent();
     }
 }

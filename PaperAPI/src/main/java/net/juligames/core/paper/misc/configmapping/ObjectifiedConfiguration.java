@@ -1,10 +1,21 @@
 package net.juligames.core.paper.misc.configmapping;
 
+import net.juligames.core.api.config.representations.Representation;
+import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
+import java.io.Reader;
 import java.lang.reflect.Field;
+import java.net.URI;
+import java.net.URL;
+import java.time.YearMonth;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -53,7 +64,6 @@ import java.util.Optional;
  * @author Ture Bentzin
  * 14.04.2023
  */
-@SuppressWarnings("ClassCanBeRecord")
 @ApiStatus.Experimental
 @ApiStatus.AvailableSince("1.6")
 public class ObjectifiedConfiguration {
@@ -64,6 +74,33 @@ public class ObjectifiedConfiguration {
         this.associatedSection = associatedSection;
         reload();
     }
+
+    public ObjectifiedConfiguration(@NotNull File ymlFile) {
+        this(YamlConfiguration.loadConfiguration(ymlFile));
+    }
+
+    public ObjectifiedConfiguration(@NotNull Reader reader) {
+        this(YamlConfiguration.loadConfiguration(reader));
+    }
+
+    public ObjectifiedConfiguration(@NotNull String data, @Nullable String section) throws InvalidConfigurationException {
+        YamlConfiguration configuration = new YamlConfiguration();
+        configuration.loadFromString(data);
+        this.associatedSection = section == null? configuration : configuration.createSection(section);
+    }
+
+    public ObjectifiedConfiguration(@NotNull String path) {
+        this(new File(path));
+    }
+
+    public ObjectifiedConfiguration(@NotNull URI path) {
+        this(new File(path));
+    }
+
+    public ObjectifiedConfiguration(@NotNull Representation<ConfigurationSection> sectionRepresentation) {
+        this(sectionRepresentation.represent());
+    }
+
 
     public final @NotNull ConfigurationSection getAssociatedSection() {
         return associatedSection;
