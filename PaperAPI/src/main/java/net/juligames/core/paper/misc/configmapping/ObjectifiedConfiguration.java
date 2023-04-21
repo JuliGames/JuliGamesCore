@@ -71,36 +71,82 @@ public class ObjectifiedConfiguration {
 
     private final @NotNull ConfigurationSection associatedSection;
 
+    /**
+     * Constructs an ObjectifiedConfiguration object with an associated ConfigurationSection.
+     * Calls the {@link #reload()} method to populate fields with values from the ConfigurationSection.
+     *
+     * @param associatedSection the ConfigurationSection to associate with this ObjectifiedConfiguration
+     */
     public ObjectifiedConfiguration(@NotNull ConfigurationSection associatedSection) {
         this.associatedSection = associatedSection;
         reload();
     }
 
+    /**
+     * Constructs an ObjectifiedConfiguration object with an associated File.
+     * Calls the {@link #reload()} method to populate fields with values from the FileConfiguration.
+     *
+     * @param ymlFile the File to associate with this ObjectifiedConfiguration
+     */
     public ObjectifiedConfiguration(@NotNull File ymlFile) {
         this(YamlConfiguration.loadConfiguration(ymlFile));
     }
 
+    /**
+     * Constructs an ObjectifiedConfiguration object with an associated Reader.
+     * Calls the {@link #reload()} method to populate fields with values from the FileConfiguration.
+     *
+     * @param reader the Reader to associate with this ObjectifiedConfiguration
+     */
     public ObjectifiedConfiguration(@NotNull Reader reader) {
         this(YamlConfiguration.loadConfiguration(reader));
     }
 
+    /**
+     * Constructs an ObjectifiedConfiguration object with an associated String data and section name.
+     * If the section name is null, creates a ConfigurationSection using the loaded data.
+     * Calls the {@link #reload()} method to populate fields with values from the ConfigurationSection.
+     *
+     * @param data    the data to associate with this ObjectifiedConfiguration
+     * @param section the section name to associate with this ObjectifiedConfiguration, can be null
+     * @throws InvalidConfigurationException if the loaded data is invalid
+     */
     public ObjectifiedConfiguration(@NotNull String data, @Nullable String section) throws InvalidConfigurationException {
         YamlConfiguration configuration = new YamlConfiguration();
         configuration.loadFromString(data);
         this.associatedSection = section == null ? configuration : configuration.createSection(section);
     }
 
+    /**
+     * Constructs an ObjectifiedConfiguration object with an associated path String.
+     * Calls the {@link #ObjectifiedConfiguration(File)} constructor to associate the File with this ObjectifiedConfiguration.
+     *
+     * @param path the path of the File to associate with this ObjectifiedConfiguration
+     */
     public ObjectifiedConfiguration(@NotNull String path) {
         this(new File(path));
     }
 
+    /**
+     * Constructs an ObjectifiedConfiguration object with an associated URI.
+     * Calls the {@link #ObjectifiedConfiguration(File)} constructor to associate the File with this ObjectifiedConfiguration.
+     *
+     * @param path the URI of the File to associate with this ObjectifiedConfiguration
+     */
     public ObjectifiedConfiguration(@NotNull URI path) {
         this(new File(path));
     }
 
+    /**
+     * Constructs an ObjectifiedConfiguration object with an associated ConfigurationSection obtained from a representation.
+     * Calls the {@link #reload()} method to populate fields with values from the ConfigurationSection.
+     *
+     * @param sectionRepresentation the representation of the ConfigurationSection to associate with this ObjectifiedConfiguration
+     */
     public ObjectifiedConfiguration(@NotNull Representation<ConfigurationSection> sectionRepresentation) {
         this(sectionRepresentation.represent());
     }
+
 
 
     public final @NotNull ConfigurationSection getAssociatedSection() {
