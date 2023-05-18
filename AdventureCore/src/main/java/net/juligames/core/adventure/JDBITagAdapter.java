@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
  * 19.11.2022
  */
 public class JDBITagAdapter {
-    
+
     /**
      * The logger for this class.
      */
