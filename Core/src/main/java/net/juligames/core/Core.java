@@ -48,9 +48,9 @@ public final class Core implements API {
      * This can be set depending on the build of the Core
      */
     public static final String CORE_BRAND = "Core";
-    public static final String CORE_VERSION_NUMBER = "1.6-SNAPSHOT";
+    public static final String CORE_VERSION_NUMBER = "1.6";
     public static final String CORE_SPECIFICATION = "Gustav";
-    private static final String BUILD_VERSION = "1.6-SNAPSHOT"; //POM VERSION
+    private static final String BUILD_VERSION = "1.6"; //POM VERSION
 
     private static Core core;
     private final Registerator<Consumer<HazelcastInstance>> hazelcastPostPreparationWorkers = new Registerator<>("hazelcastPostPreparationWorkers");

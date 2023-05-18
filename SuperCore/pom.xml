@@ -6,7 +6,7 @@
     <parent>
         <groupId>net.juligames.core</groupId>
         <artifactId>JuliGamesCore</artifactId>
-        <version>1.6-SNAPSHOT</version>
+        <version>1.6</version>
     </parent>
 
     <artifactId>SuperCore</artifactId>
@@ -22,22 +22,22 @@
         <dependency>
             <groupId>net.juligames.core</groupId>
             <artifactId>Master</artifactId>
-            <version>1.6-SNAPSHOT</version>
+            <version>1.6</version>
         </dependency>
         <dependency>
             <groupId>net.juligames.core</groupId>
             <artifactId>PaperCore</artifactId>
-            <version>1.6-SNAPSHOT</version>
+            <version>1.6</version>
         </dependency>
         <dependency>
             <groupId>net.juligames.core</groupId>
             <artifactId>VelocityCore</artifactId>
-            <version>1.6-SNAPSHOT</version>
+            <version>1.6</version>
         </dependency>
         <dependency>
             <groupId>net.juligames.core</groupId>
             <artifactId>MiniGameAPI</artifactId>
-            <version>1.6-SNAPSHOT</version>
+            <version>1.6</version>
         </dependency>
     </dependencies>
 
