@@ -24,7 +24,6 @@ public abstract class MaterialPrompt extends ValidatingPrompt {
 
     @Override
     protected @Nullable Prompt acceptValidatedInput(@NotNull ConversationContext context, @NotNull String input) {
-        MapPalette.matchColor()
         return acceptMaterialInput(context, Objects.requireNonNull(Material.getMaterial(input)));
     }
 

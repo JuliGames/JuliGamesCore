@@ -65,4 +65,3 @@ public interface MiniMessageSerializer {
      */
     @NotNull String translateLegacySectionToMiniMessage(@NotNull String section);
 }
-}
