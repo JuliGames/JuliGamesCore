@@ -7,8 +7,10 @@ import com.hazelcast.core.DistributedObject;
 import com.hazelcast.map.IMap;
 import com.hazelcast.topic.ITopic;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
+import java.util.Optional;
 
 /**
  * @author Ture Bentzin
@@ -66,4 +68,18 @@ public interface NativeHazelDataAPI {
     @ApiStatus.Experimental
     @ApiStatus.AvailableSince("1.5")
     Collection<DistributedObject> getAll();
+
+    /**
+     * Retrieves an instance of the specified type that extends DistributedObject, with the given name.
+     * This method can be used to automatically determine the type of hazel!
+     * The implementation might be changed over a version.
+     * This one should not be used outside user interface applications
+     * @apiNote The implementation currently uses {@link #getAll()} and {@link java.util.function.Predicate}s to
+     * determine what will be returned.
+     * @param hazel hazel
+     * @return the optional that may contain a  {@link DistributedObject}
+     * @param <T> the implementation of {@link DistributedObject}
+     */
+    @ApiStatus.AvailableSince("1.6")
+    <T extends DistributedObject> Optional<T> get(@NotNull String hazel);
 }

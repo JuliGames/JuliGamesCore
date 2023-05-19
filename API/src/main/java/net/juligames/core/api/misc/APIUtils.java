@@ -3,9 +3,9 @@ package net.juligames.core.api.misc;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 /**
  * @author Ture Bentzin
@@ -25,7 +25,7 @@ public class APIUtils {
      * @param exceptions a collection of exceptions that should not be counted as a failure
      * @return `true` if the `ThrowingRunnable` completes without throwing an exception or if the thrown exception is not contained in the specified collection of exceptions
      */
-    public static boolean executedWithoutException(@NotNull ThrowingRunnable runnable, Collection<Exception> exceptions) {
+    public static boolean executedWithoutException(@NotNull ThrowingRunnable runnable, @NotNull Collection<Exception> exceptions) {
         try {
             runnable.run();
             return true;
@@ -62,7 +62,7 @@ public class APIUtils {
      * @param exceptions a collection of exceptions that should not be counted as a failure
      * @return `true` if the `Runnable` completes without throwing an exception or if the thrown exception is not contained in the specified collection of exceptions
      */
-    public static boolean executedWithoutExceptionL(@NotNull Runnable runnable, Collection<Exception> exceptions) {
+    public static boolean executedWithoutExceptionL(@NotNull Runnable runnable, @NotNull Collection<Exception> exceptions) {
         try {
             runnable.run();
             return true;
@@ -80,4 +80,26 @@ public class APIUtils {
     public static boolean executedWithoutExceptionL(@NotNull Runnable runnable) {
         return executedWithoutExceptionL(runnable, Collections.emptyList());
     }
+
+    /**
+     * Maps the elements of the input stream using the provided mapper function, while dropping any elements that cause an exception during mapping.
+     *
+     * @param <T>     the type of the input stream elements
+     * @param <R>     the type of the resulting stream elements
+     * @param stream  the input stream to be mapped
+     * @param mapper  the mapping function to apply to each element of the input stream
+     * @return        a new stream containing the mapped elements, with any elements causing an exception during mapping dropped
+     */
+    public static <T, R> @NotNull Stream<R> mapOrDrop(@NotNull Stream<T> stream, @NotNull Function<T, R> mapper) {
+        List<R> list = new ArrayList<>();
+        stream.forEachOrdered(t -> {
+            try {
+                list.add(mapper.apply(t));
+            } catch (Exception ignored) {
+                // drop
+            }
+        });
+        return list.stream();
+    }
+
 }
