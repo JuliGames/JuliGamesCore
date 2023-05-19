@@ -3,15 +3,11 @@ package net.juligames.core.adventure.api.prompt.msc;
 import de.bentzin.conversationlib.ConversationContext;
 import de.bentzin.conversationlib.prompt.Prompt;
 import de.bentzin.conversationlib.prompt.ValidatingPrompt;
-import de.bentzin.tools.logging.Logger;
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.TestOnly;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -19,6 +15,7 @@ import java.util.function.Function;
  * @author Ture Bentzin
  * 19.05.2023
  */
+@ApiStatus.AvailableSince("1.6")
 public abstract class TransitivePrompt<T, R> extends ValidatingPrompt {
 
     private final @NotNull Function<ConversationContext, T> typeSupplier;
@@ -75,36 +72,5 @@ public abstract class TransitivePrompt<T, R> extends ValidatingPrompt {
 
     public @NotNull T supplyType(ConversationContext context) {
         return typeSupplier.apply(context);
-    }
-
-
-    //DO NOT PUSH TO VERSION CONTROL
-    @TestOnly
-    private static class Test {
-
-
-        public static void main(String[] args) {
-            final Prompt trans = TransitivePrompt.<Class<?>, Method>functional(
-                    context -> Component.text("this text was removed..."),
-                    context -> context.getData("class"),
-                    (aClass, s) -> {
-                        try {
-                            return aClass.getMethod(s, (Class<?>[]) null);
-                        } catch (NoSuchMethodException e) {
-                            throw new RuntimeException(e);
-                        }
-                    },
-                    (context, method) -> {
-                        try {
-                            method.invoke(context.getData("object"), (Object[]) null);
-                            return END_OF_CONVERSATION;
-                        } catch (IllegalAccessException | InvocationTargetException e) {
-                            ((Logger) context.getData("logger")).error("this text was removed too." + e.getMessage());
-                            throw new RuntimeException(e);
-                        }
-                    }
-            );
-
-        }
     }
 }
