@@ -29,14 +29,16 @@ Overall, the MessageApi interface is a powerful and flexible API for sending mes
  * replacements.
  *
  * @author Ture Bentzin
+ * 18.11.2022
  * @apiNote Please consider that the core your using may not support all the
- * operations below. If a core should not support one of the methods
- * there are two options what could happen. First the core could
- * automatically execute a similar Method and print a warning. If this
- * should not be possible then the Core will throw an
+ * operations below.
+ * If a core should not support one of the methods, there are two options for what could happen.
+ * First, the core could
+ * automatically execute a similar Method and print a warning.
+ * If this
+ * should not be possible, then the Core will throw an
  * {@link UnsupportedOperationException} with further information on
  * how to approach this issue.
- * @since 18.11.2022
  */
 @SuppressWarnings("unused")
 public interface MessageApi {

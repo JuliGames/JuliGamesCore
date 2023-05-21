@@ -35,6 +35,9 @@ import java.util.function.Function;
  * </pre>
  *
  * @param <T> the type of object that this Interpreter can interpret
+ * @author Ture Bentzin
+ * 26.11.2022
+ * @see BuildInInterpreters
  */
 public non-sealed interface Interpreter<T> extends Reverser<T>, PrimitiveInterpreter<T> {
 
