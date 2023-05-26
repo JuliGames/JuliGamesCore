@@ -11,6 +11,27 @@ import java.util.function.Function;
  * The {@link PropertyInterpreter} allows to store a reference to a property that is set. The value that is read will
  * be used as the "key" for getting the property. If you {@link #reverse(Object)} then {@link String#valueOf(Object)}
  * will be used
+ * <p>
+ *     This is an example on how to use the {@link PropertyInterpreter} specifically the {@link PropertyInterpreter#stringPropertyInterpreter()}
+ * </p>
+ * <pre>
+ *     {@code
+ *         // Create a PropertyInterpreter for String properties
+ *         PropertyInterpreter<String> stringPropertyInterpreter
+ *              = PropertyInterpreter.stringPropertyInterpreter();
+ *
+ *         // Get the value of a String property
+ *         String propertyValue = stringPropertyInterpreter.interpret("my.property");
+ *         System.out.println("Property value: " + propertyValue);
+ *
+ *         // Reverse a String value to a property
+ *         String reversedValue = "Hello, World!";
+ *         String propertyKey = stringPropertyInterpreter.reverse(reversedValue);
+ *         System.out.println("Property key: " + propertyKey);
+ *
+ *
+ *     }
+ * </pre>
  *
  * @author Ture Bentzin
  * 07.03.2023

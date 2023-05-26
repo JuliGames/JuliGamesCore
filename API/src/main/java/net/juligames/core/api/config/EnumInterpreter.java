@@ -4,8 +4,35 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 /**
+ * Here is an exmaple on how to use the {@link EnumInterpreter} with the fictional enum "Color"
+ * <pre>
+ * {@code
+ * public enum Color {
+ *     RED,
+ *     GREEN,
+ *     BLUE
+ * }
+ *
+ * public class Main {
+ *     public static void main(String[] args) {
+ *         EnumInterpreter<Color> colorInterpreter = new EnumInterpreter<>(Color.class);
+ *
+ *         // Reverse an enum value to a string
+ *         Color color = Color.RED;
+ *         String reversed = colorInterpreter.reverse(color);
+ *         System.out.println("Reversed: " + reversed); // Output: Reversed: RED
+ *
+ *         // Interpret a string as an enum value
+ *         String input = "GREEN";
+ *         Color interpreted = colorInterpreter.interpret(input);
+ *         System.out.println("Interpreted: " + interpreted); // Output: Interpreted: GREEN
+ *     }
+ * }
+ * }
+ * </pre>
  * @author Ture Bentzin
  * 15.03.2023
+
  */
 @ApiStatus.AvailableSince("1.5")
 @ApiStatus.Experimental

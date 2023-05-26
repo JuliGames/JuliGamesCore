@@ -14,6 +14,7 @@ import net.juligames.core.api.config.ConfigurationAPI;
 import net.juligames.core.api.err.dev.TODOException;
 import net.juligames.core.api.message.MessageRecipient;
 import net.juligames.core.api.minigame.BasicMiniGame;
+import net.juligames.core.api.misc.APIUtils;
 import net.juligames.core.caching.CoreCacheApi;
 import net.juligames.core.caching.MessageCaching;
 import net.juligames.core.cluster.CoreClusterApi;
@@ -37,6 +38,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.logging.LogManager;
+import java.util.stream.Stream;
 
 /**
  * @author Ture Bentzin
@@ -79,6 +82,14 @@ public final class Core implements API {
      * @param core_name the core name
      */
     public Core(String core_name) {
+        APIUtils.fromName("JG-Foreman")
+                .debug(getShortCoreName() + " started by " + APIUtils.formatCaller(
+                        StackWalker
+                                .getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE)
+                                .walk(Stream::findFirst)
+                                .orElseThrow(() -> new IllegalCallerException("Core cant identify caller of constructor?!")))
+                );
+
         start(core_name);
     }
 
@@ -166,6 +177,12 @@ public final class Core implements API {
             if (!Boolean.getBoolean("acknowledgeUnsafeMasterCheck")) {
                 coreLogger.info("checking compatibility with master..");
                 final String masterVersion = getHazelDataApi().getMasterInformation().get("master_version");
+                if(masterVersion == null) {
+                    coreLogger.error("Flawed data! Please check if hazelcast is working correctly and if your master" +
+                    " is operating normal! If you see this message on your Master, you should get in touch with me at " +
+                            "mailto://bentzin@tdrstudios.de! Thank you for using JuliGamesCore. It is likely that your JuliGamesCore Cluster " +
+                            "starts but you should expect severe issues after reading this message!");
+                }
 
                 if (!getVersion().equals(masterVersion)) {
                     coreLogger.warning("********************************************************");
@@ -410,6 +427,11 @@ public final class Core implements API {
         return getOnlineRecipientProvider().get();
     }
 
+    @Override
+    public @NotNull LogManager getJavaLogManager() {
+        return LogManager.getLogManager();
+    }
+
     public Registerator<Consumer<HazelcastInstance>> getHazelcastPostPreparationWorkers() {
         return hazelcastPostPreparationWorkers;
     }
@@ -420,5 +442,11 @@ public final class Core implements API {
         if (getCoreLogger() != null) {
             getCoreLogger().debug("This API implementation is no longer available!");
         }
+    }
+
+    @Contract(pure = true)
+    @Override
+    public @NotNull Logger getLogger() {
+        return getAPILogger();
     }
 }

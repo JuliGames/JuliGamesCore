@@ -1,6 +1,7 @@
 package net.juligames.core.api;
 
 import de.bentzin.tools.logging.Logger;
+import de.bentzin.tools.logging.Logging;
 import de.bentzin.tools.misc.SubscribableType;
 import net.juligames.core.api.cacheing.CacheApi;
 import net.juligames.core.api.cluster.ClusterApi;
@@ -22,13 +23,14 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.logging.LogManager;
 
 /**
  * @author Ture Bentzin
  * 16.11.2022
  * @implNote Main class to be used to get the different parts of the api
  */
-public interface API {
+public interface API extends Logging {
 
     /**
      * This is the primary way for getting your API Instance. With this Instance you have access to all build in features in the core
@@ -147,6 +149,15 @@ public interface API {
     @NotNull Supplier<Collection<? extends MessageRecipient>> getOnlineRecipientProvider();
 
     @NotNull Collection<? extends MessageRecipient> supplyOnlineRecipients();
+
+    /**
+     * When using a {@link LogManager} you should use {@link API#getJavaLogManager()} to get hold of it
+     * @return an {@link LogManager} instance that is or acts like {@link LogManager#getLogManager()}
+     * @apiNote This is not associated with the {@link de.bentzin.tools.logging} package and environment
+     */
+    @ApiStatus.Experimental
+    @ApiStatus.AvailableSince("1.6")
+    @NotNull LogManager getJavaLogManager();
 
     /*
      *
