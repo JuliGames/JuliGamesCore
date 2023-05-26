@@ -173,6 +173,7 @@ public final class Core implements API {
                 .addMessageListener(coreNotificationApi);
 
 
+        if(getHazelDataApi().isMasterInformationAvailable())
         {
             if (!Boolean.getBoolean("acknowledgeUnsafeMasterCheck")) {
                 coreLogger.info("checking compatibility with master..");
@@ -196,6 +197,7 @@ public final class Core implements API {
                 }
             }
         }
+        else logger.debug("master information is not available! If you see this on the Master it is expected behavior");
 
         logger.info("hooking to shutdown...");
         getJavaRuntime().addShutdownHook(new Thread(() -> {

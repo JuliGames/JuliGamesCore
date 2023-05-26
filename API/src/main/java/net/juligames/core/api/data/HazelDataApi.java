@@ -1,6 +1,7 @@
 package net.juligames.core.api.data;
 
 import de.bentzin.tools.Hardcode;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -54,6 +55,13 @@ public interface HazelDataApi {
         //API.get().getHazelDataApi().<String, String>getMap("master_information").get("default_locale")
         return getMap("master_information");
     }
+
+    /**
+     * This method trys to guess if {@link #getMasterInformation()} will provide a populated map.
+     * It provides no information about the last update
+     */
+    @ApiStatus.AvailableSince("1.6")
+    boolean isMasterInformationAvailable();
 
 
 }

@@ -2,6 +2,7 @@ package net.juligames.core.master.logging;
 
 import de.bentzin.tools.logging.JavaLogger;
 import de.bentzin.tools.logging.Logger;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
@@ -12,6 +13,11 @@ import java.time.format.DateTimeFormatter;
  * 17.11.2022
  */
 public final class MasterLogger extends JavaLogger {
+
+    @ApiStatus.AvailableSince("1.6")
+    public static void setupJavaLogging() {
+        System.setProperty("java.util.logging.SimpleFormatter.format", "[%1$tF %1$tT] [%4$-7s] %5$s %n");
+    }
 
     public static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("<yyyy/MM/dd> HH:mm:ss");
 

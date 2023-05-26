@@ -50,6 +50,11 @@ public final class HazelDataCore implements HazelDataApi, NativeHazelDataAPI {
     }
 
     @Override
+    public boolean isMasterInformationAvailable() {
+        return getMasterInformation().containsKey("available");
+    }
+
+    @Override
     public <T> @NotNull ITopic<T> getTopic(@NotNull String hazel) {
         return getHazelcastInstance().getTopic(hazel);
     }

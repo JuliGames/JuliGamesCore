@@ -35,23 +35,26 @@ public class CoreMaster {
 
     public static void main(String[] args) {
 
+        //Setup
+        MasterLogger.setupJavaLogging();
+
         logger = new MasterLogger("Master", java.util.logging.Logger.getLogger(Core.getShortRelease()));
 
         //entry point for Master
         masterCommandRunner = new MasterCommandRunner(logger);
         masterConfigManager = new MasterConfigManager();
 
-        logger.info("welcome to " + Core.getFullCoreName() + " Master by Ture Bentzin <bentzin@tdrstudios.de>");
+        logger.info("Welcome to " + Core.getFullCoreName() + " Master by Ture Bentzin <bentzin@tdrstudios.de>");
 
 
-        logger.info("preparing directory...");
+        logger.info("Preparing directory...");
         masterConfigManager.createDatabaseConfiguration();
 
-        logger.info("booting hazelcast (MEMBER CORE):");
+        logger.info("Booting hazelcast (MEMBER CORE):");
         Core core = new Core();
         try {
             core.getHazelcastPostPreparationWorkers().register(hazelcastInstance -> {
-                logger.info("loading config");
+                logger.info("Loading config");
                 masterConfigManager.load();
             });
         } catch (Registerator.DuplicateEntryException ignored) {
@@ -67,11 +70,11 @@ public class CoreMaster {
             logger.error("FAILED TO SETUP HAZELCAST - Master will probably start anyway but the master should be restarted as soon as possible");
         }
 
-        logger.info("hazelcast boot was completed - advice: hazelcast could potentially fail to boot for a variety of reasons, so if you should see" +
+        logger.info("Hazelcast boot was completed - advice: hazelcast could potentially fail to boot for a variety of reasons, so if you should see" +
                 "an error above then you might want to restart the master. In the case that the Clients are put on hold by the core you should also" +
                 "consider restarting.");
 
-        logger.debug("sql: start");
+        logger.debug("SQL: start");
         SQLManager = Core.getInstance().getSQLManager();
 
         SQLManager.createTables(); //MASTER CREATES TABLES (NOT THE CORE!!!)
@@ -83,7 +86,7 @@ public class CoreMaster {
 
         //Data
         masterHazelInformationProvider = new MasterHazelInformationProvider(hazelcast);
-        logger.warning("not all code execution on master is stable because the master DOES NOT PROVIDE a fully usable core!!!");
+        logger.warning("Not all code execution on master is stable because the master DOES NOT PROVIDE a fully usable core!!!");
         try {
             registerCommands();
         } catch (Registerator.DuplicateEntryException e) {
@@ -92,15 +95,15 @@ public class CoreMaster {
         }
 
         //CommandSystem
-        logger.info("registering CommandHandler...");
+        logger.info("Registering CommandHandler...");
         core.getCommandApi().setCommandHandler(new CommandHandler());
-        logger.info("master is now ready to receive commands from hazelcast");
+        logger.info("Master is now ready to receive commands from hazelcast");
 
         //HOOK
 
         Core.getInstance().getJavaRuntime().addShutdownHook(new Thread(() -> {
             try {
-                logger.info("master is going down!!");
+                logger.info("Master is going down!!");
             } catch (Exception ignored) {
                 System.out.println("Seems like everything is cursed right now. Please report this!");
             }

@@ -6,11 +6,9 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
 
@@ -130,6 +128,24 @@ public class APIUtils {
             }
         });
         return list.stream();
+    }
+
+    @ApiStatus.Experimental
+    public static void executeAndSwallow(ThrowingRunnable throwingRunnable) {
+        try {
+            throwingRunnable.run();
+        } catch (Exception ignored) {
+        }
+    }
+
+    @SafeVarargs
+    public static <R> Optional<R> executeAndReturnFirstSuccess(Supplier<R> @NotNull ... suppliers) {
+        for (Supplier<R> supplier : suppliers) {
+            try {
+                return Optional.of(supplier.get());
+            }catch (Exception ignore) {}
+        }
+        return Optional.empty();
     }
 
     /**
