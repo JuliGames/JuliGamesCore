@@ -30,9 +30,9 @@ import org.jetbrains.annotations.NotNull;
  * }
  * }
  * </pre>
+ *
  * @author Ture Bentzin
  * 15.03.2023
-
  */
 @ApiStatus.AvailableSince("1.5")
 @ApiStatus.Experimental

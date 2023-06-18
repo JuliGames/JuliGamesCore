@@ -9,9 +9,10 @@ import java.util.function.Predicate;
 
 /**
  * This class provides predicates
- * @implNote might use {@link APIUtils#executedWithoutExceptionL(Runnable)} later
+ *
  * @author Ture Bentzin
  * 19.05.2023
+ * @implNote might use {@link APIUtils#executedWithoutExceptionL(Runnable)} later
  */
 public class Predicates {
 

@@ -173,14 +173,13 @@ public final class Core implements API {
                 .addMessageListener(coreNotificationApi);
 
 
-        if(getHazelDataApi().isMasterInformationAvailable())
-        {
+        if (getHazelDataApi().isMasterInformationAvailable()) {
             if (!Boolean.getBoolean("acknowledgeUnsafeMasterCheck")) {
                 coreLogger.info("checking compatibility with master..");
                 final String masterVersion = getHazelDataApi().getMasterInformation().get("master_version");
-                if(masterVersion == null) {
+                if (masterVersion == null) {
                     coreLogger.error("Flawed data! Please check if hazelcast is working correctly and if your master" +
-                    " is operating normal! If you see this message on your Master, you should get in touch with me at " +
+                            " is operating normal! If you see this message on your Master, you should get in touch with me at " +
                             "mailto://bentzin@tdrstudios.de! Thank you for using JuliGamesCore. It is likely that your JuliGamesCore Cluster " +
                             "starts but you should expect severe issues after reading this message!");
                 }
@@ -196,8 +195,8 @@ public final class Core implements API {
                     coreLogger.warning("********************************************************");
                 }
             }
-        }
-        else logger.debug("master information is not available! If you see this on the Master it is expected behavior");
+        } else
+            logger.debug("master information is not available! If you see this on the Master it is expected behavior");
 
         logger.info("hooking to shutdown...");
         getJavaRuntime().addShutdownHook(new Thread(() -> {

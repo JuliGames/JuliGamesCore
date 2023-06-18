@@ -4,7 +4,6 @@ import de.bentzin.conversationlib.ConversationContext;
 import de.bentzin.conversationlib.prompt.Prompt;
 import de.bentzin.conversationlib.prompt.ValidatingPrompt;
 import org.bukkit.Material;
-import org.bukkit.map.MapPalette;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

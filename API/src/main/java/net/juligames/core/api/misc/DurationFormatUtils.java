@@ -77,6 +77,26 @@ public class DurationFormatUtils {
     static final @NotNull Object S = "S";
     public static @NotNull String INTERNAL_MESSAGE_PREFIX = "internal.api.misc.format.";
 
+    static {
+        API.get().getAPILogger().info(DurationFormatUtils.class.getName() + " was loaded! Trying to register default messages:");
+        long s1 = System.currentTimeMillis();
+        try {
+            registerMessages();
+            //BIT
+            final long between = s1 - System.currentTimeMillis();
+            Duration duration = Duration.ofMillis(between);
+            String formatDurationWords = formatDurationWords(duration, false, false, null,
+                    API.get().getMessageApi().defaultUtilLocale());
+            API.get().getAPILogger().info("finished registration of default messages! (took: " + formatDurationWords + ")");
+        } catch (Exception e) {
+            API.get().getAPILogger().warning("failed to register default messages: " + e);
+            ThrowableDebug.debug(e);
+        }
+
+    }
+
+    //-----------------------------------------------------------------------
+
     /**
      * <p>DurationFormatUtils instances should NOT be constructed in standard programming.</p>
      *
@@ -86,8 +106,6 @@ public class DurationFormatUtils {
     public DurationFormatUtils() {
         super();
     }
-
-    //-----------------------------------------------------------------------
 
     /**
      * <p>Formats the time gap as a string.</p>
@@ -242,24 +260,6 @@ public class DurationFormatUtils {
             return formatDurationWords(duration.toMillis(), suppressLeadingZeroElements, suppressTrailingZeroElements);
         return formatDurationWords(duration.toMillis(), suppressLeadingZeroElements,
                 suppressTrailingZeroElements, getLocalisationFromMessageSystem(locale, s));
-    }
-
-    static {
-        API.get().getAPILogger().info(DurationFormatUtils.class.getName() + " was loaded! Trying to register default messages:");
-        long s1 = System.currentTimeMillis();
-        try {
-            registerMessages();
-            //BIT
-            final long between = s1 - System.currentTimeMillis();
-            Duration duration = Duration.ofMillis(between);
-            String formatDurationWords = formatDurationWords(duration, false, false, null,
-                    API.get().getMessageApi().defaultUtilLocale());
-            API.get().getAPILogger().info("finished registration of default messages! (took: " + formatDurationWords + ")");
-        }catch (Exception e){
-            API.get().getAPILogger().warning("failed to register default messages: " + e);
-            ThrowableDebug.debug(e);
-        }
-
     }
 
     public static void registerMessages() {

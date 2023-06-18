@@ -79,6 +79,7 @@ public final class AdventureWebuiEditorAPI {
     public AdventureWebuiEditorAPI(final @NotNull URI root) {
         this(root, HttpClient.newHttpClient());
     }
+
     /**
      * Creates a new instance of the editor API with the default JuliGames api
      */
@@ -200,7 +201,7 @@ public final class AdventureWebuiEditorAPI {
 
     /**
      * @param command command with {token}
-     * @param app app
+     * @param app     app
      * @return the link
      */
     @Contract(pure = true)
@@ -215,7 +216,7 @@ public final class AdventureWebuiEditorAPI {
     /**
      * @param message the initial message
      * @param command command with {token}
-     * @param app app
+     * @param app     app
      * @return the link
      */
     @Contract(pure = true)

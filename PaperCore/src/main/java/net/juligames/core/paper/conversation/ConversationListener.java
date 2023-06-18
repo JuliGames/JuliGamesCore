@@ -1,7 +1,6 @@
 package net.juligames.core.paper.conversation;
 
 import net.juligames.core.Core;
-import net.juligames.core.api.API;
 import net.juligames.core.paper.PaperConversationManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -28,7 +27,7 @@ public class ConversationListener implements Listener {
     @EventHandler
     public void onCommand(@NotNull ServerCommandEvent serverCommandEvent) {
         if (PaperConversationManager.getInstance().handleInput(serverCommandEvent.getSender(),
-                serverCommandEvent.getCommand())){
+                serverCommandEvent.getCommand())) {
             serverCommandEvent.setCancelled(true);
         }
     }

@@ -70,6 +70,7 @@ public class HazelConnector {
     /**
      * This method acts like {@link #disconnect()} but cant throw an {@link Exception} and does not wait for population of
      * the {@link #instance} field!
+     *
      * @return an Optional that might contain an {@link Exception} that was thrown while trying to kill hazelcast
      */
     @ApiStatus.Internal
@@ -79,7 +80,7 @@ public class HazelConnector {
             Objects.requireNonNull(instance.getNow(null), "cant kill instance! Your cluster might be bricked now...")
                     .shutdown();
             return Optional.empty();
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace(); //print but do not propagate!
             return Optional.of(e);
         }
@@ -99,6 +100,7 @@ public class HazelConnector {
      * Get the configured {@link #clientName}.
      * This represents a memberName if this {@link HazelConnector} is used for members (masters) or a real clientName if it is
      * used for creating members
+     *
      * @return the clientName
      */
     protected @NotNull String getClientName() {

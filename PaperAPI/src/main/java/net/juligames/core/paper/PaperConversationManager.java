@@ -12,25 +12,25 @@ import java.util.Map;
  * 25.03.2023
  */
 public class PaperConversationManager extends ConversationManager {
-    
+
     private static PaperConversationManager instance;
 
-    public static PaperConversationManager getInstance() {
-        return instance;
-    }
-    
     public PaperConversationManager(@NotNull Map<Audience, Converser> audienceConverserMap) {
         super(audienceConverserMap);
-        if(instance != null) {
+        if (instance != null) {
             throw new IllegalStateException("instance is already present!");
         }
         instance = this;
     }
 
     public PaperConversationManager() {
-        if(instance != null) {
+        if (instance != null) {
             throw new IllegalStateException("instance is already present!");
         }
         instance = this;
+    }
+
+    public static PaperConversationManager getInstance() {
+        return instance;
     }
 }

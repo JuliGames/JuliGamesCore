@@ -18,9 +18,10 @@ public sealed interface Reverser<T> permits Interpreter, Reverser.PrivateReverse
 
     /**
      * The function#apply should never return null
+     *
      * @param function the function
+     * @param <T>      Type
      * @return a reverser based on the function
-     * @param <T> Type
      */
     @Contract(pure = true)
     static <T> @NotNull Reverser<T> ofFunctional(@NotNull Function<T, String> function) {
@@ -30,9 +31,10 @@ public sealed interface Reverser<T> permits Interpreter, Reverser.PrivateReverse
     /**
      * This will return a new {@link Reverser} that will execute the {@link #reverse(Object)} method from the given
      * tReverser. This only benefits of you want to prevent casting this {@link Reverser} to a {@link Interpreter}!
+     *
      * @param tReverser the reverser
+     * @param <T>       T
      * @return a new reverser
-     * @param <T> T
      */
     @ApiStatus.Experimental
     @Contract(pure = true)
@@ -44,8 +46,9 @@ public sealed interface Reverser<T> permits Interpreter, Reverser.PrivateReverse
      * This {@link Reverser} will reverse the given object ONLY based on its toString!
      * Should only be used with EXTREME caution!
      * This does not respect {@link CustomInterpretable}
-     * @return a new reverser
+     *
      * @param <T> T
+     * @return a new reverser
      */
     @ApiStatus.Experimental
     @Contract(pure = true)
@@ -57,8 +60,9 @@ public sealed interface Reverser<T> permits Interpreter, Reverser.PrivateReverse
      * This {@link Reverser} will reverse the given object ONLY based on its {@link String#valueOf(Object)}!
      * Should only be used with EXTREME caution!
      * This does not respect {@link CustomInterpretable}
-     * @return a new reverser
+     *
      * @param <T> T
+     * @return a new reverser
      */
     @ApiStatus.Experimental
     @Contract(pure = true)
@@ -81,6 +85,7 @@ public sealed interface Reverser<T> permits Interpreter, Reverser.PrivateReverse
 
     /**
      * Meant ONLY for use with {@link #ofFunctional(Function)}
+     *
      * @param <T> the type
      */
     @ApiStatus.Internal

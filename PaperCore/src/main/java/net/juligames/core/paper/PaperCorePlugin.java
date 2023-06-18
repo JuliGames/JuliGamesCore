@@ -8,7 +8,6 @@ import net.juligames.core.api.API;
 import net.juligames.core.api.jdbi.MessageDAO;
 import net.juligames.core.api.minigame.BasicMiniGame;
 import net.juligames.core.caching.MessageCaching;
-import net.juligames.core.command.CoreCommandNotificationListener;
 import net.juligames.core.paper.bstats.Metrics;
 import net.juligames.core.paper.conversation.ConversationListener;
 import net.juligames.core.paper.events.ServerBootFinishedEvent;

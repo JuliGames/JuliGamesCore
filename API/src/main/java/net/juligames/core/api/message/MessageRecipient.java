@@ -39,7 +39,7 @@ public interface MessageRecipient {
      * specified.
      *
      * @return the default locale that is distributed by the master, or the locale of this MessageRecipient if
-     *         specified
+     * specified
      */
     default @Nullable String supplyLocaleOrDefault() {
         if (supplyLocale() != null) {
@@ -49,11 +49,10 @@ public interface MessageRecipient {
     }
 
     /**
+     * @param miniMessage the miniMessage string to deliver
      * @deprecated Use {@link #deliver(Message)} instead.
      *
      * <p>Delivers a miniMessage string to the recipient.</p>
-     *
-     * @param miniMessage the miniMessage string to deliver
      */
     @Deprecated
     @ApiStatus.Internal

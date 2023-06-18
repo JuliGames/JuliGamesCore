@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * This interface provides methods for serializing a MiniMessage to plain text or legacy format.
  * It also provides methods for translating legacy format messages to MiniMessage format.
+ *
  * @author Ture Bentzin
  * 25.12.2022
  */

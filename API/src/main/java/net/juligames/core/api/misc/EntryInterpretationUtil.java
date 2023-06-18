@@ -84,11 +84,11 @@ public class EntryInterpretationUtil {
         }).collect(Collectors.toUnmodifiableSet());
     }
 
-    public static <K,V> @Unmodifiable @NotNull Map<K,V> interpretMap(@NotNull Map<String,String> map, @NotNull Interpreter<K> kInterpreter, @NotNull Interpreter<V> vInterpreter) {
+    public static <K, V> @Unmodifiable @NotNull Map<K, V> interpretMap(@NotNull Map<String, String> map, @NotNull Interpreter<K> kInterpreter, @NotNull Interpreter<V> vInterpreter) {
         return Map.ofEntries(interpretEntries(map.entrySet(), kInterpreter, vInterpreter).toArray((IntFunction<Map.Entry<K, V>[]>) value -> new Map.Entry[0]));
     }
 
-    public static <K,V> @Unmodifiable @NotNull Map<String, String> reverseMap(@NotNull Map<K, V> map, @NotNull Interpreter<K> kInterpreter, @NotNull Interpreter<V> vInterpreter) {
+    public static <K, V> @Unmodifiable @NotNull Map<String, String> reverseMap(@NotNull Map<K, V> map, @NotNull Interpreter<K> kInterpreter, @NotNull Interpreter<V> vInterpreter) {
         return Map.ofEntries(reverseEntries(map.entrySet(), kInterpreter, vInterpreter).toArray((IntFunction<Map.Entry<String, String>[]>) value -> new Map.Entry[0]));
     }
 

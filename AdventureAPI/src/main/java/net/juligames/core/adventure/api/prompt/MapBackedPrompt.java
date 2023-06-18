@@ -21,7 +21,7 @@ public abstract class MapBackedPrompt<V> extends ValidatingPrompt {
 
     private final Map<String, V> map;
 
-    public MapBackedPrompt(@NotNull  Map<String,V> map) {
+    public MapBackedPrompt(@NotNull Map<String, V> map) {
         this.map = map;
     }
 

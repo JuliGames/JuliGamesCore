@@ -14,11 +14,6 @@ import java.time.format.DateTimeFormatter;
  */
 public final class MasterLogger extends JavaLogger {
 
-    @ApiStatus.AvailableSince("1.6")
-    public static void setupJavaLogging() {
-        System.setProperty("java.util.logging.SimpleFormatter.format", "[%1$tF %1$tT] [%4$-7s] %5$s %n");
-    }
-
     public static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("<yyyy/MM/dd> HH:mm:ss");
 
     public MasterLogger(String name, @NotNull Logger parent, java.util.logging.@NotNull Logger logger) {
@@ -29,6 +24,11 @@ public final class MasterLogger extends JavaLogger {
     public MasterLogger(String name, java.util.logging.@NotNull Logger logger) {
         super(name, logger);
         logger.addHandler(LogFileHandlerManager.generateFileHandler());
+    }
+
+    @ApiStatus.AvailableSince("1.6")
+    public static void setupJavaLogging() {
+        System.setProperty("java.util.logging.SimpleFormatter.format", "[%1$tF %1$tT] [%4$-7s] %5$s %n");
     }
 
     @Override

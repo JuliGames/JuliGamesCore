@@ -14,7 +14,7 @@ import java.util.function.Function;
  * This is an example implementation for interpreting Integers
  * <pre>
  * {@code
-
+ *
  * public final class IntegerInterpreter implements Interpreter<Integer> {
  *
  *     @Override
@@ -93,7 +93,7 @@ public non-sealed interface Interpreter<T> extends Reverser<T>, PrimitiveInterpr
      * CompletableFuture with the result of the interpretation. This process is known as "interpreting the input as an
      * instance of Type T". If the interpretation fails, an Exception will be thrown.
      *
-     * @param input              the input to be interpreted
+     * @param input             the input to be interpreted
      * @param completableFuture the CompletableFuture that should be completed with the result of the interpretation
      * @throws Exception will be thrown if the input cant be interpreted according to this implementation
      */

@@ -32,7 +32,7 @@ public class DictionaryFeedInterpreter<E> implements Interpreter<MapPart<E>> {
     /**
      * Constructs a new {@link DictionaryFeedInterpreter} instance with the given dictionary supplier and map part factory.
      *
-     * @param dictionarySupplier the supplier to use to provide the backing dictionary
+     * @param dictionarySupplier    the supplier to use to provide the backing dictionary
      * @param dictionaryPartFactory the function to use to create map parts based on the dictionary and the key
      */
     public DictionaryFeedInterpreter(@NotNull Supplier<Dictionary<String, E>> dictionarySupplier,
@@ -64,7 +64,7 @@ public class DictionaryFeedInterpreter<E> implements Interpreter<MapPart<E>> {
     /**
      * Creates a new map part with the given key and dictionary supplier using the factory function.
      *
-     * @param key the key of the new map part
+     * @param key                the key of the new map part
      * @param dictionarySupplier the dictionary supplier to use for the new map part
      * @return the newly created map part
      */

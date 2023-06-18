@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Like a normal {@link Runnable} but it accepts Exceptions
+ *
  * @author Ture Bentzin
  * 10.04.2023
  */

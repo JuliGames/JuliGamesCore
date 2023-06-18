@@ -74,11 +74,12 @@ public interface NativeHazelDataAPI {
      * This method can be used to automatically determine the type of hazel!
      * The implementation might be changed over a version.
      * This one should not be used outside user interface applications
+     *
+     * @param hazel hazel
+     * @param <T>   the implementation of {@link DistributedObject}
+     * @return the optional that may contain a  {@link DistributedObject}
      * @apiNote The implementation currently uses {@link #getAll()} and {@link java.util.function.Predicate}s to
      * determine what will be returned.
-     * @param hazel hazel
-     * @return the optional that may contain a  {@link DistributedObject}
-     * @param <T> the implementation of {@link DistributedObject}
      */
     @ApiStatus.AvailableSince("1.6")
     <T extends DistributedObject> Optional<T> get(@NotNull String hazel);

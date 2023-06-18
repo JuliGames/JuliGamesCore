@@ -9,13 +9,13 @@ import org.jetbrains.annotations.NotNull;
  * 17.04.2023
  */
 @ApiStatus.AvailableSince("1.6")
-public abstract class Interpretation<T> implements Representation<T>{
+public abstract class Interpretation<T> implements Representation<T> {
+
+    public final @NotNull PrimitiveInterpreter<T> interpreter;
 
     public Interpretation(@NotNull PrimitiveInterpreter<T> interpreter) {
         this.interpreter = interpreter;
     }
-
-    public final @NotNull PrimitiveInterpreter<T> interpreter;
 
     @Override
     public final @NotNull T represent() {

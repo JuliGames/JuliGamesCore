@@ -5,7 +5,6 @@ import com.hazelcast.map.IMap;
 import de.bentzin.tools.logging.Logger;
 import net.juligames.core.Core;
 import net.juligames.core.api.TODO;
-import net.juligames.core.api.misc.APIUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
@@ -13,7 +12,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 
 import static net.juligames.core.api.misc.APIUtils.executeAndReturnFirstSuccess;
-import static net.juligames.core.api.misc.APIUtils.executeAndSwallow;
 
 /**
  * @author Ture Bentzin
@@ -59,9 +57,9 @@ public class PrintMapCommand extends MasterCommand {
     protected <K, V> IMap<K, V> findMap(String query) {
         return (IMap<K, V>) executeAndReturnFirstSuccess(
                 //Equal names
-                () -> findMapHard(query,distributedObject -> distributedObject.getName().equals(query)),
+                () -> findMapHard(query, distributedObject -> distributedObject.getName().equals(query)),
                 //Semi Equal names
-                () -> findMapHard(query,distributedObject -> distributedObject.getName().equalsIgnoreCase(query)),
+                () -> findMapHard(query, distributedObject -> distributedObject.getName().equalsIgnoreCase(query)),
                 //Starts with
                 () -> findMapHard(query, distributedObject -> distributedObject.getName().startsWith(query)),
                 //Starts with (semi)
@@ -83,6 +81,6 @@ public class PrintMapCommand extends MasterCommand {
         if (optionalDistributedObject.isEmpty()) {
             throw new IllegalArgumentException("cant find: " + name);
         }
-        return (IMap<K, V>)optionalDistributedObject.get();
+        return (IMap<K, V>) optionalDistributedObject.get();
     }
 }

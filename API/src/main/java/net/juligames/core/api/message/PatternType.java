@@ -71,7 +71,7 @@ public enum PatternType {
      * Converts a pattern string to a tag string.
      *
      * @param target the target string to convert
-     * @param index the integer index to use in the tag
+     * @param index  the integer index to use in the tag
      * @return the converted tag string
      */
     public @NotNull String convertPatternToTag(@NotNull String target, int index) {

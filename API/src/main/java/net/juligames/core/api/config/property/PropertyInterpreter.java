@@ -12,7 +12,7 @@ import java.util.function.Function;
  * be used as the "key" for getting the property. If you {@link #reverse(Object)} then {@link String#valueOf(Object)}
  * will be used
  * <p>
- *     This is an example on how to use the {@link PropertyInterpreter} specifically the {@link PropertyInterpreter#stringPropertyInterpreter()}
+ * This is an example on how to use the {@link PropertyInterpreter} specifically the {@link PropertyInterpreter#stringPropertyInterpreter()}
  * </p>
  * <pre>
  *     {@code

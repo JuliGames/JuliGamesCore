@@ -142,7 +142,8 @@ public class APIUtils {
         for (Supplier<R> supplier : suppliers) {
             try {
                 return Optional.of(supplier.get());
-            }catch (Exception ignore) {}
+            } catch (Exception ignore) {
+            }
         }
         return Optional.empty();
     }

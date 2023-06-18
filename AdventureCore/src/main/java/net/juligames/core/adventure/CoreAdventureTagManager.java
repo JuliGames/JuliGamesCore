@@ -5,7 +5,6 @@ import net.juligames.core.api.API;
 import net.juligames.core.api.jdbi.DBReplacement;
 import net.juligames.core.api.jdbi.ReplacementDAO;
 import net.juligames.core.api.message.Message;
-import net.juligames.core.api.message.MiniMessageSerializer;
 import net.juligames.core.api.message.PatternType;
 import net.juligames.core.api.message.TagManager;
 import net.kyori.adventure.text.Component;

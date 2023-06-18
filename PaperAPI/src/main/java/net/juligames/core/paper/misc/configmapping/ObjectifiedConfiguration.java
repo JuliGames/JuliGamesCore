@@ -148,7 +148,6 @@ public class ObjectifiedConfiguration {
     }
 
 
-
     public final @NotNull ConfigurationSection getAssociatedSection() {
         return associatedSection;
     }

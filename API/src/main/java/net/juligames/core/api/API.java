@@ -152,6 +152,7 @@ public interface API extends Logging {
 
     /**
      * When using a {@link LogManager} you should use {@link API#getJavaLogManager()} to get hold of it
+     *
      * @return an {@link LogManager} instance that is or acts like {@link LogManager#getLogManager()}
      * @apiNote This is not associated with the {@link de.bentzin.tools.logging} package and environment
      */

@@ -6,7 +6,6 @@ import net.juligames.core.api.message.Message;
 import net.juligames.core.api.message.MessageRecipient;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.identity.Identity;
-import net.kyori.adventure.pointer.Pointered;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;

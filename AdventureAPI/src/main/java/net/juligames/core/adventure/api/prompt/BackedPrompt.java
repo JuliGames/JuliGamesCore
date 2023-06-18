@@ -4,7 +4,6 @@ import de.bentzin.conversationlib.ConversationContext;
 import de.bentzin.conversationlib.prompt.Prompt;
 import de.bentzin.conversationlib.prompt.ValidatingPrompt;
 import de.bentzin.tools.misc.SubscribableType;
-import net.juligames.core.api.config.Interpreter;
 import net.juligames.core.api.config.PrimitiveInterpreter;
 import net.juligames.core.api.misc.APIUtils;
 import org.jetbrains.annotations.ApiStatus;

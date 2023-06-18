@@ -31,8 +31,8 @@ public record InventoryConfigWriter(Inventory inventory) implements ConfigWriter
      * Populates an inventory with items from the given configuration.
      *
      * @param configuration the configuration to read items from
-     * @param keyspace the keyspace in the configuration to read items from
-     * @param inventory the inventory to populate
+     * @param keyspace      the keyspace in the configuration to read items from
+     * @param inventory     the inventory to populate
      */
     public static void populateInventory(@NotNull Configuration configuration, @NotNull String keyspace, @NotNull Inventory inventory) {
         Collection<ItemStack> collection = configuration.getCollection(keyspace, itemStackInterpreter);
@@ -44,8 +44,8 @@ public record InventoryConfigWriter(Inventory inventory) implements ConfigWriter
      * <p>
      *
      * @param configuration the configuration to read items from
-     * @param keyspace the keyspace in the configuration to read items from
-     * @param inventory the inventory to populate
+     * @param keyspace      the keyspace in the configuration to read items from
+     * @param inventory     the inventory to populate
      * @return the populated inventory
      */
     @ApiStatus.Experimental
@@ -59,7 +59,7 @@ public record InventoryConfigWriter(Inventory inventory) implements ConfigWriter
      * Writes the inventory to the given configuration.
      *
      * @param configuration the configuration to write the inventory to
-     * @param keyspace the keyspace in the configuration to write the inventory to
+     * @param keyspace      the keyspace in the configuration to write the inventory to
      */
     @Override
     public void write(@NotNull Configuration configuration, @NotNull String keyspace) {
