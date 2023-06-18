@@ -130,7 +130,6 @@ public class APIUtils {
         return list.stream();
     }
 
-    @ApiStatus.Experimental
     public static void executeAndSwallow(ThrowingRunnable throwingRunnable) {
         try {
             throwingRunnable.run();
