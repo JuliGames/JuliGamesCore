@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.function.IntFunction;
 import java.util.stream.Collectors;
 
-@ApiStatus.AvailableSince("1.6")
+@ApiStatus.AvailableSince("1.5")
 public class EntryInterpretationUtil {
 
     private EntryInterpretationUtil() {
