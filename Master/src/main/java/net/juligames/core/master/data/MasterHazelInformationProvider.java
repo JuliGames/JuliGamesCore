@@ -47,7 +47,7 @@ public class MasterHazelInformationProvider {
         informationMap().put("master_version", API.get().getVersion());
         informationMap().put("last_update", String.valueOf(System.currentTimeMillis()));
         //Experimental
-        informationMap().put("master_commands", CoreMaster.getMasterCommandRunner().getIndex().toString());
+        informationMap().put("master_commands", String.valueOf(CoreMaster.getMasterCommandRunner().getIndex()));
         informationMap().put("hazelcast_version", VersionFinder.getVersion());
         informationMap().put("master_os", VersionFinder.OS.name());
         informationMap().put("java_version", VersionFinder.JAVA_VERSION);
