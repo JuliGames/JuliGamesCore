@@ -15,11 +15,11 @@ import java.util.Collections;
  * 25.03.2023
  */
 @ApiStatus.AvailableSince("1.6")
-public abstract class PartiallPlayerPrompt extends FixedSetPrompt<Collection<Player>> implements ProxyServerPrompt, PluginManagerPrompt {
+public abstract class PartialPlayerPrompt extends FixedSetPrompt<Collection<Player>> implements ProxyServerPrompt, PluginManagerPrompt {
 
     private final ProxyServer proxyServer;
 
-    public PartiallPlayerPrompt(@NotNull ProxyServer proxyServer) {
+    public PartialPlayerPrompt(@NotNull ProxyServer proxyServer) {
         super(s -> Collections.singleton(proxyServer.matchPlayer(s).stream().findFirst().orElse(null)),
                 proxyServer.getAllPlayers());
         this.proxyServer = proxyServer;
