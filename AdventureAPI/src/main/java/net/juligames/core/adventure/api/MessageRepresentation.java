@@ -2,11 +2,9 @@ package net.juligames.core.adventure.api;
 
 import net.juligames.core.adventure.AdventureTagManager;
 import net.juligames.core.api.API;
-import net.juligames.core.api.config.BuildInInterpreters;
 import net.juligames.core.api.config.representations.Representation;
 import net.juligames.core.api.jdbi.DBLocale;
 import net.juligames.core.api.message.Message;
-import net.juligames.core.api.misc.EntryInterpretationUtil;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.pointer.Pointered;
 import net.kyori.adventure.text.Component;
@@ -15,12 +13,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
-import java.net.URL;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
-import java.util.stream.Stream;
 
 /**
  * @author Ture Bentzin
@@ -75,13 +68,13 @@ public class MessageRepresentation implements ComponentLike, Representation<Comp
     //Personal
 
     @Contract("_, _ -> new")
-    public static @NotNull MessageRepresentation represent(String messageKey, Pointered pointered) {
+    public static @NotNull MessageRepresentation represent(String messageKey, @NotNull Pointered pointered) {
         return new MessageRepresentation(API.get().getMessageApi().getMessageSmart(messageKey,
                 pointered.get(Identity.LOCALE).orElse(defaultLocale())));
     }
 
     @Contract("_, _, _ -> new")
-    public static @NotNull MessageRepresentation represent(String messageKey, Pointered pointered, String... replacements) {
+    public static @NotNull MessageRepresentation represent(String messageKey, @NotNull Pointered pointered, String... replacements) {
         return new MessageRepresentation(API.get().getMessageApi().getMessageSmart(messageKey, pointered.get(Identity.LOCALE).orElse(defaultLocale()), replacements));
     }
 
@@ -96,17 +89,6 @@ public class MessageRepresentation implements ComponentLike, Representation<Comp
 
     public Message getMessage() {
         return message;
-    }
-
-    private void demo() {
-
-        Map<File, URL> fileURLMap = new HashMap<>();
-        Map<String, String> stringStringMap = EntryInterpretationUtil.reverseMap(fileURLMap, BuildInInterpreters.fileInterpreter(), BuildInInterpreters.urlInterpreter());
-        Map<File, URL> fileURLMap1 = EntryInterpretationUtil.interpretMap(stringStringMap, BuildInInterpreters.fileInterpreter(), BuildInInterpreters.urlInterpreter());
-        assert fileURLMap1.equals(fileURLMap);
-
-        Stream<Map.Entry<String, String>> entryStream = fileURLMap.entrySet().stream().map(fileURLEntry -> EntryInterpretationUtil.reverseEntry(fileURLEntry, BuildInInterpreters.fileInterpreter(), BuildInInterpreters.urlInterpreter()));
-
     }
 
     @Override
