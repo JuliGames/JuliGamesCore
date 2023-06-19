@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--suppress VulnerableLibrariesLocal -->
+<!--
+  Security Note:
+  Please report any issues related to dependencies used in this project immediately to GitHub:
+  github.com/JuliGames/JuliGamesCore/issues.
+  For any other inquiries or concerns, please email the development team at bentzin@tdrstudios.de
+  -->
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>JuliGamesCore</artifactId>
         <groupId>net.juligames.core</groupId>
-        <version>1.5</version>
+        <version>1.6</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -24,7 +30,7 @@
         <dependency>
             <groupId>net.juligames.core</groupId>
             <artifactId>API</artifactId>
-            <version>1.5</version>
+            <version>1.6</version>
         </dependency>
 
         <dependency>
@@ -44,6 +50,11 @@
             <artifactId>adventure-text-serializer-legacy</artifactId>
             <version>4.11.0</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.bentzin</groupId>
+            <artifactId>ConversationLib</artifactId>
+            <version>1.3.1</version>
         </dependency>
     </dependencies>
 

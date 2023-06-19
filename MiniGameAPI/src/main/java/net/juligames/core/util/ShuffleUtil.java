@@ -25,7 +25,6 @@ public final class ShuffleUtil {
     );
 
     private ShuffleUtil() {
-
     }
 
     @SuppressWarnings("unchecked")

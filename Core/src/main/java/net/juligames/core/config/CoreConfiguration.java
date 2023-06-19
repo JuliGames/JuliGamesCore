@@ -60,7 +60,7 @@ public class CoreConfiguration implements Configuration {
         for (Map.Entry<Object, Object> entry : entries) {
             if (override) {
                 String old = map.put(entry.getKey().toString(), entry.getValue().toString()); //oh man... oh man
-                Core.getInstance().getCoreLogger().debug("OVERRIDE: set " + entry.getKey() + "from " + old + " to " + entry.getValue());
+                Core.getInstance().getCoreLogger().debug("OVERRIDE: set " + entry.getKey() + " from " + old + " to " + entry.getValue());
             } else if (!map.containsKey(entry.getKey().toString())) {
                 String old = map.put(entry.getKey().toString(), entry.getValue().toString()); //oh man... oh man
                 Core.getInstance().getCoreLogger().debug("set " + entry.getKey() + "from " + old + " to " + entry.getValue());

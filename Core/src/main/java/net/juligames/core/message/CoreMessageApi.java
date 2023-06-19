@@ -18,6 +18,8 @@ import org.jetbrains.annotations.*;
 
 import java.security.InvalidParameterException;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAmount;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -106,7 +108,7 @@ public class CoreMessageApi implements MessageApi {
     }
 
     @Override
-    public @NotNull CoreMessage getMessage(@NotNull String messageKey, @NotNull String locale, String... replacements) {
+    public @NotNull CoreMessage getMessage(@NotNull String messageKey, @NotNull String locale, @Nullable String... replacements) {
         CoreMessage message = getMessage(messageKey, locale);
         Core.getInstance().getCoreLogger().debug("inserting replacements: " + Arrays.toString(replacements) + " to " + message.getMiniMessage() + "@" + message.getMessageData().getMessageKey());
         insertReplacements(message, replacements);
@@ -514,7 +516,7 @@ public class CoreMessageApi implements MessageApi {
         Collection<Message> messages = new ArrayList<>();
         for (String messageKey : messageKeys) {
             for (MessageRecipient messageRecipient : messageRecipients) {
-                CoreMessage message = getMessage(messageKey, messageRecipient.supplyLocaleOrDefault()); //no fallback?! oh, fuck this could get interesting | This may cause NullPointerException - let us hope it does not...
+                CoreMessage message = getMessage(messageKey, Objects.requireNonNull(messageRecipient.supplyLocaleOrDefault())); //no fallback?! oh, fuck this could get interesting | This may cause NullPointerException - let us hope it does not...
                 insertReplacements(message, replacements);
                 if (messages.stream().noneMatch(message1 -> message1.getMessageData().getMessageKey().equals(message.getMessageData().getMessageKey()))) {
                     messages.add(message);
@@ -621,6 +623,16 @@ public class CoreMessageApi implements MessageApi {
         return Date.from(Instant.now());
     }
 
+    @Contract("_ -> new")
+    private @NotNull Date nowPlusThen(long fluxCompensator) {
+        return Date.from(Instant.now().plus(fluxCompensator, ChronoUnit.MILLIS));
+    }
+
+    @Contract("_ -> new")
+    private @NotNull Date nowPlusThen(TemporalAmount fluxCompensator) {
+        return Date.from(Instant.now().plus(fluxCompensator));
+    }
+
     /**
      * Support for the old replacement handling
      *
@@ -639,7 +651,6 @@ public class CoreMessageApi implements MessageApi {
             Core.getInstance().getCoreLogger().debug("insert start: " + miniMessage);
             for (int i = 0; i < replacements.length; i++) {
                 if (replacements[i] == null) replacements[i] = "null";
-                //TODO replacements[i] = replacements[i].replace("</blank>","blank");
                 miniMessage = miniMessage.replace(buildPattern(i), replacements[i]);
                 Core.getInstance().getCoreLogger().debug("insert step: " + i + " :" + miniMessage);
             }
@@ -648,7 +659,7 @@ public class CoreMessageApi implements MessageApi {
         };
     }
 
-    private void insertReplacements(CoreMessage coreMessage, String @NotNull ... replacements) {
+    private void insertReplacements(@NotNull CoreMessage coreMessage, @Nullable String... replacements) {
         Map<Integer, String> map = new HashMap<>();
         if (replacements == null)
             return;

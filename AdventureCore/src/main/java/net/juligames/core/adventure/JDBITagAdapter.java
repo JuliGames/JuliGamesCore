@@ -22,9 +22,17 @@ import org.jetbrains.annotations.NotNull;
  */
 public class JDBITagAdapter {
 
-
+    /**
+     * The logger for this class.
+     */
     public static final Logger logger = API.get().getAPILogger().adopt("adapter");
 
+    /**
+     * Converts a {@link DBReplacement} to a {@link Tag}.
+     *
+     * @param replacement the DBReplacement to convert
+     * @return the resulting Tag
+     */
     @SuppressWarnings("PatternValidation")
     public static Tag fromJDBI(@NotNull DBReplacement replacement) {
         String s = replacement.getReplacementType();
@@ -63,21 +71,22 @@ public class JDBITagAdapter {
 
     /**
      * WARNING: This uses the fallback resolver
+     *
+     * @param replacement the DBReplacement to resolve
+     * @return the resulting Component
      */
     private static @NotNull Component resolveValue(@NotNull DBReplacement replacement) {
         return AdventureAPI.get().getAdventureTagManager().fallbackResolve(replacement.getValue()); //TODO currently this is hardcode and i intend to leave it that way to insure that fallback resolving never fails
     }
 
+    /**
+     * Represents the type of a replacement.
+     *
+     * @see CoreSQLManager
+     */
     @SuppressWarnings("JavadocReference")
     public enum ReplacementType {
-        TEXT_CLOSING,
-        TEXT,
-        COLOR_HEX,
-        COLOR_HEX_CSS,
-        NAMED_COLOR,
-        FONT,
-        INSERT,
-        PROCESS;
+        TEXT_CLOSING, TEXT, COLOR_HEX, COLOR_HEX_CSS, NAMED_COLOR, FONT, INSERT, PROCESS;
 
         /**
          * @see net.juligames.core.jdbi.CoreSQLManager

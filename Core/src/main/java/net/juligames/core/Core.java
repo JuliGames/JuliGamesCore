@@ -14,6 +14,7 @@ import net.juligames.core.api.config.ConfigurationAPI;
 import net.juligames.core.api.err.dev.TODOException;
 import net.juligames.core.api.message.MessageRecipient;
 import net.juligames.core.api.minigame.BasicMiniGame;
+import net.juligames.core.api.misc.APIUtils;
 import net.juligames.core.caching.CoreCacheApi;
 import net.juligames.core.caching.MessageCaching;
 import net.juligames.core.cluster.CoreClusterApi;
@@ -37,6 +38,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.logging.LogManager;
+import java.util.stream.Stream;
 
 /**
  * @author Ture Bentzin
@@ -48,9 +51,9 @@ public final class Core implements API {
      * This can be set depending on the build of the Core
      */
     public static final String CORE_BRAND = "Core";
-    public static final String CORE_VERSION_NUMBER = "1.5";
+    public static final String CORE_VERSION_NUMBER = "1.6";
     public static final String CORE_SPECIFICATION = "Gustav";
-    private static final String BUILD_VERSION = "1.5"; //POM VERSION
+    private static final String BUILD_VERSION = "1.6"; //POM VERSION
 
     private static Core core;
     private final Registerator<Consumer<HazelcastInstance>> hazelcastPostPreparationWorkers = new Registerator<>("hazelcastPostPreparationWorkers");
@@ -79,6 +82,14 @@ public final class Core implements API {
      * @param core_name the core name
      */
     public Core(String core_name) {
+        APIUtils.fromName("JG-Foreman")
+                .debug(getShortCoreName() + " started by " + APIUtils.formatCaller(
+                        StackWalker
+                                .getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE)
+                                .walk(Stream::findFirst)
+                                .orElseThrow(() -> new IllegalCallerException("Core cant identify caller of constructor?!")))
+                );
+
         start(core_name);
     }
 
@@ -162,10 +173,16 @@ public final class Core implements API {
                 .addMessageListener(coreNotificationApi);
 
 
-        {
+        if (getHazelDataApi().isMasterInformationAvailable()) {
             if (!Boolean.getBoolean("acknowledgeUnsafeMasterCheck")) {
                 coreLogger.info("checking compatibility with master..");
                 final String masterVersion = getHazelDataApi().getMasterInformation().get("master_version");
+                if (masterVersion == null) {
+                    coreLogger.error("Flawed data! Please check if hazelcast is working correctly and if your master" +
+                            " is operating normal! If you see this message on your Master, you should get in touch with me at " +
+                            "mailto://bentzin@tdrstudios.de! Thank you for using JuliGamesCore. It is likely that your JuliGamesCore Cluster " +
+                            "starts but you should expect severe issues after reading this message!");
+                }
 
                 if (!getVersion().equals(masterVersion)) {
                     coreLogger.warning("********************************************************");
@@ -178,7 +195,8 @@ public final class Core implements API {
                     coreLogger.warning("********************************************************");
                 }
             }
-        }
+        } else
+            logger.debug("master information is not available! If you see this on the Master it is expected behavior");
 
         logger.info("hooking to shutdown...");
         getJavaRuntime().addShutdownHook(new Thread(() -> {
@@ -410,6 +428,11 @@ public final class Core implements API {
         return getOnlineRecipientProvider().get();
     }
 
+    @Override
+    public @NotNull LogManager getJavaLogManager() {
+        return LogManager.getLogManager();
+    }
+
     public Registerator<Consumer<HazelcastInstance>> getHazelcastPostPreparationWorkers() {
         return hazelcastPostPreparationWorkers;
     }
@@ -420,5 +443,11 @@ public final class Core implements API {
         if (getCoreLogger() != null) {
             getCoreLogger().debug("This API implementation is no longer available!");
         }
+    }
+
+    @Contract(pure = true)
+    @Override
+    public @NotNull Logger getLogger() {
+        return getAPILogger();
     }
 }

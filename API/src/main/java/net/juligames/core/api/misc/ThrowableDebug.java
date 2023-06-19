@@ -1,7 +1,6 @@
 package net.juligames.core.api.misc;
 
 import net.juligames.core.api.API;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.PrintWriter;

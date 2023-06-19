@@ -1,0 +1,12 @@
+41c41
+<   private static final Pattern TOKEN_PATTERN = Pattern.compile("\"(.*?)\"");
+---
+>   private static final Pattern TOKEN_PATTERN = Pattern.compile("\\{\"token\": \"(.*?)\"\\}");
+89,92c89,90
+<           final String group = matcher.group(0);
+<           if (group.equalsIgnoreCase("token")) {
+<             result.complete(group);
+<           }
+---
+>           final String group = matcher.group(1);
+>           result.complete(group);

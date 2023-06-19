@@ -1,5 +1,6 @@
 package net.juligames.core.config;
 
+import com.hazelcast.core.DistributedObject;
 import net.juligames.core.Core;
 import net.juligames.core.api.config.ConfigWriter;
 import net.juligames.core.api.config.Configuration;
@@ -8,6 +9,7 @@ import net.juligames.core.api.config.Interpreter;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -166,5 +168,24 @@ public class CoreConfigurationApi implements ConfigurationAPI {
                             String after = s.getKey().replaceFirst(section + "_", "");
                             return Map.entry(section + "_" + after.substring(0, after.indexOf("_")), s.getValue());
                         }).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))));
+    }
+
+    @Override
+    public @NotNull @Unmodifiable Collection<Configuration> getAll() {
+        return getAllHazels()
+                .stream()
+                .map(this::getOrCreate)
+                .collect(Collectors.toUnmodifiableSet());
+    }
+
+    @Override
+    public @NotNull @Unmodifiable Collection<String> getAllHazels() {
+        return Core.getInstance()
+                .getHazelDataApi()
+                .getAll()
+                .stream()
+                .map(DistributedObject::getName)
+                .filter(s -> s.startsWith("config:"))
+                .collect(Collectors.toUnmodifiableSet());
     }
 }

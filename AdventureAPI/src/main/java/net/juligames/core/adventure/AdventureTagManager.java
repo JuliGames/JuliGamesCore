@@ -49,6 +49,7 @@ public interface AdventureTagManager extends MiniMessageSerializer {
 
     /**
      * This method creates a new {@link TagResolver} that combines {@link #getResolver()} and append
+     *
      * @param append additional resolvers
      * @return a new {@link TagResolver}
      */

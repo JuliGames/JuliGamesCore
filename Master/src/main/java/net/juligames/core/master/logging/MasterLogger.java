@@ -2,6 +2,7 @@ package net.juligames.core.master.logging;
 
 import de.bentzin.tools.logging.JavaLogger;
 import de.bentzin.tools.logging.Logger;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
@@ -23,6 +24,11 @@ public final class MasterLogger extends JavaLogger {
     public MasterLogger(String name, java.util.logging.@NotNull Logger logger) {
         super(name, logger);
         logger.addHandler(LogFileHandlerManager.generateFileHandler());
+    }
+
+    @ApiStatus.AvailableSince("1.6")
+    public static void setupJavaLogging() {
+        System.setProperty("java.util.logging.SimpleFormatter.format", "[%1$tF %1$tT] [%4$-7s] %5$s %n");
     }
 
     @Override

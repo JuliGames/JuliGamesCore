@@ -23,7 +23,7 @@ import java.util.logging.Level;
  * 03.12.2022
  */
 
-@Plugin(id = "velocitycore", name = "JuliGames Velocity Core", version = "1.5",
+@Plugin(id = "velocitycore", name = "JuliGames Velocity Core", version = "1.6",
         url = "https://github.com/JuliGames/JuliGamesCore", description = "Velocity Client for the core - necessary to provide the API here",
         authors = {"Ture Bentzin"})
 public final class VelocityCore {
@@ -64,6 +64,8 @@ public final class VelocityCore {
         logger.info("core seems to be running... booting AdventureCore");
         adventureCore = new AdventureCore();
         adventureCore.start();
+
+        new VelocityConversationManager();
 
         core.setOnlineRecipientProvider(() -> {
             Collection<AudienceMessageRecipient> recipients = new ArrayList<>();

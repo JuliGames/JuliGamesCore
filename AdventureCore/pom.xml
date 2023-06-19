@@ -6,7 +6,7 @@
     <parent>
         <artifactId>JuliGamesCore</artifactId>
         <groupId>net.juligames.core</groupId>
-        <version>1.5</version>
+        <version>1.6</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -22,7 +22,7 @@
         <dependency>
             <groupId>net.juligames.core</groupId>
             <artifactId>AdventureAPI</artifactId>
-            <version>1.5</version>
+            <version>1.6</version>
         </dependency>
     </dependencies>
 

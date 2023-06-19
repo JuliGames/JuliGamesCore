@@ -38,15 +38,16 @@ public class MasterHazelInformationProvider {
     public void update() {
         //Locale
         DBLocale defaultEnglish = CoreSQLManager.defaultEnglish();
+        informationMap().put("available", "");
         informationMap().put("default_locale", defaultEnglish.getLocale());
         informationMap().put("default_locale_description", defaultEnglish.getDescription());
         informationMap().put("master_uuid", hazelcast.getLocalEndpoint().getUuid().toString());
         informationMap().put("master_name", hazelcast.getName());
         informationMap().put("master_boot", String.valueOf(CoreMaster.getBootMillis().orElseThrow()));
         informationMap().put("master_version", API.get().getVersion());
-        informationMap().put("last_update", System.currentTimeMillis() + "");
+        informationMap().put("last_update", String.valueOf(System.currentTimeMillis()));
         //Experimental
-        informationMap().put("master_commands", CoreMaster.getMasterCommandRunner().getIndex() + "");
+        informationMap().put("master_commands", String.valueOf(CoreMaster.getMasterCommandRunner().getIndex()));
         informationMap().put("hazelcast_version", VersionFinder.getVersion());
         informationMap().put("master_os", VersionFinder.OS.name());
         informationMap().put("java_version", VersionFinder.JAVA_VERSION);

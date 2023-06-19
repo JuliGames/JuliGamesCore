@@ -3,6 +3,7 @@ package net.juligames.core.api.config;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collection;
 import java.util.Comparator;
@@ -140,4 +141,10 @@ public interface ConfigurationAPI {
      */
     @ApiStatus.AvailableSince("1.5")
     @NotNull Configuration createSectionClone(@NotNull Configuration root, @NotNull String section);
+
+    @ApiStatus.AvailableSince("1.6")
+    @NotNull @Unmodifiable Collection<Configuration> getAll();
+
+    @ApiStatus.AvailableSince("1.6")
+    @NotNull @Unmodifiable Collection<String> getAllHazels();
 }
